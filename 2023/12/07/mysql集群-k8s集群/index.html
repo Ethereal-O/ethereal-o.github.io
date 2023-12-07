@@ -26,7 +26,7 @@
 <meta property="og:description" content="创建nfs12345678910111213141516171819# 安装apt install nfs-kernel-server# 创建文件夹mkdir -p &#x2F;root&#x2F;sharedata&#x2F;mysql-0mkdir -p &#x2F;root&#x2F;sharedata&#x2F;mysql-1mkdir -p &#x2F;root&#x2F;sharedata&#x2F;mysql-2# 编辑vim &#x2F;etc&#x2F;exports&#x2F;root&#x2F;sha">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-12-06T16:37:15.000Z">
-<meta property="article:modified_time" content="2023-12-06T16:44:16.532Z">
+<meta property="article:modified_time" content="2023-12-07T12:29:45.004Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2023-12-07 00:44:16</span>
-            <span class="mobile">2023-12-07 00:44</span>
+            <span class="desktop">2023-12-07 20:29:45</span>
+            <span class="mobile">2023-12-07 20:29</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -401,8 +401,15 @@
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FROM paigeeworld/centos7:latest</span><br><span class="line"></span><br><span class="line">MAINTAINER jstang &lt;389634070@qq.com&gt;</span><br><span class="line"></span><br><span class="line">RUN rpm --rebuilddb &amp;&amp; \</span><br><span class="line">    yum -y install wget hostname mariadb &amp;&amp; \</span><br><span class="line">    wget https://downloads.percona.com/downloads/Percona-XtraBackup-LATEST/Percona-XtraBackup-8.0.9/binary/redhat/7/x86_64/percona-xtrabackup-80-8.0.9-1.el7.x86_64.rpm &amp;&amp; \</span><br><span class="line">	yum -y localinstall percona-xtrabackup-80-8.0.9-1.el7.x86_64.rpm</span><br><span class="line"></span><br><span class="line">RUN rm percona-xtrabackup-80-8.0.9-1.el7.x86_64.rpm -rf</span><br><span class="line"></span><br><span class="line">EXPOSE 3307</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker build -t jstang/xtrabackup:2.3</span><br><span class="line">docker login</span><br><span class="line">docker push jstang/xtrabackup:2.3</span><br></pre></td></tr></table></figure></div>
+
 <ol start="7">
-<li>其他<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW SLAVE STATUS\G # 检查slave状态</span><br></pre></td></tr></table></figure></div></li>
+<li>搭建服务<br><code>mysql_readonly.yaml</code>这里可以直接修改4中的yaml配置<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: mysql-headless</span><br><span class="line">  labels:</span><br><span class="line">    app: mysql</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - name: mysql</span><br><span class="line">    port: 3306</span><br><span class="line">    nodePort: 30080</span><br><span class="line">    targetPort: 3306</span><br><span class="line">  selector:</span><br><span class="line">    app: mysql</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<p><code>mysql_write.yaml</code></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: mysql-write</span><br><span class="line">  labels:</span><br><span class="line">    app: mysql</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - port: 3306</span><br><span class="line">    nodePort: 30081 #对k8s外部30080端口</span><br><span class="line">    targetPort: 3306</span><br><span class="line">  selector:</span><br><span class="line">    statefulset.kubernetes.io/pod-name: mysql-ss-0</span><br></pre></td></tr></table></figure></div>
+
+<ol start="8">
+<li>其他<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SHOW SLAVE STATUS\G # 检查slave状态</span><br><span class="line">kubectl get pods --show-labels # 查看pod的labels</span><br></pre></td></tr></table></figure></div></li>
 <li>参考<br><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38900565/article/details/114832445" >【全网最全最详细】K8s部署Mysql 8主从复制+读写分离 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
 </ol>
 
@@ -417,7 +424,7 @@
         <li><strong>Created at:</strong> 2023-12-07 00:37:15</li>
         
             <li>
-                <strong>Updated at:</strong> 2023-12-07 00:44:16
+                <strong>Updated at:</strong> 2023-12-07 20:29:45
             </li>
         
         <li>
