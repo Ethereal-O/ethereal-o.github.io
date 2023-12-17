@@ -13,16 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/"/>
+    <link rel="canonical" href="http://example.com/2023/12/17/嵌套transaction中的try-catch/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
+        <meta name="description" content="背景 产生异常  1org.springframework.transaction.UnexpectedRollbackException: Transaction rolled back because it has been marked as rollback-only   结构  AOP切片在Service方法上（指定Order），切片方法加事务注解，Service方法加事务注解，Serv">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌套transaction中的try catch">
+<meta property="og:url" content="http://example.com/2023/12/17/%E5%B5%8C%E5%A5%97transaction%E4%B8%AD%E7%9A%84try-catch/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景 产生异常  1org.springframework.transaction.UnexpectedRollbackException: Transaction rolled back because it has been marked as rollback-only   结构  AOP切片在Service方法上（指定Order），切片方法加事务注解，Service方法加事务注解，Serv">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-17T14:41:27.000Z">
+<meta property="article:modified_time" content="2023-12-17T15:57:18.676Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -35,6 +39,8 @@
     <!--- Page Info-->
     
     <title>
+        
+            嵌套transaction中的try catch -
         
         Ethereal&#39;s Blog
     </title>
@@ -102,67 +108,19 @@
 <main class="page-container">
 
     
-        
-    <style>
-        .home-banner-container {
-            background: transparent !important;
-        }
-        .home-article-item,
-        .sidebar-links,
-        .sidebar-content,
-        a.page-number,
-        a.extend,
-        .sidebar-links .links:hover,
-        .right-bottom-tools,
-        footer.footer {
-            background-color: var(--background-color-transparent-80) !important;
-        }
-        .right-bottom-tools:hover,
-        a.page-number:hover,
-        a.extend:hover {
-            background-color: var(--primary-color) !important;
-        }
-        .site-info,
-        .home-article-sticky-label {
-            background-color: var(--background-color-transparent-15) !important;
-        }
-        .home-article-sticky-label {
-            backdrop-filter: none !important;
-        }
-    </style>
-
-    <div class="home-banner-background">
-    </div>
-
-
-<div class="home-banner-container flex-center">
-    <div class="content flex-center">
-        <div class="description fade-in-down-animation" >
-          Welcome to Ethereal's Blog 
-          
-            <p><i id="subtitle"></i></p>
-          
-        </div>
-        
-    </div>
-</div>
-
-
-
-    
 
     <div class="main-content-container">
 
         <div class="main-content-header">
             <header class="navbar-container">
     
-    <div class="navbar-content has-home-banner">
+    <div class="navbar-content">
         <div class="left">
             
             <a class="logo-title" href="/">
-                <h1>
+                
                 Ethereal&#39;s Blog
-                </h1>
+                
             </a>
         </div>
 
@@ -174,7 +132,7 @@
                         
                             <li class="navbar-item">
                                 <!-- Menu -->
-                                <a class="active" 
+                                <a class="" 
                                     href="/"  >
                                     
                                         
@@ -273,7 +231,7 @@
             
                 
                     <li class="drawer-navbar-item flex-center">
-                        <a class="active" 
+                        <a class="" 
                         href="/"  >
                              
                                 
@@ -359,396 +317,206 @@
         <div class="main-content-body">
 
             
-                <div class="home-sidebar-container fade-in-down-animation">
-    <div class="sticky-container">
-        
-            
-            <div class="sidebar-content" >
-                <div class="avatar">
-                    <img src="/images/favicon.svg">
-                </div>
-                <div class="author">
-                    <div class="name">Ethereal</div>
-                    
-                        <div class="label">Lv2</div>
-                    
-                </div>
-                <div class="statistics">
-                    <a class="item" href="/tags">
-                        <div class="number">0</div>
-                        <div class="label">Tags</div>
-                    </a>
-                    <a class="item" href="/categories">
-                        <div class="number">0</div>
-                        <div class="label">Categories</div>
-                    </a>
-                    <a class="item" href="/archives">
-                        <div class="number">9</div>
-                        <div class="label">Posts</div>
-                    </a>
-                </div>
-            </div>
-        
-
-    </div>
-</div>
-
-            
 
             <div class="main-content">
 
                 
-                    <div class="home-content-container fade-in-down-animation">
-    <ul class="home-article-list">
-        
-            <li class="home-article-item">
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
 
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/12/17/%E5%B5%8C%E5%A5%97transaction%E4%B8%AD%E7%9A%84try-catch/">
-                        嵌套transaction中的try catch
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        背景
-产生异常
-
-1org.springframework.transaction.UnexpectedRollbackException: Transaction rolled back because it has been marked as ...
-                    
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">嵌套transaction中的try catch</h1>
                 </div>
+            
+                
+            
 
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Dec 17 2023 22:41:27 GMT+0800">
-                
-                    2023-12-17
-                
-            </span>
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv2</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-12-17 22:41:27</span>
+        <span class="mobile">2023-12-17 22:41</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-12-17 23:57:18</span>
+            <span class="mobile">2023-12-17 23:57</span>
+            <span class="hover-info">Updated</span>
         </span>
-        
-        
-    </div>
+    
 
-    <a href="/2023/12/17/%E5%B5%8C%E5%A5%97transaction%E4%B8%AD%E7%9A%84try-catch/">Read more<span class="seo-reader-text">嵌套transaction中的try catch</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
 
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/12/07/mysql%E9%9B%86%E7%BE%A4-k8s%E9%9B%86%E7%BE%A4/">
-                        mysql集群+k8s集群
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        
-创建nfs12345678910111213141516171819# 安装apt install nfs-kernel-server# 创建文件夹mkdir -p /root/sharedata/mysql-0mkdir -p /root/sha...
-                    
+                        </div>
+                    </div>
                 </div>
+            
 
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Thu Dec 07 2023 00:37:15 GMT+0800">
-                
-                    2023-12-07
-                
-            </span>
-        </span>
+            <div class="article-content markdown-body">
+                <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ol>
+<li>产生异常</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.transaction.UnexpectedRollbackException: Transaction rolled back because it has been marked as rollback-only</span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li>结构</li>
+</ol>
+<p>AOP切片在Service方法上（指定Order），切片方法加事务注解，Service方法加事务注解，Service方法中，使用try catch调用Dao方法，Dao方法调用JPA的save方法，save方法存在默认的事务注解，数据库建立联合独立索引。此时第二次保存相同的数据时会异常。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>分析此时存在三个方法存在事务注解，即切片方法，Service方法，save方法。而此时三者为同一事务（默认事务传播级别为REQUIRED）。</p>
+<p>当save方法异常时，将此事务标记为回滚，并且向上抛出异常，然而上层方法catch异常，使得执行流达到事务方法末尾，使得transaction可以提交，提交时发现已经标记为回滚，抛出此异常。</p>
+<p><em>需要注意的是，此时最多只有两个事务，即切片方法和Service方法是同一个事务。因为其没有通过动态代理实现，因此无法使用子事务，认为其是在同一方法内被调用。</em></p>
+<p><strong>因此，触发的真正条件是，使用JDK方式开启事务，下层事务与上层事务为同一事务，且在上层事务中catch异常。</strong></p>
+<h2 id="失败探索"><a href="#失败探索" class="headerlink" title="失败探索"></a>失败探索</h2><p>尝试在Service上更改事务传播级别，即改为REQUIRES_NEW，不可行。同理在Service中新建方法标记REQUIRES_NEW也不可行。这是因为事务传播机制导致的。因为Spring事务管理是通过JDK动态代理实现，故直接调用子方法无法触发事务，事务传播失效。<a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xlgen157387/article/details/79026285" >事务传播失效 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h2><ol>
+<li>真正开启新事务。只需要在下层方法使用JDK方式开启时加入开启新事务注解即可。此处即在DAO层加入<code>@Transactional(propagation = REQUIQRES_NEW)</code>。</li>
+<li>catch后继续向上传播。可以使用throw直接抛出异常，也可以在上层事务中catch中使用方法继续传播<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/564106121" >rollback-only异常令我对事务有了新的认识 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/nizuimeiabc1/p/14774125.html" >Spring事务嵌套引发的血案—Transaction rolled back because it has been marked as rollback-only <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 嵌套transaction中的try catch</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2023-12-17 22:41:27</li>
         
-        
-    </div>
-
-    <a href="/2023/12/07/mysql%E9%9B%86%E7%BE%A4-k8s%E9%9B%86%E7%BE%A4/">Read more<span class="seo-reader-text">mysql集群+k8s集群</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
+            <li>
+                <strong>Updated at:</strong> 2023-12-17 23:57:18
             </li>
         
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">
-                        备份QQ聊天记录
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        备份QQ应用使用手机自带的备份APP备份应用。备份教程 
-小米手机提取聊天记录
-使用WinHex 修改二进制文件，将头部的一些字符删除，直到使得”apps&#x2F;“位于开头，如下图所示。
-使用解压软件解压。
-打开QQ_History_Backup...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Nov 12 2023 17:42:40 GMT+0800">
-                
-                    2023-11-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">Read more<span class="seo-reader-text">备份QQ聊天记录</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/11/07/%E9%83%A8%E7%BD%B2VPN%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%B3Azure%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                        部署VPN服务器至Azure服务器
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        安装Python3.7123456789101112131415# 安装必要环境sudo apt-get install opensslsudo apt-get install libssl-devsudo apt-get install libff...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Nov 07 2023 18:45:54 GMT+0800">
-                
-                    2023-11-07
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/11/07/%E9%83%A8%E7%BD%B2VPN%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%B3Azure%E6%9C%8D%E5%8A%A1%E5%99%A8/">Read more<span class="seo-reader-text">部署VPN服务器至Azure服务器</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/10/27/Github-actions/">
-                        Github actions
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        buildGithub默认自带docker。因此可以直接使用gradle执行dockerPushImage。在build.gradle添加：
-12345678910111213141516plugins &#123;    id(&quot;com....
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Fri Oct 27 2023 19:37:25 GMT+0800">
-                
-                    2023-10-27
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/10/27/Github-actions/">Read more<span class="seo-reader-text">Github actions</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/10/22/%E7%A7%BB%E5%8A%A8%E5%9B%BA%E6%80%81%E5%A4%9A%E7%B3%BB%E7%BB%9F/">
-                        移动固态多系统
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        步骤1. 分区首先进行分区，将磁盘分为四块，分别为4GB的启动EFI分区（分区一），Ubuntu系统分区（分区二），64GB储存分区（分区三），4GBWEPE分区（分区四）。
-2. 安装Ubuntu使用虚拟机挂载硬盘，并将ubuntu装入分区二中，选...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Oct 22 2023 00:29:24 GMT+0800">
-                
-                    2023-10-22
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/10/22/%E7%A7%BB%E5%8A%A8%E5%9B%BA%E6%80%81%E5%A4%9A%E7%B3%BB%E7%BB%9F/">Read more<span class="seo-reader-text">移动固态多系统</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/08/12/MiAC2100IPv6/">
-                        MiAC2100IPv6
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        1. 升级&#x2F;降级至官方固件版本: 2.0.23 稳定版。操作入口在路由器常用设置-系统状态-升级检测处。
-2. 开启SSH2.1 方法一
-登录到路由器后台，输入密码进入。
-复制路径中的stok，然后执行。将其中的和替换为自己的值。12345...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sat Aug 12 2023 16:00:46 GMT+0800">
-                
-                    2023-08-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/08/12/MiAC2100IPv6/">Read more<span class="seo-reader-text">MiAC2100IPv6</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/07/25/maven-for-JNA/">
-                        maven for JNA
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Java Native调用JNI最朴素的方式，也是JNA的前身。首先写一个接口java文件，里面包含着native的方法和加载库的方法loadLibrary，例如：
-123456789101112131415public class HelloNat...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Jul 25 2023 19:01:31 GMT+0800">
-                
-                    2023-07-25
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/25/maven-for-JNA/">Read more<span class="seo-reader-text">maven for JNA</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
-                        k8s集群搭建
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        
-更新 apt 包索引并安装使用 Kubernetes apt 仓库所需要的包：12sudo apt-get updatesudo apt-get install -y apt-transport-https ca-certificates curl...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Wed Jul 12 2023 18:28:16 GMT+0800">
-                
-                    2023-07-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">Read more<span class="seo-reader-text">k8s集群搭建</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2023/12/17/嵌套transaction中的try-catch/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
     </ul>
-
-    <div class="home-paginator">
-        <div class="paginator">
-    <span class="page-number current">1</span>
 </div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2023/12/07/mysql%E9%9B%86%E7%BE%A4-k8s%E9%9B%86%E7%BE%A4/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">mysql集群+k8s集群</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">嵌套transaction中的try catch</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0"><span class="nav-text">原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E6%8E%A2%E7%B4%A2"><span class="nav-text">失败探索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E5%BC%8F"><span class="nav-text">解决方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
+            </div>
+        
+    </div>
+</div>
+
 
                 
 
@@ -822,6 +590,27 @@
     </div>
 
     
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
 
     <div class="right-side-tools-container">
         <div class="side-tools-container">
@@ -881,7 +670,6 @@
 
 
 
-
 <script src="/js/utils.js"></script>
 
 <script src="/js/main.js"></script>
@@ -933,6 +721,16 @@
 
 
 <div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
     
 </div>
 
