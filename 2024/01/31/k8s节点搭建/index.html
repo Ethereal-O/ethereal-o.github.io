@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/01/31/k8s节点搭建/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="一. mysql节点搭建nfs服务器 123456789101112131415# 安装apt install nfs-kernel-server# 创建文件夹mkdir -p &#x2F;root&#x2F;sharedata&#x2F;mysql# 编辑vim &#x2F;etc&#x2F;exports&#x2F;root&#x2F;sharedata&#x2F;mysql *(rw,sync,no_root_squash)# 使配置生效，不用重启 nfs 服务器，客户">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s节点搭建">
+<meta property="og:url" content="http://example.com/2024/01/31/k8s%E8%8A%82%E7%82%B9%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一. mysql节点搭建nfs服务器 123456789101112131415# 安装apt install nfs-kernel-server# 创建文件夹mkdir -p &#x2F;root&#x2F;sharedata&#x2F;mysql# 编辑vim &#x2F;etc&#x2F;exports&#x2F;root&#x2F;sharedata&#x2F;mysql *(rw,sync,no_root_squash)# 使配置生效，不用重启 nfs 服务器，客户">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-01-31T13:11:48.000Z">
+<meta property="article:modified_time" content="2024-01-31T13:21:05.394Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            k8s节点搭建 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A fine foal dashes without a horsewhip."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">k8s节点搭建</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv2</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-01-31 21:11:48</span>
+        <span class="mobile">2024-01-31 21:11</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-01-31 21:21:05</span>
+            <span class="mobile">2024-01-31 21:21</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="一-mysql节点"><a href="#一-mysql节点" class="headerlink" title="一. mysql节点"></a>一. mysql节点</h2><p>搭建nfs服务器</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">apt install nfs-kernel-server</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建文件夹</span></span><br><span class="line">mkdir -p /root/sharedata/mysql</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编辑</span></span><br><span class="line">vim /etc/exports</span><br><span class="line">/root/sharedata/mysql *(rw,sync,no_root_squash)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使配置生效，不用重启 nfs 服务器，客户端实时更新</span></span><br><span class="line">exportfs -rv</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动</span></span><br><span class="line">systemctl start rpcbind</span><br><span class="line">systemctl start nfs-server</span><br><span class="line">systemctl enable --now nfs-server</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看</span></span><br><span class="line">showmount -e</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">说明</span></span><br><span class="line">/root/sharedata/mysql        # 共享的目录</span><br><span class="line">*               # 指客户端所有主机都可以使用, 也可以指定某个主机</span><br><span class="line">rw              # 读写权限</span><br><span class="line">no_root_squash  # 登入 NFS 主机使用者如果是 root 的话，那么他就具有 root 的权限</span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件mysql-pv.yaml</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">apiVersion<span class="punctuation">:</span> v1</span><br><span class="line">kind<span class="punctuation">:</span> PersistentVolume</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> mysql-pv-volume</span><br><span class="line">  labels<span class="punctuation">:</span></span><br><span class="line">    type<span class="punctuation">:</span> local</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  storageClassName<span class="punctuation">:</span> manual</span><br><span class="line">  capacity<span class="punctuation">:</span></span><br><span class="line">    storage<span class="punctuation">:</span> <span class="number">20</span>Gi</span><br><span class="line">  accessModes<span class="punctuation">:</span></span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  nfs<span class="punctuation">:</span></span><br><span class="line">    path<span class="punctuation">:</span> /root/sharedata/mysql</span><br><span class="line">    server<span class="punctuation">:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件mysql-pvc.yaml</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apiVersion<span class="punctuation">:</span> v1</span><br><span class="line">kind<span class="punctuation">:</span> PersistentVolumeClaim</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> mysql-pv-claim</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  storageClassName<span class="punctuation">:</span> manual</span><br><span class="line">  accessModes<span class="punctuation">:</span></span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  resources<span class="punctuation">:</span></span><br><span class="line">    requests<span class="punctuation">:</span></span><br><span class="line">      storage<span class="punctuation">:</span> <span class="number">20</span>Gi</span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件mysql-server.yaml</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">apiVersion<span class="punctuation">:</span> v1</span><br><span class="line">kind<span class="punctuation">:</span> Service</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> mysql</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  ports<span class="punctuation">:</span></span><br><span class="line">  - port<span class="punctuation">:</span> <span class="number">3306</span></span><br><span class="line">  selector<span class="punctuation">:</span></span><br><span class="line">    app<span class="punctuation">:</span> mysql</span><br><span class="line">  clusterIP<span class="punctuation">:</span> None</span><br><span class="line">---</span><br><span class="line">apiVersion<span class="punctuation">:</span> apps/v1</span><br><span class="line">kind<span class="punctuation">:</span> StatefulSet</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> mysql</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  replicas<span class="punctuation">:</span> <span class="number">1</span></span><br><span class="line">  selector<span class="punctuation">:</span></span><br><span class="line">    matchLabels<span class="punctuation">:</span></span><br><span class="line">      app<span class="punctuation">:</span> mysql</span><br><span class="line">  serviceName<span class="punctuation">:</span> <span class="string">&quot;mysql&quot;</span></span><br><span class="line">  template<span class="punctuation">:</span></span><br><span class="line">    metadata<span class="punctuation">:</span></span><br><span class="line">      labels<span class="punctuation">:</span></span><br><span class="line">        app<span class="punctuation">:</span> mysql</span><br><span class="line">    spec<span class="punctuation">:</span></span><br><span class="line">      containers<span class="punctuation">:</span></span><br><span class="line">      - image<span class="punctuation">:</span> mysql<span class="punctuation">:</span><span class="number">8</span></span><br><span class="line">        name<span class="punctuation">:</span> mysql</span><br><span class="line">        env<span class="punctuation">:</span></span><br><span class="line">         - name<span class="punctuation">:</span> <span class="string">&quot;MYSQL_ROOT_PASSWORD&quot;</span></span><br><span class="line">           value<span class="punctuation">:</span> &#x27;<span class="number">123456</span>&#x27;</span><br><span class="line">        ports<span class="punctuation">:</span></span><br><span class="line">        - containerPort<span class="punctuation">:</span> <span class="number">3306</span></span><br><span class="line">          name<span class="punctuation">:</span> mysql</span><br><span class="line">        volumeMounts<span class="punctuation">:</span></span><br><span class="line">        - name<span class="punctuation">:</span> mysql-persistent-storage</span><br><span class="line">          mountPath<span class="punctuation">:</span> /var/lib/mysql</span><br><span class="line">      volumes<span class="punctuation">:</span></span><br><span class="line">      - name<span class="punctuation">:</span> mysql-persistent-storage</span><br><span class="line">        persistentVolumeClaim<span class="punctuation">:</span></span><br><span class="line">          claimName<span class="punctuation">:</span> mysql-pv-claim</span><br></pre></td></tr></table></figure></div>
+
+<p>如果要使得mysql能被外部访问，可以将service部分改成如下（要删掉原service，否则会报错）：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: mysql</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - port: 3306</span><br><span class="line">    nodePort: 30080 #对k8s外部30080端口</span><br><span class="line">    targetPort: 3306</span><br><span class="line">  selector:</span><br><span class="line">    app: mysql</span><br></pre></td></tr></table></figure></div>
+
+<p>分别执行</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f mysql-pv.yaml</span><br><span class="line">kubectl create -f mysql-pvc.yaml</span><br><span class="line">kubectl create -f mysql-server.yaml</span><br></pre></td></tr></table></figure></div>
+
+<p>进入mysql</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -it mysql-0 /bin/bash</span><br><span class="line">mysql -uroot -p123456</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="二-springboot节点"><a href="#二-springboot节点" class="headerlink" title="二. springboot节点"></a>二. springboot节点</h2><p>dockerfile如下：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用Ubuntu作为基础镜像</span></span><br><span class="line">FROM arm64v8/ubuntu:latest</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">维护人信息</span></span><br><span class="line">MAINTAINER ethereal</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">切换到usr/local 目录下</span></span><br><span class="line">WORKDIR ./usr/local</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建jdk目录</span></span><br><span class="line">RUN mkdir jdk</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">对jdk赋权</span></span><br><span class="line">RUN chmod 777 /usr/local/jdk</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将下载的jdk 的压缩包拷贝到镜像中，注意 ADD和COPY的区别，ADD 会解压，COPY不会解压</span></span><br><span class="line">ADD jdk-8u341-linux-aarch64.tar /usr/local/jdk</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置JAVA_HOME 的环境变量</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk/jdk1.8.0_341</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置JAVA 环境</span></span><br><span class="line">ENV CLASSPATH=$JAVA_HOME/bin:$JAVA_HOME/lib:$JAVA_HOME/jre/lib</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将java可执行文件设置到PATH中，这样就可以使用java命令了</span></span><br><span class="line">ENV PATH=.:$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH</span><br><span class="line"></span><br><span class="line">COPY ./target/backend-0.0.1-SNAPSHOT.jar /app/spring-boot-k8s-app.jar</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;java&quot;, &quot;-jar&quot; , &quot;/app/spring-boot-k8s-app.jar&quot;]</span><br></pre></td></tr></table></figure></div>
+
+<p>推送与拉取</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">build</span></span><br><span class="line">docker buildx build --platform arm64 -f Dockerfile -t jdk1.8 .</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">tag</span></span><br><span class="line">docker tag &lt;imageID&gt; registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">push</span></span><br><span class="line">docker push registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">pull</span></span><br><span class="line">crictl pull --creds aliyun8516592724(username):[password] registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">tag</span></span><br><span class="line">ctr -n k8s.io i tag registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1 javabackend.io/springboot:v1</span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件springboot.yaml</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">apiVersion<span class="punctuation">:</span> apps/v1</span><br><span class="line">kind<span class="punctuation">:</span> Deployment #部署</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> springboot-app</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  replicas<span class="punctuation">:</span> <span class="number">2</span> #<span class="number">2</span>个副本</span><br><span class="line">  selector<span class="punctuation">:</span></span><br><span class="line">    matchLabels<span class="punctuation">:</span></span><br><span class="line">      app<span class="punctuation">:</span> springboot-app</span><br><span class="line">  template<span class="punctuation">:</span></span><br><span class="line">    metadata<span class="punctuation">:</span></span><br><span class="line">      labels<span class="punctuation">:</span></span><br><span class="line">        app<span class="punctuation">:</span> springboot-app</span><br><span class="line">    spec<span class="punctuation">:</span></span><br><span class="line">      containers<span class="punctuation">:</span></span><br><span class="line">      - name<span class="punctuation">:</span> springboot-app</span><br><span class="line">        # image<span class="punctuation">:</span> registry.cn-shanghai.aliyuncs.com/ethereal-o/docker<span class="punctuation">:</span>v1 #刚刚push到阿里云上的镜像地址</span><br><span class="line">        image<span class="punctuation">:</span> javabackend.io/springboot<span class="punctuation">:</span>v1</span><br><span class="line">        ports<span class="punctuation">:</span></span><br><span class="line">        - containerPort<span class="punctuation">:</span> <span class="number">8080</span> #默认springboot端口 </span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion<span class="punctuation">:</span> v1</span><br><span class="line">kind<span class="punctuation">:</span> Service</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> springboot-app</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  type<span class="punctuation">:</span> NodePort</span><br><span class="line">  selector<span class="punctuation">:</span></span><br><span class="line">    app<span class="punctuation">:</span> springboot-app #选中上面的 Deployment</span><br><span class="line">  ports<span class="punctuation">:</span></span><br><span class="line">  - port<span class="punctuation">:</span> <span class="number">8080</span> #对service外部<span class="number">8080</span>端口</span><br><span class="line">    nodePort<span class="punctuation">:</span> <span class="number">30090</span> #对k8s外部<span class="number">30090</span>端口</span><br><span class="line">    targetPort<span class="punctuation">:</span> <span class="number">8080</span></span><br></pre></td></tr></table></figure></div>
+
+<p>部署</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f springboot.yaml</span><br></pre></td></tr></table></figure></div>
+
+<p>cicd</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">crictl rmi registry.cn-shanghai.aliyuncs.com/miaoa/miaoa:prod</span><br><span class="line">crictl pull --creds Ethereal@1608148795872129:SichaoMiaoA123456 registry.cn-shanghai.aliyuncs.com/miaoa/miaoa:prod</span><br><span class="line">ctr -n k8s.io i tag registry.cn-shanghai.aliyuncs.com/miaoa/miaoa:prod javabackend.io/springboot-main:v1</span><br><span class="line">kubectl get pods | grep springboot-main | awk -F &#x27; &#x27; &#x27;&#123;print $1&#125;&#x27; | xargs kubectl delete pod</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="三-redis节点"><a href="#三-redis节点" class="headerlink" title="三. redis节点"></a>三. redis节点</h2><p>搭建nfs服务器</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建文件夹</span></span><br><span class="line">mkdir /root/sharedata/redis</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编辑</span></span><br><span class="line">vim /etc/exports</span><br><span class="line">/root/sharedata/redis *(rw,sync,no_root_squash)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使配置生效，不用重启 nfs 服务器，客户端实时更新</span></span><br><span class="line">exportfs -rv</span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件redis-pv.yaml</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion<span class="punctuation">:</span> v1</span><br><span class="line">kind<span class="punctuation">:</span> PersistentVolume</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> redis-pv-volume</span><br><span class="line">  labels<span class="punctuation">:</span></span><br><span class="line">    type<span class="punctuation">:</span> local</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  capacity<span class="punctuation">:</span></span><br><span class="line">    storage<span class="punctuation">:</span> <span class="number">200</span>M</span><br><span class="line">  accessModes<span class="punctuation">:</span></span><br><span class="line">    - ReadWriteMany</span><br><span class="line">  nfs<span class="punctuation">:</span></span><br><span class="line">    path<span class="punctuation">:</span> /root/sharedata/redis</span><br><span class="line">    server<span class="punctuation">:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件redis.conf</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ignore-warnings ARM64-COW-BUG</span><br><span class="line">appendonly yes</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file /var/lib/redis/nodes.conf</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">dir /var/lib/redis</span><br><span class="line">port 6379</span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件redis-server.yaml</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">apiVersion<span class="punctuation">:</span> v1</span><br><span class="line">kind<span class="punctuation">:</span> Service</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> redis</span><br><span class="line">  labels<span class="punctuation">:</span></span><br><span class="line">    app<span class="punctuation">:</span> redis</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  ports<span class="punctuation">:</span></span><br><span class="line">  - name<span class="punctuation">:</span> redis-port</span><br><span class="line">    port<span class="punctuation">:</span> <span class="number">6379</span></span><br><span class="line">  clusterIP<span class="punctuation">:</span> None</span><br><span class="line">  selector<span class="punctuation">:</span></span><br><span class="line">    app<span class="punctuation">:</span> redis</span><br><span class="line">    appCluster<span class="punctuation">:</span> redis-cluster</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion<span class="punctuation">:</span> apps/v1</span><br><span class="line">kind<span class="punctuation">:</span> StatefulSet</span><br><span class="line">metadata<span class="punctuation">:</span></span><br><span class="line">  name<span class="punctuation">:</span> redis</span><br><span class="line">spec<span class="punctuation">:</span></span><br><span class="line">  serviceName<span class="punctuation">:</span> <span class="string">&quot;redis&quot;</span></span><br><span class="line">  replicas<span class="punctuation">:</span> <span class="number">1</span></span><br><span class="line">  selector<span class="punctuation">:</span></span><br><span class="line">    matchLabels<span class="punctuation">:</span></span><br><span class="line">      app<span class="punctuation">:</span> redis</span><br><span class="line">  template<span class="punctuation">:</span></span><br><span class="line">    metadata<span class="punctuation">:</span></span><br><span class="line">      labels<span class="punctuation">:</span></span><br><span class="line">        app<span class="punctuation">:</span> redis</span><br><span class="line">        appCluster<span class="punctuation">:</span> redis-cluster</span><br><span class="line">    spec<span class="punctuation">:</span></span><br><span class="line">      terminationGracePeriodSeconds<span class="punctuation">:</span> <span class="number">20</span></span><br><span class="line">      affinity<span class="punctuation">:</span></span><br><span class="line">        podAntiAffinity<span class="punctuation">:</span></span><br><span class="line">          preferredDuringSchedulingIgnoredDuringExecution<span class="punctuation">:</span></span><br><span class="line">          - weight<span class="punctuation">:</span> <span class="number">100</span></span><br><span class="line">            podAffinityTerm<span class="punctuation">:</span></span><br><span class="line">              labelSelector<span class="punctuation">:</span></span><br><span class="line">                matchExpressions<span class="punctuation">:</span></span><br><span class="line">                - key<span class="punctuation">:</span> app</span><br><span class="line">                  operator<span class="punctuation">:</span> In</span><br><span class="line">                  values<span class="punctuation">:</span></span><br><span class="line">                  - redis</span><br><span class="line">              topologyKey<span class="punctuation">:</span> kubernetes.io/hostname</span><br><span class="line">      containers<span class="punctuation">:</span></span><br><span class="line">      - name<span class="punctuation">:</span> redis</span><br><span class="line">        image<span class="punctuation">:</span> redis<span class="punctuation">:</span><span class="number">7</span></span><br><span class="line">        command<span class="punctuation">:</span></span><br><span class="line">          - <span class="string">&quot;redis-server&quot;</span></span><br><span class="line">        args<span class="punctuation">:</span></span><br><span class="line">          - <span class="string">&quot;/etc/redis/redis.conf&quot;</span></span><br><span class="line">          - <span class="string">&quot;--protected-mode&quot;</span></span><br><span class="line">          - <span class="string">&quot;no&quot;</span></span><br><span class="line">        resources<span class="punctuation">:</span></span><br><span class="line">          requests<span class="punctuation">:</span></span><br><span class="line">            cpu<span class="punctuation">:</span> <span class="string">&quot;100m&quot;</span></span><br><span class="line">            memory<span class="punctuation">:</span> <span class="string">&quot;100Mi&quot;</span></span><br><span class="line">        ports<span class="punctuation">:</span></span><br><span class="line">            - name<span class="punctuation">:</span> redis</span><br><span class="line">              containerPort<span class="punctuation">:</span> <span class="number">6379</span></span><br><span class="line">              protocol<span class="punctuation">:</span> <span class="string">&quot;TCP&quot;</span></span><br><span class="line">            - name<span class="punctuation">:</span> cluster</span><br><span class="line">              containerPort<span class="punctuation">:</span> <span class="number">16379</span></span><br><span class="line">              protocol<span class="punctuation">:</span> <span class="string">&quot;TCP&quot;</span></span><br><span class="line">        volumeMounts<span class="punctuation">:</span></span><br><span class="line">          - name<span class="punctuation">:</span> <span class="string">&quot;redis-conf&quot;</span></span><br><span class="line">            mountPath<span class="punctuation">:</span> <span class="string">&quot;/etc/redis&quot;</span></span><br><span class="line">          - name<span class="punctuation">:</span> <span class="string">&quot;redis-data&quot;</span></span><br><span class="line">            mountPath<span class="punctuation">:</span> <span class="string">&quot;/var/lib/redis&quot;</span></span><br><span class="line">      volumes<span class="punctuation">:</span></span><br><span class="line">      - name<span class="punctuation">:</span> <span class="string">&quot;redis-conf&quot;</span></span><br><span class="line">        configMap<span class="punctuation">:</span></span><br><span class="line">          name<span class="punctuation">:</span> <span class="string">&quot;redis-conf&quot;</span></span><br><span class="line">          items<span class="punctuation">:</span></span><br><span class="line">            - key<span class="punctuation">:</span> <span class="string">&quot;redis.conf&quot;</span></span><br><span class="line">              path<span class="punctuation">:</span> <span class="string">&quot;redis.conf&quot;</span></span><br><span class="line">  volumeClaimTemplates<span class="punctuation">:</span></span><br><span class="line">  - metadata<span class="punctuation">:</span></span><br><span class="line">      name<span class="punctuation">:</span> redis-data</span><br><span class="line">    spec<span class="punctuation">:</span></span><br><span class="line">      accessModes<span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;ReadWriteMany&quot;</span> <span class="punctuation">]</span></span><br><span class="line">      resources<span class="punctuation">:</span></span><br><span class="line">        requests<span class="punctuation">:</span></span><br><span class="line">          storage<span class="punctuation">:</span> <span class="number">200</span>M</span><br></pre></td></tr></table></figure></div>
+
+<p>分别执行</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f redis-pv.yaml </span><br><span class="line">kubectl create configmap redis-conf --from-file=redis.conf</span><br><span class="line">kubectl create -f redis-server.yaml </span><br></pre></td></tr></table></figure></div>
+
+<p>分配slots</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入主机</span></span><br><span class="line">kubectl exec -it redis-0 /bin/bash</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查</span></span><br><span class="line">redis-cli --cluster check 127.0.0.1:6379</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修复</span></span><br><span class="line">redis-cli --cluster fix 127.0.0.1:6379</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检验</span></span><br><span class="line">redis-cli </span><br><span class="line">set a 1</span><br><span class="line">get a</span><br><span class="line">del a</span><br><span class="line">get a</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="四-python节点"><a href="#四-python节点" class="headerlink" title="四. python节点"></a>四. python节点</h2><p>dockerfile如下：</p>
+<div class="highlight-container" data-rel="Dockerfile"><figure class="iseeu highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu:<span class="number">20.04</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">mkdir</span> /sichao_python</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./ /sichao_python</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /sichao_python</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get update &amp;&amp; apt-get install -y python3 python3-pip python3-dev gcc g++ libffi-dev libssl-dev</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip install cython</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip install cryptography</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip install -r requirements.txt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;gunicorn&quot;</span>, <span class="string">&quot;--workers=4&quot;</span>, <span class="string">&quot;--bind=0.0.0.0:5000&quot;</span>, <span class="string">&quot;miaoA:app&quot;</span>]</span></span><br></pre></td></tr></table></figure></div>
+
+<p>推送与拉取</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">build</span></span><br><span class="line">docker buildx build --platform arm64 -f Dockerfile -t python-backend .</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">tag</span></span><br><span class="line">docker tag &lt;imageID&gt; registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">push</span></span><br><span class="line">docker push registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">pull</span></span><br><span class="line">crictl pull --creds aliyun8516592724(username):[password] registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">tag</span></span><br><span class="line">ctr -n k8s.io i tag registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1 javabackend.io/springboot:v1</span><br></pre></td></tr></table></figure></div>
+
+<p>配置文件</p>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">python-recommend</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">python-recommend</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">python-recommend</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">python-recommend</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">pythonbackend.io/python-recommend:v1</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">5000</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">python-recommend</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">python-recommend</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">5000</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30150</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">5000</span></span><br></pre></td></tr></table></figure></div>
+
+<p>部署</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f python.yaml</span><br></pre></td></tr></table></figure></div>
+
+<p>cicd</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">crictl rmi registry.cn-shanghai.aliyuncs.com/miaoa/miaoa-python:prod</span><br><span class="line">crictl pull --creds Ethereal@1608148795872129:SichaoMiaoA123456 registry.cn-shanghai.aliyuncs.com/miaoa/miaoa-python:prod</span><br><span class="line">ctr -n k8s.io i tag registry.cn-shanghai.aliyuncs.com/miaoa/miaoa-python:prod pythonbackend.io/python-recommend:v1</span><br><span class="line">kubectl get pods | grep python-recommend | awk -F &#x27; &#x27; &#x27;&#123;print $1&#125;&#x27; | xargs kubectl delete pod</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="五-附录"><a href="#五-附录" class="headerlink" title="五. 附录"></a>五. 附录</h2><p>消除master节点的taint</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl taint nodes --all node-role.kubernetes.io/master-  # 旧版本</span><br><span class="line">kubectl taint nodes --all node-role.kubernetes.io/control-plane-</span><br></pre></td></tr></table></figure></div>
+
+<p>kubectl常用命令</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br><span class="line">kubectl get pods</span><br><span class="line">kubectl delete pod &lt;podname&gt;</span><br><span class="line">kubectl describe pod &lt;podname&gt;</span><br><span class="line">kubectl logs &lt;podname&gt;</span><br><span class="line">kubectl exec -it &lt;podname&gt; /bin/bash</span><br></pre></td></tr></table></figure></div>
+
+<p>docker常用命令</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker rmi &lt;imagesID&gt;</span><br><span class="line">docker rm &lt;containerID&gt;</span><br><span class="line">docker buildx build --platform arm64 -f Dockerfile -t jdk1.8 .</span><br><span class="line">docker tag [imageID] registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br><span class="line">docker push registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br></pre></td></tr></table></figure></div>
+
+<p>crictl常用命令</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crictl img</span><br><span class="line">crictl rmi</span><br><span class="line">crictl pull --creds aliyun8516592724(username):[password] registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1</span><br></pre></td></tr></table></figure></div>
+
+<p>ctr常用命令</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ctr -n k8s.io i rm &lt;imageID&gt;</span><br><span class="line">ctr -n k8s.io i tag registry.cn-shanghai.aliyuncs.com/ethereal-o/docker:v1 javabackend.io/springboot:v1</span><br><span class="line">ctr -n=k8s.io i ls</span><br><span class="line">ctr -n=k8s.io i ls|awk -F &#x27; &#x27; &#x27;&#123;print $1&#125;&#x27;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="六-参考"><a href="#六-参考" class="headerlink" title="六. 参考"></a>六. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/mshxuyi/article/details/115102838" >https://blog.csdn.net/mshxuyi/article/details/115102838 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/asufeiya/article/details/119595862" >https://blog.csdn.net/asufeiya/article/details/119595862 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/sebeefe/article/details/124473706" >https://blog.csdn.net/sebeefe/article/details/124473706 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zxc_123_789/article/details/122924616" >https://blog.csdn.net/zxc_123_789/article/details/122924616 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> k8s节点搭建</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2024-01-31 21:11:48</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2024-01-31 21:21:05
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/01/31/k8s节点搭建/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2024/01/08/k8s%E6%90%AD%E5%BB%BAinfluxdb%E5%92%8Ckafka%E9%9B%86%E7%BE%A4/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">k8s搭建influxdb和kafka集群</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">k8s节点搭建</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-mysql%E8%8A%82%E7%82%B9"><span class="nav-text">一. mysql节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-springboot%E8%8A%82%E7%82%B9"><span class="nav-text">二. springboot节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-redis%E8%8A%82%E7%82%B9"><span class="nav-text">三. redis节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B-python%E8%8A%82%E7%82%B9"><span class="nav-text">四. python节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94-%E9%99%84%E5%BD%95"><span class="nav-text">五. 附录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD-%E5%8F%82%E8%80%83"><span class="nav-text">六. 参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
