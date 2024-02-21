@@ -13,16 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/archives/2023/page/2/"/>
+    <link rel="canonical" href="http://example.com/2024/02/21/stl源码剖析阅读/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2023/page/2/index.html">
+        <meta name="description" content="空间配置器 标准STL（包括GCC）提供std::allocator作为各容器的默认配置器，而不是书中所说的std::alloc，且std::alloc已经不存在。  std::allocator只使用new和delete操作，如书中所言是简单包装。  旧版的std::alloc所持有的空间为全局所拥有，而新版的std::allocator及其衍生物为各容器私有。  为了解决空间利用率问题，引入了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL源码剖析阅读">
+<meta property="og:url" content="http://example.com/2024/02/21/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E9%98%85%E8%AF%BB/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="空间配置器 标准STL（包括GCC）提供std::allocator作为各容器的默认配置器，而不是书中所说的std::alloc，且std::alloc已经不存在。  std::allocator只使用new和delete操作，如书中所言是简单包装。  旧版的std::alloc所持有的空间为全局所拥有，而新版的std::allocator及其衍生物为各容器私有。  为了解决空间利用率问题，引入了">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-21T10:01:28.000Z">
+<meta property="article:modified_time" content="2024-02-21T10:52:58.641Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -36,7 +40,7 @@
     
     <title>
         
-            Archive: 2023 -
+            STL源码剖析阅读 -
         
         Ethereal&#39;s Blog
     </title>
@@ -318,118 +322,250 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="archive-container ">
-        
-<div class="archive-list-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">STL源码剖析阅读</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv2</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-02-21 18:01:28</span>
+        <span class="mobile">2024-02-21 18:01</span>
+        <span class="hover-info">Created</span>
+    </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2024</span>
-                <span class="archive-year-post-count">[3]</span>
-            </div>
-            <ul class="article-list">
-              
-              <li class="article-item" date-is='02-21'>
-                <a href="/2024/02/21/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E9%98%85%E8%AF%BB/">
-                  <span class="article-title">STL源码剖析阅读</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='01-31'>
-                <a href="/2024/01/31/k8s%E8%8A%82%E7%82%B9%E6%90%AD%E5%BB%BA/">
-                  <span class="article-title">k8s节点搭建</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='01-08'>
-                <a href="/2024/01/08/k8s%E6%90%AD%E5%BB%BAinfluxdb%E5%92%8Ckafka%E9%9B%86%E7%BE%A4/">
-                  <span class="article-title">k8s搭建influxdb和kafka集群</span>
-                </a>
-              </li>
-              
-            </ul>
-        </section>
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-02-21 18:52:58</span>
+            <span class="mobile">2024-02-21 18:52</span>
+            <span class="hover-info">Updated</span>
+        </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2023</span>
-                <span class="archive-year-post-count">[11]</span>
-            </div>
-            <ul class="article-list">
-              
-              <li class="article-item" date-is='12-28'>
-                <a href="/2023/12/28/JPA%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%E4%B8%8E%E6%96%B0%E4%BA%8B%E5%8A%A1%E7%BB%93%E5%90%88/">
-                  <span class="article-title">JPA延迟加载与新事务结合</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-18'>
-                <a href="/2023/12/18/%E7%A7%BB%E6%A4%8DPLC%E7%A8%8B%E5%BA%8F%E5%88%B0OpenHarmony%E4%B8%8A/">
-                  <span class="article-title">移植PLC程序到OpenHarmony上</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-17'>
-                <a href="/2023/12/17/%E5%B5%8C%E5%A5%97transaction%E4%B8%AD%E7%9A%84try-catch/">
-                  <span class="article-title">嵌套transaction中的try catch</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-07'>
-                <a href="/2023/12/07/mysql%E9%9B%86%E7%BE%A4-k8s%E9%9B%86%E7%BE%A4/">
-                  <span class="article-title">mysql集群+k8s集群</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-12'>
-                <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">
-                  <span class="article-title">备份QQ聊天记录</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-07'>
-                <a href="/2023/11/07/%E9%83%A8%E7%BD%B2VPN%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%B3Azure%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                  <span class="article-title">部署VPN服务器至Azure服务器</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-27'>
-                <a href="/2023/10/27/Github-actions/">
-                  <span class="article-title">Github actions</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-22'>
-                <a href="/2023/10/22/%E7%A7%BB%E5%8A%A8%E5%9B%BA%E6%80%81%E5%A4%9A%E7%B3%BB%E7%BB%9F/">
-                  <span class="article-title">移动固态多系统</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='08-12'>
-                <a href="/2023/08/12/MiAC2100IPv6/">
-                  <span class="article-title">MiAC2100IPv6</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-25'>
-                <a href="/2023/07/25/maven-for-JNA/">
-                  <span class="article-title">maven for JNA</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-12'>
-                <a href="/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
-                  <span class="article-title">k8s集群搭建</span>
-                </a>
-              </li>
-              
-            </ul>
-        </section>
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
     
 </div>
 
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="空间配置器"><a href="#空间配置器" class="headerlink" title="空间配置器"></a>空间配置器</h2><ul>
+<li><p>标准STL（包括GCC）提供<code>std::allocator</code>作为各容器的默认配置器，而不是书中所说的<code>std::alloc</code>，且<code>std::alloc</code>已经不存在。</p>
+</li>
+<li><p><code>std::allocator</code>只使用new和delete操作，如书中所言是简单包装。</p>
+</li>
+<li><p>旧版的<code>std::alloc</code>所持有的空间为全局所拥有，而新版的<code>std::allocator</code>及其衍生物为各容器私有。</p>
+</li>
+<li><p>为了解决空间利用率问题，引入了<code>std::pmr</code>空间，表示多态内存资源。空间中存在一个<code>allocator</code>，为<code>std::pmr::polymorphic_allocator</code>，即多态内存配置器。而空间中的容器例如<code>std::pmr::vector</code>，即使用此配置器。因此，<code>std::pmr::vector&lt;std::string&gt; v</code>即<code>std::vector&lt;std::string, std::pmr::polymorphic_allocator&lt;std::string&gt;&gt; v</code>。</p>
+</li>
+<li><p><code>std::pmr</code>空间中的容器不具有内存配置器传导性，即<code>std::pmr::vector&lt;std::pmr::string&gt; v</code>则vector中string也使用此内存配置器，但是<code>std::pmr::vector&lt;std::string&gt; v</code>中的string则使用默认配置器（std::allocator）。</p>
+</li>
+<li><p><code>std::pmr</code>空间中的容器具有内存配置器所使用的资源（resource）传导性，例如</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">std::array&lt;std::byte, 200000&gt; buf;</span><br><span class="line">std::pmr::monotonic_buffer_resource pool&#123;buf.<span class="built_in">data</span>(), buf.<span class="built_in">size</span>()&#125;;</span><br><span class="line">std::pmr::vector&lt;std::pmr::string&gt; coll&#123;&amp;pool&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<p>则其中的string也会使用<code>pool</code>来分配内存。</p>
+<ul>
+<li><p><code>std::pmr</code>空间中资源（resource）具有三种，<code>std::pmr::monotonic_buffer_resource</code>，<code>std::pmr::unsynchronized_pool_resource</code>和<code>std::pmr::synchronized_pool_resource</code>。<code>std::pmr::monotonic_buffer_resource</code>只单调增长，虽然存在释放函数，但什么都不做。<code>std::pmr::synchronized_pool_resource</code>是<code>std::pmr::unsynchronized_pool_resource</code>的线程安全版本，使用<code>std::lock_guard(std::mutex)</code>来保证。</p>
+</li>
+<li><p><code>std::pmr::synchronized_pool_resource</code>内部存在两个成员，其一<code>__pool_resource _M_impl</code>，是具体的实现，<code>_TPools* _M_tpools</code>，是线程特殊内存池的链表。第一个内存池被所有线程共享。对于每一个线程池，都具有一个<code>__pool_resource::_Pool</code>链表。每一个<code>__pool_resource::_Pool</code>中，所有的block大小一致。当初始化<code>_TPools</code>时会申请分级的<code>__pool_resource::_Pool</code>。对于每一个<code>__pool_resource::_Pool</code>对象，持有一个<code>vector</code>（不同于std::vector），其内部按地址大小排列。vector内部元素是chunk，所有的chunk大小均一致为1024byte。每个chunk由开头的n个block和后面一个大小为n的bitset组成。bitset充当布隆过滤器的功能。<code>_TPools</code>即一个多级内存池。（<code>_TPools-&gt;_Pool-&gt;chunk-&gt;block</code>）</p>
+</li>
+<li><p>此外，<code>__pool_resource _M_impl</code>中还存在一个vector，存储不会放在内存池中的块（过大的内存块）。</p>
+</li>
+<li><p>初始化时，通过内存资源对象初始化<code>__pool_resource _M_impl</code>（其中的vector为<code>std::pmr::vector</code>因此是通过内存资源初始化的），然后向<code>M_impl</code>申请资源构造<code>_TPools* _M_tpools</code>（通过构造临时构造器来构造）。当此<code>std::pmr::synchronized_pool_resource</code>申请资源时，会通过分级得到合适的<code>_Pool</code>，<code>_Pool</code>分配无论是否存在空余都会传入内存资源对象（此对象<code>_TPools* _M_tpools</code>持有），并向vector后加入chunk。</p>
+</li>
+<li><p>POD类型存在unintialized_系列方法，例如unintialized_copy，表示向一块未初始化的区域上复制对象。</p>
+</li>
+</ul>
+<h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><ul>
+<li><p>容器需要设计迭代器的萃取（通过偏特化以对接STL算法接口）</p>
+</li>
+<li><p>容器需要设计迭代器</p>
+</li>
+<li><p>迭代器类型</p>
+<ul>
+<li><p>输入迭代器<code>input iterator</code></p>
+</li>
+<li><p>输出迭代器<code>output iterator</code></p>
+</li>
+<li><p>前向迭代器<code>forward iterator</code></p>
+</li>
+<li><p>双向迭代器<code>bidirectional iterator</code></p>
+</li>
+<li><p>随机访问迭代器<code>random-access iterator</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="容器与算法"><a href="#容器与算法" class="headerlink" title="容器与算法"></a>容器与算法</h2><p>注意一下deque</p>
+<h2 id="仿函数与配接器"><a href="#仿函数与配接器" class="headerlink" title="仿函数与配接器"></a>仿函数与配接器</h2><ul>
+<li><p>仿函数即结构体重载()运算符。</p>
+</li>
+<li><p>配接器分为三种</p>
+<ul>
+<li><p>容器配接器（stack和queue，两者底层均为deque，只是隐藏了功能而已）</p>
+</li>
+<li><p>迭代器配接器（通过Output迭代器类型实现功能，例如把一般迭代器的<strong>复制操作转变为插入操作</strong>）</p>
+</li>
+<li><p>仿函数配接器（数学逻辑运算）</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gcc-mirror/gcc/blob/ecfcc362b7f3f796c72f3525c4e3a6dd8ab3beac/libstdc%2B%2B-v3/src/c%2B%2B17/memory_resource.cc#L1378" >gcc&#x2F;libstdc++-v3&#x2F;src&#x2F;c++17&#x2F;memory_resource.cc at ecfcc362b7f3f796c72f3525c4e3a6dd8ab3beac · gcc-mirror&#x2F;gcc (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://landodo.github.io/posts/20190304-stl-notes/" >《STL 源码剖析》STL 学习笔记 | Notes (landodo.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/181298460" >《STL源码剖析》第8章配接器 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Johnsonjjj/article/details/107783210" >C++ STL 迭代器Iterator、五种迭代器类别_c++ iterator的种类-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> STL源码剖析阅读</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2024-02-21 18:01:28</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2024-02-21 18:52:58
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/02/21/STL源码剖析阅读/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2024/01/31/k8s%E8%8A%82%E7%82%B9%E6%90%AD%E5%BB%BA/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">k8s节点搭建</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">STL源码剖析阅读</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E9%85%8D%E7%BD%AE%E5%99%A8"><span class="nav-text">空间配置器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-text">迭代器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E4%B8%8E%E7%AE%97%E6%B3%95"><span class="nav-text">容器与算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BF%E5%87%BD%E6%95%B0%E4%B8%8E%E9%85%8D%E6%8E%A5%E5%99%A8"><span class="nav-text">仿函数与配接器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
     </div>
 </div>
+            </div>
+        
+    </div>
+</div>
+
 
                 
 
@@ -502,6 +638,27 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
@@ -613,6 +770,16 @@
 
 
 <div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
     
 </div>
 
