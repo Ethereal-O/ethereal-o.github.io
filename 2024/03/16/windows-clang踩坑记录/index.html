@@ -13,16 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/archives/2023/"/>
+    <link rel="canonical" href="http://example.com/2024/03/16/windows-clang踩坑记录/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2023/index.html">
+        <meta name="description" content="VS studio安装路径 准备工作   卸载所有的SDK，从vs studio installer中卸载，并且从设置-应用中卸载（搜索kit），并且移除C:\Program Files (x86)\Windows Kits目录。   共享组件、工具和SDK安装位置修改   进入注册表，找到表项计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows clang踩坑记录">
+<meta property="og:url" content="http://example.com/2024/03/16/windows-clang%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="VS studio安装路径 准备工作   卸载所有的SDK，从vs studio installer中卸载，并且从设置-应用中卸载（搜索kit），并且移除C:\Program Files (x86)\Windows Kits目录。   共享组件、工具和SDK安装位置修改   进入注册表，找到表项计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStud">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-16T12:47:46.000Z">
+<meta property="article:modified_time" content="2024-03-16T14:41:23.887Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -36,7 +40,7 @@
     
     <title>
         
-            Archive: 2023 -
+            windows clang踩坑记录 -
         
         Ethereal&#39;s Blog
     </title>
@@ -318,136 +322,234 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="archive-container ">
-        
-<div class="archive-list-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">windows clang踩坑记录</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv3</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-03-16 20:47:46</span>
+        <span class="mobile">2024-03-16 20:47</span>
+        <span class="hover-info">Created</span>
+    </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2024</span>
-                <span class="archive-year-post-count">[6]</span>
-            </div>
-            <ul class="article-list">
-              
-              <li class="article-item" date-is='03-16'>
-                <a href="/2024/03/16/windows-clang%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
-                  <span class="article-title">windows clang踩坑记录</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-01'>
-                <a href="/2024/03/01/%E7%83%A7%E5%86%99OpenHarmony%E9%95%9C%E5%83%8F%E5%88%B0DAYU200%E6%9D%BF%E5%AD%90%E4%B8%8A/">
-                  <span class="article-title">烧写OpenHarmony镜像到DAYU200板子上</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='02-26'>
-                <a href="/2024/02/26/docker%E6%B8%85%E7%90%86/">
-                  <span class="article-title">docker清理</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='02-21'>
-                <a href="/2024/02/21/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E9%98%85%E8%AF%BB/">
-                  <span class="article-title">STL源码剖析阅读</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='01-31'>
-                <a href="/2024/01/31/k8s%E8%8A%82%E7%82%B9%E6%90%AD%E5%BB%BA/">
-                  <span class="article-title">k8s节点搭建</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='01-08'>
-                <a href="/2024/01/08/k8s%E6%90%AD%E5%BB%BAinfluxdb%E5%92%8Ckafka%E9%9B%86%E7%BE%A4/">
-                  <span class="article-title">k8s搭建influxdb和kafka集群</span>
-                </a>
-              </li>
-              
-            </ul>
-        </section>
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-03-16 22:41:23</span>
+            <span class="mobile">2024-03-16 22:41</span>
+            <span class="hover-info">Updated</span>
+        </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2023</span>
-                <span class="archive-year-post-count">[11]</span>
-            </div>
-            <ul class="article-list">
-              
-              <li class="article-item" date-is='12-28'>
-                <a href="/2023/12/28/JPA%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%E4%B8%8E%E6%96%B0%E4%BA%8B%E5%8A%A1%E7%BB%93%E5%90%88/">
-                  <span class="article-title">JPA延迟加载与新事务结合</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-18'>
-                <a href="/2023/12/18/%E7%A7%BB%E6%A4%8DPLC%E7%A8%8B%E5%BA%8F%E5%88%B0OpenHarmony%E4%B8%8A/">
-                  <span class="article-title">移植PLC程序到OpenHarmony上</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-17'>
-                <a href="/2023/12/17/%E5%B5%8C%E5%A5%97transaction%E4%B8%AD%E7%9A%84try-catch/">
-                  <span class="article-title">嵌套transaction中的try catch</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-07'>
-                <a href="/2023/12/07/mysql%E9%9B%86%E7%BE%A4-k8s%E9%9B%86%E7%BE%A4/">
-                  <span class="article-title">mysql集群+k8s集群</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-12'>
-                <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">
-                  <span class="article-title">备份QQ聊天记录</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-07'>
-                <a href="/2023/11/07/%E9%83%A8%E7%BD%B2VPN%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%B3Azure%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                  <span class="article-title">部署VPN服务器至Azure服务器</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-27'>
-                <a href="/2023/10/27/Github-actions/">
-                  <span class="article-title">Github actions</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-22'>
-                <a href="/2023/10/22/%E7%A7%BB%E5%8A%A8%E5%9B%BA%E6%80%81%E5%A4%9A%E7%B3%BB%E7%BB%9F/">
-                  <span class="article-title">移动固态多系统</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='08-12'>
-                <a href="/2023/08/12/MiAC2100IPv6/">
-                  <span class="article-title">MiAC2100IPv6</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-25'>
-                <a href="/2023/07/25/maven-for-JNA/">
-                  <span class="article-title">maven for JNA</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-12'>
-                <a href="/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
-                  <span class="article-title">k8s集群搭建</span>
-                </a>
-              </li>
-              
-            </ul>
-        </section>
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
     
 </div>
 
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h3 id="VS-studio安装路径"><a href="#VS-studio安装路径" class="headerlink" title="VS studio安装路径"></a>VS studio安装路径</h3><ol>
+<li>准备工作</li>
+</ol>
+<ul>
+<li>卸载所有的SDK，从vs studio installer中卸载，并且从设置-应用中卸载（搜索kit），并且移除<code>C:\Program Files (x86)\Windows Kits</code>目录。</li>
+</ul>
+<ol start="2">
+<li>共享组件、工具和SDK安装位置修改</li>
+</ol>
+<ul>
+<li><p>进入注册表，找到表项<code>计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\Setup</code>，删除项<code>CachePath</code>与<code>SharedInstallationPath</code>。</p>
+</li>
+<li><p>在vs studio installer中此时即可修改安装位置。</p>
+</li>
+</ul>
+<ol start="3">
+<li>系统缓存、工具和位置固定的SDK修改</li>
+</ol>
+<ul>
+<li>进入注册表，找到表项<code>计算机\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots</code>，修改项<code>KitsRoot10</code>、<code>KitsRoot81</code>、<code>WindowsDebuggersRoot10</code>等包含目录的项，**注意最后必须加<code>\</code>**。</li>
+</ul>
+<ol start="4">
+<li>重新安装</li>
+</ol>
+<ul>
+<li>在vs studio installer中安装SDK。</li>
+</ul>
+<h3 id="配置资源编译器"><a href="#配置资源编译器" class="headerlink" title="配置资源编译器"></a>配置资源编译器</h3><ol>
+<li><p>找到上述SDK安装路径（默认为<code>C:\Program Files (x86)\Windows Kits</code>），找到MSVC的资源编译器（<code>安装路径\10\bin\10.0.22621.0\x64\rc.exe</code>）。</p>
+</li>
+<li><p>复制文件地址，配置cmake编译选项<code>-DCMAKE_RC_COMPILER=&quot;rc_path&quot;</code>或配置环境变量<code>RC</code>为<code>&quot;rc_path&quot;</code>，<code>如果路径中有空格，注意加入引号</code>。</p>
+</li>
+</ol>
+<h3 id="配置clang"><a href="#配置clang" class="headerlink" title="配置clang"></a>配置clang</h3><ol>
+<li><p>下载llvm<a class="link"   target="_blank" rel="noopener" href="https://github.com/llvm/llvm-project/releases" >Releases · llvm&#x2F;llvm-project (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>加入环境变量</p>
+</li>
+<li><p>设置clion的工具链和cmake选项。</p>
+</li>
+</ol>
+<ul>
+<li><p>工具链：选择C编译工具为<code>bin\clang.exe</code>，C++编译工具为<code>bin\clang++.exe</code>，cmake为自己安装的cmake路径。</p>
+</li>
+<li><p>cmake选项：参考上述配置资源编译器中的选项。</p>
+</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44377470/article/details/107664066" >Visual Studio安装时，不能更改共享组件、工具和SDK的位置_共享组件、工具和sdk位置-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/ask/sof/1968857" >更改windows kit通用安装路径-腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/ask/sof/115982288" >忍者:找不到CMAKE_RC_COMPILER-腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/llvm/llvm-project/releases" >Releases · llvm&#x2F;llvm-project (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334520673" >Clion 2020.3：如何设置Clang编译器 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> windows clang踩坑记录</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2024-03-16 20:47:46</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2024-03-16 22:41:23
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/03/16/windows-clang踩坑记录/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2024/03/01/%E7%83%A7%E5%86%99OpenHarmony%E9%95%9C%E5%83%8F%E5%88%B0DAYU200%E6%9D%BF%E5%AD%90%E4%B8%8A/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">烧写OpenHarmony镜像到DAYU200板子上</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">windows clang踩坑记录</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#VS-studio%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84"><span class="nav-text">VS studio安装路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%B5%84%E6%BA%90%E7%BC%96%E8%AF%91%E5%99%A8"><span class="nav-text">配置资源编译器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEclang"><span class="nav-text">配置clang</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
     </div>
 </div>
+            </div>
+        
+    </div>
+</div>
+
 
                 
 
@@ -520,6 +622,27 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
@@ -631,6 +754,16 @@
 
 
 <div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
     
 </div>
 
