@@ -26,7 +26,7 @@
 <meta property="og:description" content="预编译首先编译一次oh完整镜像，细节可以参考OpenHarmony编译环境搭建 （兼容至4.0-Master和主干分支） - 文章 OpenHarmony开发者论坛  编译结束后在out&#x2F;rk3568&#x2F;packages&#x2F;phone&#x2F;images下得到所有的镜像，包括如下镜像： 12boot_linux.img  config.cfg      MiniLoaderAll.bin  ramdisk.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-08T08:31:09.000Z">
-<meta property="article:modified_time" content="2024-05-08T09:01:27.104Z">
+<meta property="article:modified_time" content="2024-05-08T09:05:21.821Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-05-08 17:01:27</span>
-            <span class="mobile">2024-05-08 17:01</span>
+            <span class="desktop">2024-05-08 17:05:21</span>
+            <span class="mobile">2024-05-08 17:05</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -414,6 +414,8 @@
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">out/kernel/src_tmp/linux-5.10/boot_linux.img</span><br><span class="line">out/kernel/OBJ/linux-5.10/resource.img</span><br></pre></td></tr></table></figure></div>
 
 <p>将两个文件与之前编译得到的镜像一同打包烧写到板子上即可。</p>
+<h2 id="查看隔离情况"><a href="#查看隔离情况" class="headerlink" title="查看隔离情况"></a>查看隔离情况</h2><p>执行<code>cat /proc/cmdline</code>来获取<code>cmdline</code>参数。</p>
+<p>执行<code>ps -o pid,psr,comm -e</code>获取运行核心情况，第二列<code>PSR</code>即为正在运行的核心。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://forums.openharmony.cn/forum.php?mod=viewthread&tid=897" >OpenHarmony编译环境搭建 （兼容至4.0-Master和主干分支） - 文章 OpenHarmony开发者论坛 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://ipads.se.sjtu.edu.cn:1312/xinruil/ohtools" >IPADS-Gitlab编译步骤参考 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://gitee.com/openharmony/kernel_linux_patches/pulls/253/files" >support A&#x2F;B partition startup · Pull Request !253 · OpenHarmony&#x2F;kernel_linux_patches - Gitee.com <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -431,7 +433,7 @@
         <li><strong>Created at:</strong> 2024-05-08 16:31:09</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-05-08 17:01:27
+                <strong>Updated at:</strong> 2024-05-08 17:05:21
             </li>
         
         <li>
@@ -526,7 +528,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">OH隔离核心</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91"><span class="nav-text">预编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%86%85%E6%A0%B8"><span class="nav-text">修改内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8"><span class="nav-text">编译内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91"><span class="nav-text">预编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%86%85%E6%A0%B8"><span class="nav-text">修改内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8"><span class="nav-text">编译内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E9%9A%94%E7%A6%BB%E6%83%85%E5%86%B5"><span class="nav-text">查看隔离情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
