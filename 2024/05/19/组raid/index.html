@@ -13,20 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2024/05/08/oh隔离核心/"/>
+    <link rel="canonical" href="http://example.com/2024/05/19/组raid/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="预编译首先编译一次oh完整镜像，细节可以参考OpenHarmony编译环境搭建 （兼容至4.0-Master和主干分支） - 文章 OpenHarmony开发者论坛  编译结束后在out&#x2F;rk3568&#x2F;packages&#x2F;phone&#x2F;images下得到所有的镜像，包括如下镜像： 12boot_linux.img  config.cfg      MiniLoaderAll.bin  ramdisk.">
+        <meta name="description" content="1. 查看磁盘信息fdisk -l：列出所有的磁盘块设备信息，包含重复的磁盘，例如在raid下一个磁盘可以被抽象成两个设备（如下&#x2F;dev&#x2F;md0包含&#x2F;dev&#x2F;sda和&#x2F;dev&#x2F;sdb） 12345678910111213141516171819202122232425262728293031323334353637383940Disk &#x2F;dev&#x2F;loop0: 105.4 MiB, 11052646">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OH隔离核心">
-<meta property="og:url" content="http://example.com/2024/05/08/OH%E9%9A%94%E7%A6%BB%E6%A0%B8%E5%BF%83/index.html">
+<meta property="og:title" content="组raid">
+<meta property="og:url" content="http://example.com/2024/05/19/%E7%BB%84raid/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="预编译首先编译一次oh完整镜像，细节可以参考OpenHarmony编译环境搭建 （兼容至4.0-Master和主干分支） - 文章 OpenHarmony开发者论坛  编译结束后在out&#x2F;rk3568&#x2F;packages&#x2F;phone&#x2F;images下得到所有的镜像，包括如下镜像： 12boot_linux.img  config.cfg      MiniLoaderAll.bin  ramdisk.">
+<meta property="og:description" content="1. 查看磁盘信息fdisk -l：列出所有的磁盘块设备信息，包含重复的磁盘，例如在raid下一个磁盘可以被抽象成两个设备（如下&#x2F;dev&#x2F;md0包含&#x2F;dev&#x2F;sda和&#x2F;dev&#x2F;sdb） 12345678910111213141516171819202122232425262728293031323334353637383940Disk &#x2F;dev&#x2F;loop0: 105.4 MiB, 11052646">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-05-08T08:31:09.000Z">
-<meta property="article:modified_time" content="2024-05-08T09:41:50.202Z">
+<meta property="article:published_time" content="2024-05-19T10:03:11.000Z">
+<meta property="article:modified_time" content="2024-05-19T10:37:14.341Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -40,7 +40,7 @@
     
     <title>
         
-            OH隔离核心 -
+            组raid -
         
         Ethereal&#39;s Blog
     </title>
@@ -328,7 +328,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">OH隔离核心</h1>
+                    <h1 class="article-title-regular">组raid</h1>
                 </div>
             
                 
@@ -350,15 +350,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-05-08 16:31:09</span>
-        <span class="mobile">2024-05-08 16:31</span>
+        <span class="desktop">2024-05-19 18:03:11</span>
+        <span class="mobile">2024-05-19 18:03</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-05-08 17:41:50</span>
-            <span class="mobile">2024-05-08 17:41</span>
+            <span class="desktop">2024-05-19 18:37:14</span>
+            <span class="mobile">2024-05-19 18:37</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -382,45 +382,56 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h2><p>首先编译一次oh完整镜像，细节可以参考<a class="link"   target="_blank" rel="noopener" href="https://forums.openharmony.cn/forum.php?mod=viewthread&tid=897" >OpenHarmony编译环境搭建 （兼容至4.0-Master和主干分支） - 文章 OpenHarmony开发者论坛 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p>编译结束后在<code>out/rk3568/packages/phone/images</code>下得到所有的镜像，包括如下镜像：</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">boot_linux.img  config.cfg      MiniLoaderAll.bin  ramdisk.img   sys_prod.img  uboot.img    userdata.img</span><br><span class="line">chip_prod.img   eng_system.img  parameter.txt      resource.img  system.img    updater.img  vendor.img</span><br></pre></td></tr></table></figure></div>
+                <h2 id="1-查看磁盘信息"><a href="#1-查看磁盘信息" class="headerlink" title="1. 查看磁盘信息"></a>1. 查看磁盘信息</h2><p><code>fdisk -l</code>：列出所有的磁盘块设备信息，包含重复的磁盘，例如在raid下一个磁盘可以被抽象成两个设备（如下<code>/dev/md0</code>包含<code>/dev/sda</code>和<code>/dev/sdb</code>）</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Disk /dev/loop0: 105.4 MiB, 110526464 bytes, 215872 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/loop1: 104 MiB, 109043712 bytes, 212976 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/nvme0n1: 953.9 GiB, 1024209543168 bytes, 2000409264 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disklabel type: gpt</span><br><span class="line">Disk identifier: 5EC6A3B1-BAEF-4D2F-BE18-39C22209C460</span><br><span class="line"></span><br><span class="line">Device           Start        End    Sectors   Size Type</span><br><span class="line">/dev/nvme0n1p1    2048    1050623    1048576   512M EFI System</span><br><span class="line">/dev/nvme0n1p2 1050624 2000406527 1999355904 953.4G Linux filesystem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 3.7 TiB, 4000787030016 bytes, 7814037168 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/sdb: 3.7 TiB, 4000787030016 bytes, 7814037168 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/md0: 3.7 TiB, 4000786874368 bytes, 7814036864 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br></pre></td></tr></table></figure></div>
 
-<p><strong>注意：</strong></p>
-<ol>
-<li><p>可以使用docker镜像<code>swr.cn-south-1.myhuaweicloud.com/openharmony-docker/docker_oh_standard:3.2</code></p>
+<p><code>lsblk</code>：查看所有的磁盘信息，不包含重复的</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">NAME        MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT</span><br><span class="line">loop0         7:0    0 105.4M  1 loop  /snap/core/16574</span><br><span class="line">loop1         7:1    0   104M  1 loop  /snap/core/16928</span><br><span class="line">sda           8:0    0   3.7T  0 disk</span><br><span class="line">└─md0         9:0    0   3.7T  0 raid1</span><br><span class="line">sdb           8:16   0   3.7T  0 disk</span><br><span class="line">└─md0         9:0    0   3.7T  0 raid1</span><br><span class="line">nvme0n1     259:0    0 953.9G  0 disk</span><br><span class="line">├─nvme0n1p1 259:1    0   512M  0 part  /boot/efi</span><br><span class="line">└─nvme0n1p2 259:2    0 953.4G  0 part  /</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="2-分配RAID"><a href="#2-分配RAID" class="headerlink" title="2. 分配RAID"></a>2. 分配RAID</h2><p><code>mdadm --create /dev/md0 --homehost=any --metadata=1.0 --level=1 --raid-devices=2 /dev/sda /dev/sdb</code></p>
+<ul>
+<li><p>上述命令表示创建<code>/dev/md0</code>块设备，通过<code>/dev/sda</code>和<code>/dev/sdb</code>以RAID1方式创建RAID。</p>
 </li>
-<li><p>当执行<code>./build.sh</code>时，执行以下命令</p>
+<li><p><code>--homehost</code>表示域名，以防冲突；<code>--metadata</code>表示元数据版本格式；<code>--level</code>表示RAID版本，<code>--raid-devices</code>指定数量。</p>
 </li>
-</ol>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build.sh --product-name rk3568 --ccache --gn-args enable_notice_collection=false --gn-args load_test_config=false --gn-flags=&quot;--export-compile-commands&quot; --target-cpu arm64 --build-target images </span><br></pre></td></tr></table></figure></div>
+<li><p>通过将 <code>-level=1</code>（镜像）与 <code>-metadata=1.0</code> （将元数据存储在设备末尾）结合使用，可以创建一个 RAID1 阵列。</p>
+</li>
+<li><p>更详细信息可以参考<a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/63990027" >使用 mdadm 管理 RAID 阵列 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+</li>
+</ul>
+<h2 id="3-查看RAID"><a href="#3-查看RAID" class="headerlink" title="3. 查看RAID"></a>3. 查看RAID</h2><p><code>mdadm -Ds</code>：查看阵列设备详细信息和阵列缺失信息</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ARRAY /dev/md0 metadata=1.0 name=any:0 UUID=806448e9:8a672a6b:39a23572:41f9d93a</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="修改内核"><a href="#修改内核" class="headerlink" title="修改内核"></a>修改内核</h2><p>当编译完成后，在目录下会生成out文件夹，编辑<code>out/kernel/src_tmp/linux-5.10/arch/arm64/boot/dts/rockchip/rk3568-linux.dtsi</code></p>
-<p>（此文件受<code>kernel/linux/patches/linux-5.10/rk3568_patch/kernel.patch</code>预控制，当执行完一轮完整编译后，此patch已经打入此文件，而之后的步骤不涉及重新打patch，因此可以直接修改）</p>
-<p>修改dtsi文件中的cmdline，前几行如下所示，在cmdline后加<code>isolcpus=3</code>表示隔离第3个核心（从0计数）</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: (GPL-2.0+ OR MIT)</span><br><span class="line">/*</span><br><span class="line"> * Copyright (c) 2020 Rockchip Electronics Co., Ltd.</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">/ &#123;</span><br><span class="line">        chosen: chosen &#123;</span><br><span class="line">                bootargs = &quot;earlycon=uart8250,mmio32,0xfe660000 console=ttyFIQ0 ohos.boot.eng_mode=on root=PARTUUID=614e0000-0000 hardware=rk3568 default_boot_device=fe310000.sdhci rw rootwait isolcpus=3 ohos.required_mount.system=/dev/block/platform/fe310000.sdhci/by-name/system@/usr@ext4@ro,barrier=1@wait,required ohos.required_mount.vendor=/dev/block/platform/fe310000.sdhci/by-name/vendor@/vendor@ext4@ro,barrier=1@wait,required ohos.required_mount.misc=/dev/block/platform/fe310000.sdhci/by-name/misc@none@none@none@wait,required ohos.required_mount.bootctrl=/dev/block/platform/fe310000.sdhci/by-name/bootctrl@none@none@none@wait,required&quot;;</span><br><span class="line">        &#125;;</span><br></pre></td></tr></table></figure></div>
+<p><code>mdadm -D /dev/md0</code>：查看某一设备的具体更详细的信息</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/dev/md0:</span><br><span class="line">           Version : 1.0</span><br><span class="line">     Creation Time : Sun May 19 09:03:10 2024</span><br><span class="line">        Raid Level : raid1</span><br><span class="line">        Array Size : 3907018432 (3726.02 GiB 4000.79 GB)</span><br><span class="line">     Used Dev Size : 3907018432 (3726.02 GiB 4000.79 GB)</span><br><span class="line">      Raid Devices : 2</span><br><span class="line">     Total Devices : 2</span><br><span class="line">       Persistence : Superblock is persistent</span><br><span class="line"></span><br><span class="line">     Intent Bitmap : Internal</span><br><span class="line"></span><br><span class="line">       Update Time : Sun May 19 10:14:05 2024</span><br><span class="line">             State : clean, resyncing</span><br><span class="line">    Active Devices : 2</span><br><span class="line">   Working Devices : 2</span><br><span class="line">    Failed Devices : 0</span><br><span class="line">     Spare Devices : 0</span><br><span class="line"></span><br><span class="line">Consistency Policy : bitmap</span><br><span class="line"></span><br><span class="line">     Resync Status : 21% complete</span><br><span class="line"></span><br><span class="line">              Name : any:0</span><br><span class="line">              UUID : 806448e9:8a672a6b:39a23572:41f9d93a</span><br><span class="line">            Events : 856</span><br><span class="line"></span><br><span class="line">    Number   Major   Minor   RaidDevice State</span><br><span class="line">       0       8        0        0      active sync   /dev/sda</span><br><span class="line">       1       8       16        1      active sync   /dev/sdb</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h2><p>进入目录<code>out/kernel/src_tmp/linux-5.10</code>，执行下列命令编译</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export PRODUCT_COMPANY=hihope</span><br><span class="line">export DEVICE_COMPANY=rockchip</span><br><span class="line">export DEVICE_NAME=rk3568</span><br><span class="line">export KBUILD_OUTPUT=../../OBJ/linux-5.10/</span><br><span class="line">./make-ohos.sh TB-RK3568X0</span><br></pre></td></tr></table></figure></div>
+<p>可以看到设备仍在同步中。无论是否在同步中，都可以执行命令，例如格式化。</p>
+<p><code>cat /proc/mdstat</code>：查看同步进度和速度</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Personalities : [linear] [multipath] [raid0] [raid1] [raid6] [raid5] [raid4] [raid10]</span><br><span class="line">md0 : active raid1 sdb[1] sda[0]</span><br><span class="line">      3907018432 blocks super 1.0 [2/2] [UU]</span><br><span class="line">      [====&gt;................]  resync = 22.0% (862519232/3907018432) finish=253.1min speed=200390K/sec</span><br><span class="line">      bitmap: 24/30 pages [96KB], 65536KB chunk</span><br><span class="line"></span><br><span class="line">unused devices: &lt;none&gt;</span><br></pre></td></tr></table></figure></div>
 
-<p>其中<code>./make-ohos.sh TB-RK3568X0</code>默认会指定编译架构为<code>arm64</code>，因此能够读取到上述的dtsi文件的修改</p>
-<p>编译输出如下：</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">make[1]: Entering directory &#x27;/root/ssd/openharmony/dayu200/4/out/kernel/OBJ/linux-5.10&#x27;</span><br><span class="line">  GEN     Makefile</span><br><span class="line">drivers/hdf/khdf/model/audio/Kconfig:96:warning: ignoring type redefinition of &#x27;DRM_DW_HDMI_I2S_AUDIO&#x27; from &#x27;tristate&#x27; to &#x27;bool&#x27;</span><br><span class="line">drivers/hdf/khdf/model/network/wifi/bus/Kconfig:25:warning: defaults for choice values not supported</span><br><span class="line">drivers/hdf/khdf/model/network/wifi/bus/Kconfig:32:warning: defaults for choice values not supported</span><br><span class="line">arch/arm64/configs/rockchip_linux_defconfig:2619:warning: override: reassigning to symbol TUN</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment"># No change to .config</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash">make[1]: Leaving directory <span class="string">&#x27;/root/ssd/openharmony/dayu200/4/out/kernel/OBJ/linux-5.10&#x27;</span></span></span><br><span class="line">make[1]: Entering directory &#x27;/root/ssd/openharmony/dayu200/4/out/kernel/OBJ/linux-5.10&#x27;</span><br><span class="line">  GEN     Makefile</span><br><span class="line">  DESCEND  bpf/resolve_btfids</span><br><span class="line">  CALL    /root/ssd/openharmony/dayu200/4/out/kernel/src_tmp/linux-5.10/scripts/atomic/check-atomics.sh</span><br><span class="line">  CALL    /root/ssd/openharmony/dayu200/4/out/kernel/src_tmp/linux-5.10/scripts/checksyscalls.sh</span><br><span class="line">  DTC     arch/arm64/boot/dts/rockchip/rk3568-toybrick-x0-linux.dtb</span><br><span class="line">/root/ssd/openharmony/dayu200/4/out/kernel/src_tmp/linux-5.10/arch/arm64/boot/dts/rockchip/rk3568-toybrick.dtsi:1411.16-1419.4: Warning (i2c_bus_reg): /i2c@fe5a0000/gt1x@14: I2C bus unit address format error, expected &quot;5d&quot;</span><br><span class="line">  also defined at /root/ssd/openharmony/dayu200/4/out/kernel/src_tmp/linux-5.10/arch/arm64/boot/dts/rockchip/rk3568-toybrick-x0.dtsi:352.7-354.3</span><br><span class="line">  also defined at /root/ssd/openharmony/dayu200/4/out/kernel/src_tmp/linux-5.10/arch/arm64/boot/dts/rockchip/rk3568-toybrick-mipi-tx0-beiqicloud.dtsi:326.16-335.4</span><br><span class="line">/root/ssd/openharmony/dayu200/4/out/kernel/src_tmp/linux-5.10/arch/arm64/boot/dts/rockchip/rk3568.dtsi:1901.18-1916.6: Warning (graph_port): /hdmi@fe0a0000/ports/port: graph node unit address error, expected &quot;0&quot;</span><br><span class="line">  CHK     include/generated/compile.h</span><br><span class="line">fatal: not a git repository (or any parent up to mount point /root)</span><br><span class="line">Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).</span><br><span class="line">/root/ssd/openharmony/dayu200/4/out/kernel/src_tmp/linux-5.10/drivers/hdf/khdf/Makefile:19: PRODUCT_PATH=vendor/hihope/rk3568</span><br><span class="line">HCS_DIR = /root/ssd/openharmony/dayu200/4/vendor/hihope/rk3568/hdf_config/khdf/hdf_test</span><br><span class="line">E/write_index_tbl(1475): try to write index table...</span><br><span class="line">E/write_index_tbl(1483): write_index_tbl 3</span><br><span class="line"></span><br><span class="line">E/write_index_tbl(1498): try to write index entry(./arch/arm64/boot/dts/rockchip/rk3568-toybrick-x0-linux.dtb)...</span><br><span class="line">E/write_index_tbl(1515): mod fdt path:./arch/arm64/boot/dts/rockchip/rk3568-toybrick-x0-linux.dtb -&gt; rk-kernel.dtb...</span><br><span class="line">E/write_index_tbl(1498): try to write index entry(logo.bmp)...</span><br><span class="line">E/write_index_tbl(1498): try to write index entry(logo_kernel.bmp)...</span><br><span class="line">  Image:  resource.img (with rk3568-toybrick-x0-linux.dtb logo.bmp logo_kernel.bmp) is ready</span><br><span class="line">make[1]: Leaving directory &#x27;/root/ssd/openharmony/dayu200/4/out/kernel/OBJ/linux-5.10&#x27;</span><br></pre></td></tr></table></figure></div>
+<p><code>sudo sh -c &quot;mdadm -Dsv &gt; /etc/mdadm.conf&quot;</code>：保存RAID信息</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ARRAY /dev/md0 level=raid1 num-devices=2 metadata=1.0 name=any:0 UUID=806448e9:8a672a6b:39a23572:41f9d93a</span><br><span class="line">   devices=/dev/sda,/dev/sdb</span><br></pre></td></tr></table></figure></div>
 
-<p>其中会有<code>git</code>报错<code>fatal: not a git repository not a git repository (or any parent up to mount point /root)</code>没有影响，编译时间很短</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">real    0m3.528s</span><br><span class="line">user    0m16.580s</span><br><span class="line">sys     0m5.822s</span><br></pre></td></tr></table></figure></div>
+<h2 id="4-创建文件系统"><a href="#4-创建文件系统" class="headerlink" title="4. 创建文件系统"></a>4. 创建文件系统</h2><p><code>sudo mkfs.xfs /dev/md0</code>：创建文件系统并格式化</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">meta-data=/dev/md0               isize=512    agcount=4, agsize=244188652 blks</span><br><span class="line">         =                       sectsz=512   attr=2, projid32bit=1</span><br><span class="line">         =                       crc=1        finobt=1, sparse=0, rmapbt=0, reflink=0</span><br><span class="line">data     =                       bsize=4096   blocks=976754608, imaxpct=5</span><br><span class="line">         =                       sunit=0      swidth=0 blks</span><br><span class="line">naming   =version 2              bsize=4096   ascii-ci=0 ftype=1</span><br><span class="line">log      =internal log           bsize=4096   blocks=476930, version=2</span><br><span class="line">         =                       sectsz=512   sunit=0 blks, lazy-count=1</span><br><span class="line">realtime =none                   extsz=4096   blocks=0, rtextents=0</span><br></pre></td></tr></table></figure></div>
 
-<p>当编译结束后，会生成如下两个文件</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">out/kernel/src_tmp/linux-5.10/boot_linux.img</span><br><span class="line">out/kernel/OBJ/linux-5.10/resource.img</span><br></pre></td></tr></table></figure></div>
+<p><code>mkdir /raid1</code>：创建文件夹</p>
+<p><code>mount /dev/md0 /raid1/</code>：挂载RAID</p>
+<p><code>df -Th /raid1/</code>：查看挂载信息</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Filesystem     Type  Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/md0       xfs   3.7T  3.8G  3.7T   1% /raid1</span><br></pre></td></tr></table></figure></div>
 
-<p>将两个文件与之前编译得到的镜像一同打包烧写到板子上即可。</p>
-<h2 id="查看隔离情况"><a href="#查看隔离情况" class="headerlink" title="查看隔离情况"></a>查看隔离情况</h2><p>执行<code>cat /proc/cmdline</code>来获取<code>cmdline</code>参数。</p>
-<p>执行<code>ps -o pid,psr,comm -e</code>获取运行核心情况，第二列<code>PSR</code>即为正在运行的核心。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://forums.openharmony.cn/forum.php?mod=viewthread&tid=897" >OpenHarmony编译环境搭建 （兼容至4.0-Master和主干分支） - 文章 OpenHarmony开发者论坛 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://ipads.se.sjtu.edu.cn:1312/xinruil/ohtools" >IPADS-Gitlab编译步骤参考 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://gitee.com/openharmony/kernel_linux_patches/pulls/253/files" >support A&#x2F;B partition startup · Pull Request !253 · OpenHarmony&#x2F;kernel_linux_patches - Gitee.com <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.51cto.com/harmonyos/6033458" >OpenHarmony内核学习[1]–单独编译OpenHarmony标准系统内核_鸿蒙社区的技术博客_51CTO博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://gitee.com/openharmony/kernel_linux_patches/raw/2d27fcaab23515d5325da7d17c2fd46af72a7f3e/linux-5.10/rk3568_patch/kernel.patch" >gitee.com&#x2F;openharmony&#x2F;kernel_linux_patches&#x2F;raw&#x2F;2d27fcaab23515d5325da7d17c2fd46af72a7f3e&#x2F;linux-5.10&#x2F;rk3568_patch&#x2F;kernel.patch <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="5-设置开机自动挂载"><a href="#5-设置开机自动挂载" class="headerlink" title="5. 设置开机自动挂载"></a>5. 设置开机自动挂载</h2><p><code>blkid /dev/md0</code>：查看RAID设备的<code>kid</code>信息（注意必须用<code>sudo</code>运行才能显示）</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/md0: UUID=&quot;bcd132b2-c746-4e4f-8766-933b7e249f41&quot; TYPE=&quot;xfs&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p><code>sudo sh -c &#39;echo &quot;UUID=bcd132b2-c746-4e4f-8766-933b7e249f41 /raid1 xfs defaults 0 0&quot; &gt;&gt; /etc/fstab&#39;</code>：添加到开机自动挂载信息中。</p>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6. 参考"></a>6. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/gaohongyu/p/15697879.html" >Linux &#x2F;dev&#x2F;loop0文件详解 - 高宏宇 - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/112988111" >raid0、raid1、raid5、raid10这四种硬盘阵列的特点和区别 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/woailyoo0000/article/details/86485666" >Linux检查未挂载磁盘和为磁盘分区、挂载_disk identifier-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/u014389734/article/details/112256625" >使用lsblk命令列出系统中的块设备_maj:min lsblk-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/63990027" >使用 mdadm 管理 RAID 阵列 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/6341c44b534e" >mdadm详解之mdadm -D 详解 - 简书 (jianshu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46622350/article/details/118916350" >Linux配置RAID详解（全）！_linux做raid-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zdyxry.github.io/2019/11/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E7%9A%84-mdadm-%E5%90%8C%E6%AD%A5%E8%BF%99%E4%B9%88%E6%85%A2/" >为什么你的 mdadm 同步这么慢 · Yiran’s Blog (zdyxry.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -428,16 +439,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> OH隔离核心</li>
+        <li><strong>Title:</strong> 组raid</li>
         <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2024-05-08 16:31:09</li>
+        <li><strong>Created at:</strong> 2024-05-19 18:03:11</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-05-08 17:41:50
+                <strong>Updated at:</strong> 2024-05-19 18:37:14
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2024/05/08/OH隔离核心/
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/05/19/组raid/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -455,29 +466,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2024/05/19/%E7%BB%84raid/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">组raid</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2024/03/16/windows-clang%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/"
+                            href="/2024/05/08/OH%E9%9A%94%E7%A6%BB%E6%A0%B8%E5%BF%83/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">windows clang踩坑记录</span>
+                                    <span class="post-nav-title-item">OH隔离核心</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -542,8 +538,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">OH隔离核心</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91"><span class="nav-text">预编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%86%85%E6%A0%B8"><span class="nav-text">修改内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8"><span class="nav-text">编译内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E9%9A%94%E7%A6%BB%E6%83%85%E5%86%B5"><span class="nav-text">查看隔离情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">组raid</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9F%A5%E7%9C%8B%E7%A3%81%E7%9B%98%E4%BF%A1%E6%81%AF"><span class="nav-text">1. 查看磁盘信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%86%E9%85%8DRAID"><span class="nav-text">2. 分配RAID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9F%A5%E7%9C%8BRAID"><span class="nav-text">3. 查看RAID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-text">4. 创建文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD"><span class="nav-text">5. 设置开机自动挂载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8F%82%E8%80%83"><span class="nav-text">6. 参考</span></a></li></ol>
 
     </div>
 </div>
