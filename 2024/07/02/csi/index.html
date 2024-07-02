@@ -18,15 +18,15 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 架构 CO：container orchestration，容器编排  SP：storage vendors，存储供应商  主节点部署一个，从节点部署一个                            CO &quot;Master&quot; Host    +——————————————-+  |">
+        <meta name="description" content="1. 架构 CO：container orchestration，容器编排  SP：storage vendors，存储供应商  主节点部署一个，从节点部署一个   1234567891011121314151617181920212223                             CO &quot;Master&quot; Host+------------------------">
 <meta property="og:type" content="article">
 <meta property="og:title" content="csi">
 <meta property="og:url" content="http://example.com/2024/07/02/csi/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 架构 CO：container orchestration，容器编排  SP：storage vendors，存储供应商  主节点部署一个，从节点部署一个                            CO &quot;Master&quot; Host    +——————————————-+  |">
+<meta property="og:description" content="1. 架构 CO：container orchestration，容器编排  SP：storage vendors，存储供应商  主节点部署一个，从节点部署一个   1234567891011121314151617181920212223                             CO &quot;Master&quot; Host+------------------------">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-07-02T08:07:23.000Z">
-<meta property="article:modified_time" content="2024-07-02T08:07:48.013Z">
+<meta property="article:modified_time" content="2024-07-02T08:12:09.883Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-07-02 16:07:48</span>
-            <span class="mobile">2024-07-02 16:07</span>
+            <span class="desktop">2024-07-02 16:12:09</span>
+            <span class="mobile">2024-07-02 16:12</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -388,94 +388,45 @@
 <li><p>SP：storage vendors，存储供应商</p>
 </li>
 <li><p>主节点部署一个，从节点部署一个</p>
-<pre><code>                           CO &quot;Master&quot; Host
-</code></pre>
-<p>  +——————————————-+<br>  |                                           |<br>  |  +————+           +————+  |<br>  |  |     CO     |   gRPC    | Controller |  |<br>  |  |            +———–&gt;   Plugin   |  |<br>  |  +————+           +————+  |<br>  |                                           |<br>  +——————————————-+</p>
-<pre><code>                          CO &quot;Node&quot; Host(s)
-</code></pre>
-<p>  +——————————————-+<br>  |                                           |<br>  |  +————+           +————+  |<br>  |  |     CO     |   gRPC    |    Node    |  |<br>  |  |            +———–&gt;   Plugin   |  |<br>  |  +————+           +————+  |<br>  |                                           |<br>  +——————————————-+</p>
-<p>  Figure 1: The Plugin runs on all nodes in the cluster: a centralized<br>  Controller Plugin is available on the CO master host and the Node<br>  Plugin is available on all of the CO Nodes.</p>
-</li>
-<li><p>从节点部署多个</p>
-<pre><code>                          CO &quot;Node&quot; Host(s)
-</code></pre>
-<p>  +——————————————-+<br>  |                                           |<br>  |  +————+           +————+  |<br>  |  |     CO     |   gRPC    | Controller |  |<br>  |  |            +–+——–&gt;   Plugin   |  |<br>  |  +————+  |        +————+  |<br>  |                  |                        |<br>  |                  |                        |<br>  |                  |        +————+  |<br>  |                  |        |    Node    |  |<br>  |                  +——–&gt;   Plugin   |  |<br>  |                           +————+  |<br>  |                                           |<br>  +——————————————-+<br>  Figure 2: Headless Plugin deployment, only the CO Node hosts run<br>  Plugins. Separate, split-component Plugins supply the Controller<br>  Service and the Node Service respectively.</p>
-</li>
-<li><p>从节点部署一个</p>
-<pre><code>                          CO &quot;Node&quot; Host(s)
-</code></pre>
-<p>  +——————————————-+<br>  |                                           |<br>  |  +————+           +————+  |<br>  |  |     CO     |   gRPC    | Controller |  |<br>  |  |            +———–&gt;    Node    |  |<br>  |  +————+           |   Plugin   |  |<br>  |                           +————+  |<br>  |                                           |<br>  +——————————————-+<br>  Figure 3: Headless Plugin deployment, only the CO Node hosts run<br>  Plugins. A unified Plugin component supplies both the Controller<br>  Service and Node Service.</p>
-</li>
-<li><p>从节点无controller</p>
-<pre><code>                          CO &quot;Node&quot; Host(s)
-</code></pre>
-<p>  +——————————————-+<br>  |                                           |<br>  |  +————+           +————+  |<br>  |  |     CO     |   gRPC    |    Node    |  |<br>  |  |            +———–&gt;   Plugin   |  |<br>  |  +————+           +————+  |<br>  |                                           |<br>  +——————————————-+<br>  Figure 4: Headless Plugin deployment, only the CO Node hosts run<br>  Plugins. A Node-only Plugin component supplies only the Node Service.<br>  Its GetPluginCapabilities RPC does not report the CONTROLLER_SERVICE<br>  capability.</p>
 </li>
 </ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">                             CO &quot;Master&quot; Host</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    | Controller |  |</span><br><span class="line">|  |            +-----------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    |    Node    |  |</span><br><span class="line">|  |            +-----------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 1: The Plugin runs on all nodes in the cluster: a centralized</span><br><span class="line">Controller Plugin is available on the CO master host and the Node</span><br><span class="line">Plugin is available on all of the CO Nodes.</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>从节点部署多个</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    | Controller |  |</span><br><span class="line">|  |            +--+--------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+  |        +------------+  |</span><br><span class="line">|                  |                        |</span><br><span class="line">|                  |                        |</span><br><span class="line">|                  |        +------------+  |</span><br><span class="line">|                  |        |    Node    |  |</span><br><span class="line">|                  +--------&gt;   Plugin   |  |</span><br><span class="line">|                           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 2: Headless Plugin deployment, only the CO Node hosts run</span><br><span class="line">Plugins. Separate, split-component Plugins supply the Controller</span><br><span class="line">Service and the Node Service respectively.</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>从节点部署一个</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    | Controller |  |</span><br><span class="line">|  |            +-----------&gt;    Node    |  |</span><br><span class="line">|  +------------+           |   Plugin   |  |</span><br><span class="line">|                           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 3: Headless Plugin deployment, only the CO Node hosts run</span><br><span class="line">Plugins. A unified Plugin component supplies both the Controller</span><br><span class="line">Service and Node Service.</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>从节点无controller</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    |    Node    |  |</span><br><span class="line">|  |            +-----------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 4: Headless Plugin deployment, only the CO Node hosts run</span><br><span class="line">Plugins. A Node-only Plugin component supplies only the Node Service.</span><br><span class="line">Its GetPluginCapabilities RPC does not report the CONTROLLER_SERVICE</span><br><span class="line">capability.</span><br></pre></td></tr></table></figure></div>
+
 <h2 id="2-卷生命周期"><a href="#2-卷生命周期" class="headerlink" title="2. 卷生命周期"></a>2. 卷生命周期</h2><ul>
-<li><p>动态配置卷</p>
-<pre><code> CreateVolume +------------+ DeleteVolume
-</code></pre>
-<p>   +————-&gt;|  CREATED   +————–+<br>   |              +—+—-^—+              |<br>   |       Controller |    | Controller       v<br>  +++         Publish |    | Unpublish       +++<br>  |X|          Volume |    | Volume          | |<br>  +-+             +—v—-+—+             +-+</p>
-<pre><code>              | NODE_READY |
-              +---+----^---+
-             Node |    | Node
-          Publish |    | Unpublish
-           Volume |    | Volume
-              +---v----+---+
-              | PUBLISHED  |
-              +------------+
-</code></pre>
-<p>  Figure 5: The lifecycle of a dynamically provisioned volume, from<br>  creation to destruction.</p>
-</li>
-<li><p>动态配置卷+<code>STAGE_UNSTAGE_VOLUME</code>能力</p>
-<pre><code> CreateVolume +------------+ DeleteVolume
-</code></pre>
-<p>   +————-&gt;|  CREATED   +————–+<br>   |              +—+—-^—+              |<br>   |       Controller |    | Controller       v<br>  +++         Publish |    | Unpublish       +++<br>  |X|          Volume |    | Volume          | |<br>  +-+             +—v—-+—+             +-+</p>
-<pre><code>              | NODE_READY |
-              +---+----^---+
-             Node |    | Node
-            Stage |    | Unstage
-           Volume |    | Volume
-              +---v----+---+
-              |  VOL_READY |
-              +---+----^---+
-             Node |    | Node
-          Publish |    | Unpublish
-           Volume |    | Volume
-              +---v----+---+
-              | PUBLISHED  |
-              +------------+
-</code></pre>
-<p>  Figure 6: The lifecycle of a dynamically provisioned volume, from<br>  creation to destruction, when the Node Plugin advertises the<br>  STAGE_UNSTAGE_VOLUME capability.</p>
-</li>
-<li><p>提前配置的卷（只需要验证能力即可，不需要调用创建）</p>
-<pre><code>  Controller                  Controller
-     Publish                  Unpublish
-      Volume  +------------+  Volume
-</code></pre>
-<p>   +————-&gt;+ NODE_READY +————–+<br>   |              +—+—-^—+              |<br>   |             Node |    | Node             v<br>  +++         Publish |    | Unpublish       +++<br>  |X| &lt;-+      Volume |    | Volume          | |<br>  +++   |         +—v—-+—+             +-+<br>   |    |         | PUBLISHED  |<br>   |    |         +————+<br>   +—-+</p>
-<pre><code> Validate
- Volume
- Capabilities
-</code></pre>
-<p>  Figure 7: The lifecycle of a pre-provisioned volume that requires<br>  controller to publish to a node (<code>ControllerPublishVolume</code>) prior to<br>  publishing on the node (<code>NodePublishVolume</code>).</p>
-</li>
-<li><p>自定义的</p>
-<pre><code>     +-+  +-+
-     |X|  | |
-     +++  +^+
-      |    |
- Node |    | Node
-</code></pre>
-<p>  Publish |    | Unpublish<br>   Volume |    | Volume</p>
-<pre><code>  +---v----+---+
-  | PUBLISHED  |
-  +------------+
-</code></pre>
-<p>  Figure 8: Plugins MAY forego other lifecycle steps by contraindicating<br>  them via the capabilities API. Interactions with the volumes of such<br>  plugins is reduced to <code>NodePublishVolume</code> and <code>NodeUnpublishVolume</code><br>  calls.</p>
-</li>
+<li>动态配置卷</li>
 </ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">   CreateVolume +------------+ DeleteVolume</span><br><span class="line"> +-------------&gt;|  CREATED   +--------------+</span><br><span class="line"> |              +---+----^---+              |</span><br><span class="line"> |       Controller |    | Controller       v</span><br><span class="line">+++         Publish |    | Unpublish       +++</span><br><span class="line">|X|          Volume |    | Volume          | |</span><br><span class="line">+-+             +---v----+---+             +-+</span><br><span class="line">                | NODE_READY |</span><br><span class="line">                +---+----^---+</span><br><span class="line">               Node |    | Node</span><br><span class="line">            Publish |    | Unpublish</span><br><span class="line">             Volume |    | Volume</span><br><span class="line">                +---v----+---+</span><br><span class="line">                | PUBLISHED  |</span><br><span class="line">                +------------+</span><br><span class="line"></span><br><span class="line">Figure 5: The lifecycle of a dynamically provisioned volume, from</span><br><span class="line">creation to destruction.</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>动态配置卷+<code>STAGE_UNSTAGE_VOLUME</code>能力</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">   CreateVolume +------------+ DeleteVolume</span><br><span class="line"> +-------------&gt;|  CREATED   +--------------+</span><br><span class="line"> |              +---+----^---+              |</span><br><span class="line"> |       Controller |    | Controller       v</span><br><span class="line">+++         Publish |    | Unpublish       +++</span><br><span class="line">|X|          Volume |    | Volume          | |</span><br><span class="line">+-+             +---v----+---+             +-+</span><br><span class="line">                | NODE_READY |</span><br><span class="line">                +---+----^---+</span><br><span class="line">               Node |    | Node</span><br><span class="line">              Stage |    | Unstage</span><br><span class="line">             Volume |    | Volume</span><br><span class="line">                +---v----+---+</span><br><span class="line">                |  VOL_READY |</span><br><span class="line">                +---+----^---+</span><br><span class="line">               Node |    | Node</span><br><span class="line">            Publish |    | Unpublish</span><br><span class="line">             Volume |    | Volume</span><br><span class="line">                +---v----+---+</span><br><span class="line">                | PUBLISHED  |</span><br><span class="line">                +------------+</span><br><span class="line"></span><br><span class="line">Figure 6: The lifecycle of a dynamically provisioned volume, from</span><br><span class="line">creation to destruction, when the Node Plugin advertises the</span><br><span class="line">STAGE_UNSTAGE_VOLUME capability.</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>提前配置的卷（只需要验证能力即可，不需要调用创建）</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">    Controller                  Controller</span><br><span class="line">       Publish                  Unpublish</span><br><span class="line">        Volume  +------------+  Volume</span><br><span class="line"> +-------------&gt;+ NODE_READY +--------------+</span><br><span class="line"> |              +---+----^---+              |</span><br><span class="line"> |             Node |    | Node             v</span><br><span class="line">+++         Publish |    | Unpublish       +++</span><br><span class="line">|X| &lt;-+      Volume |    | Volume          | |</span><br><span class="line">+++   |         +---v----+---+             +-+</span><br><span class="line"> |    |         | PUBLISHED  |</span><br><span class="line"> |    |         +------------+</span><br><span class="line"> +----+</span><br><span class="line">   Validate</span><br><span class="line">   Volume</span><br><span class="line">   Capabilities</span><br><span class="line"></span><br><span class="line">Figure 7: The lifecycle of a pre-provisioned volume that requires</span><br><span class="line">controller to publish to a node (`ControllerPublishVolume`) prior to</span><br><span class="line">publishing on the node (`NodePublishVolume`).</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>自定义的</li>
+</ul>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">       +-+  +-+</span><br><span class="line">       |X|  | |</span><br><span class="line">       +++  +^+</span><br><span class="line">        |    |</span><br><span class="line">   Node |    | Node</span><br><span class="line">Publish |    | Unpublish</span><br><span class="line"> Volume |    | Volume</span><br><span class="line">    +---v----+---+</span><br><span class="line">    | PUBLISHED  |</span><br><span class="line">    +------------+</span><br><span class="line"></span><br><span class="line">Figure 8: Plugins MAY forego other lifecycle steps by contraindicating</span><br><span class="line">them via the capabilities API. Interactions with the volumes of such</span><br><span class="line">plugins is reduced to `NodePublishVolume` and `NodeUnpublishVolume`</span><br><span class="line">calls.</span><br></pre></td></tr></table></figure></div>
+
 <h2 id="3-接口"><a href="#3-接口" class="headerlink" title="3. 接口"></a>3. 接口</h2><ul>
 <li><p>RPC接口分类</p>
 <ul>
@@ -666,7 +617,7 @@
         <li><strong>Created at:</strong> 2024-07-02 16:07:23</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-07-02 16:07:48
+                <strong>Updated at:</strong> 2024-07-02 16:12:09
             </li>
         
         <li>
