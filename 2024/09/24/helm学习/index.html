@@ -13,18 +13,25 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/page/3/"/>
+    <link rel="canonical" href="http://example.com/2024/09/24/helm学习/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/page/3/index.html">
+        <meta name="description" content="1. 版本对应与k8s的版本对应是使用helm的前提 Helm版本支持策略   官方文档给出的版本较为老旧，可以从github获取：https:&#x2F;&#x2F;github.com&#x2F;helm&#x2F;helm&#x2F;releases  但是，始终满足如下关系：  2. 添加仓库# 先移除原先的仓库 helm repo remove stable # 添加新的仓库地址 helm repo add stable https:&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="helm学习">
+<meta property="og:url" content="http://example.com/2024/09/24/helm%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 版本对应与k8s的版本对应是使用helm的前提 Helm版本支持策略   官方文档给出的版本较为老旧，可以从github获取：https:&#x2F;&#x2F;github.com&#x2F;helm&#x2F;helm&#x2F;releases  但是，始终满足如下关系：  2. 添加仓库# 先移除原先的仓库 helm repo remove stable # 添加新的仓库地址 helm repo add stable https:&#x2F;">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://d0q3ylf4728.feishu.cn/space/api/box/stream/download/asynccode/?code=MzNlYjc4OTk4MTQ5ZGI3NWE4NTNiNjgwYTAwNTZlMDlfTlNuMnJaaFVxRW00RXFlaGZ4MGVuaUdnZzhxcEJzcnpfVG9rZW46SEVTTGJBWXpib2RyWlJ4U0JZZ2NtMTFybmliXzE3MjcxNjU1NzA6MTcyNzE2OTE3MF9WNA">
+<meta property="og:image" content="https://d0q3ylf4728.feishu.cn/space/api/box/stream/download/asynccode/?code=NDQzNjU0MThlMzliY2I4ZDUwZDQ0NDMwZDNmODRjMmVfUkhxcVV3MTEyUGZKbWVYZjBGSjdQcHdqTnN3QlozRjlfVG9rZW46UVJqN2JKZ2Fib3N5c3d4SmprcWNqTG94bkxoXzE3MjcxNjU1NzA6MTcyNzE2OTE3MF9WNA">
+<meta property="article:published_time" content="2024-09-24T08:12:06.000Z">
+<meta property="article:modified_time" content="2024-09-24T08:16:31.647Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://d0q3ylf4728.feishu.cn/space/api/box/stream/download/asynccode/?code=MzNlYjc4OTk4MTQ5ZGI3NWE4NTNiNjgwYTAwNTZlMDlfTlNuMnJaaFVxRW00RXFlaGZ4MGVuaUdnZzhxcEJzcnpfVG9rZW46SEVTTGJBWXpib2RyWlJ4U0JZZ2NtMTFybmliXzE3MjcxNjU1NzA6MTcyNzE2OTE3MF9WNA">
     
     
     <!--- Icon Part-->
@@ -35,6 +42,8 @@
     <!--- Page Info-->
     
     <title>
+        
+            helm学习 -
         
         Ethereal&#39;s Blog
     </title>
@@ -112,9 +121,9 @@
         <div class="left">
             
             <a class="logo-title" href="/">
-                <h1>
+                
                 Ethereal&#39;s Blog
-                </h1>
+                
             </a>
         </div>
 
@@ -126,7 +135,7 @@
                         
                             <li class="navbar-item">
                                 <!-- Menu -->
-                                <a class="active" 
+                                <a class="" 
                                     href="/"  >
                                     
                                         
@@ -225,7 +234,7 @@
             
                 
                     <li class="drawer-navbar-item flex-center">
-                        <a class="active" 
+                        <a class="" 
                         href="/"  >
                              
                                 
@@ -311,321 +320,255 @@
         <div class="main-content-body">
 
             
-                <div class="home-sidebar-container fade-in-down-animation">
-    <div class="sticky-container">
-        
-            
-            <div class="sidebar-content" >
-                <div class="avatar">
-                    <img src="/images/favicon.svg">
-                </div>
-                <div class="author">
-                    <div class="name">Ethereal</div>
-                    
-                        <div class="label">Lv3</div>
-                    
-                </div>
-                <div class="statistics">
-                    <a class="item" href="/tags">
-                        <div class="number">0</div>
-                        <div class="label">Tags</div>
-                    </a>
-                    <a class="item" href="/categories">
-                        <div class="number">0</div>
-                        <div class="label">Categories</div>
-                    </a>
-                    <a class="item" href="/archives">
-                        <div class="number">27</div>
-                        <div class="label">Posts</div>
-                    </a>
-                </div>
-            </div>
-        
-
-    </div>
-</div>
-
-            
 
             <div class="main-content">
 
                 
-                    <div class="home-content-container fade-in-down-animation">
-    <ul class="home-article-list">
-        
-            <li class="home-article-item">
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
 
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">
-                        备份QQ聊天记录
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        备份QQ应用使用手机自带的备份APP备份应用。备份教程 
-小米手机提取聊天记录
-使用WinHex 修改二进制文件，将头部的一些字符删除，直到使得”apps&#x2F;“位于开头，如下图所示。
-使用解压软件解压。
-打开QQ_History_Backup...
-                    
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">helm学习</h1>
                 </div>
+            
+                
+            
 
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Nov 12 2023 17:42:40 GMT+0800">
-                
-                    2023-11-12
-                
-            </span>
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv3</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-09-24 16:12:06</span>
+        <span class="mobile">2024-09-24 16:12</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-09-24 16:16:31</span>
+            <span class="mobile">2024-09-24 16:16</span>
+            <span class="hover-info">Updated</span>
         </span>
-        
-        
-    </div>
+    
 
-    <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">Read more<span class="seo-reader-text">备份QQ聊天记录</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
 
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/11/07/%E9%83%A8%E7%BD%B2VPN%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%B3Azure%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                        部署VPN服务器至Azure服务器
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        安装Python3.7123456789101112131415# 安装必要环境sudo apt-get install opensslsudo apt-get install libssl-devsudo apt-get install libff...
-                    
+                        </div>
+                    </div>
                 </div>
+            
 
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Nov 07 2023 18:45:54 GMT+0800">
-                
-                    2023-11-07
-                
-            </span>
-        </span>
+            <div class="article-content markdown-body">
+                <h2 id="1-版本对应"><a href="#1-版本对应" class="headerlink" title="1. 版本对应"></a>1. 版本对应</h2><p>与k8s的版本对应是使用helm的前提</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://helm.sh/zh/docs/topics/version_skew/" >Helm版本支持策略 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://d0q3ylf4728.feishu.cn/space/api/box/stream/download/asynccode/?code=MzNlYjc4OTk4MTQ5ZGI3NWE4NTNiNjgwYTAwNTZlMDlfTlNuMnJaaFVxRW00RXFlaGZ4MGVuaUdnZzhxcEJzcnpfVG9rZW46SEVTTGJBWXpib2RyWlJ4U0JZZ2NtMTFybmliXzE3MjcxNjU1NzA6MTcyNzE2OTE3MF9WNA"
+                     
+                ></p>
+<p>官方文档给出的版本较为老旧，可以从github获取：<a class="link"   target="_blank" rel="noopener" href="https://github.com/helm/helm/releases" >https://github.com/helm/helm/releases <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>但是，始终满足如下关系：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://d0q3ylf4728.feishu.cn/space/api/box/stream/download/asynccode/?code=NDQzNjU0MThlMzliY2I4ZDUwZDQ0NDMwZDNmODRjMmVfUkhxcVV3MTEyUGZKbWVYZjBGSjdQcHdqTnN3QlozRjlfVG9rZW46UVJqN2JKZ2Fib3N5c3d4SmprcWNqTG94bkxoXzE3MjcxNjU1NzA6MTcyNzE2OTE3MF9WNA"
+                     
+                ></p>
+<h2 id="2-添加仓库"><a href="#2-添加仓库" class="headerlink" title="2. 添加仓库"></a>2. 添加仓库</h2><pre><code># 先移除原先的仓库
+helm repo remove stable
+# 添加新的仓库地址
+helm repo add stable https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+# 更新仓库
+helm repo update
+</code></pre>
+<p>不添加仓库也可以正常运行，但是后续建议将包全部导入仓库中</p>
+<h2 id="3-架构"><a href="#3-架构" class="headerlink" title="3. 架构"></a>3. 架构</h2><p><a class="link"   target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1207395#:~:text=%E4%BD%BF%E7%94%A8helm%20c" >Helm入门（一篇就够了）-阿里云开发者社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34759180/article/details/120456050#:~:text=#1.%E4%B8%8B%E8%BD%BDhel" >Helm的安装使用_helm install 本地-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/csyown/p/17828307.html#:~:text=2.%20%E5%88%A0%E9%99%A4%20He" >www.cnblogs.com <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>values.yaml</li>
+</ul>
+<p>定义一些环境变量，这些变量将会导入到template文件夹中的文件里。</p>
+<ul>
+<li>template</li>
+</ul>
+<p>对于此文件夹中的每个文件，都会将环境变量导入，并且执行一些函数。</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://helm.sh/zh/docs/chart_template_guide/control_structures/#:~:text=Helm%E7%9A%84%E6%A8%A1%E6%9D%BF%E8%AF%AD" >流控制 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_26884501/article/details/108150545" >helm中template与include区别_helm include-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://helm.sh/zh/docs/howto/charts_tips_and_tricks/" >chart开发提示和技巧 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://helm.sh/zh/docs/chart_template_guide/debugging/#:~:text=Helm%20|%20%E8%B0%83" >调试模板 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> （helm template –debug）</p>
+<ul>
+<li>变量</li>
+</ul>
+<p>此处，变量不同于values.yaml中的环境变量，而是可以在运行中赋值的元素</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://helm.sh/zh/docs/chart_template_guide/variables/#:~:text=Helm%E6%A8%A1%E6%9D%BF%E4%B8%AD%EF%BC%8C%E5%8F%98%E9%87%8F%E6%98%AF%E5%AF%B9%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%91%BD%E5%90%8D%E5%BC%95%E7%94%A8%E3%80%82%20%E9%81%B5%E5%BE%AA%20%24name,%E5%8F%98%E9%87%8F%E7%9A%84%E6%A0%BC%E5%BC%8F%E4%B8%94%E6%8C%87%E5%AE%9A%E4%BA%86%E4%B8%80%E4%B8%AA%E7%89%B9%E6%AE%8A%E7%9A%84%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%9A%3A%3D%E3%80%82%20%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E9%92%88%E5%AF%B9%20Release.Name%20%E7%9A%84%E5%8F%98%E9%87%8F%E9%87%8D%E5%86%99%E4%B8%8A%E8%BF%B0%E5%86%85%E5%AE%B9%E3%80%82" >变量 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>Chart.yaml</li>
+</ul>
+<p>定义依赖以及镜像版本，注意，此处镜像的版本将会被应用到templates中，而不是在templates中定义镜像版本（或tag）</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://helm.sh/zh/docs/chart_template_guide/subcharts_and_globals/#:~:text=Helm%E6%9C%89%E4%B8%80%E4%B8%AA" >子chart和全局值 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://helm.sh/zh/docs/helm/helm_dependency/#:~:text=%E7%AE%80%E4%BB%8B.%20%E7%AE%A1%E7%90%86ch" >Helm 依赖 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ygq13572549874/article/details/129020773" >Helm系列-Helm命令之helm dependency依赖管理_helm dependencies-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39680564/article/details/107516510#:~:text=%E5%BD%93%E6%88%91%E4%BB%AC%E4%BD%BF%E7%94%A8%20He" >Helm3 Chart 多依赖微服务构建案例_helm依赖其他的chart-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="4-其他命令"><a href="#4-其他命令" class="headerlink" title="4. 其他命令"></a>4. 其他命令</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">helm install ips-server ips-server/ -n dev-ips-server</span><br><span class="line">helm uninstall ips-server -n dev-ips-server</span><br><span class="line">helm list -n dev-ips-server</span><br><span class="line">helm template --debug </span><br></pre></td></tr></table></figure></div>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> helm学习</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2024-09-24 16:12:06</li>
         
-        
-    </div>
-
-    <a href="/2023/11/07/%E9%83%A8%E7%BD%B2VPN%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%B3Azure%E6%9C%8D%E5%8A%A1%E5%99%A8/">Read more<span class="seo-reader-text">部署VPN服务器至Azure服务器</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
+            <li>
+                <strong>Updated at:</strong> 2024-09-24 16:16:31
             </li>
         
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/10/27/Github-actions/">
-                        Github actions
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        buildGithub默认自带docker。因此可以直接使用gradle执行dockerPushImage。在build.gradle添加：
-12345678910111213141516plugins &#123;    id(&quot;com....
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Fri Oct 27 2023 19:37:25 GMT+0800">
-                
-                    2023-10-27
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/10/27/Github-actions/">Read more<span class="seo-reader-text">Github actions</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/10/22/%E7%A7%BB%E5%8A%A8%E5%9B%BA%E6%80%81%E5%A4%9A%E7%B3%BB%E7%BB%9F/">
-                        移动固态多系统
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        步骤1. 分区首先进行分区，将磁盘分为四块，分别为4GB的启动EFI分区（分区一），Ubuntu系统分区（分区二），64GB储存分区（分区三），4GBWEPE分区（分区四）。
-2. 安装Ubuntu使用虚拟机挂载硬盘，并将ubuntu装入分区二中，选...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Oct 22 2023 00:29:24 GMT+0800">
-                
-                    2023-10-22
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/10/22/%E7%A7%BB%E5%8A%A8%E5%9B%BA%E6%80%81%E5%A4%9A%E7%B3%BB%E7%BB%9F/">Read more<span class="seo-reader-text">移动固态多系统</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/08/12/MiAC2100IPv6/">
-                        MiAC2100IPv6
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        1. 升级&#x2F;降级至官方固件版本: 2.0.23 稳定版。操作入口在路由器常用设置-系统状态-升级检测处。
-2. 开启SSH2.1 方法一
-登录到路由器后台，输入密码进入。
-复制路径中的stok，然后执行。将其中的和替换为自己的值。12345...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sat Aug 12 2023 16:00:46 GMT+0800">
-                
-                    2023-08-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/08/12/MiAC2100IPv6/">Read more<span class="seo-reader-text">MiAC2100IPv6</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/07/25/maven-for-JNA/">
-                        maven for JNA
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Java Native调用JNI最朴素的方式，也是JNA的前身。首先写一个接口java文件，里面包含着native的方法和加载库的方法loadLibrary，例如：
-123456789101112131415public class HelloNat...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Tue Jul 25 2023 19:01:31 GMT+0800">
-                
-                    2023-07-25
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/25/maven-for-JNA/">Read more<span class="seo-reader-text">maven for JNA</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
-                        k8s集群搭建
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        
-更新 apt 包索引并安装使用 Kubernetes apt 仓库所需要的包：
-12sudo apt-get updatesudo apt-get install -y apt-transport-https ca-certificates cur...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Wed Jul 12 2023 18:28:16 GMT+0800">
-                
-                    2023-07-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">Read more<span class="seo-reader-text">k8s集群搭建</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/09/24/helm学习/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
     </ul>
-
-    <div class="home-paginator">
-        <div class="paginator">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa-regular fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
 </div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2024/09/24/ssh%E8%BD%AC%E5%8F%91/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">ssh转发</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2024/08/01/nv-k8s/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">nv-k8s</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">helm学习</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%89%88%E6%9C%AC%E5%AF%B9%E5%BA%94"><span class="nav-text">1. 版本对应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B7%BB%E5%8A%A0%E4%BB%93%E5%BA%93"><span class="nav-text">2. 添加仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9E%B6%E6%9E%84"><span class="nav-text">3. 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="nav-text">4. 其他命令</span></a></li></ol>
 
     </div>
 </div>
+            </div>
+        
+    </div>
+</div>
+
 
                 
 
@@ -699,6 +642,27 @@
     </div>
 
     
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
 
     <div class="right-side-tools-container">
         <div class="side-tools-container">
@@ -758,7 +722,6 @@
 
 
 
-
 <script src="/js/utils.js"></script>
 
 <script src="/js/main.js"></script>
@@ -810,6 +773,16 @@
 
 
 <div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
     
 </div>
 
