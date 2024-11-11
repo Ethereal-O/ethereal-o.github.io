@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 本地转发1ssh -f -N -L 1234:192.168.126.128:22 ethereal@Ethereal-Desktop  格式为 1ssh -L 主机A端口X:主机C:主机C端口Z username@hostname  含义是开启本地的端口X，当通过X进行ssh时，则会经过username@hostname，向主机C端口Z建立ssh 此外，-f 参数允许SSH在后台运行，而">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-24T08:17:17.000Z">
-<meta property="article:modified_time" content="2024-09-24T08:28:13.162Z">
+<meta property="article:modified_time" content="2024-11-11T11:31:38.939Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-09-24 16:28:13</span>
-            <span class="mobile">2024-09-24 16:28</span>
+            <span class="desktop">2024-11-11 19:31:38</span>
+            <span class="mobile">2024-11-11 19:31</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -389,8 +389,25 @@
 
 <p>含义是开启本地的端口X，当通过X进行ssh时，则会经过username@hostname，向主机C端口Z建立ssh</p>
 <p>此外，<code>-f</code> 参数允许SSH在后台运行，而 <code>-N</code> 参数则告诉SSH不要执行远程命令</p>
-<h2 id="2-参考"><a href="#2-参考" class="headerlink" title="2. 参考"></a>2. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/148825449" >彻底搞懂SSH端口转发命令 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="2-转发显示器"><a href="#2-转发显示器" class="headerlink" title="2. 转发显示器"></a>2. 转发显示器</h2><h3 id="2-1-远程配置"><a href="#2-1-远程配置" class="headerlink" title="2.1 远程配置"></a>2.1 远程配置</h3><ol>
+<li>允许转发。查看<code>/etc/ssh/sshd_config</code>文件，其中必须包含<code>X11Forwarding yes</code>。重启使其生效<code>sudo systemctl restart sshd</code>。</li>
+</ol>
+<h3 id="2-2-本地配置"><a href="#2-2-本地配置" class="headerlink" title="2.2 本地配置"></a>2.2 本地配置</h3><ol>
+<li>允许转发远程。查看<code>~/.ssh/config</code>文件，其中必须包含<code>ForwardX11 yes</code>。windows需要首先安装vcxsrv。<a class="link"   target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/" >VcXsrv Windows X Server download | SourceForge.net <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>（一路下一步即可，其中选择安装位置 ）</li>
+<li>配置显示器。检查$DISPLAY变量是否设定。windows可以通过<code>$env:DISPLAY=&quot;127.0.0.1:0.0&quot;</code>临时设定，通过<code>setx DISPLAY &quot;127.0.0.1:0.0&quot;</code>永久设定。</li>
+<li>配置XAUTHORITY。检查$XAUTHORITY变量是否设定。linux可以通过<code>export XAUTHORITY=$HOME/.Xauthority</code>来设定。（解决火狐报错X11 connection rejected because of wrong authentication）</li>
+<li>连接。使用<code>ssh -XY -p port user@ip</code>连接。</li>
+</ol>
+<h2 id="3-参考"><a href="#3-参考" class="headerlink" title="3. 参考"></a>3. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/148825449" >彻底搞懂SSH端口转发命令 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2311822" >在Linux中使用SSH端口转发实现远端与本地端口映射-腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/33394/firefox-launch-failed-x11-connection-rejected-because-of-wrong-authentication" >linux - firefox launch failed: X11 connection rejected because of wrong authentication - Unix &amp; Linux Stack Exchange <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://techblog.dev/posts/2023/02/fix-x11-connection-rejected-wrong-authentication-openssh-error-linux/" >How to Fix SSH ‘X11 connection rejected because of wrong authentication’ Error on Linux – TechBlog.dev <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39589455/article/details/114405736" >【Linux】X11 connection rejected because of wrong authentication-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/66075449" >X11 forwarding，Windows与Linux结合的最佳开发环境【编程环境优化篇】 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://sourceforge.net/projects/vcxsrv/" >VcXsrv Windows X Server download | SourceForge.net <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41951387/article/details/130746539" >使用 X11 实现 Windows（MobaXterm） 连接 Linux 并显示图形界面_mobaxterm x11配置-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.dengqi.org/posts/%E4%BD%BF%E7%94%A8-windows-%E8%87%AA%E5%B8%A6ssh%E7%9A%84x11%E8%BD%AC%E5%8F%91%E5%8A%9F%E8%83%BD%E5%B9%B6%E9%85%8D%E7%BD%AEssh%E5%92%8Cvscode/" >使用 Windows 自带 ssh 的 X11转发功能并配置 ssh 和 VSCode | 蛤布斯堡 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely" >xorg - How to forward X over SSH to run graphics applications remotely? - Unix &amp; Linux Stack Exchange <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -403,7 +420,7 @@
         <li><strong>Created at:</strong> 2024-09-24 16:17:17</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-09-24 16:28:13
+                <strong>Updated at:</strong> 2024-11-11 19:31:38
             </li>
         
         <li>
@@ -513,7 +530,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">ssh转发</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%AC%E5%9C%B0%E8%BD%AC%E5%8F%91"><span class="nav-text">1. 本地转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%82%E8%80%83"><span class="nav-text">2. 参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%AC%E5%9C%B0%E8%BD%AC%E5%8F%91"><span class="nav-text">1. 本地转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BD%AC%E5%8F%91%E6%98%BE%E7%A4%BA%E5%99%A8"><span class="nav-text">2. 转发显示器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%BF%9C%E7%A8%8B%E9%85%8D%E7%BD%AE"><span class="nav-text">2.1 远程配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%9C%AC%E5%9C%B0%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2 本地配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8F%82%E8%80%83"><span class="nav-text">3. 参考</span></a></li></ol>
 
     </div>
 </div>
