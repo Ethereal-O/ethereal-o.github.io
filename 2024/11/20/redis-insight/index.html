@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/11/20/redis-insight/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="redis-insight+redis helm部署配置1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis-insight">
+<meta property="og:url" content="http://example.com/2024/11/20/redis-insight/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="redis-insight+redis helm部署配置1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-11-19T16:19:47.000Z">
+<meta property="article:modified_time" content="2024-11-19T16:26:01.027Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            redis-insight -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A fine foal dashes without a horsewhip."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">redis-insight</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-11-20 00:19:47</span>
+        <span class="mobile">2024-11-20 00:19</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-11-20 00:26:01</span>
+            <span class="mobile">2024-11-20 00:26</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="redis-insight-redis-helm部署配置"><a href="#redis-insight-redis-helm部署配置" class="headerlink" title="redis-insight+redis helm部署配置"></a>redis-insight+redis helm部署配置</h2><div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># templates/NOTES.txt</span></span><br><span class="line"><span class="attr">1. Get the application URL by running these commands:</span></span><br><span class="line">&#123;&#123;<span class="bullet">-</span> <span class="string">if</span> <span class="string">contains</span> <span class="string">&quot;NodePort&quot;</span> <span class="string">.Values.service.type</span> &#125;&#125;</span><br><span class="line">  <span class="string">export</span> <span class="string">NODE_PORT=$(kubectl</span> <span class="string">get</span> <span class="string">--namespace</span> &#123;&#123; <span class="string">.Release.Namespace</span> &#125;&#125; <span class="string">-o</span> <span class="string">jsonpath=&quot;&#123;.spec.ports[0].nodePort&#125;&quot;</span> <span class="string">services</span> &#123;&#123; <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.fullname&quot;</span> <span class="string">.</span> &#125;&#125;<span class="string">)</span></span><br><span class="line">  <span class="string">export</span> <span class="string">NODE_IP=$(kubectl</span> <span class="string">get</span> <span class="string">nodes</span> <span class="string">--namespace</span> &#123;&#123; <span class="string">.Release.Namespace</span> &#125;&#125; <span class="string">-o</span> <span class="string">jsonpath=&quot;&#123;.items[0].status.addresses[0].address&#125;&quot;)</span></span><br><span class="line">  <span class="string">echo</span> <span class="string">http://$NODE_IP:$NODE_PORT</span></span><br><span class="line">&#123;&#123;<span class="bullet">-</span> <span class="string">else</span> <span class="string">if</span> <span class="string">contains</span> <span class="string">&quot;LoadBalancer&quot;</span> <span class="string">.Values.service.type</span> &#125;&#125;</span><br><span class="line">     <span class="attr">NOTE:</span> <span class="string">It</span> <span class="string">may</span> <span class="string">take</span> <span class="string">a</span> <span class="string">few</span> <span class="string">minutes</span> <span class="string">for</span> <span class="string">the</span> <span class="string">LoadBalancer</span> <span class="string">IP</span> <span class="string">to</span> <span class="string">be</span> <span class="string">available.</span></span><br><span class="line">           <span class="string">You</span> <span class="string">can</span> <span class="string">watch</span> <span class="string">its</span> <span class="string">status</span> <span class="string">by</span> <span class="string">running</span> <span class="string">&#x27;kubectl get --namespace <span class="template-variable">&#123;&#123; .Release.Namespace &#125;&#125;</span> svc -w <span class="template-variable">&#123;&#123; include &quot;cicd-env-args-serv.fullname&quot; . &#125;&#125;</span>&#x27;</span></span><br><span class="line">  <span class="string">export</span> <span class="string">SERVICE_IP=$(kubectl</span> <span class="string">get</span> <span class="string">svc</span> <span class="string">--namespace</span> &#123;&#123; <span class="string">.Release.Namespace</span> &#125;&#125; &#123;&#123; <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.fullname&quot;</span> <span class="string">.</span> &#125;&#125; <span class="string">--template</span> <span class="string">&quot;<span class="template-variable">&#123;&#123;&quot;&#123;&#123; range (index .status.loadBalancer.ingress 0) &#125;&#125;</span><span class="template-variable">&#123;&#123;.&#125;&#125;</span><span class="template-variable">&#123;&#123; end &#125;&#125;</span>&quot;</span><span class="string">&#125;&#125;&quot;)</span></span><br><span class="line">  <span class="string">echo</span> <span class="string">http://$SERVICE_IP:&#123;&#123;</span> <span class="string">.Values.service.port</span> <span class="string">&#125;&#125;</span></span><br><span class="line">&#123;&#123;<span class="bullet">-</span> <span class="string">else</span> <span class="string">if</span> <span class="string">contains</span> <span class="string">&quot;ClusterIP&quot;</span> <span class="string">.Values.service.type</span> &#125;&#125;</span><br><span class="line">  <span class="string">export</span> <span class="string">POD_NAME=$(kubectl</span> <span class="string">get</span> <span class="string">pods</span> <span class="string">--namespace</span> &#123;&#123; <span class="string">.Release.Namespace</span> &#125;&#125; <span class="string">-l</span> <span class="string">&quot;app.kubernetes.io/name=<span class="template-variable">&#123;&#123; include &quot;cicd-env-args-serv.name&quot; . &#125;&#125;</span>,app.kubernetes.io/instance=<span class="template-variable">&#123;&#123; .Release.Name &#125;&#125;</span>&quot;</span> <span class="string">-o</span> <span class="string">jsonpath=&quot;&#123;.items[0].metadata.name&#125;&quot;)</span></span><br><span class="line">  <span class="string">export</span> <span class="string">CONTAINER_PORT=$(kubectl</span> <span class="string">get</span> <span class="string">pod</span> <span class="string">--namespace</span> &#123;&#123; <span class="string">.Release.Namespace</span> &#125;&#125; <span class="string">$POD_NAME</span> <span class="string">-o</span> <span class="string">jsonpath=&quot;&#123;.spec.containers[0].ports[0].containerPort&#125;&quot;)</span></span><br><span class="line">  <span class="string">echo</span> <span class="string">&quot;Visit http://127.0.0.1:8080 to use your application&quot;</span></span><br><span class="line">  <span class="string">kubectl</span> <span class="string">--namespace</span> &#123;&#123; <span class="string">.Release.Namespace</span> &#125;&#125; <span class="string">port-forward</span> <span class="string">$POD_NAME</span> <span class="number">8080</span><span class="string">:$CONTAINER_PORT</span></span><br><span class="line">&#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># templates/configmap.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> &#123;&#123; <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.fullname&quot;</span> <span class="string">.</span> &#125;&#125;<span class="string">-configmap</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">redis.conf:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    ignore-warnings ARM64-COW-BUG</span></span><br><span class="line"><span class="string">    appendonly yes</span></span><br><span class="line"><span class="string">    cluster-enabled yes</span></span><br><span class="line"><span class="string">    cluster-config-file /var/lib/redis/nodes.conf</span></span><br><span class="line"><span class="string">    cluster-node-timeout 5000</span></span><br><span class="line"><span class="string">    maxmemory 1G</span></span><br><span class="line"><span class="string">    dir /var/lib/redis</span></span><br><span class="line"><span class="string">    port 6379</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="comment"># templates/service.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> &#123;&#123; <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.fullname&quot;</span> <span class="string">.</span> &#125;&#125;</span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    &#123;&#123;<span class="bullet">-</span> <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.labels&quot;</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">4</span> &#125;&#125;</span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">kube-vip.io/loadbalancerIPs:</span> &#123;&#123; <span class="string">.Values.service.loadbalancerIP</span> &#125;&#125;</span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">loadBalancerClass:</span> <span class="string">kube-vip.io/kube-vip-class</span></span><br><span class="line">  <span class="attr">type:</span> &#123;&#123; <span class="string">.Values.service.type</span> &#125;&#125;</span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> &#123;&#123; <span class="string">.Values.service.redisport</span> &#125;&#125;</span><br><span class="line">      <span class="attr">targetPort:</span> <span class="string">redis</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">redis</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> &#123;&#123; <span class="string">.Values.service.httpport</span> &#125;&#125;</span><br><span class="line">      <span class="attr">targetPort:</span> <span class="string">http</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    &#123;&#123;<span class="bullet">-</span> <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.selectorLabels&quot;</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">4</span> &#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># templates/statefulset.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StatefulSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> &#123;&#123; <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.fullname&quot;</span> <span class="string">.</span> &#125;&#125;</span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    &#123;&#123;<span class="bullet">-</span> <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.labels&quot;</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">4</span> &#125;&#125;</span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">serviceName:</span> &#123;&#123; <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.fullname&quot;</span> <span class="string">.</span> &#125;&#125;</span><br><span class="line">  <span class="attr">replicas:</span> &#123;&#123; <span class="string">.Values.replicaCount</span> &#125;&#125;</span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      &#123;&#123;<span class="bullet">-</span> <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.selectorLabels&quot;</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">6</span> &#125;&#125;</span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.podAnnotations</span> &#125;&#125;</span><br><span class="line">      <span class="attr">annotations:</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">8</span> &#125;&#125;</span><br><span class="line">      &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.labels&quot;</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">8</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.podLabels</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">8</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> &#123;&#123; <span class="string">.Chart.Name</span> &#125;&#125;</span><br><span class="line">        <span class="attr">image:</span> <span class="string">&quot;<span class="template-variable">&#123;&#123; .Values.image.redisrepository &#125;&#125;</span>&quot;</span></span><br><span class="line">        <span class="attr">imagePullPolicy:</span> &#123;&#123; <span class="string">.Values.image.pullPolicy</span> &#125;&#125;</span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">TZ</span></span><br><span class="line">            <span class="attr">value:</span> <span class="string">&quot;Asia/Shanghai&quot;</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.livenessProbe</span> &#125;&#125;</span><br><span class="line">        <span class="attr">livenessProbe:</span></span><br><span class="line">          &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">12</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.readinessProbe</span> &#125;&#125;</span><br><span class="line">        <span class="attr">readinessProbe:</span></span><br><span class="line">          &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">12</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">          &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.Values.resources</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">12</span> &#125;&#125;</span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">redis</span></span><br><span class="line">          <span class="attr">containerPort:</span> &#123;&#123; <span class="string">.Values.service.redisport</span> &#125;&#125;</span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&quot;config-map&quot;</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">&quot;/etc/redis&quot;</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&quot;data&quot;</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">&quot;/data&quot;</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.volumeMounts</span> &#125;&#125;</span><br><span class="line">          &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">8</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> &#123;&#123; <span class="string">.Chart.Name</span> &#125;&#125;<span class="string">-http</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">&quot;<span class="template-variable">&#123;&#123; .Values.image.httprepository &#125;&#125;</span>&quot;</span></span><br><span class="line">        <span class="attr">imagePullPolicy:</span> &#123;&#123; <span class="string">.Values.image.pullPolicy</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.customCommand</span> &#125;&#125;</span><br><span class="line">        <span class="attr">command:</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">range</span> <span class="string">.command</span> &#125;&#125;</span><br><span class="line">          <span class="bullet">-</span> &#123;&#123; <span class="string">.</span> <span class="string">|</span> <span class="string">quote</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">        <span class="attr">args:</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">range</span> <span class="string">.args</span> &#125;&#125;</span><br><span class="line">          <span class="bullet">-</span> &#123;&#123; <span class="string">.</span> <span class="string">|</span> <span class="string">quote</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">5540</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.livenessProbe</span> &#125;&#125;</span><br><span class="line">        <span class="attr">livenessProbe:</span></span><br><span class="line">          &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">12</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.readinessProbe</span> &#125;&#125;</span><br><span class="line">        <span class="attr">readinessProbe:</span></span><br><span class="line">          &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">12</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http-volume</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/data</span></span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.volumeMounts</span> &#125;&#125;</span><br><span class="line">          &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">8</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">conf</span></span><br><span class="line">        <span class="attr">emptyDir:</span> &#123;&#125;</span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config-map</span></span><br><span class="line">        <span class="attr">configMap:</span></span><br><span class="line">          <span class="attr">name:</span> &#123;&#123; <span class="string">include</span> <span class="string">&quot;cicd-env-args-serv.fullname&quot;</span> <span class="string">.</span> &#125;&#125;<span class="string">-configmap</span></span><br><span class="line">          <span class="attr">items:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">&quot;redis.conf&quot;</span></span><br><span class="line">              <span class="attr">path:</span> <span class="string">&quot;redis.conf&quot;</span></span><br><span class="line">      &#123;&#123;<span class="bullet">-</span> <span class="string">with</span> <span class="string">.Values.volumes</span> &#125;&#125;</span><br><span class="line">        &#123;&#123;<span class="bullet">-</span> <span class="string">toYaml</span> <span class="string">.</span> <span class="string">|</span> <span class="string">nindent</span> <span class="number">6</span> &#125;&#125;</span><br><span class="line">      &#123;&#123;<span class="bullet">-</span> <span class="string">end</span> &#125;&#125;</span><br><span class="line">  <span class="attr">persistentVolumeClaimRetentionPolicy:</span></span><br><span class="line">    <span class="attr">whenDeleted:</span> <span class="string">Retain</span></span><br><span class="line">    <span class="attr">whenScaled:</span> <span class="string">Retain</span></span><br><span class="line">  <span class="attr">volumeClaimTemplates:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">accessModes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">      <span class="attr">storageClassName:</span> <span class="string">local-path</span></span><br><span class="line">      <span class="attr">resources:</span></span><br><span class="line">        <span class="attr">requests:</span></span><br><span class="line">          <span class="attr">storage:</span> <span class="string">10000Gi</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">metadata:</span></span><br><span class="line">       <span class="attr">name:</span> <span class="string">http-volume</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">accessModes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">      <span class="attr">storageClassName:</span> <span class="string">local-path</span></span><br><span class="line">      <span class="attr">resources:</span></span><br><span class="line">        <span class="attr">requests:</span></span><br><span class="line">          <span class="attr">storage:</span> <span class="string">10000Gi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># values.yaml</span></span><br><span class="line"><span class="comment"># Default values for redis.-all</span></span><br><span class="line"><span class="comment"># This is a YAML-formatted file.</span></span><br><span class="line"><span class="comment"># Declare variables to be passed into your templates.</span></span><br><span class="line"></span><br><span class="line"><span class="attr">replicaCount:</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="attr">image:</span></span><br><span class="line">  <span class="attr">redisrepository:</span> <span class="string">redis:6.0.6</span></span><br><span class="line">  <span class="attr">httprepository:</span> <span class="string">redis/redisinsight</span> </span><br><span class="line">  <span class="attr">pullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line"></span><br><span class="line"><span class="attr">imagePullSecrets:</span> []</span><br><span class="line"><span class="attr">nameOverride:</span> <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="attr">fullnameOverride:</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">podAnnotations:</span> &#123;&#125;</span><br><span class="line"><span class="attr">podLabels:</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">service:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">LoadBalancer</span></span><br><span class="line">  <span class="attr">redisport:</span> <span class="number">6379</span></span><br><span class="line">  <span class="attr">httpport:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">loadbalancerIP:</span> <span class="number">10.2</span><span class="number">.89</span><span class="number">.32</span></span><br><span class="line"></span><br><span class="line"><span class="attr">resources:</span> &#123;&#125;</span><br><span class="line">  <span class="comment"># We usually recommend not to specify default resources and to leave this as a conscious</span></span><br><span class="line">  <span class="comment"># choice for the user. This also increases chances charts run on environments with little</span></span><br><span class="line">  <span class="comment"># resources, such as Minikube. If you do want to specify resources, uncomment the following</span></span><br><span class="line">  <span class="comment"># lines, adjust them as necessary, and remove the curly braces after &#x27;resources:&#x27;.</span></span><br><span class="line">  <span class="comment"># limits:</span></span><br><span class="line">  <span class="comment">#   cpu: 100m</span></span><br><span class="line">  <span class="comment">#   memory: 128Mi</span></span><br><span class="line">  <span class="comment"># requests:</span></span><br><span class="line">  <span class="comment">#   cpu: 100m</span></span><br><span class="line">  <span class="comment">#   memory: 128Mi</span></span><br><span class="line"></span><br><span class="line"><span class="attr">livenessProbe:</span> []</span><br><span class="line"></span><br><span class="line"><span class="attr">readinessProbe:</span> []</span><br><span class="line"><span class="comment"># Additional volumes on the output Deployment definition.</span></span><br><span class="line"><span class="attr">volumes:</span> []</span><br><span class="line"><span class="comment"># - name: foo</span></span><br><span class="line"><span class="comment">#   secret:</span></span><br><span class="line"><span class="comment">#     secretName: mysecret</span></span><br><span class="line"><span class="comment">#     optional: false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Additional volumeMounts on the output Deployment definition.</span></span><br><span class="line"><span class="attr">volumeMounts:</span> []</span><br><span class="line"><span class="comment"># - name: foo</span></span><br><span class="line"><span class="comment">#   mountPath: &quot;/etc/foo&quot;</span></span><br><span class="line"><span class="comment">#   readOnly: true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">nodeSelector:</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">tolerations:</span> []</span><br><span class="line"></span><br><span class="line"><span class="attr">affinity:</span> &#123;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> redis-insight</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2024-11-20 00:19:47</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2024-11-20 00:26:01
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/11/20/redis-insight/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2024/11/13/wireguard%E8%BF%81%E7%A7%BB%E6%96%B9%E6%A1%88/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">wireguard迁移方案</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">redis-insight</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-insight-redis-helm%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="nav-text">redis-insight+redis helm部署配置</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
