@@ -18,12 +18,12 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 特点 lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。    2. lustre核心组件  MGS(Management Server) :提供整个文件系统的配置信息与崩溃恢复  MGT(Management Target):MGT是MGS用于存储lustre文件系统配置信">
+        <meta name="description" content="1. 特点 lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。  2. lustre核心组件  MGS(Management Server) :提供整个文件系统的配置信息与崩溃恢复  MGT(Management Target):MGT是MGS用于存储lustre文件系统配置信息的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lustre学习">
 <meta property="og:url" content="http://example.com/2024/12/02/lustre%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 特点 lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。    2. lustre核心组件  MGS(Management Server) :提供整个文件系统的配置信息与崩溃恢复  MGT(Management Target):MGT是MGS用于存储lustre文件系统配置信">
+<meta property="og:description" content="1. 特点 lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。  2. lustre核心组件  MGS(Management Server) :提供整个文件系统的配置信息与崩溃恢复  MGT(Management Target):MGT是MGS用于存储lustre文件系统配置信息的">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png">
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a876799e-0bf6-11ed-8f79-fa163eb4f6be.png">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_ad890140-0bf6-11ed-8f79-fa163eb4f6be.png">
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be.png">
 <meta property="article:published_time" content="2024-12-01T16:12:48.000Z">
-<meta property="article:modified_time" content="2024-12-01T16:49:34.342Z">
+<meta property="article:modified_time" content="2024-12-01T16:55:01.398Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png">
@@ -363,8 +363,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-12-02 00:49:34</span>
-            <span class="mobile">2024-12-02 00:49</span>
+            <span class="desktop">2024-12-02 00:55:01</span>
+            <span class="mobile">2024-12-02 00:55</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -389,14 +389,12 @@
 
             <div class="article-content markdown-body">
                 <h2 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h2><ol>
-<li><p>lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。</p>
-<p><img  
+<li>lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。<br><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png"
                       alt="modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be"
-                ></p>
-</li>
+                ></li>
 </ol>
 <h2 id="2-lustre核心组件"><a href="#2-lustre核心组件" class="headerlink" title="2. lustre核心组件"></a>2. lustre核心组件</h2><p><img  
                      lazyload
@@ -424,6 +422,8 @@
 <li><p>Lustre Client：负责挂载lustre文件系统</p>
 </li>
 <li><p>Lustre Network：lustre的网络协议，支持RDMA</p>
+</li>
+<li><p>LIBCFS：提供基础的进程管理和调试 API。libcfs 被大量使用在 LNet、Lustre 的相关工具上。</p>
 </li>
 </ol>
 <h2 id="3-布局"><a href="#3-布局" class="headerlink" title="3. 布局"></a>3. 布局</h2><ol>
@@ -455,6 +455,7 @@
                       alt="modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be"
                 ></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.modb.pro/db/444635" >深入理解Lustre分布式文件系统之Lustre架构 - 墨天轮 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/635991046" >深入理解 Lustre 系列六：LIBCFS - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -467,7 +468,7 @@
         <li><strong>Created at:</strong> 2024-12-02 00:12:48</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-12-02 00:49:34
+                <strong>Updated at:</strong> 2024-12-02 00:55:01
             </li>
         
         <li>
