@@ -13,28 +13,24 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2024/12/02/lustre学习/"/>
+    <link rel="canonical" href="http://example.com/2024/12/22/nfs-ganesha路径梳理/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 特点 lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。  2. lustre核心组件  MGS(Management Server) :提供整个文件系统的配置信息与崩溃恢复  MGT(Management Target):MGT是MGS用于存储lustre文件系统配置信息的">
+        <meta name="description" content="1. 结构及组成1.1 FSALFSAL（File System Abstraction Layer），文件系统抽象层，将后端存储抽象为统一的、命名空间独立的API，供应用层来调用。 命名空间是什么？内核命名空间？ FSAL provides a namespace independent API  1.2 ntirpc一个nfs ganesha的组件，与GRPC相比？ 为什么内核中喜欢使用RPC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="lustre学习">
-<meta property="og:url" content="http://example.com/2024/12/02/lustre%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:title" content="nfs-ganesha路径梳理">
+<meta property="og:url" content="http://example.com/2024/12/22/nfs-ganesha%E8%B7%AF%E5%BE%84%E6%A2%B3%E7%90%86/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 特点 lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。  2. lustre核心组件  MGS(Management Server) :提供整个文件系统的配置信息与崩溃恢复  MGT(Management Target):MGT是MGS用于存储lustre文件系统配置信息的">
+<meta property="og:description" content="1. 结构及组成1.1 FSALFSAL（File System Abstraction Layer），文件系统抽象层，将后端存储抽象为统一的、命名空间独立的API，供应用层来调用。 命名空间是什么？内核命名空间？ FSAL provides a namespace independent API  1.2 ntirpc一个nfs ganesha的组件，与GRPC相比？ 为什么内核中喜欢使用RPC">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png">
-<meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a876799e-0bf6-11ed-8f79-fa163eb4f6be.png">
-<meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_aa646f72-0bf6-11ed-8f79-fa163eb4f6be.png">
-<meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_ad890140-0bf6-11ed-8f79-fa163eb4f6be.png">
-<meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be.png">
-<meta property="article:published_time" content="2024-12-01T16:12:48.000Z">
-<meta property="article:modified_time" content="2024-12-01T16:57:06.340Z">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
+<meta property="article:published_time" content="2024-12-22T12:20:26.000Z">
+<meta property="article:modified_time" content="2024-12-22T14:58:56.890Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png">
+<meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
     
     
     <!--- Icon Part-->
@@ -46,7 +42,7 @@
     
     <title>
         
-            lustre学习 -
+            nfs-ganesha路径梳理 -
         
         Ethereal&#39;s Blog
     </title>
@@ -334,7 +330,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">lustre学习</h1>
+                    <h1 class="article-title-regular">nfs-ganesha路径梳理</h1>
                 </div>
             
                 
@@ -356,15 +352,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-12-02 00:12:48</span>
-        <span class="mobile">2024-12-02 00:12</span>
+        <span class="desktop">2024-12-22 20:20:26</span>
+        <span class="mobile">2024-12-22 20:20</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-12-02 00:57:06</span>
-            <span class="mobile">2024-12-02 00:57</span>
+            <span class="desktop">2024-12-22 22:58:56</span>
+            <span class="mobile">2024-12-22 22:58</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -388,75 +384,80 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h2><ol>
-<li>lustre分布式文件系统支持ldiskfs和zfs两种文件系统，ldiskfs是基于ext4文件系统定制优化而来（需要修改内核）；zfs则是采用openzfs的项目。<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png"
-                      alt="modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be"
-                ></li>
-</ol>
-<h2 id="2-lustre核心组件"><a href="#2-lustre核心组件" class="headerlink" title="2. lustre核心组件"></a>2. lustre核心组件</h2><p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a876799e-0bf6-11ed-8f79-fa163eb4f6be.png"
-                      alt="modb_20220725_a876799e-0bf6-11ed-8f79-fa163eb4f6be"
-                ></p>
-<ol>
-<li><p>MGS(Management Server) :提供整个文件系统的配置信息与崩溃恢复</p>
-</li>
-<li><p>MGT(Management Target):MGT是MGS用于存储lustre文件系统配置信息的块设备，MGT的容量最大需要100MB。</p>
-</li>
-<li><p>MDS(Meta Server):MDS负责管理文件系统统一的命名空间，同时提供文件系统的元数据访问服务</p>
-</li>
-<li><p>MDT(Metadata Target):MDS存储元数据信息的后端块设备。</p>
-</li>
-<li><p>OSS(Object Storage Server)：OSS负责管理文件对象数据，对lustre客户端提供完整文件数据的访问。</p>
-</li>
-<li><p>OST(Object Storage Target):OSS使用的存储文件对象数据的块设备。</p>
-</li>
-<li><p>LMV(Logical Metadata Voliume）：访问<code>MDC(Metadata client)</code>的抽象层</p>
-</li>
-<li><p><code>LOV(Logical Object Volume)</code>：针对<code>OSC(Object Storage Client)</code>的抽象层</p>
-</li>
-<li><p>Lustre Client：负责挂载lustre文件系统</p>
-</li>
-<li><p>Lustre Network：lustre的网络协议，支持RDMA</p>
-</li>
-<li><p>LIBCFS：提供基础的进程管理和调试 API。libcfs 被大量使用在 LNet、Lustre 的相关工具上。</p>
-</li>
-</ol>
-<h2 id="3-布局"><a href="#3-布局" class="headerlink" title="3. 布局"></a>3. 布局</h2><ol>
-<li>正常(normal)文件布局</li>
-</ol>
-<p>文件的每个stripe按照round-robin方式轮询当前集群中每个ost来放置数据分片对象。</p>
+                <h2 id="1-结构及组成"><a href="#1-结构及组成" class="headerlink" title="1. 结构及组成"></a>1. 结构及组成</h2><h3 id="1-1-FSAL"><a href="#1-1-FSAL" class="headerlink" title="1.1 FSAL"></a>1.1 FSAL</h3><p>FSAL（File System Abstraction Layer），文件系统抽象层，将后端存储抽象为统一的、命名空间独立的API，供应用层来调用。</p>
+<p>命名空间是什么？内核命名空间？</p>
+<p>FSAL provides a namespace independent</p>
+<p>API</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_aa646f72-0bf6-11ed-8f79-fa163eb4f6be.png"
-                      alt="modb_20220725_aa646f72-0bf6-11ed-8f79-fa163eb4f6be"
+                     data-src="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png"
+                      alt="4ab501d475f973bcb0b48f6b6465a012"
                 ></p>
-<ol start="2">
-<li>复合布局</li>
-</ol>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_ad890140-0bf6-11ed-8f79-fa163eb4f6be.png"
-                      alt="modb_20220725_ad890140-0bf6-11ed-8f79-fa163eb4f6be"
-                ></p>
+<h3 id="1-2-ntirpc"><a href="#1-2-ntirpc" class="headerlink" title="1.2 ntirpc"></a>1.2 ntirpc</h3><p>一个nfs ganesha的组件，与GRPC相比？</p>
+<p>为什么内核中喜欢使用RPC？（OpenHarmony内核中使用了大量的RPC，几乎每个组件都具有client与server）<br>Ganesha 的核心模块</p>
+<h3 id="1-3-Memory-Manager"><a href="#1-3-Memory-Manager" class="headerlink" title="1.3 Memory Manager"></a>1.3 Memory Manager</h3><p>负责 Ganesha 的内存管理。</p>
+<h3 id="1-4-RPCSEC-GSS"><a href="#1-4-RPCSEC-GSS" class="headerlink" title="1.4 RPCSEC_GSS"></a>1.4 RPCSEC_GSS</h3><p>负责使用 RPCSEC_GSS 的数据传输，通常使用 krb5, SPKM3 或 LIPKEY 来管理安全。</p>
+<h3 id="1-5-NFS-协议模块"><a href="#1-5-NFS-协议模块" class="headerlink" title="1.5 NFS 协议模块"></a>1.5 NFS 协议模块</h3><p>负责 NFS 消息结构的管理Metadata（Inode）</p>
+<h3 id="1-6-Cache"><a href="#1-6-Cache" class="headerlink" title="1.6 Cache"></a>1.6 Cache</h3><p>负责元数据缓存管理</p>
+<h3 id="1-7-File-Content-Cache"><a href="#1-7-File-Content-Cache" class="headerlink" title="1.7 File Content Cache"></a>1.7 File Content Cache</h3><p>负责数据缓存管理</p>
+<h3 id="1-8-Hash-Tables"><a href="#1-8-Hash-Tables" class="headerlink" title="1.8 Hash Tables"></a>1.8 Hash Tables</h3><p>提供了基于红黑树的哈希表，这个模块在 Ganesha 里用到很多。</p>
+<h3 id="1-9-LTTNG"><a href="#1-9-LTTNG" class="headerlink" title="1.9 LTTNG"></a>1.9 LTTNG</h3><p>用于追踪应用程序路径，通过编译时-DUSE_LTTNG&#x3D;ON激活</p>
+<h2 id="2-调用链"><a href="#2-调用链" class="headerlink" title="2. 调用链"></a>2. 调用链</h2><h3 id="2-1-启动"><a href="#2-1-启动" class="headerlink" title="2.1 启动"></a>2.1 启动</h3><ol>
+<li><p>由src&#x2F;MainNFSD&#x2F;nfs_main.c或src&#x2F;MainNFSD&#x2F;nfs_lib.c中的main函数，启动后台服务进程（编译好的文件为&#x2F;usr&#x2F;bin&#x2F;ganesha.nfsd，服务文件为src&#x2F;scripts&#x2F;systemd&#x2F;nfs-ganesha.service.el7）。</p>
+</li>
+<li><p>Main函数中做参数解析操作后，转入nfs_prereq_init，初始化tirpc。</p>
+</li>
+<li><p>之后进入nfs_init_init，初始化Init的mutex和cond，之后进行初始化操作。</p>
+</li>
+<li><p>屏蔽SIGPIPE信号（）</p>
+</li>
+<li><p>启动start_fsals，主要包括mdcache（CEPH）和pseudofs.</p>
+</li>
+<li><p>init_server_pkgs，初始化mdcache_pkginit</p>
+</li>
+<li><p>nfs_start_grace&#x2F;nfs_wait_for_grace_enforcement，恢复</p>
+</li>
+<li><p>nfs_start，正式启动</p>
 <ol>
-<li>需要注意后面的部分会空出前面配置的空间大小</li>
+<li><p>nfs_Init，包括exports_pkginit，初始化clientid（通过hashtable存储）和state_id（通过hashtable存储），owner（hashtable），session_id（hash_table)以及session_pool（提前分配空间，用于memalloc时将数据存储在一起，避免碎片），dupreq2_pkginit，create_pseudofs，<strong>nfs_Init_svc</strong>，nfs_rpc_cb_pkginit</p>
+</li>
+<li><p>nfs_Start_threads，包括delayed executor（多个线程），sigmgr_thrid（信号处理），admin_thrid（主线程），reaper thread，fridgethr_init（类似idle）</p>
+</li>
+<li><p>delayed_get_work：通过avltree_container_of（类似linux container of）</p>
+</li>
+<li><p>nfs_Init_svc中创建Create_SVCXPRTs，即创建Create_udp和Create_tcp，绑定处理方式，为nfs_rpc_dispatch_udp_NFS和nfs_rpc_dispatch_tcp_NFS，其中均绑定为nfs_rpc_valid_NFS，并通过Register_program将handler注册到ntirpc中，在nfs_rpc_valid_NFS其中由nfs_rpc_process_request进行处理。其中通过svc_auth_authenticate鉴权（ntirpc中成员），最终移交给service_function，即nfs4_Compound，其中process_one_op进行处理（client发送可以发送多个请求，但是处理将一个一个处理），其中通过optabv4分发到具体操作，例如nfs4_op_access等。<strong>nfs4_op_setclientid等也是其中成员</strong></p>
+</li>
 </ol>
-<h2 id="4-访问流程"><a href="#4-访问流程" class="headerlink" title="4. 访问流程"></a>4. 访问流程</h2><p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be.png"
-                      alt="modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be"
-                ></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.modb.pro/db/444635" >深入理解Lustre分布式文件系统之Lustre架构 - 墨天轮 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/635991046" >深入理解 Lustre 系列六：LIBCFS - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/news/229014" >HPC高性能计算知识：深度解析Lustre体系结构 - 腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+</ol>
+<h3 id="2-2-操作"><a href="#2-2-操作" class="headerlink" title="2.2 操作"></a>2.2 操作</h3><ol>
+<li><p>按照上述，当请求到来时会分发到nfs4_op_create等操作中。</p>
+</li>
+<li><p>以nfs4_op_create为例，先进行check_quota，然后移交给fsal_create</p>
+</li>
+<li><p>统一文件处理结构如下：</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">compound_data</span> &#123;</span><br><span class="line">    nfs_fh4 currentFH;    <span class="comment">/*&lt; Current filehandle */</span></span><br><span class="line">    nfs_fh4 savedFH;    <span class="comment">/*&lt; Saved filehandle */</span></span><br><span class="line">    stateid4 current_stateid;    <span class="comment">/*&lt; Current stateid */</span></span><br><span class="line">    <span class="type">bool</span> current_stateid_valid;    <span class="comment">/*&lt; Current stateid is valid */</span></span><br><span class="line">    stateid4 saved_stateid;    <span class="comment">/*&lt; Saved stateid */</span></span><br><span class="line">    <span class="type">bool</span> saved_stateid_valid;    <span class="comment">/*&lt; Saved stateid is valid */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> minorversion;    <span class="comment">/*&lt; NFSv4 minor version */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_obj_handle</span> *current_obj;    <span class="comment">/*&lt; Current object handle */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_obj_handle</span> *saved_obj;    <span class="comment">/*&lt; saved object handle */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_ds_handle</span> *current_ds;    <span class="comment">/*&lt; current ds handle */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_ds_handle</span> *saved_ds;    <span class="comment">/*&lt; Saved DS handle */</span></span><br><span class="line">    <span class="type">object_file_type_t</span> current_filetype;    <span class="comment">/*&lt; File type of current obj */</span></span><br><span class="line">    <span class="type">object_file_type_t</span> saved_filetype;    <span class="comment">/*&lt; File type of saved entry */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">gsh_export</span> *saved_export; <span class="comment">/*&lt; Export entry related to the</span></span><br><span class="line"><span class="comment">                         savedFH */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_pnfs_ds</span> *saved_pnfs_ds; <span class="comment">/*&lt; DS related to the savedFH */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">export_perms</span> saved_export_perms; <span class="comment">/*&lt; Permissions for export for</span></span><br><span class="line"><span class="comment">                           savedFH */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">svc_req</span> *req;    <span class="comment">/*&lt; RPC Request related to the compound */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timespec</span> op_start_time;</span><br><span class="line">    nfs_argop4 *argarray;</span><br><span class="line">    <span class="type">nfs_res_t</span> *res;</span><br><span class="line">    nfs_resop4 *resarray;</span><br><span class="line">    <span class="type">uint32_t</span> argarray_len;</span><br><span class="line">    <span class="type">nfs_client_cred_t</span> credential;    <span class="comment">/*&lt; Raw RPC credentials */</span></span><br><span class="line">    <span class="type">nfs_client_id_t</span> *preserved_clientid;    <span class="comment">/*&lt; clientid that has lease</span></span><br><span class="line"><span class="comment">                           reserved, if any */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">nfs41_session_slot__</span> *slot;    <span class="comment">/*&lt; NFv41: pointer to the</span></span><br><span class="line"><span class="comment">                            session&#x27;s slot */</span></span><br><span class="line">    nfsstat4 cached_result_status; <span class="comment">/* &lt;NFv41: save the</span></span><br><span class="line"><span class="comment">        slot-&gt;cached_result-&gt;status for reply request */</span></span><br><span class="line">    <span class="type">bool</span> sa_cachethis;    <span class="comment">/*&lt; True if cachethis was specified in</span></span><br><span class="line"><span class="comment">                    SEQUENCE op. */</span></span><br><span class="line">    nfs_opnum4 opcode;    <span class="comment">/*&lt; Current NFS4 OP */</span></span><br><span class="line">    <span class="type">uint32_t</span> oppos;        <span class="comment">/*&lt; Position of the operation within the</span></span><br><span class="line"><span class="comment">                    request processed  */</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *opname;    <span class="comment">/*&lt; Name of the operation */</span></span><br><span class="line">    <span class="type">char</span> *tagname;</span><br><span class="line">    <span class="type">void</span> *op_data;        <span class="comment">/*&lt; operation specific data for resume */</span></span><br><span class="line">    <span class="type">nfs41_session_t</span> *session;    <span class="comment">/*&lt; Related session</span></span><br><span class="line"><span class="comment">                       (found by OP_SEQUENCE) */</span></span><br><span class="line">    sequenceid4 sequence;    <span class="comment">/*&lt; Sequence ID of the current compound</span></span><br><span class="line"><span class="comment">                   (if applicable) */</span></span><br><span class="line">    slotid4 slotid;        <span class="comment">/*&lt; Slot ID of the current compound</span></span><br><span class="line"><span class="comment">                   (if applicable) */</span></span><br><span class="line">    <span class="type">uint32_t</span> resp_size;    <span class="comment">/*&lt; Running total response size. */</span></span><br><span class="line">    <span class="type">uint32_t</span> op_resp_size;    <span class="comment">/*&lt; Current op&#x27;s response size. */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ol>
+<li>打印日志(src&#x2F;include&#x2F;log.h)</li>
+</ol>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">LogInfo</span>(COMPONENT_DISPATCH,</span><br><span class="line">    <span class="string">&quot;Could not authenticate request... rejecting with AUTH_STAT=%s&quot;</span>,</span><br><span class="line">    <span class="built_in">auth_stat2str</span>(auth_rc)</span><br><span class="line">);</span><br><span class="line">        <span class="built_in">LogFullDebug</span>(COMPONENT_DISPATCH,</span><br><span class="line">         <span class="string">&quot;RPCSEC_GSS no_dispatch=%d&quot;</span>, no_dispatch);</span><br><span class="line">        <span class="built_in">LogDebug</span>(COMPONENT_DISPATCH,</span><br><span class="line">     <span class="string">&quot;Cannot get client block for Program %&quot;</span> PRIu32</span><br><span class="line">     <span class="string">&quot;, Version %&quot;</span> PRIu32</span><br><span class="line">     <span class="string">&quot;, Function %&quot;</span> PRIu32,</span><br><span class="line">     reqdata-&gt;svc.rq_msg.cb_prog,</span><br><span class="line">     reqdata-&gt;svc.rq_msg.cb_vers,</span><br><span class="line">     reqdata-&gt;svc.rq_msg.cb_proc);</span><br><span class="line"></span><br><span class="line">            <span class="built_in">LogCrit</span>(COMPONENT_DISPATCH,</span><br><span class="line">        <span class="string">&quot;DUP: Unknown duplicate request cache status. This should never be reached!&quot;</span>);</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/bandaoyu/article/details/122302684" >【ceph】什么是NFS-Ganesha和fuse-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.infoq.cn/article/qKE8tJzit8EHwtDFx0Ff" >NFS-Ganesha 核心架构解读_文化 &amp; 方法_陈涛_InfoQ精选文章 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/suncoolcat/p/3366045.html" >LTTng 简介&amp;使用实战 - 新一 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="http://www.selinuxplus.com/?p=800" >RGW NFS&#x2F;ganesha 源码分析 – 下一代安全 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/0c2e07293121" >nfs-ganesha - Session - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/2c61594c922e" >nfs-ganesha - Open - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/jiang4357291/article/details/103337655" >nfs-ganesha rados_ng恢复原理分析_grace period ganesha-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/sunbines/p/17070548.html" >【nfs-ganesha】nfs4.1 rados_cluster数据恢复机制 - 苏格拉底的落泪 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/5092fe878424" >nfs-ganesha - thread model - fridgethr - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/choumin/article/details/114461137" >使用glibc xdr对结构体进行编解码_a-xdr编码-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/kuno_y/article/details/124764840" >[LTTng学习之旅]——环境搭建_编译tlg需要依赖fst的环境,请参考文档安装fts相关环境-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zangjiaoshou/article/details/80495510" >nfs-ganesha cache代码分析，转mdcache readdir_nfs-ganesha 去mdcache-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -464,16 +465,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> lustre学习</li>
+        <li><strong>Title:</strong> nfs-ganesha路径梳理</li>
         <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2024-12-02 00:12:48</li>
+        <li><strong>Created at:</strong> 2024-12-22 20:20:26</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-12-02 00:57:06
+                <strong>Updated at:</strong> 2024-12-22 22:58:56
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2024/12/02/lustre学习/
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/12/22/nfs-ganesha路径梳理/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -491,29 +492,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2024/12/22/nfs-ganesha%E8%B7%AF%E5%BE%84%E6%A2%B3%E7%90%86/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">nfs-ganesha路径梳理</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2024/11/20/redis-insight/"
+                            href="/2024/12/02/lustre%E5%AD%A6%E4%B9%A0/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">redis-insight</span>
+                                    <span class="post-nav-title-item">lustre学习</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -578,8 +564,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">lustre学习</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%89%B9%E7%82%B9"><span class="nav-text">1. 特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-lustre%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-text">2. lustre核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B8%83%E5%B1%80"><span class="nav-text">3. 布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B"><span class="nav-text">4. 访问流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">nfs-ganesha路径梳理</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BB%93%E6%9E%84%E5%8F%8A%E7%BB%84%E6%88%90"><span class="nav-text">1. 结构及组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-FSAL"><span class="nav-text">1.1 FSAL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-ntirpc"><span class="nav-text">1.2 ntirpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Memory-Manager"><span class="nav-text">1.3 Memory Manager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-RPCSEC-GSS"><span class="nav-text">1.4 RPCSEC_GSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-NFS-%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="nav-text">1.5 NFS 协议模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-Cache"><span class="nav-text">1.6 Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-File-Content-Cache"><span class="nav-text">1.7 File Content Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-Hash-Tables"><span class="nav-text">1.8 Hash Tables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-9-LTTNG"><span class="nav-text">1.9 LTTNG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B0%83%E7%94%A8%E9%93%BE"><span class="nav-text">2. 调用链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%90%AF%E5%8A%A8"><span class="nav-text">2.1 启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%93%8D%E4%BD%9C"><span class="nav-text">2.2 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
