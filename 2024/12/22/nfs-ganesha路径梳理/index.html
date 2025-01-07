@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
 <meta property="article:published_time" content="2024-12-22T12:20:26.000Z">
-<meta property="article:modified_time" content="2024-12-29T15:08:41.903Z">
+<meta property="article:modified_time" content="2025-01-07T15:36:02.802Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
@@ -359,8 +359,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-12-29 23:08:41</span>
-            <span class="mobile">2024-12-29 23:08</span>
+            <span class="desktop">2025-01-07 23:36:02</span>
+            <span class="mobile">2025-01-07 23:36</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -470,6 +470,20 @@
 <li><p>nconnect（创建多个客户端，连接同一个server）</p>
 </li>
 </ol>
+<h3 id="4-1-pNFS"><a href="#4-1-pNFS" class="headerlink" title="4.1 pNFS"></a>4.1 pNFS</h3><ul>
+<li><p>nfs4_get_device_info-&gt;nfs4_proc_getdeviceinfo-&gt;nfs4_call_sync-&gt;nfs4_do_call_sync  alloc_deviceid_node</p>
+</li>
+<li><p>路径</p>
+</li>
+</ul>
+<p>nfs4_ff_layout_prepare_ds-&gt;nfs4_pnfs_ds_connect-&gt;_nfs4_pnfs_v4_ds_connect-&gt;nfs4_set_ds_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
+<h3 id="4-2-multipath"><a href="#4-2-multipath" class="headerlink" title="4.2 multipath"></a>4.2 multipath</h3><h3 id="4-3-nconnect"><a href="#4-3-nconnect" class="headerlink" title="4.3 nconnect"></a>4.3 nconnect</h3><ul>
+<li>路径：</li>
+</ul>
+<p>nfs4_set_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
+<ul>
+<li>是</li>
+</ul>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ol>
 <li>打印日志(src&#x2F;include&#x2F;log.h)</li>
 </ol>
@@ -514,6 +528,19 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://vdan.cz/vmware/esxi/add-nconnect-support-to-nfs-v4-1/" >Add nConnect Support to NFS v4.1 - vDan <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://support.vastdata.com/s/article/UUID-c43bd6a6-9b4d-96ef-ade5-44ea59d2052e" >NFS Features for Enhanced Performance <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.vmware.com/docs/nfs-iscsi-multipathing-in-vsphere" >vmware.com&#x2F;docs&#x2F;nfs-iscsi-multipathing-in-vsphere <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://wiki.linux-nfs.org/wiki/index.php/PNFS_Development_Road_Map" >PNFS Development Road Map - Linux NFS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8526734" >NFS系统read调用过程（四）-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://rfc2cn.com/rfc5663.html" >RFC5663 中文翻译 中文RFC RFC文档 RFC翻译 RFC中文版 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc5663" >RFC 5663：并行 NFS （pNFS） 块&#x2F;卷布局 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://rfc2cn.com/rfc6688.html" >RFC6688 中文翻译 中文RFC RFC文档 RFC翻译 RFC中文版 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc6688" >RFC 6688: Parallel NFS (pNFS) Block Disk Protection <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/src/translations/nfs/pnfs.com.html" >pnfs.com <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/src/translations/nfs/pnfs-development.html" >linux-nfs.org PNFS Development <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/courses/nfs/pnfs.html" >Parallel NFS (pNFS) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.redhat.com/zh-cn/documentation/red_hat_enterprise_linux/7/html/storage_administration_guide/nfs-pnfs" >8.9. pNFS | Red Hat Product Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/qinlulu/p/14671475.html" >详谈：pNFS增强文件系统架构 - 开源Linux - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.redhat.com/zh-cn/documentation/red_hat_enterprise_linux/7/html/storage_administration_guide/enabling-pnfs-scsi#enabling-pnfs-scsi" >8.10. 在 NFS 中启用 pNFS SCSI 布局 | Red Hat Product Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/838f9bc02fee68185c1c6e667d6a7ab0eb5948a1/Documentation/admin-guide/nfs/pnfs-block-server.rst" >linux&#x2F;Documentation&#x2F;admin-guide&#x2F;nfs&#x2F;pnfs-block-server.rst at 838f9bc02fee68185c1c6e667d6a7ab0eb5948a1 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -526,7 +553,7 @@
         <li><strong>Created at:</strong> 2024-12-22 20:20:26</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-12-29 23:08:41
+                <strong>Updated at:</strong> 2025-01-07 23:36:02
             </li>
         
         <li>
@@ -621,7 +648,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">nfs-ganesha路径梳理</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BB%93%E6%9E%84%E5%8F%8A%E7%BB%84%E6%88%90"><span class="nav-text">1. 结构及组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-FSAL"><span class="nav-text">1.1 FSAL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-ntirpc"><span class="nav-text">1.2 ntirpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Memory-Manager"><span class="nav-text">1.3 Memory Manager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-RPCSEC-GSS"><span class="nav-text">1.4 RPCSEC_GSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-NFS-%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="nav-text">1.5 NFS 协议模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-Cache"><span class="nav-text">1.6 Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-File-Content-Cache"><span class="nav-text">1.7 File Content Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-Hash-Tables"><span class="nav-text">1.8 Hash Tables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-9-LTTNG"><span class="nav-text">1.9 LTTNG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B0%83%E7%94%A8%E9%93%BE"><span class="nav-text">2. 调用链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%90%AF%E5%8A%A8"><span class="nav-text">2.1 启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%93%8D%E4%BD%9C"><span class="nav-text">2.2 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-client%E6%8F%90%E4%BE%9B%E4%BF%A1%E6%81%AF"><span class="nav-text">3. client提供信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B9%B6%E8%A1%8C"><span class="nav-text">4. 并行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BB%93%E6%9E%84%E5%8F%8A%E7%BB%84%E6%88%90"><span class="nav-text">1. 结构及组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-FSAL"><span class="nav-text">1.1 FSAL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-ntirpc"><span class="nav-text">1.2 ntirpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Memory-Manager"><span class="nav-text">1.3 Memory Manager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-RPCSEC-GSS"><span class="nav-text">1.4 RPCSEC_GSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-NFS-%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="nav-text">1.5 NFS 协议模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-Cache"><span class="nav-text">1.6 Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-File-Content-Cache"><span class="nav-text">1.7 File Content Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-Hash-Tables"><span class="nav-text">1.8 Hash Tables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-9-LTTNG"><span class="nav-text">1.9 LTTNG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B0%83%E7%94%A8%E9%93%BE"><span class="nav-text">2. 调用链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%90%AF%E5%8A%A8"><span class="nav-text">2.1 启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%93%8D%E4%BD%9C"><span class="nav-text">2.2 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-client%E6%8F%90%E4%BE%9B%E4%BF%A1%E6%81%AF"><span class="nav-text">3. client提供信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B9%B6%E8%A1%8C"><span class="nav-text">4. 并行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-pNFS"><span class="nav-text">4.1 pNFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-multipath"><span class="nav-text">4.2 multipath</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-nconnect"><span class="nav-text">4.3 nconnect</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
@@ -648,7 +675,7 @@
               <span>2023</span>
               -
             
-            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
         </div>
         
             <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
