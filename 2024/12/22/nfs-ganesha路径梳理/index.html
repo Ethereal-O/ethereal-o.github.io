@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
 <meta property="article:published_time" content="2024-12-22T12:20:26.000Z">
-<meta property="article:modified_time" content="2025-01-07T15:36:02.802Z">
+<meta property="article:modified_time" content="2025-01-09T15:07:48.983Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
@@ -359,8 +359,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-01-07 23:36:02</span>
-            <span class="mobile">2025-01-07 23:36</span>
+            <span class="desktop">2025-01-09 23:07:48</span>
+            <span class="mobile">2025-01-09 23:07</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -471,13 +471,23 @@
 </li>
 </ol>
 <h3 id="4-1-pNFS"><a href="#4-1-pNFS" class="headerlink" title="4.1 pNFS"></a>4.1 pNFS</h3><ul>
-<li><p>nfs4_get_device_info-&gt;nfs4_proc_getdeviceinfo-&gt;nfs4_call_sync-&gt;nfs4_do_call_sync  alloc_deviceid_node</p>
+<li><p>首先向server通过getlayout请求获取layout，服务端返回当前请求文件的对应地址的ds的id，接着客户端发送getdeviceinfo获取对应的ip，后直接与ds交流，通过is_hole来获取空地址，向空地址写入后，发送到ds，然后向服务器更新layout（layoutcommit），最后layout return（nfs-ganesha中规定必须return），当server没有人读时，尝试merge这些layout（ext4中实现或相应fsal中实现），完成COW操作。（通过bl_submit_bio和zero_user_segment初始化页）</p>
+</li>
+<li><p>lock：租期锁，超时释放，客户端重启后通过grace重新拿到同一把锁。并发写是被允许的，因为支持直接向ds通过COW写入，但是错误不会保证。</p>
 </li>
 <li><p>路径</p>
+<ul>
+<li><p>nfs4_get_device_info-&gt;nfs4_proc_getdeviceinfo-&gt;nfs4_call_sync-&gt;nfs4_do_call_sync  alloc_deviceid_node</p>
+</li>
+<li><p>nfs4_ff_layout_prepare_ds-&gt;nfs4_pnfs_ds_connect-&gt;_nfs4_pnfs_v4_ds_connect-&gt;nfs4_set_ds_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
+</li>
+<li><p>pnfs_try_to_read_data-&gt;&gt;&gt;bl_alloc_lseg-&gt;bl_alloc_extent-&gt;bl_find_get_deviceid-&gt;nfs4_find_get_deviceid-&gt;</p>
 </li>
 </ul>
-<p>nfs4_ff_layout_prepare_ds-&gt;nfs4_pnfs_ds_connect-&gt;_nfs4_pnfs_v4_ds_connect-&gt;nfs4_set_ds_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
-<h3 id="4-2-multipath"><a href="#4-2-multipath" class="headerlink" title="4.2 multipath"></a>4.2 multipath</h3><h3 id="4-3-nconnect"><a href="#4-3-nconnect" class="headerlink" title="4.3 nconnect"></a>4.3 nconnect</h3><ul>
+</li>
+</ul>
+<h3 id="4-2-multipath"><a href="#4-2-multipath" class="headerlink" title="4.2 multipath"></a>4.2 multipath</h3><p>直接复用nconnect，只不过创建的server地址不同</p>
+<h3 id="4-3-nconnect"><a href="#4-3-nconnect" class="headerlink" title="4.3 nconnect"></a>4.3 nconnect</h3><ul>
 <li>路径：</li>
 </ul>
 <p>nfs4_set_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
@@ -541,6 +551,14 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/qinlulu/p/14671475.html" >详谈：pNFS增强文件系统架构 - 开源Linux - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.redhat.com/zh-cn/documentation/red_hat_enterprise_linux/7/html/storage_administration_guide/enabling-pnfs-scsi#enabling-pnfs-scsi" >8.10. 在 NFS 中启用 pNFS SCSI 布局 | Red Hat Product Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/838f9bc02fee68185c1c6e667d6a7ab0eb5948a1/Documentation/admin-guide/nfs/pnfs-block-server.rst" >linux&#x2F;Documentation&#x2F;admin-guide&#x2F;nfs&#x2F;pnfs-block-server.rst at 838f9bc02fee68185c1c6e667d6a7ab0eb5948a1 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://wenku.csdn.net/answer/9je62en5m5#:~:text=%E5%9C%A8%20NFSv3%20%E9%A9%B1%E5%8A%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%EF%BC%8C%22xdr%22%20%E6%98%AF%20%22External%20Data%20Representation%22,%E7%9A%84%E7%BC%A9%E5%86%99%EF%BC%8C%E8%A1%A8%E7%A4%BA%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%A4%BA%E3%80%82%20%E5%AE%83%E6%98%AF%E4%B8%80%E7%A7%8D%E7%94%A8%E4%BA%8E%E5%9C%A8%E7%BD%91%E7%BB%9C%E4%B8%AD%E4%BC%A0%E8%BE%93%E6%95%B0%E6%8D%AE%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E6%A0%BC%E5%BC%8F%E3%80%82%20NFSv3%20%E5%8D%8F%E8%AE%AE%E4%BD%BF%E7%94%A8%20XDR%20%E6%9D%A5%E7%BC%96%E7%A0%81%E5%92%8C%E8%A7%A3%E7%A0%81%E6%95%B0%E6%8D%AE%EF%BC%8C%E4%BB%A5%E4%BE%BF%E5%9C%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B9%8B%E9%97%B4%E8%BF%9B%E8%A1%8C%E9%80%9A%E4%BF%A1%E3%80%82%20XDR%20%E6%98%AF%E4%B8%80%E7%A7%8D%E4%B8%8E%E6%9C%BA%E5%99%A8%E6%97%A0%E5%85%B3%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%A1%AE%E4%BF%9D%E6%95%B0%E6%8D%AE%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E7%B3%BB%E7%BB%9F%E4%B9%8B%E9%97%B4%E4%BC%A0%E8%BE%93%E6%97%B6%E8%83%BD%E5%A4%9F%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%9E%90%E3%80%82" >nfs3驱动代码中xdr什么意思 - CSDN文库 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8744847" >理解filelayout中layout创建过程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8749127" >NFSv4布局获取处理-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/category_1320297.html" >NFS文件系统_ycnian的博客-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8719051" >FILE LAYOUT_file layout(rfc5661)-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/ask/sof/111090104" >如何在NFS上使用扩展文件属性？-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8731344" >理解NFSv4.1布局类型及其在MDS中的查找过程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/zhenjing/archive/2011/07/04/filelock.html" >文件锁与NFS文件锁 - zhenjing - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -553,7 +571,7 @@
         <li><strong>Created at:</strong> 2024-12-22 20:20:26</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-01-07 23:36:02
+                <strong>Updated at:</strong> 2025-01-09 23:07:48
             </li>
         
         <li>
