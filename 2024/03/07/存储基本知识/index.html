@@ -13,22 +13,29 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2024/03/16/windows-clang踩坑记录/"/>
+    <link rel="canonical" href="http://example.com/2024/03/07/存储基本知识/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="VS studio安装路径 准备工作   卸载所有的SDK，从vs studio installer中卸载，并且从设置-应用中卸载（搜索kit），并且移除C:\Program Files (x86)\Windows Kits目录。 可以使用工具删除Releases · microsoft&#x2F;VisualStudioUninstaller (github.com)    共享组件、工具和SD">
+        <meta name="description" content="1. iops (input&#x2F;output per second) + vfs 通常，计算IOPS的基本公式是：（总的读+写的操作量）&#x2F; 时间（秒） 目前PCIe4.0固态硬盘，一些高性能产品的顺序读取速度可达7000MB&#x2F;s，4K随机读&#x2F;写可达1000K&#x2F;1000K IOPS以上。 4k读写性能其实就是针对小文件的读写性能   2. 分布式事务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="windows clang踩坑记录">
-<meta property="og:url" content="http://example.com/2024/03/16/windows-clang%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:title" content="存储基本知识">
+<meta property="og:url" content="http://example.com/2024/03/07/%E5%AD%98%E5%82%A8%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="VS studio安装路径 准备工作   卸载所有的SDK，从vs studio installer中卸载，并且从设置-应用中卸载（搜索kit），并且移除C:\Program Files (x86)\Windows Kits目录。 可以使用工具删除Releases · microsoft&#x2F;VisualStudioUninstaller (github.com)    共享组件、工具和SD">
+<meta property="og:description" content="1. iops (input&#x2F;output per second) + vfs 通常，计算IOPS的基本公式是：（总的读+写的操作量）&#x2F; 时间（秒） 目前PCIe4.0固态硬盘，一些高性能产品的顺序读取速度可达7000MB&#x2F;s，4K随机读&#x2F;写可达1000K&#x2F;1000K IOPS以上。 4k读写性能其实就是针对小文件的读写性能   2. 分布式事务">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-16T12:47:46.000Z">
-<meta property="article:modified_time" content="2024-03-17T07:48:30.001Z">
+<meta property="og:image" content="https://img-blog.csdn.net/20180318233354367?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTA0ODc1Njg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://segmentfault.com/img/bVc9bLH">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/direct/038cb1262a0b495eb4cab3bd6909eaff.png">
+<meta property="og:image" content="https://segmentfault.com/img/bVbCiCP">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-25903c3b11d19c9bbbc2f414665a435e_720w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-87f3921867fe19e3ed509ef6cb63ae40_720w.webp">
+<meta property="article:published_time" content="2024-03-07T08:00:46.000Z">
+<meta property="article:modified_time" content="2025-01-09T07:29:32.003Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180318233354367?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTA0ODc1Njg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
     
     
     <!--- Icon Part-->
@@ -40,7 +47,7 @@
     
     <title>
         
-            windows clang踩坑记录 -
+            存储基本知识 -
         
         Ethereal&#39;s Blog
     </title>
@@ -328,7 +335,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">windows clang踩坑记录</h1>
+                    <h1 class="article-title-regular">存储基本知识</h1>
                 </div>
             
                 
@@ -350,15 +357,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-03-16 20:47:46</span>
-        <span class="mobile">2024-03-16 20:47</span>
+        <span class="desktop">2024-03-07 16:46</span>
+        <span class="mobile">2024-03-07 16</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-03-17 15:48:30</span>
-            <span class="mobile">2024-03-17 15:48</span>
+            <span class="desktop">2025-01-09 15:29:32</span>
+            <span class="mobile">2025-01-09 15:29</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -382,74 +389,139 @@
             
 
             <div class="article-content markdown-body">
-                <h3 id="VS-studio安装路径"><a href="#VS-studio安装路径" class="headerlink" title="VS studio安装路径"></a>VS studio安装路径</h3><ol>
-<li>准备工作</li>
-</ol>
-<ul>
-<li>卸载所有的SDK，从vs studio installer中卸载，并且从设置-应用中卸载（搜索kit），并且移除<code>C:\Program Files (x86)\Windows Kits</code>目录。</li>
-<li>可以使用工具删除<a class="link"   target="_blank" rel="noopener" href="https://github.com/Microsoft/VisualStudioUninstaller/releases" >Releases · microsoft&#x2F;VisualStudioUninstaller (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+                <h2 id="1-iops-input-x2F-output-per-second-vfs"><a href="#1-iops-input-x2F-output-per-second-vfs" class="headerlink" title="1. iops (input&#x2F;output per second) + vfs"></a>1. iops (input&#x2F;output per second) + vfs</h2><ul>
+<li>通常，计算IOPS的基本公式是：（<strong>总的</strong>读+写的操作量）&#x2F; 时间（秒）</li>
+<li>目前PCIe4.0固态硬盘，一些高性能产品的顺序读取速度可达7000MB&#x2F;s，4K随机读&#x2F;写可达1000K&#x2F;1000K IOPS以上。</li>
+<li>4k读写性能其实就是针对小文件的读写性能</li>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://img-blog.csdn.net/20180318233354367?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3UwMTA0ODc1Njg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"
+                     
+                ></li>
 </ul>
-<ol start="2">
-<li>共享组件、工具和SDK安装位置修改</li>
-</ol>
+<h2 id="2-分布式事务"><a href="#2-分布式事务" class="headerlink" title="2. 分布式事务"></a>2. 分布式事务</h2><ul>
+<li><p>BASE理论（Basically Available（基本可用）、Soft state（软状态）和 Eventually consistent （最终一致性））</p>
 <ul>
-<li><p>进入注册表，找到表项<code>计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\Setup</code>，删除项<code>CachePath</code>与<code>SharedInstallationPath</code>。</p>
+<li><p>BASE 理论是对 CAP 中 AP 的一个扩展，通过牺牲强一致性来获得可用性</p>
 </li>
-<li><p>在vs studio installer中此时即可修改安装位置。</p>
+<li><p><strong>基本可用</strong>：分布式系统在出现故障时，允许损失部分可用功能，保证核心功能可用。</p>
 </li>
-</ul>
-<ol start="3">
-<li>系统缓存、工具和位置固定的SDK修改</li>
-</ol>
-<ul>
-<li>进入注册表，找到表项<code>计算机\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots</code>，修改项<code>KitsRoot10</code>、<code>KitsRoot81</code>、<code>WindowsDebuggersRoot10</code>等包含目录的项，**注意最后必须加<code>\</code>**。</li>
-</ul>
-<ol start="4">
-<li>重新安装</li>
-</ol>
-<ul>
-<li>在vs studio installer中安装SDK。</li>
-</ul>
-<h3 id="配置资源编译器"><a href="#配置资源编译器" class="headerlink" title="配置资源编译器"></a>配置资源编译器</h3><ol>
-<li><p>找到上述SDK安装路径（默认为<code>C:\Program Files (x86)\Windows Kits</code>），找到MSVC的资源编译器（<code>安装路径\10\bin\10.0.22621.0\x64\rc.exe</code>）。</p>
+<li><p><strong>软状态</strong>：由于不要求强一致性，所以BASE允许系统中存在中间状态（也叫<strong>软状态</strong>），这个状态不影响系统可用性。</p>
 </li>
-<li><p>复制文件地址，配置cmake编译选项<code>-DCMAKE_RC_COMPILER=&quot;rc_path&quot;</code>或配置环境变量<code>RC</code>为<code>&quot;rc_path&quot;</code>，<code>如果路径中有空格，注意加入引号</code>。</p>
-</li>
-</ol>
-<h3 id="配置clang"><a href="#配置clang" class="headerlink" title="配置clang"></a>配置clang</h3><ol>
-<li><p>下载llvm<a class="link"   target="_blank" rel="noopener" href="https://github.com/llvm/llvm-project/releases" >Releases · llvm&#x2F;llvm-project (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</li>
-<li><p>加入环境变量</p>
-</li>
-<li><p>设置clion的工具链和cmake选项。</p>
-</li>
-</ol>
-<ul>
-<li><p>工具链：选择C编译工具为<code>bin\clang.exe</code>，C++编译工具为<code>bin\clang++.exe</code>，cmake为自己安装的cmake路径。</p>
-</li>
-<li><p>cmake选项：参考上述配置资源编译器中的选项。</p>
+<li><p><strong>最终一致</strong>：最终一致是指经过一段时间后，所有节点数据都将会达到一致。</p>
 </li>
 </ul>
-<ol start="4">
-<li>编译选项</li>
-</ol>
+</li>
+<li><p>2PC：推荐采用 Seata 实现 2PC</p>
+</li>
+<li><p>TCC (Try、Conﬁrm、Cancel)</p>
 <ul>
-<li><p>由于找不到libc，所以需要借用一下mingw的libc（需要保证mingw安装且加入环境变量）加入编译选项<code>-target x86_64-pc-windows-gnu</code>。</p>
+<li><p>TCC需要注意三种异常处理分别是<strong>空回滚</strong>、<strong>幂等</strong>、<strong>悬挂</strong></p>
 </li>
-<li><p>由于报警告<code>Warning: corrupt .drectve at end of def file</code>，使用编译选项<code>-fuse-ld=lld</code>指定链接器。</p>
-</li>
-<li><p>所以，最终编译命令可以为<code>clang++ .\test.cpp -target x86_64-pc-windows-gnu -std=c++20 -fuse-ld=lld</code>。</p>
+<li><p>2PC 通常都是在跨库的 DB 层面，而 TCC 则在应用层面的处理，需要通过业务逻辑来实现。</p>
 </li>
 </ul>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Microsoft/VisualStudioUninstaller/releases" >Releases · microsoft&#x2F;VisualStudioUninstaller (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44377470/article/details/107664066" >Visual Studio安装时，不能更改共享组件、工具和SDK的位置_共享组件、工具和sdk位置-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/ask/sof/1968857" >更改windows kit通用安装路径-腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/ask/sof/115982288" >忍者:找不到CMAKE_RC_COMPILER-腾讯云开发者社区-腾讯云 (tencent.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/llvm/llvm-project/releases" >Releases · llvm&#x2F;llvm-project (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334520673" >Clion 2020.3：如何设置Clang编译器 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/342916589" >Windows下clang使用 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/RioTian/p/17758813.html" >在Windows下配置Clang编译器 - Koshkaaa (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://stackoverflow.org.cn/questions/58008494" >c++ - 与 clang 链接时 MinGW ld 的警告_Stack Overflow中文网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>可靠消息最终一致性</p>
+</li>
+<li><p>最大努力通知</p>
+</li>
+</ul>
+<h2 id="3-IO"><a href="#3-IO" class="headerlink" title="3. IO"></a>3. IO</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://segmentfault.com/img/bVc9bLH"
+                     
+                ></p>
+<p>上图中，page cache其实属于文件系统，buffered IO区别于mmap的点是多一次由内核向用户态程序的复制，同理类似sprintf也存在，fflush只是将内容写入page cache而已</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://img-blog.csdnimg.cn/direct/038cb1262a0b495eb4cab3bd6909eaff.png"
+                     
+                ></p>
+<p>自从Linux-2.4版本之后，buffer cache管理指向page cache list的指针</p>
+<p>mmap可以使用匿名页进行内存共享，因为page cache由操作系统管理，同理文件空洞也在文件系统层，ext只需要把中间的inode指针置为空即可。</p>
+<p>JAVA只包含Mapped和buffered，注意下面direct其实只是mapped而已。JAVA无法绕过page cache，除非使用JNA</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://segmentfault.com/img/bVbCiCP"
+                     
+                ></p>
+<p>BIO（同步阻塞），NIO（同步非阻塞），AIO（异步非阻塞）</p>
+<ul>
+<li><p>BIO使用while循环，内部等待会阻塞，无法执行其他代码。</p>
+</li>
+<li><p>NIO需要主动检查是否存在新的消息，因此常用while循环，如果没有消息则执行其他代码，因此为非阻塞，而处理消息必须排队处理因此为同步。演化路程为select-&gt;poll-&gt;epoll</p>
+<ul>
+<li><p>epoll底层由消息主动通知，从底层讲也可以理解为异步的，但是在用户层来说通过<code>epoll_wait</code>等待，因此是同步的（<a class="link"   target="_blank" rel="noopener" href="https://github.com/CyC2018/CS-Notes/issues/194" >select&#x2F;poll应该是同步阻塞，epoll是同步非阻塞的 · Issue #194 · CyC2018&#x2F;CS-Notes (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>）</p>
+</li>
+<li><p>如果将等待时间设置为无限，则使用select、poll和epoll也是阻塞的</p>
+</li>
+<li><p><strong>Reactor</strong>模式</p>
+</li>
+</ul>
+</li>
+<li><p>信号驱动IO：提醒为异步，但是收到信号后需要主动获取数据</p>
+</li>
+<li><p>开多线程或协程即为异步</p>
+</li>
+<li><p>AIO不需要主动检查，因此常用回调方式，传入回调函数解决。此外，也可以使用协程方式。</p>
+<ul>
+<li><p>linux提供libaio（利用程序和IO设备异步性，只支持direct IO）、POSIX AIO（利用线程）和io_uring实现</p>
+</li>
+<li><p>io_uring使用了类似spdk的思路，使用SQs (submission)和CQs (completion)队列。</p>
+</li>
+<li><p><strong>Proactor</strong>模式</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic3.zhimg.com/80/v2-25903c3b11d19c9bbbc2f414665a435e_720w.webp"
+                     
+                ></p>
+<h2 id="4-RDMA"><a href="#4-RDMA" class="headerlink" title="4. RDMA"></a>4. RDMA</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic1.zhimg.com/80/v2-87f3921867fe19e3ed509ef6cb63ae40_720w.webp"
+                     
+                ></p>
+<p>RDMA协议栈与ISO协议栈不同，因此需要全部由硬件实现</p>
+<h2 id="5-lock-free"><a href="#5-lock-free" class="headerlink" title="5. lock-free"></a>5. lock-free</h2><ul>
+<li><p>实现一：队列方式，FIFO具有的天然特性使得无锁实现很简单</p>
+</li>
+<li><p>实现二：使用<code>CAS（compare-and-swap）</code>、<code>TAS（test-and-set）</code>、<code>TTAS（test and test-and-set）</code>、<code>FAA（fetch-and-add）</code>等原语（cmpxchg是一个比较交换指令，原意是Compare and Exchange）</p>
+</li>
+<li><p>setnx实现分布式锁</p>
+</li>
+</ul>
+<h2 id="6-Shared-Disk-amp-amp-Shared-Nothing-amp-amp-Shared-Everything"><a href="#6-Shared-Disk-amp-amp-Shared-Nothing-amp-amp-Shared-Everything" class="headerlink" title="6. Shared Disk &amp;&amp; Shared Nothing &amp;&amp; Shared Everything"></a>6. Shared Disk &amp;&amp; Shared Nothing &amp;&amp; Shared Everything</h2><p><a class="link"   target="_blank" rel="noopener" href="https://developer.baidu.com/article/detail.html?id=2902561" >从Shared Everything到Shared Nothing：数据仓库技术架构的演进-百度开发者中心 (baidu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="7-View-Synchrony"><a href="#7-View-Synchrony" class="headerlink" title="7. View Synchrony"></a>7. View Synchrony</h2><p><a class="link"   target="_blank" rel="noopener" href="https://people.cs.rutgers.edu/~pxk/417/notes/virtual_synchrony.html" >Virtual Synchrony (rutgers.edu) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/507895" >On programming with view synchrony | IEEE Conference Publication | IEEE Xplore <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="8-fs操作"><a href="#8-fs操作" class="headerlink" title="8. fs操作"></a>8. fs操作</h2><p>create&#x2F;delete&#x2F;mkdir</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://arkingc.github.io/2017/12/22/2017-12-22-linux-code-overlayfs-create_delete/" >内核OverlayFS—创建与删除文件 | Arking (arkingc.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/chen1415886044/article/details/120028459" >Linux C&#x2F;C++源码实现常见命令mkdir_c++ mkdir-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>nlink-&gt;硬链接数目</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/263555694" >分布式事务有这一篇就够了！ - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/bandaoyu/article/details/110849171" >【linux】随机读写之DirectIO|MMAP和DIRECT IO区别_linux directio-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/650947325" >从 Buffer 和 Cache 到 Linux 的 PageCache 和 BufferCahe - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://javabetter.cn/nio/BIONIOAIO.html#java-io-%E4%B8%8E-bio%E3%80%81nio" >一文彻底解释清楚Java 中的NIO、BIO和AIO | 二哥的Java进阶之路 (javabetter.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/367591714" >IO多路复用——深入浅出理解select、poll、epoll的实现 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37037348/article/details/131488712" >Linux 系统中的 POSIX 接口详细介绍_linux posix-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/don_chiang709/article/details/92628623" >linux FIO命令详解(一)：磁盘IO测试工具 fio (并简要介绍iostat工具)-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/650852520" >解析Linux权限管理：ACL 权限 - 知乎 (zhihu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1651655729890771323" >Linux的ACL权限实现原理及实现详解 (baidu.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/gordon0918/p/5280309.html" >Linux UGO和ACL权限管理 - Gordon0918 - 博客园 (cnblogs.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/jslove1997/article/details/115267044" >区分一下cluster、MPP、SMP和SSMP_massive parallel processing-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/easylife206/article/details/125579964" >五分钟理解服务器 SMP、NUMA、MPP 三大体系结构-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.csc2.ncsu.edu/faculty/efg/courses/506/s23/www/lectures/notes/lec21.pdf" >why parallel architecture <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.ibm.com/blog/olap-vs-oltp/" >OLAP vs. OLTP: What’s the Difference? - IBM Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://aws.amazon.com/cn/compare/the-difference-between-olap-and-oltp/" >OLTP 与 OLAP — 数据处理系统之间的区别 — AWS (amazon.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -457,16 +529,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> windows clang踩坑记录</li>
+        <li><strong>Title:</strong> 存储基本知识</li>
         <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2024-03-16 20:47:46</li>
+        <li><strong>Created at:</strong> 2024-03-07 16:00:46</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-03-17 15:48:30
+                <strong>Updated at:</strong> 2025-01-09 15:29:32
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2024/03/16/windows-clang踩坑记录/
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/03/07/存储基本知识/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -487,13 +559,13 @@
                         <div class="article-prev">
                             <a class="prev"
                             rel="prev"
-                            href="/2024/05/08/OH%E9%9A%94%E7%A6%BB%E6%A0%B8%E5%BF%83/"
+                            href="/2024/03/16/windows-clang%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/"
                             >
                                 <span class="left arrow-icon flex-center">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </span>
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">OH隔离核心</span>
+                                    <span class="post-nav-title-item">windows clang踩坑记录</span>
                                     <span class="post-nav-item">Prev posts</span>
                                 </span>
                             </a>
@@ -503,10 +575,10 @@
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2024/03/07/%E5%AD%98%E5%82%A8%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/"
+                            href="/2024/03/01/%E7%83%A7%E5%86%99OpenHarmony%E9%95%9C%E5%83%8F%E5%88%B0DAYU200%E6%9D%BF%E5%AD%90%E4%B8%8A/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">存储基本知识</span>
+                                    <span class="post-nav-title-item">烧写OpenHarmony镜像到DAYU200板子上</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -571,8 +643,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">windows clang踩坑记录</div>
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#VS-studio%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84"><span class="nav-text">VS studio安装路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%B5%84%E6%BA%90%E7%BC%96%E8%AF%91%E5%99%A8"><span class="nav-text">配置资源编译器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEclang"><span class="nav-text">配置clang</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">存储基本知识</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-iops-input-x2F-output-per-second-vfs"><span class="nav-text">1. iops (input&#x2F;output per second) + vfs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-text">2. 分布式事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-IO"><span class="nav-text">3. IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-RDMA"><span class="nav-text">4. RDMA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-lock-free"><span class="nav-text">5. lock-free</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Shared-Disk-amp-amp-Shared-Nothing-amp-amp-Shared-Everything"><span class="nav-text">6. Shared Disk &amp;&amp; Shared Nothing &amp;&amp; Shared Everything</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-View-Synchrony"><span class="nav-text">7. View Synchrony</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-fs%E6%93%8D%E4%BD%9C"><span class="nav-text">8. fs操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol>
 
     </div>
 </div>
