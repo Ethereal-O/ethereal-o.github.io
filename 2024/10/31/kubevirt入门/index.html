@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 前置条件1.1 配置本地存储# local path-provisioner # https:&#x2F;&#x2F;github.com&#x2F;rancher&#x2F;local-path-provisioner wget https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;rancher&#x2F;local-path-provisioner&#x2F;v0.0.29&#x2F;deploy&#x2F;local-path-storage.ya">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-10-30T16:13:02.000Z">
-<meta property="article:modified_time" content="2024-11-24T13:35:55.082Z">
+<meta property="article:modified_time" content="2025-01-14T09:06:45.849Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-11-24 21:35:55</span>
-            <span class="mobile">2024-11-24 21:35</span>
+            <span class="desktop">2025-01-14 17:06:45</span>
+            <span class="mobile">2025-01-14 17:06</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -419,6 +419,9 @@ sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml
 
 <p>其中指明了mac地址。</p>
 <p>因此只需要将mac地址修改为<code>ip a</code>所显示的mac地址，保存后使用命令<code>sudo netplan apply</code>部署即可。</p>
+<h2 id="8-救砖"><a href="#8-救砖" class="headerlink" title="8. 救砖"></a>8. 救砖</h2><p>通过管理文件即可救砖。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">## 通过外带的机器挂载镜像</span><br><span class="line">virt-rescue -a CentOS_8_Server.img -i</span><br><span class="line">## 修改密码</span><br><span class="line">virt-sysprep -d 21admin --firstboot-command ‘dpkg-reconfigure openssh-server’ --password ubuntu:password:123456 --root-password password:123456</span><br><span class="line">## 工具安装</span><br><span class="line">apt/yum install libguestfs-tools </span><br><span class="line">systemctl start libvirtd</span><br><span class="line">## 详细信息</span><br><span class="line">virt-sysprep -v -x ...</span><br></pre></td></tr></table></figure></div>
+
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_48711696/article/details/135641361" >Kubernetes Kubevirt ｜使用Kubevirt创建虚拟机-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/easylife206/article/details/139760310" >手把手教你从零部署一套 KubeVirt 最新版 1.2.1-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://kubevirt.io/user-guide/cluster_admin/installation/" >Installation - KubeVirt user guide <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -449,6 +452,8 @@ sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml
 <p><a class="link"   target="_blank" rel="noopener" href="https://kubevirt.io/user-guide/storage/hotplug_volumes/" >Hotplug Volumes - KubeVirt user guide <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://kubevirt.io/user-guide/compute/cpu_hotplug/" >CPU Hotplug - KubeVirt user guide <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://kubevirt.io/user-guide/compute/memory_hotplug/" >Memory Hotplug - KubeVirt user guide <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://manpages.ubuntu.com/manpages/trusty/man1/virt-sysprep.1.html" >Ubuntu Manpage: virt-sysprep - Reset, unconfigure or customize a virtual machine so clones can be made <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2345376" >虚拟机 img 镜像密码修改-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -461,7 +466,7 @@ sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml
         <li><strong>Created at:</strong> 2024-10-31 00:13:02</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-11-24 21:35:55
+                <strong>Updated at:</strong> 2025-01-14 17:06:45
             </li>
         
         <li>
@@ -571,7 +576,7 @@ sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">kubevirt入门</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="nav-text">1. 前置条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8"><span class="nav-text">1.1 配置本地存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%BC%80%E5%90%AF%E7%89%B9%E6%80%A7%E9%97%A8%E6%8E%A7"><span class="nav-text">1.2 开启特性门控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-text">2. 安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-text">3. 检查是否支持虚拟化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%89%E8%A3%85kubevirt"><span class="nav-text">4. 安装kubevirt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%BC%96%E5%86%99%E9%83%A8%E7%BD%B2helm%E6%96%87%E4%BB%B6"><span class="nav-text">5. 编写部署helm文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%99%84%E5%8A%A0%E9%A2%9D%E5%A4%96%E5%86%85%E5%AE%B9"><span class="nav-text">6. 附加额外内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E7%89%B9%E6%AE%8A%E6%83%85%E5%86%B5"><span class="nav-text">7. 特殊情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="nav-text">1. 前置条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8"><span class="nav-text">1.1 配置本地存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%BC%80%E5%90%AF%E7%89%B9%E6%80%A7%E9%97%A8%E6%8E%A7"><span class="nav-text">1.2 开启特性门控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-text">2. 安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-text">3. 检查是否支持虚拟化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%89%E8%A3%85kubevirt"><span class="nav-text">4. 安装kubevirt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%BC%96%E5%86%99%E9%83%A8%E7%BD%B2helm%E6%96%87%E4%BB%B6"><span class="nav-text">5. 编写部署helm文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%99%84%E5%8A%A0%E9%A2%9D%E5%A4%96%E5%86%85%E5%AE%B9"><span class="nav-text">6. 附加额外内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E7%89%B9%E6%AE%8A%E6%83%85%E5%86%B5"><span class="nav-text">7. 特殊情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E6%95%91%E7%A0%96"><span class="nav-text">8. 救砖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
