@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 编译123456789101112131415git clone https:&#x2F;&#x2F;github.com&#x2F;nfs-ganesha&#x2F;nfs-ganesha.gitcd nfs-ganeshagit submodule update --initgit checkout V5-stablemkdir buildcd buildsudo apt install -y krb5-user libpam">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-06-14T14:13:36.000Z">
-<meta property="article:modified_time" content="2024-06-21T02:56:23.451Z">
+<meta property="article:modified_time" content="2025-01-14T12:07:15.316Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-06-21 10:56:23</span>
-            <span class="mobile">2024-06-21 10:56</span>
+            <span class="desktop">2025-01-14 20:07:15</span>
+            <span class="mobile">2025-01-14 20:07</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -455,13 +455,101 @@
 <p>列出数据库条目表中内容</p>
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo klist -k /etc/krb5.keytab</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="5-参考"><a href="#5-参考" class="headerlink" title="5. 参考"></a>5. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Hearz/article/details/120840448" >nfs-ganesha(用户态NFS)编译、安装和使用_nfs-ganesha 编译-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="5-配置kerberos鉴权"><a href="#5-配置kerberos鉴权" class="headerlink" title="5. 配置kerberos鉴权"></a>5. 配置kerberos鉴权</h2><h3 id="5-1-kerberos服务端"><a href="#5-1-kerberos服务端" class="headerlink" title="5.1 kerberos服务端"></a>5.1 kerberos服务端</h3><ol>
+<li>安装</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install krb5-server krb5-workstation </span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li>编辑 &#x2F;etc&#x2F;krb5.conf 文件， 取消注释所有行，并替换kdc, admin server的设置，这里用default realm EXAMPLE.COM , 最后配置文件如下：</li>
+</ol>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">logging</span>]</span><br><span class="line"> <span class="string">default</span> <span class="string">=</span> <span class="string">FILE:/var/log/krb5libs.log</span></span><br><span class="line"> <span class="string">kdc</span> <span class="string">=</span> <span class="string">FILE:/var/log/krb5kdc.log</span></span><br><span class="line"> <span class="string">admin_server</span> <span class="string">=</span> <span class="string">FILE:/var/log/kadmind.log</span></span><br><span class="line"></span><br><span class="line">[<span class="string">libdefaults</span>]</span><br><span class="line"> <span class="string">dns_lookup_realm</span> <span class="string">=</span> <span class="literal">false</span></span><br><span class="line"> <span class="string">ticket_lifetime</span> <span class="string">=</span> <span class="string">24h</span></span><br><span class="line"> <span class="string">renew_lifetime</span> <span class="string">=</span> <span class="string">7d</span></span><br><span class="line"> <span class="string">forwardable</span> <span class="string">=</span> <span class="literal">true</span></span><br><span class="line"> <span class="string">rdns</span> <span class="string">=</span> <span class="string">falsei</span></span><br><span class="line"> <span class="string">default_realm</span> <span class="string">=</span> <span class="string">EXAMPLE.COM</span></span><br><span class="line"> <span class="string">default_ccache_name</span> <span class="string">=</span> <span class="string">KEYRING:persistent:%&#123;uid&#125;</span></span><br><span class="line"></span><br><span class="line">[<span class="string">realms</span>]</span><br><span class="line"> <span class="string">EXAMPLE.COM</span> <span class="string">=</span> &#123;</span><br><span class="line">  <span class="string">kdc</span> <span class="string">=</span> <span class="string">remote.example.com</span></span><br><span class="line">  <span class="string">admin_server</span> <span class="string">=</span> <span class="string">remote.example.com</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">[<span class="string">domain_realm</span>]</span><br><span class="line"> <span class="string">.example.com</span> <span class="string">=</span> <span class="string">EXAMPLE.COM</span></span><br><span class="line"> <span class="string">example.com</span> <span class="string">=</span> <span class="string">EXAMPLE.COM</span></span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li>修改 &#x2F;etc&#x2F;hosts 文件</li>
+</ol>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">192.168</span><span class="number">.57</span><span class="number">.3</span> <span class="string">server.example.com</span> <span class="string">remote</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.57</span><span class="number">.2</span> <span class="string">remote.example.com</span> <span class="string">server</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.57</span><span class="number">.204</span> <span class="string">client.example.com</span> <span class="string">client</span></span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li><p>修改 &#x2F;var&#x2F;kerberos&#x2F;krb5kdc&#x2F;kdc.conf 文件<br>由于我们使用default realm 所以<strong>无需修改此文件</strong>，若用另外的realm，需替换此文件中的EXAMPLE.COM</p>
+</li>
+<li><p>运行命令以下命令创建**<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/tencentdb-catalog?from_column=20065&from=20065"><strong>数据库</strong></a>，并按照提示设置数据库密码</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@remote ~]# kdb5_util create  -s</span><br><span class="line">Loading random data</span><br><span class="line">Initializing database &#x27;/var/kerberos/krb5kdc/principal&#x27; for realm &#x27;EXAMPLE.COM&#x27;,</span><br><span class="line">master key name &#x27;K/M@EXAMPLE.COM&#x27;</span><br><span class="line">You will be prompted for the database Master Password.</span><br><span class="line">It is important that you NOT FORGET this password.</span><br><span class="line">Enter KDC database master key:</span><br></pre></td></tr></table></figure></div>
+
+<ol start="6">
+<li><strong>启动kerberos</strong></li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start krb5kdc kadmin </span><br><span class="line">systemctl enable krb5kdc kadmin </span><br></pre></td></tr></table></figure></div>
+
+<ol start="7">
+<li><strong>运行kadmin.local 来管理kdc 并添加nfs server 和 client的 主机信息</strong></li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@remote ~]# kadmin.local</span><br><span class="line">Authenticating as principal root/admin@EXAMPLE.COM with password.</span><br><span class="line">kadmin.local:  addprinc -randkey host/server.example.com</span><br><span class="line">WARNING: no policy specified for host/server.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;host/server.example.com@EXAMPLE.COM&quot; created.</span><br><span class="line">kadmin.local:  addprinc -randkey host/client.example.com</span><br><span class="line">WARNING: no policy specified for host/client.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;host/client.example.com@EXAMPLE.COM&quot; created.</span><br></pre></td></tr></table></figure></div>
+
+<ol start="8">
+<li><strong>添加nfs server 和 client的 nfs 服务主机和客户端</strong></li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  addprinc -randkey nfs/server.example.com</span><br><span class="line">WARNING: no policy specified for nfs/server.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;nfs/server.example.com@EXAMPLE.COM&quot; created.</span><br><span class="line">kadmin.local:  addprinc -randkey nfs/client.example.com</span><br><span class="line">WARNING: no policy specified for nfs/client.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;nfs/client.example.com@EXAMPLE.COM&quot; created.</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  listprincs</span><br><span class="line">K/M@EXAMPLE.COM</span><br><span class="line">host/client.example.com@EXAMPLE.COM</span><br><span class="line">host/server.example.com@EXAMPLE.COM</span><br><span class="line">kadmin/admin@EXAMPLE.COM</span><br><span class="line">kadmin/changepw@EXAMPLE.COM</span><br><span class="line">kadmin/server.example.com@EXAMPLE.COM</span><br><span class="line">krbtgt/EXAMPLE.COM@EXAMPLE.COM</span><br><span class="line">nfs/client.example.com@EXAMPLE.COM</span><br><span class="line">nfs/server.example.com@EXAMPLE.COM</span><br><span class="line">[root@remote ~]#</span><br></pre></td></tr></table></figure></div>
+
+<ol start="9">
+<li>生成密钥</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  ktadd -k /tmp/server.keytab nfs/server.example.com</span><br><span class="line">[以下省略输出]</span><br><span class="line">kadmin.local:  ktadd -k /tmp/client.keytab nfs/client.example.com</span><br><span class="line">[以下省略输出]</span><br><span class="line">kadmin.local:  quit</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="5-2-nfs服务端"><a href="#5-2-nfs服务端" class="headerlink" title="5.2 nfs服务端"></a>5.2 nfs服务端</h3><ol>
+<li><p>配置host</p>
+</li>
+<li><p>复制文件</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp remote:/etc/krb5.conf /etc/krb5.conf   </span><br><span class="line">scp remote:/tmp/server.keytab /etc/krb5.keytab </span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li>导出文件路径</li>
+</ol>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">EXPORT</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment"># Export Id (mandatory, each EXPORT must have a unique Export_Id)</span></span><br><span class="line">        <span class="string">Export_Id</span> <span class="string">=</span> <span class="number">12345</span><span class="string">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Exported path (mandatory)</span></span><br><span class="line">        <span class="string">Path</span> <span class="string">=</span> <span class="string">/etc/nfs;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Pseudo Path (required for NFSv4 or if mount_path_pseudo = true)</span></span><br><span class="line">        <span class="string">Pseudo</span> <span class="string">=</span> <span class="string">/etc/nfs;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Restrict the protocols that may use this export.  This cannot allow</span></span><br><span class="line">        <span class="comment"># access that is denied in NFS_CORE_PARAM.</span></span><br><span class="line">        <span class="string">Protocols</span> <span class="string">=</span> <span class="number">3</span>,<span class="number">4</span><span class="string">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Access type for clients.  Default is None, so some access must be</span></span><br><span class="line">        <span class="comment"># given. It can be here, in the EXPORT_DEFAULTS, or in a CLIENT block</span></span><br><span class="line">        <span class="string">Access_Type</span> <span class="string">=</span> <span class="string">RW;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Whether to squash various users.</span></span><br><span class="line">        <span class="string">Squash</span> <span class="string">=</span> <span class="string">no_root_squash;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Allowed security types for this export</span></span><br><span class="line">        <span class="string">Sectype</span> <span class="string">=</span> <span class="string">sys</span>,<span class="string">krb5</span>,<span class="string">krb5i</span>,<span class="string">krb5p;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Exporting FSAL</span></span><br><span class="line">        <span class="string">FSAL</span> &#123;</span><br><span class="line">                <span class="string">Name</span> <span class="string">=</span> <span class="string">VFS;</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">NFS_KRB5</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">PrincipalName</span> <span class="string">=</span> <span class="string">nfs</span> <span class="string">;</span></span><br><span class="line">   <span class="string">KeytabPath</span> <span class="string">=</span> <span class="string">/etc/krb5.keytab</span> <span class="string">;</span></span><br><span class="line">   <span class="string">Active_krb5</span> <span class="string">=</span> <span class="literal">YES</span> <span class="string">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>初始化</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo kinit -k -t /etc/krb5.keytab nfs/openeuler-vm-2203@EXAMPLE.COM</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="5-3-客户端配置"><a href="#5-3-客户端配置" class="headerlink" title="5.3 客户端配置"></a>5.3 客户端配置</h3><ol>
+<li><p>配置host</p>
+</li>
+<li><p>复制文件<br>  scp remote:&#x2F;etc&#x2F;krb5.conf &#x2F;etc&#x2F;krb5.conf<br>  scp remote:&#x2F;tmp&#x2F;server.keytab &#x2F;etc&#x2F;krb5.keytab </p>
+</li>
+<li><p>挂载</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mount -v -t nfs4 -o sec=krb5 openeuler-vm-2203:/etc/nfs /mnt/tmp</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>初始化<br> sudo kinit -k -t &#x2F;etc&#x2F;krb5.keytab nfs&#x2F;<a class="link"   href="mailto:&#111;&#112;&#x65;&#x6e;&#101;&#117;&#x6c;&#101;&#x72;&#45;&#x76;&#x6d;&#45;&#50;&#50;&#48;&#51;&#x40;&#69;&#x58;&#65;&#x4d;&#x50;&#76;&#x45;&#46;&#x43;&#x4f;&#x4d;" >&#111;&#112;&#x65;&#x6e;&#101;&#117;&#x6c;&#101;&#x72;&#45;&#x76;&#x6d;&#45;&#50;&#50;&#48;&#51;&#x40;&#69;&#x58;&#65;&#x4d;&#x50;&#76;&#x45;&#46;&#x43;&#x4f;&#x4d; <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Hearz/article/details/120840448" >nfs-ganesha(用户态NFS)编译、安装和使用_nfs-ganesha 编译-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xwd127429/article/details/106047036" >Ubuntu1804安装MIT Kerberos_ubuntu kerberos-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha" >GitHub - nfs-ganesha&#x2F;nfs-ganesha: NFS-Ganesha is an NFSv3,v4,v4.1 fileserver that runs in user mode on most UNIX&#x2F;Linux systems <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/ceph/ceph/blob/main/doc/cephfs/nfs.rst" >ceph&#x2F;doc&#x2F;cephfs&#x2F;nfs.rst at main · ceph&#x2F;ceph · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/blob/V5-stable/src/COMPILING_HOWTO.txt" >nfs-ganesha&#x2F;src&#x2F;COMPILING_HOWTO.txt at V5-stable · nfs-ganesha&#x2F;nfs-ganesha · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/issues/882" >Make Error when Linking C shared library libganesha_nfsd.so · Issue #882 · nfs-ganesha&#x2F;nfs-ganesha · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/RPCSEC_GSS" >RPCSEC_GSS · nfs-ganesha&#x2F;nfs-ganesha Wiki · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://bbs.csdn.net/topics/380063565" >【求助kerberos配置】Cannot contact any KDC for realm ‘EXAMPLE.COM’ -CSDN社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.51cto.com/u_13259/11788457" >nfs 连接用户名 nfs密码认证指定用户_kekenai的技术博客_51CTO博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266491528" >一文搞定Kerberos - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/tongh/p/13493316.html" >Kerberos认证原理及基于Kerberos认证的NFS文件共享 - 佟晖 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/RPCSEC_GSS" >RPCSEC_GSS · nfs-ganesha&#x2F;nfs-ganesha Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1815069" >centos7 部署kerberos实现nfs用户密码认证挂载-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/mlwise/article/details/108966354" >Kerberos常用命令用法_addprinc-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://serverfault.com/questions/605210/kerberized-nfs4-mounts-error-no-credentials-found-for-connection-to-server" >ubuntu - Kerberized nfs4 mounts ERROR: No credentials found for connection to server - Server Fault <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://askoverflow.dev/server/question/605210/kerberized-nfs4-mounts-error-no-credentials-found-for-connection-to-server/" >Kerberized nfs4 挂载错误：找不到连接到服务器的凭据 - server <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/snail_bing/article/details/118081091" >kerberos使用详解_krb5-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://bbs.csdn.net/topics/380063565" >【求助kerberos配置】Cannot contact any KDC for realm ‘EXAMPLE.COM’ -CSDN社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
@@ -475,7 +563,7 @@
         <li><strong>Created at:</strong> 2024-06-14 22:13:36</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-06-21 10:56:23
+                <strong>Updated at:</strong> 2025-01-14 20:07:15
             </li>
         
         <li>
@@ -585,7 +673,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">nfs-ganesha编译</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91"><span class="nav-text">1. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8"><span class="nav-text">2. 服务启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E8%AF%95"><span class="nav-text">3. 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%B6%E4%BB%96"><span class="nav-text">4. 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%8F%82%E8%80%83"><span class="nav-text">5. 参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91"><span class="nav-text">1. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8"><span class="nav-text">2. 服务启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E8%AF%95"><span class="nav-text">3. 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%B6%E4%BB%96"><span class="nav-text">4. 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AEkerberos%E9%89%B4%E6%9D%83"><span class="nav-text">5. 配置kerberos鉴权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-kerberos%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.1 kerberos服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-nfs%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.2 nfs服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3 客户端配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
