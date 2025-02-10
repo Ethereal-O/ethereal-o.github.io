@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 编译123456789101112131415git clone https:&#x2F;&#x2F;github.com&#x2F;nfs-ganesha&#x2F;nfs-ganesha.gitcd nfs-ganeshagit submodule update --initgit checkout V5-stablemkdir buildcd buildsudo apt install -y krb5-user libpam">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-06-14T14:13:36.000Z">
-<meta property="article:modified_time" content="2025-01-14T12:07:15.316Z">
+<meta property="article:modified_time" content="2025-02-10T10:27:55.329Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-01-14 20:07:15</span>
-            <span class="mobile">2025-01-14 20:07</span>
+            <span class="desktop">2025-02-10 18:27:55</span>
+            <span class="mobile">2025-02-10 18:27</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -531,8 +531,53 @@
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mount -v -t nfs4 -o sec=krb5 openeuler-vm-2203:/etc/nfs /mnt/tmp</span><br></pre></td></tr></table></figure></div>
 
 <ol start="4">
-<li>初始化<br> sudo kinit -k -t &#x2F;etc&#x2F;krb5.keytab nfs&#x2F;<a class="link"   href="mailto:&#111;&#112;&#x65;&#x6e;&#101;&#117;&#x6c;&#101;&#x72;&#45;&#x76;&#x6d;&#45;&#50;&#50;&#48;&#51;&#x40;&#69;&#x58;&#65;&#x4d;&#x50;&#76;&#x45;&#46;&#x43;&#x4f;&#x4d;" >&#111;&#112;&#x65;&#x6e;&#101;&#117;&#x6c;&#101;&#x72;&#45;&#x76;&#x6d;&#45;&#50;&#50;&#48;&#51;&#x40;&#69;&#x58;&#65;&#x4d;&#x50;&#76;&#x45;&#46;&#x43;&#x4f;&#x4d; <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li>初始化<br> sudo kinit -k -t &#x2F;etc&#x2F;krb5.keytab nfs&#x2F;<a class="link"   href="mailto:&#111;&#112;&#x65;&#x6e;&#101;&#117;&#108;&#101;&#114;&#x2d;&#118;&#109;&#45;&#50;&#x32;&#48;&#x33;&#64;&#x45;&#88;&#65;&#77;&#x50;&#76;&#69;&#x2e;&#67;&#x4f;&#77;" >&#111;&#112;&#x65;&#x6e;&#101;&#117;&#108;&#101;&#114;&#x2d;&#118;&#109;&#45;&#50;&#x32;&#48;&#x33;&#64;&#x45;&#88;&#65;&#77;&#x50;&#76;&#69;&#x2e;&#67;&#x4f;&#77; <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
 </ol>
+<h2 id="6-系统测试"><a href="#6-系统测试" class="headerlink" title="6. 系统测试"></a>6. 系统测试</h2><h3 id="6-1-使用文件测试工具测试"><a href="#6-1-使用文件测试工具测试" class="headerlink" title="6.1 使用文件测试工具测试"></a>6.1 使用文件测试工具测试</h3><h3 id="6-2-使用kdevops-x2F-pynfs测试"><a href="#6-2-使用kdevops-x2F-pynfs测试" class="headerlink" title="6.2 使用kdevops&#x2F;pynfs测试"></a>6.2 使用<a class="link"   target="_blank" rel="noopener" href="https://github.com/linux-kdevops/kdevops" >kdevops <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x2F;<a class="link"   target="_blank" rel="noopener" href="https://github.com/dang/pynfs/tree/master" >pynfs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>测试</h3><p>pynfs中含有使用python编写的测试pnfs的测试脚本，因此可以直接用来测试。</p>
+<ol>
+<li><p>安装anaconda</p>
+</li>
+<li><p>使用python2.7</p>
+</li>
+<li><p>执行构建</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python setup.py build</span><br><span class="line">python setup.py install</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>在<strong>原路径</strong>中运行</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python ./testserver.py localhost:/etc/nfs pnfs</span><br></pre></td></tr></table></figure></div>
+
+<ol start="5">
+<li>需要注意的是服务器必须使用MDS（ceph），保证存在flag为EXCHGID4_FLAG_USE_PNFS_MDS。否则报错为：</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CSID7    st_current_stateid.testOpenLayoutGet                     : FAILURE</span><br><span class="line">           NameError: global name &#x27;fail&#x27; is not defined</span><br></pre></td></tr></table></figure></div>
+
+<p>位置为devkernel&#x2F;pynfs&#x2F;nfs4.1&#x2F;nfs4client.py中的new_pnfs_client_session。</p>
+<p>服务端返回此标识位置为src&#x2F;Protocols&#x2F;NFS&#x2F;nfs4_op_exchange_id.c中的nfs4_op_exchange_id中的</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if ((arg_EXCHANGE_ID4-&gt;eia_flags &amp; EXCHGID4_FLAG_MASK_PNFS) == 0) &#123;</span><br><span class="line">    if (nfs_param.nfsv4_param.pnfs_mds)</span><br><span class="line">        server_pnfs_flags |= EXCHGID4_FLAG_USE_PNFS_MDS;</span><br><span class="line">    else</span><br><span class="line">        server_pnfs_flags |= EXCHGID4_FLAG_USE_NON_PNFS;</span><br><span class="line">    if (nfs_param.nfsv4_param.pnfs_ds)</span><br><span class="line">        server_pnfs_flags |= EXCHGID4_FLAG_USE_PNFS_DS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>当设置参数后将启用此标识，参数解析位于src&#x2F;support&#x2F;nfs_read_conf.c</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.blk_desc.name = <span class="string">&quot;NFSv4&quot;</span>,</span><br><span class="line">.blk_desc.type = CONFIG_BLOCK,</span><br><span class="line">.blk_desc.flags = CONFIG_UNIQUE,  <span class="comment">/* too risky to have more */</span></span><br><span class="line">.blk_desc.u.blk.init = noop_conf_init,</span><br><span class="line">.blk_desc.u.blk.params = version4_params,</span><br></pre></td></tr></table></figure></div>
+
+<p>因此只需要在&#x2F;etc&#x2F;ganesha&#x2F;ganesha.conf中添加</p>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">NFSv4</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">PNFS_MDS</span> <span class="string">=</span> <span class="literal">YES</span> <span class="string">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>重启nfs-ganesha服务后，发现即可正确使用pnfs。</p>
+<p>但是，pynfs要求必须使用BLOCK布局，位置在devkernel&#x2F;pynfs&#x2F;nfs4.1&#x2F;server41tests&#x2F;st_getdevicelist.py</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blocksize = get_blocksize(sess, use_obj(env.opts.path))</span><br></pre></td></tr></table></figure></div>
+
+<p>否则返回，对应服务端代码位于src&#x2F;FSAL&#x2F;FSAL_GLUSTER&#x2F;mds.c中的handle_ops_pnfs与pnfs_layout_get。</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GETLAYOUT1 st_getdevicelist.testGetLayout                         : FAILURE</span><br><span class="line">           layout_type does not contain BLOCK</span><br><span class="line">LAYOUTCOMMIT1 st_getdevicelist.testLayoutCommit                   : FAILURE</span><br><span class="line">           layout_type does not contain BLOCK</span><br></pre></td></tr></table></figure></div>
+
+<p>将get_blocksize注释掉后显示</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GETLAYOUT1 st_getdevicelist.testGetLayout                         : FAILURE</span><br><span class="line">           OP_LAYOUTGET should return NFS4_OK, instead got</span><br><span class="line">           NFS4ERR_LAYOUTUNAVAILABLE</span><br></pre></td></tr></table></figure></div>
+
+<p>对应服务端代码位置在src&#x2F;FSAL&#x2F;default_methods.c，其中def_handle_ops变量定义了函数指针。</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> nfsstat4 <span class="title function_">layoutget</span><span class="params">(<span class="keyword">struct</span> fsal_obj_handle *obj_hdl,</span></span><br><span class="line"><span class="params">			  XDR *loc_body,</span></span><br><span class="line"><span class="params">			  <span class="type">const</span> <span class="keyword">struct</span> fsal_layoutget_arg *arg,</span></span><br><span class="line"><span class="params">			  <span class="keyword">struct</span> fsal_layoutget_res *res)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> NFS4ERR_LAYOUTUNAVAILABLE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>标准文件系统不支持此操作，但是CEPH等支持。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Hearz/article/details/120840448" >nfs-ganesha(用户态NFS)编译、安装和使用_nfs-ganesha 编译-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xwd127429/article/details/106047036" >Ubuntu1804安装MIT Kerberos_ubuntu kerberos-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha" >GitHub - nfs-ganesha&#x2F;nfs-ganesha: NFS-Ganesha is an NFSv3,v4,v4.1 fileserver that runs in user mode on most UNIX&#x2F;Linux systems <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -551,6 +596,14 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://askoverflow.dev/server/question/605210/kerberized-nfs4-mounts-error-no-credentials-found-for-connection-to-server/" >Kerberized nfs4 挂载错误：找不到连接到服务器的凭据 - server <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/snail_bing/article/details/118081091" >kerberos使用详解_krb5-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://bbs.csdn.net/topics/380063565" >【求助kerberos配置】Cannot contact any KDC for realm ‘EXAMPLE.COM’ -CSDN社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/linux-kdevops/kdevops" >linux-kdevops&#x2F;kdevops: kdevops main repository: Generalized devops infrastructure for Linux kernel development <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/linux-kdevops/kdevops/blob/main/docs/nfs.md" >kdevops&#x2F;docs&#x2F;nfs.md at main · linux-kdevops&#x2F;kdevops <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-devel-from-github-with-pip" >Installing Ansible — Ansible Community Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/502931250" >(80 条消息) ansible执行命令的时候报错msg”: “Missing sudo password 有知道的吗？ - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/yujia_666/article/details/107986930" >ansible踩坑指南_missing sudo password-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xuxin8911/article/details/80038153" >virt-install找不到default网络_没有网络与名称 ‘default’ 映射-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/dang/pynfs/tree/master" >dang&#x2F;pynfs: Clone of git:&#x2F;&#x2F;git.linux-nfs.org&#x2F;projects&#x2F;bfields&#x2F;pynfs.git <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://patchwork.kernel.org/project/linux-nfs/patch/20250122-master-v1-1-3c6c66a66fe5@kernel.org/" >[pynfs] Move to xdrlib3 - Patchwork <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -563,7 +616,7 @@
         <li><strong>Created at:</strong> 2024-06-14 22:13:36</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-01-14 20:07:15
+                <strong>Updated at:</strong> 2025-02-10 18:27:55
             </li>
         
         <li>
@@ -673,7 +726,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">nfs-ganesha编译</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91"><span class="nav-text">1. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8"><span class="nav-text">2. 服务启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E8%AF%95"><span class="nav-text">3. 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%B6%E4%BB%96"><span class="nav-text">4. 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AEkerberos%E9%89%B4%E6%9D%83"><span class="nav-text">5. 配置kerberos鉴权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-kerberos%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.1 kerberos服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-nfs%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.2 nfs服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3 客户端配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91"><span class="nav-text">1. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8"><span class="nav-text">2. 服务启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E8%AF%95"><span class="nav-text">3. 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%B6%E4%BB%96"><span class="nav-text">4. 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AEkerberos%E9%89%B4%E6%9D%83"><span class="nav-text">5. 配置kerberos鉴权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-kerberos%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.1 kerberos服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-nfs%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.2 nfs服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3 客户端配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E7%B3%BB%E7%BB%9F%E6%B5%8B%E8%AF%95"><span class="nav-text">6. 系统测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E6%B5%8B%E8%AF%95"><span class="nav-text">6.1 使用文件测试工具测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E4%BD%BF%E7%94%A8kdevops-x2F-pynfs%E6%B5%8B%E8%AF%95"><span class="nav-text">6.2 使用kdevops &#x2F;pynfs 测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
