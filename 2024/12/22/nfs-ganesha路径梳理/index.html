@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
 <meta property="article:published_time" content="2024-12-22T12:20:26.000Z">
-<meta property="article:modified_time" content="2025-01-15T06:20:23.505Z">
+<meta property="article:modified_time" content="2025-02-13T09:28:49.154Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
@@ -359,8 +359,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-01-15 14:20:23</span>
-            <span class="mobile">2025-01-15 14:20</span>
+            <span class="desktop">2025-02-13 17:28:49</span>
+            <span class="mobile">2025-02-13 17:28</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -478,16 +478,46 @@
 </li>
 <li><p>lock：租期锁，超时释放，客户端重启后通过grace重新拿到同一把锁。并发写是被允许的，因为支持直接向ds通过COW写入，但是错误不会保证。</p>
 </li>
+<li><p>layoutdriver：使用set_pnfs_layoutdriver与set_layoutdriver设置驱动。加载内核模块之后，nfs简单地写入块设备即可，由块设备负责进行同步（例如使用iscsi）。当前同一filesystem的一种layouttype只支持一种driver。当bio callback需要drain时，调用do_callback_layoutrecall。如果是file，那么需要layoutcommit。</p>
+</li>
 <li><p>路径</p>
 <ul>
 <li><p>nfs4_get_device_info-&gt;nfs4_proc_getdeviceinfo-&gt;nfs4_call_sync-&gt;nfs4_do_call_sync  alloc_deviceid_node</p>
 </li>
 <li><p>nfs4_ff_layout_prepare_ds-&gt;nfs4_pnfs_ds_connect-&gt;_nfs4_pnfs_v4_ds_connect-&gt;nfs4_set_ds_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
 </li>
-<li><p>pnfs_try_to_read_data-&gt;&gt;&gt;bl_alloc_lseg-&gt;bl_alloc_extent-&gt;bl_find_get_deviceid-&gt;nfs4_find_get_deviceid-&gt;</p>
+<li><p>nfs4_do_open-&gt;&gt;&gt;bl_alloc_lseg-&gt;bl_alloc_extent-&gt;bl_find_get_deviceid-&gt;nfs4_find_get_deviceid-&gt;</p>
+</li>
+<li><p>（Layoutget）（pnfs_layout_segment）pnfs_layout_process-&gt;bl_alloc_lseg-&gt;bl_alloc_extent-&gt;bl_find_get_deviceid-&gt;nfs4_find_get_deviceid-&gt;</p>
+</li>
+<li><p>pnfs_generic_pg_readpages-&gt;pnfs_do_read-&gt;pnfs_try_to_read_data-&gt;read_pagelist-&gt;bl_read_pagelist-&gt;bl_submit_bio-&gt;submit_bio</p>
+</li>
+<li><p>pnfs_generic_pg_writepages…</p>
 </li>
 </ul>
 </li>
+<li><p>layputget</p>
+<ul>
+<li>原数据</li>
+</ul>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">LAYOUTGET4resok</span> &#123;</span></span><br><span class="line">        <span class="type">bool</span>               logr_return_on_close;</span><br><span class="line">        stateid4           logr_stateid;</span><br><span class="line">        layout4            logr_layout&lt;&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">layout4</span> &#123;</span></span><br><span class="line">        offset4                 lo_offset;</span><br><span class="line">        length4                 lo_length;</span><br><span class="line">        layoutiomode4           lo_iomode;</span><br><span class="line">        layout_content4         lo_content;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>解析(通过nfsd4_decode_layoutget解析)</li>
+</ul>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> __be32</span><br><span class="line"><span class="title function_">nfsd4_decode_layoutget</span><span class="params">(<span class="keyword">struct</span> nfsd4_compoundargs *argp,</span></span><br><span class="line"><span class="params">        <span class="keyword">struct</span> nfsd4_layoutget *lgp)</span></span><br><span class="line">&#123;</span><br><span class="line">    DECODE_HEAD;</span><br><span class="line"></span><br><span class="line">    READ_BUF(<span class="number">36</span>);</span><br><span class="line">    lgp-&gt;lg_signal = be32_to_cpup(p++);</span><br><span class="line">    lgp-&gt;lg_layout_type = be32_to_cpup(p++);</span><br><span class="line">    lgp-&gt;lg_seg.iomode = be32_to_cpup(p++);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_seg.offset);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_seg.length);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_minlength);</span><br><span class="line"></span><br><span class="line">    status = nfsd4_decode_stateid(argp, &amp;lgp-&gt;lg_sid);</span><br><span class="line">    <span class="keyword">if</span> (status)</span><br><span class="line">        <span class="keyword">return</span> status;</span><br><span class="line"></span><br><span class="line">    READ_BUF(<span class="number">4</span>);</span><br><span class="line">    lgp-&gt;lg_maxcount = be32_to_cpup(p++);</span><br><span class="line"></span><br><span class="line">    DECODE_TAIL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_pnfs_block_extent4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.pnfs_block_extent4()</span><br><span class="line">    data.bex_vol_id = self.unpack_deviceid4()</span><br><span class="line">    data.bex_file_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_length = self.unpack_length4()</span><br><span class="line">    data.bex_storage_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_state = self.unpack_pnfs_block_extent_state4()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>返回值</li>
+</ul>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">nfs4_layoutget_res</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">nfs4_sequence_res</span> <span class="title">seq_res</span>;</span></span><br><span class="line">    <span class="type">int</span> status;</span><br><span class="line">    __u32 return_on_close;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_range</span> <span class="title">range</span>;</span></span><br><span class="line">    __u32 type;</span><br><span class="line">    nfs4_stateid stateid;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">nfs4_layoutdriver_data</span> *<span class="title">layoutp</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>转换类型</li>
+</ul>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_segment</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">pls_list</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">pls_lc_list</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">pls_commits</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_range</span> <span class="title">pls_range</span>;</span></span><br><span class="line">    <span class="type">refcount_t</span> pls_refcount;</span><br><span class="line">    u32 pls_seq;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> pls_flags;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_hdr</span> *<span class="title">pls_layout</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></li>
 </ul>
 <h3 id="4-2-multipath"><a href="#4-2-multipath" class="headerlink" title="4.2 multipath"></a>4.2 multipath</h3><p>直接复用nconnect，只不过创建的server地址不同</p>
 <h3 id="4-3-nconnect"><a href="#4-3-nconnect" class="headerlink" title="4.3 nconnect"></a>4.3 nconnect</h3><ul>
@@ -562,6 +592,10 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/ask/sof/111090104" >如何在NFS上使用扩展文件属性？-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8731344" >理解NFSv4.1布局类型及其在MDS中的查找过程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/zhenjing/archive/2011/07/04/filelock.html" >文件锁与NFS文件锁 - zhenjing - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8731755" >pNFS客户端布局驱动-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zhang_shuai_2011/article/details/7386507" >从nfs_page结构看PNFS读写流程_nfs的pageio什么意思-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ha_weii/article/details/80586753" >iSCSI 远程块存储 （共享设备）-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/filesystems/nfs/pnfs.html" >Reference counting in pnfs — The Linux Kernel documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -574,7 +608,7 @@
         <li><strong>Created at:</strong> 2024-12-22 20:20:26</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-01-15 14:20:23
+                <strong>Updated at:</strong> 2025-02-13 17:28:49
             </li>
         
         <li>
