@@ -30,8 +30,9 @@
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_aa646f72-0bf6-11ed-8f79-fa163eb4f6be.png">
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_ad890140-0bf6-11ed-8f79-fa163eb4f6be.png">
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be.png">
+<meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20211222_05f4333e-6334-11ec-8889-fa163eb4f6be.png">
 <meta property="article:published_time" content="2024-12-01T16:12:48.000Z">
-<meta property="article:modified_time" content="2024-12-01T16:57:06.340Z">
+<meta property="article:modified_time" content="2025-03-09T12:31:43.659Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png">
@@ -363,8 +364,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-12-02 00:57:06</span>
-            <span class="mobile">2024-12-02 00:57</span>
+            <span class="desktop">2025-03-09 20:31:43</span>
+            <span class="mobile">2025-03-09 20:31</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -454,9 +455,31 @@
                      data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be.png"
                       alt="modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be"
                 ></p>
+<h2 id="4-代码分析"><a href="#4-代码分析" class="headerlink" title="4. 代码分析"></a>4. 代码分析</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20211222_05f4333e-6334-11ec-8889-fa163eb4f6be.png"
+                      alt="modb_20211222_05f4333e-6334-11ec-8889-fa163eb4f6be"
+                ></p>
+<h3 id="4-1-执行流"><a href="#4-1-执行流" class="headerlink" title="4.1 执行流"></a>4.1 执行流</h3><ul>
+<li>lustre客户端stack中，一个文件处理需要<code>vvp_object</code>、<code>lov_object</code>、<code>lovsub_object</code>、<code>osc_object</code>。每一层的对象都会包含通用的对象层<code>cl_object</code>.<code>vvp_object</code>是vfs-vm-posix层的对象，这个包含了操作文件的inode和<code>cl_object</code>的客户端通用对象;<code>lov_object</code>是为了处理来自<code>vvp_object</code>的封装的数据，其中也包含了<code>cl_object</code>，这一层是逻辑对象层，比如文件被stripe后，在<code>lov_object</code>会包含多个sripe的对象，这些对象封装成对象<code>lovsub_object</code>,每一个<code>lovsub_object</code>对应一个<code>osc_object</code>对象。最后<code>osc_object</code>通过自己这一层的device的接口层，数据到mds或者oss.</li>
+</ul>
+<p>(flock是文件锁)<a class="link"   target="_blank" rel="noopener" href="https://wiki.lustre.org/Mounting_a_Lustre_File_System_on_Client_Nodes" >Mounting a Lustre File System on Client Nodes - Lustre Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ol>
+<li>read: ll_file_operations_flock-&gt;ll_file_read-&gt;(init_sync_kiocb)ll_file_aio_read-&gt;ll_file_read_iter-&gt;(do_loop_readv_writev)do_file_read_iter-&gt;pcc_file_read_iter&#x2F;ll_do_fast_read&#x2F;ll_file_io_generic-&gt;(vvp_env_new_io&#x2F;cl_io_rw_init&#x2F;range_lock_init)cl_io_loop-&gt;(cl_io_lock)cl_io_start-&gt;vvp_io_ops&#x2F;lov_io_ops&#x2F;mdc_io_ops&#x2F;osc_io_ops(类型在do_file_read_iter赋值为CIT_READ&#x3D;1，全局由cl_io_slice_add与lov_io_init_composite赋值为lov_io_ops)-&gt;lov_io_start-&gt;lov_io_call-&gt;cl_io_start(调用子请求)—–&gt;osc_io_read_start</li>
+</ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.modb.pro/db/444635" >深入理解Lustre分布式文件系统之Lustre架构 - 墨天轮 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/635991046" >深入理解 Lustre 系列六：LIBCFS - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/news/229014" >HPC高性能计算知识：深度解析Lustre体系结构 - 腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://wiki.lustre.org/Mounting_a_Lustre_File_System_on_Client_Nodes" >Mounting a Lustre File System on Client Nodes - Lustre Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/jpa2/archive/2012/03/08/2527876.html" >深入理解Lustre文件系统-第3篇 lustre lite - myjava2 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2074615" >初探lustre文件创建的过程-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2226433" >深入浅出Lustre扩展属性-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/632518511" >深入理解 Lustre 系列一：Lustre 架构 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.modb.pro/db/220673" >Lustre PCC 初探 - 墨天轮 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/fsdev/article/details/7317414" >深入理解Lustre文件系统-第4篇 LOV和OSC_深入理解 lustre-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/jinking01/article/details/105581078" >linux内核读写IO过程中的iovec及其相关的结构体-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2074582" >lustre客户端实现的答疑解惑-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -469,7 +492,7 @@
         <li><strong>Created at:</strong> 2024-12-02 00:12:48</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-12-02 00:57:06
+                <strong>Updated at:</strong> 2025-03-09 20:31:43
             </li>
         
         <li>
@@ -579,7 +602,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">lustre学习</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%89%B9%E7%82%B9"><span class="nav-text">1. 特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-lustre%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-text">2. lustre核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B8%83%E5%B1%80"><span class="nav-text">3. 布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B"><span class="nav-text">4. 访问流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%89%B9%E7%82%B9"><span class="nav-text">1. 特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-lustre%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-text">2. lustre核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B8%83%E5%B1%80"><span class="nav-text">3. 布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B"><span class="nav-text">4. 访问流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">4. 代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%89%A7%E8%A1%8C%E6%B5%81"><span class="nav-text">4.1 执行流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
