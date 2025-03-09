@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be.png">
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20211222_05f4333e-6334-11ec-8889-fa163eb4f6be.png">
 <meta property="article:published_time" content="2024-12-01T16:12:48.000Z">
-<meta property="article:modified_time" content="2025-03-09T12:31:43.659Z">
+<meta property="article:modified_time" content="2025-03-09T16:56:33.990Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png">
@@ -364,8 +364,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-09 20:31:43</span>
-            <span class="mobile">2025-03-09 20:31</span>
+            <span class="desktop">2025-03-10 00:56:33</span>
+            <span class="mobile">2025-03-10 00:56</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -467,6 +467,7 @@
 <p>(flock是文件锁)<a class="link"   target="_blank" rel="noopener" href="https://wiki.lustre.org/Mounting_a_Lustre_File_System_on_Client_Nodes" >Mounting a Lustre File System on Client Nodes - Lustre Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <ol>
 <li>read: ll_file_operations_flock-&gt;ll_file_read-&gt;(init_sync_kiocb)ll_file_aio_read-&gt;ll_file_read_iter-&gt;(do_loop_readv_writev)do_file_read_iter-&gt;pcc_file_read_iter&#x2F;ll_do_fast_read&#x2F;ll_file_io_generic-&gt;(vvp_env_new_io&#x2F;cl_io_rw_init&#x2F;range_lock_init)cl_io_loop-&gt;(cl_io_lock)cl_io_start-&gt;vvp_io_ops&#x2F;lov_io_ops&#x2F;mdc_io_ops&#x2F;osc_io_ops(类型在do_file_read_iter赋值为CIT_READ&#x3D;1，全局由cl_io_slice_add与lov_io_init_composite赋值为lov_io_ops)-&gt;lov_io_start-&gt;lov_io_call-&gt;cl_io_start(调用子请求)—–&gt;osc_io_read_start</li>
+<li>submit:lov_io_submit-&gt;cl_io_submit_rw-&gt;cio_submit-&gt;osc_io_submit-&gt;osc_page_submit&#x2F;osc_queue_sync_pages-&gt;(osc_extent_lookup&#x2F;osc_extent_alloc)list_add_tail&#x2F;osc_update_pending</li>
 </ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.modb.pro/db/444635" >深入理解Lustre分布式文件系统之Lustre架构 - 墨天轮 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/635991046" >深入理解 Lustre 系列六：LIBCFS - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -492,7 +493,7 @@
         <li><strong>Created at:</strong> 2024-12-02 00:12:48</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-03-09 20:31:43
+                <strong>Updated at:</strong> 2025-03-10 00:56:33
             </li>
         
         <li>
