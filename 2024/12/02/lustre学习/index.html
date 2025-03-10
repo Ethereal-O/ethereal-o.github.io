@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_b1b190a2-0bf6-11ed-8f79-fa163eb4f6be.png">
 <meta property="og:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20211222_05f4333e-6334-11ec-8889-fa163eb4f6be.png">
 <meta property="article:published_time" content="2024-12-01T16:12:48.000Z">
-<meta property="article:modified_time" content="2025-03-09T16:56:33.990Z">
+<meta property="article:modified_time" content="2025-03-10T15:50:24.729Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://oss-emcsprod-public.modb.pro/wechatSpider/modb_20220725_a84a3924-0bf6-11ed-8f79-fa163eb4f6be.png">
@@ -364,8 +364,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-10 00:56:33</span>
-            <span class="mobile">2025-03-10 00:56</span>
+            <span class="desktop">2025-03-10 23:50:24</span>
+            <span class="mobile">2025-03-10 23:50</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -463,11 +463,15 @@
                 ></p>
 <h3 id="4-1-执行流"><a href="#4-1-执行流" class="headerlink" title="4.1 执行流"></a>4.1 执行流</h3><ul>
 <li>lustre客户端stack中，一个文件处理需要<code>vvp_object</code>、<code>lov_object</code>、<code>lovsub_object</code>、<code>osc_object</code>。每一层的对象都会包含通用的对象层<code>cl_object</code>.<code>vvp_object</code>是vfs-vm-posix层的对象，这个包含了操作文件的inode和<code>cl_object</code>的客户端通用对象;<code>lov_object</code>是为了处理来自<code>vvp_object</code>的封装的数据，其中也包含了<code>cl_object</code>，这一层是逻辑对象层，比如文件被stripe后，在<code>lov_object</code>会包含多个sripe的对象，这些对象封装成对象<code>lovsub_object</code>,每一个<code>lovsub_object</code>对应一个<code>osc_object</code>对象。最后<code>osc_object</code>通过自己这一层的device的接口层，数据到mds或者oss.</li>
+<li>cio_submit和cio_commit的区别在于cio_submit用于紧急请求。</li>
+<li>wakeup all cache waiters-&gt;spin_unlock(&amp;cli-&gt;cl_loi_list_lock);</li>
 </ul>
 <p>(flock是文件锁)<a class="link"   target="_blank" rel="noopener" href="https://wiki.lustre.org/Mounting_a_Lustre_File_System_on_Client_Nodes" >Mounting a Lustre File System on Client Nodes - Lustre Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <ol>
 <li>read: ll_file_operations_flock-&gt;ll_file_read-&gt;(init_sync_kiocb)ll_file_aio_read-&gt;ll_file_read_iter-&gt;(do_loop_readv_writev)do_file_read_iter-&gt;pcc_file_read_iter&#x2F;ll_do_fast_read&#x2F;ll_file_io_generic-&gt;(vvp_env_new_io&#x2F;cl_io_rw_init&#x2F;range_lock_init)cl_io_loop-&gt;(cl_io_lock)cl_io_start-&gt;vvp_io_ops&#x2F;lov_io_ops&#x2F;mdc_io_ops&#x2F;osc_io_ops(类型在do_file_read_iter赋值为CIT_READ&#x3D;1，全局由cl_io_slice_add与lov_io_init_composite赋值为lov_io_ops)-&gt;lov_io_start-&gt;lov_io_call-&gt;cl_io_start(调用子请求)—–&gt;osc_io_read_start</li>
 <li>submit:lov_io_submit-&gt;cl_io_submit_rw-&gt;cio_submit-&gt;osc_io_submit-&gt;osc_page_submit&#x2F;osc_queue_sync_pages-&gt;(osc_extent_lookup&#x2F;osc_extent_alloc)list_add_tail&#x2F;osc_update_pending</li>
+<li>commit: lov_io_commit_async-&gt;cl_io_commit_async-&gt;cio_commit_async-&gt;osc_io_commit_async-&gt;osc_page_cache_add-&gt;osc_queue_async_io-&gt;osc_enter_cache-&gt;cli_unlock_and_unplug-&gt;osc_io_unplug_async-&gt;osc_io_unplug0-&gt;osc_check_rpcs&#x2F;ptlrpcd_queue_work（异步）-&gt;(osc_send_write_rpc-&gt;osc_build_rpc-&gt;)ptlrpcd_add_req</li>
+<li>seek: ll_file_seek-&gt;cl_sync_file_range-&gt;cl_io_loop</li>
 </ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.modb.pro/db/444635" >深入理解Lustre分布式文件系统之Lustre架构 - 墨天轮 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/635991046" >深入理解 Lustre 系列六：LIBCFS - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -481,6 +485,7 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/fsdev/article/details/7317414" >深入理解Lustre文件系统-第4篇 LOV和OSC_深入理解 lustre-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/jinking01/article/details/105581078" >linux内核读写IO过程中的iovec及其相关的结构体-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2074582" >lustre客户端实现的答疑解惑-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/jpa2/archive/2012/03/08/2527876.html" >深入理解Lustre文件系统-第3篇 lustre lite - myjava2 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -493,7 +498,7 @@
         <li><strong>Created at:</strong> 2024-12-02 00:12:48</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-03-10 00:56:33
+                <strong>Updated at:</strong> 2025-03-10 23:50:24
             </li>
         
         <li>
