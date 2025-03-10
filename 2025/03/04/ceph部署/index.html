@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 部署1.1 修改host并配置互信（所有节点都需执行）vim &#x2F;etc&#x2F;hosts 10.244.0.228 ubuntu-vm-2404-test-1 10.244.0.155 ubuntu-vm-2404-test-2 10.244.0.226 ubuntu-vm-2404-test-3  1.2 安装 Docker（所有节点都需执行）sudo apt install docker.io">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-04T13:58:41.000Z">
-<meta property="article:modified_time" content="2025-03-06T11:39:04.739Z">
+<meta property="article:modified_time" content="2025-03-10T03:40:45.186Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-06 19:39:04</span>
-            <span class="mobile">2025-03-06 19:39</span>
+            <span class="desktop">2025-03-10 11:40:45</span>
+            <span class="mobile">2025-03-10 11:40</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -432,6 +432,20 @@ ceph orch apply mds test --placement=&quot;1 ubuntu-vm-2404-test-1&quot;
 ceph osd pool application enable test cephfs
 # 创建文件系统
 ceph fs new cephfs cephfs_metadata test
+# 创建rgw
+ceph orch apply rgw default-realm default-zone --placement=&quot;3 k10 k11 k12&quot;
+# 创建对象存储
+radosgw-admin user create --uid=s3 --display-name=&quot;object_storage&quot; --system
+# 记住你的access_key和secret_key
+&quot;keys&quot;: [
+        &#123;
+            &quot;user&quot;: &quot;s3&quot;,
+            &quot;access_key&quot;: &quot;ENL7QVDGNNYNNEX3X3VS&quot;,
+            &quot;secret_key&quot;: &quot;vaUjPhUkR8yLAdqVD6FRnXGVNrxBNDs9bMWFb6Kb&quot;,
+            &quot;active&quot;: true,
+            &quot;create_date&quot;: &quot;2025-03-10T02:55:13.039290Z&quot;
+        &#125;
+    ],
 </code></pre>
 <h3 id="1-6-配置密钥（客户端执行）"><a href="#1-6-配置密钥（客户端执行）" class="headerlink" title="1.6 配置密钥（客户端执行）"></a>1.6 配置密钥（客户端执行）</h3><pre><code># 找到某用户密钥
 cat /etc/ceph/ceph.client.admin.keyring
@@ -472,7 +486,7 @@ tmpfs                748M   12K  748M   1% /run/user/1000
     usage:   461 MiB used, 56 GiB / 57 GiB avail
     pgs:     145 active+clean
 </code></pre>
-<h3 id="1-8-客户端"><a href="#1-8-客户端" class="headerlink" title="1.8 客户端"></a>1.8 客户端</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">先安装客户端</span></span><br><span class="line">sudo apt install ceph-common</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制密钥和配置，以下两条在服务器端执行</span></span><br><span class="line">sudo scp /etc/ceph/ceph.conf ethereal@10.244.0.118:/home/ethereal/Downloads/ceph</span><br><span class="line">sudo scp /etc/ceph/ceph.client.admin.keyring ethereal@10.244.0.118:/home/ethereal/Downloads/ceph</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">以下客户端执行</span></span><br><span class="line">sudo cp ceph.conf /etc/ceph/</span><br><span class="line">sudo cp ceph.client.admin.keyring /etc/ceph</span><br><span class="line">echo &quot;AQCpx8Zn2nTWMxAAvqX4K3Limi6qYmqh9XKTsw==&quot; &gt; secret # 密钥来自于ceph.client.admin.keyring</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">客户端挂载</span></span><br><span class="line">sudo mount -t ceph 10.244.0.228:6789:/ /mnt/cephfs -o name=admin,secretfile=secret,mon_addr=10.244.0.228</span><br></pre></td></tr></table></figure></div>
+<h3 id="1-8-客户端"><a href="#1-8-客户端" class="headerlink" title="1.8 客户端"></a>1.8 客户端</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">先安装客户端</span></span><br><span class="line">sudo apt install ceph-common</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制密钥和配置，以下两条在服务器端执行</span></span><br><span class="line">sudo scp /etc/ceph/ceph.conf ethereal@10.24.0.118:/home/ethereal/Downloads/ceph</span><br><span class="line">sudo scp /etc/ceph/ceph.client.admin.keyring ethereal@10.244.0.118:/home/ethereal/Downloads/ceph</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">以下客户端执行</span></span><br><span class="line">sudo cp ceph.conf /etc/ceph/</span><br><span class="line">sudo cp ceph.client.admin.keyring /etc/ceph</span><br><span class="line">echo &quot;AQCpx8Zn2nTWMxAAvqX4K3Limi6qYmqh9XKTsw==&quot; &gt; secret # 密钥来自于ceph.client.admin.keyring</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">客户端挂载</span></span><br><span class="line">sudo mount -t ceph 10.244.0.228:6789:/ /mnt/cephfs -o name=admin,secretfile=secret,mon_addr=10.244.0.228</span><br><span class="line"></span><br><span class="line">apt install s3cmd</span><br><span class="line">s3cmd --configure</span><br><span class="line">Access Key：刚才创建的radosgw user的access_key</span><br><span class="line">Secret Key：刚才创建的radosgw user的secret_key</span><br><span class="line">Default Region：默认直接回车</span><br><span class="line">S3 Endpoint：IP地址:port，例如“192.168.64.128:80”</span><br><span class="line">DNS-style bucket+hostname：“bootstrap_host_ip:80/%(bucket)s”，如&quot;192.168.64.128:80/%(bucket)s&quot;</span><br><span class="line">Encryption password：默认直接回车</span><br><span class="line">Path to GPG program [/usr/bin/gpg]：默认直接回车</span><br><span class="line">Use HTTPS protocol [No]: no</span><br><span class="line">HTTP Proxy server name: 默认直接回车</span><br><span class="line">Test access with supplied credentials? [Y/n] 默认直接回车</span><br><span class="line">最后保存设置，会生成/root/.s3cfg文件</span><br><span class="line">修改刚生成的/root/.s3cfg中的三处配置</span><br><span class="line">cloudfront_host = [serverIP]（改成自己的服务端的IP）</span><br><span class="line">host_base = [serverIP]:[Port]（改成自己的服务端的IP和端口）</span><br><span class="line">host_bucket = [serverIP]:[Port]/%(bucket)（改成自己的服务端的IP和端口）</span><br></pre></td></tr></table></figure></div>
 
 <h3 id="1-9-设置时间"><a href="#1-9-设置时间" class="headerlink" title="1.9 设置时间"></a>1.9 设置时间</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（服务端，所有节点）</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启用时间同步</span></span><br><span class="line">timedatectl set-ntp true</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置时区 Asia/Shanghai</span></span><br><span class="line">timedatectl set-timezone Asia/Shanghai</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看状态</span></span><br><span class="line">timedatectl status</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">（服务端，单个节点）</span></span><br><span class="line">ceph config set mon mon_clock_drift_allowed 0.5</span><br><span class="line">ceph config set mon mon_clock_drift_warn_backoff 10</span><br></pre></td></tr></table></figure></div>
 
@@ -576,6 +590,12 @@ sudo ceph orch stop mds.test
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/619236201" >实战篇：使用rook在k8s上搭建ceph集群 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zuolaoshi.cn/article/2024/12/15/603.html" >K8S中部署Ceph | 左老师的课堂笔记 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1923891" >kubernetes 部署 rook+ceph 存储系统-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/gengduc/article/details/134913678" >Cephadm部署使用rgw对象网关（s3cmd和Java）_cephadm rgw-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43860781/article/details/121072084" >Ceph分布式存储系列（七）：对象存储RGW和S3cmd的安装配置及常用命令_对象存储常用命令-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/landhu/p/7793870.html" >s3cmd在配置后使用时提示ERROR: S3 error: 403 (InvalidAccessKeyId): The AWS Access Key Id you provided does not exist in our records. - Believer007 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/basic-setup/create-cluster" >Create a Postgres Cluster <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44008424/article/details/143696308" >在k8s上部署Crunchy Postgres for Kubernetes-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.aliyun.com/article/953902" >云原生 PostgreSQL 集群 - PGO:来自 Crunchy Data 的 Postgres Operator-阿里云开发者社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -588,7 +608,7 @@ sudo ceph orch stop mds.test
         <li><strong>Created at:</strong> 2025-03-04 21:58:41</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-03-06 19:39:04
+                <strong>Updated at:</strong> 2025-03-10 11:40:45
             </li>
         
         <li>
