@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 部署1.1 修改host并配置互信（所有节点都需执行）vim &#x2F;etc&#x2F;hosts 10.244.0.228 ubuntu-vm-2404-test-1 10.244.0.155 ubuntu-vm-2404-test-2 10.244.0.226 ubuntu-vm-2404-test-3  1.2 安装 Docker（所有节点都需执行）sudo apt install docker.io">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-04T13:58:41.000Z">
-<meta property="article:modified_time" content="2025-03-14T11:33:30.857Z">
+<meta property="article:modified_time" content="2025-03-16T14:20:59.439Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-14 19:33:30</span>
-            <span class="mobile">2025-03-14 19:33</span>
+            <span class="desktop">2025-03-16 22:20:59</span>
+            <span class="mobile">2025-03-16 22:20</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -460,6 +460,31 @@ radosgw-admin user create --uid=s3 --display-name=&quot;object_storage&quot; --s
     ],
 # 创建对象桶
 radosgw-admin bucket create --bucket=&lt;bucket-name&gt; --user=&lt;username&gt;
+
+
+# 创建自定义realm的rgw
+# 删除默认zone和zonegroup
+radosgw-admin zone list
+radosgw-admin zone delete  --rgw-zone default
+radosgw-admin zonegroup list
+radosgw-admin zonegroup delete  --rgw-zonegroup default
+# 创建realm、zone和zonegroup
+radosgw-admin realm create --rgw-realm=default --default
+radosgw-admin zonegroup create --rgw-zonegroup default --rgw-realm default --master --default
+radosgw-admin zone create --rgw-zonegroup default --rgw-zone default --master --default
+# 设定default（前面default是命令后面是名字）
+radosgw-admin realm default default
+radosgw-admin zonegroup default default
+radosgw-admin zone default default
+# 设定master
+radosgw-admin zonegroup get &gt; zonegroup.json
+vim zonegroup.json # 将其中is_master字段改为true
+radosgw-admin zonegroup set --infile zonegroup.json # 导入配置
+# 同步period，要执行两次
+radosgw-admin period update --commit
+radosgw-admin period update --commit
+# 部署rgw，必须指定realm和zone
+ceph orch apply rgw default --realm=default --zone=default  --placement=&#39;3 k10 k11 k12&#39;
 </code></pre>
 <h3 id="1-6-配置密钥（客户端执行）"><a href="#1-6-配置密钥（客户端执行）" class="headerlink" title="1.6 配置密钥（客户端执行）"></a>1.6 配置密钥（客户端执行）</h3><pre><code># 找到某用户密钥
 cat /etc/ceph/ceph.client.admin.keyring
@@ -699,6 +724,11 @@ radosgw-admin user create --uid=s3 --display-name=&quot;object_storage&quot; --s
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/fengdejiyixx/p/15186831.html" >k8s如何强制删除pod&amp;pv&amp;pvc和ns&amp;namespace方法 - 记忆流年 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/ceph/ceph-csi/blob/devel/examples/cephfs/storageclass.yaml" >ceph-csi&#x2F;examples&#x2F;cephfs&#x2F;storageclass.yaml at devel · ceph&#x2F;ceph-csi <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="http://strugglesquirrel.com/2020/07/24/ceph%E8%BF%90%E7%BB%B4%E5%A4%A7%E5%AE%9D%E5%89%91%E4%B9%8Bpg%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E4%BF%AE%E5%A4%8D/#:~:text=%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E6%98%AF%EF%BC%8C%E9%87%8D%E5%BB%BA,%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%81%A2%E5%A4%8D%E6%AD%A3%E5%B8%B8%E4%BA%86" >ceph运维大宝剑之pg常见状态修复 | 奋斗的松鼠 - Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.ibm.com/docs/en/storage-ceph/7?topic=groups-setting-zone-group" >Setting a zone group - IBM Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.ceph.com/en/latest/radosgw/multisite/" >Multi-Site — Ceph Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zorsea/article/details/104925067" >ceph部署与配置及部署过程遇到的问题解决_ceph dashboard creat-self-signed-cert 报错-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/sunbines/p/15789295.html" >【ceph运维】修改ceph集群配置 - 苏格拉底的落泪 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.ibm.com/docs/en/storage-ceph/8.0?topic=administration-configuring-multiple-realms-in-same-storage-cluster" >Configuring multiple realms in the same storage cluster - IBM Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -711,7 +741,7 @@ radosgw-admin user create --uid=s3 --display-name=&quot;object_storage&quot; --s
         <li><strong>Created at:</strong> 2025-03-04 21:58:41</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-03-14 19:33:30
+                <strong>Updated at:</strong> 2025-03-16 22:20:59
             </li>
         
         <li>
