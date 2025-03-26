@@ -13,20 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2025/03/20/powershell自动补全/"/>
+    <link rel="canonical" href="http://example.com/2025/03/26/nexus-repository/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 执行123456789101112131415161718192021222324Install-Module PSReadLine -RequiredVersion 2.1.0Import-Module PSReadLineSet-PSReadLineOption -PredictionSource HistoryTest-path $profile# 如果是False执行下面# New-">
+        <meta name="description" content="1. 下载镜像docker.io&#x2F;sonatype&#x2F;nexus3 项目中国可用镜像列表 | 高速可靠的 Docker 镜像资源  Docker Proxy 镜像加速  2. 修改并安装123456789101112131415# 下载部署helm包git clone git@github.com:sonatype&#x2F;nxrm3-helm-repository.git# 修改val">
 <meta property="og:type" content="article">
-<meta property="og:title" content="powershell自动补全">
-<meta property="og:url" content="http://example.com/2025/03/20/powershell%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8/index.html">
+<meta property="og:title" content="nexus repository">
+<meta property="og:url" content="http://example.com/2025/03/26/nexus-repository/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 执行123456789101112131415161718192021222324Install-Module PSReadLine -RequiredVersion 2.1.0Import-Module PSReadLineSet-PSReadLineOption -PredictionSource HistoryTest-path $profile# 如果是False执行下面# New-">
+<meta property="og:description" content="1. 下载镜像docker.io&#x2F;sonatype&#x2F;nexus3 项目中国可用镜像列表 | 高速可靠的 Docker 镜像资源  Docker Proxy 镜像加速  2. 修改并安装123456789101112131415# 下载部署helm包git clone git@github.com:sonatype&#x2F;nxrm3-helm-repository.git# 修改val">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-03-20T04:52:43.000Z">
-<meta property="article:modified_time" content="2025-03-20T04:55:32.407Z">
+<meta property="article:published_time" content="2025-03-26T07:15:05.000Z">
+<meta property="article:modified_time" content="2025-03-26T07:34:51.239Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -40,7 +40,7 @@
     
     <title>
         
-            powershell自动补全 -
+            nexus repository -
         
         Ethereal&#39;s Blog
     </title>
@@ -328,7 +328,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">powershell自动补全</h1>
+                    <h1 class="article-title-regular">nexus repository</h1>
                 </div>
             
                 
@@ -350,15 +350,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-03-20 12:52:43</span>
-        <span class="mobile">2025-03-20 12:52</span>
+        <span class="desktop">2025-03-26 15:15:05</span>
+        <span class="mobile">2025-03-26 15:15</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-20 12:55:32</span>
-            <span class="mobile">2025-03-20 12:55</span>
+            <span class="desktop">2025-03-26 15:34:51</span>
+            <span class="mobile">2025-03-26 15:34</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -382,9 +382,15 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="1-执行"><a href="#1-执行" class="headerlink" title="1. 执行"></a>1. 执行</h2><div class="highlight-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Install-Module</span> PSReadLine <span class="literal">-RequiredVersion</span> <span class="number">2.1</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Import-Module</span> PSReadLine</span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Test-path</span> <span class="variable">$profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是False执行下面</span></span><br><span class="line"><span class="comment"># New-item –type file –force $profile</span></span><br><span class="line"></span><br><span class="line">notepad <span class="variable">$profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开记事本输入</span></span><br><span class="line"><span class="comment"># Shows navigable menu of all options when hitting Tab</span></span><br><span class="line"><span class="built_in">Set-PSReadlineKeyHandler</span> <span class="literal">-Key</span> Tab <span class="literal">-Function</span> MenuComplete</span><br><span class="line"></span><br><span class="line"><span class="comment"># Autocompletion for arrow keys</span></span><br><span class="line"><span class="built_in">Set-PSReadlineKeyHandler</span> <span class="literal">-Key</span> UpArrow <span class="literal">-Function</span> HistorySearchBackward</span><br><span class="line"><span class="built_in">Set-PSReadlineKeyHandler</span> <span class="literal">-Key</span> DownArrow <span class="literal">-Function</span> HistorySearchForward</span><br><span class="line"></span><br><span class="line"><span class="comment"># auto suggestions</span></span><br><span class="line"><span class="built_in">Import-Module</span> PSReadLine</span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+                <h2 id="1-下载镜像"><a href="#1-下载镜像" class="headerlink" title="1. 下载镜像"></a>1. 下载镜像</h2><p><a class="link"   target="_blank" rel="noopener" href="https://docker.aityp.com/r/docker.io/sonatype/nexus3" >docker.io&#x2F;sonatype&#x2F;nexus3 项目中国可用镜像列表 | 高速可靠的 Docker 镜像资源 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://dockerproxy.net/docs" >Docker Proxy 镜像加速 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="2-修改并安装"><a href="#2-修改并安装" class="headerlink" title="2. 修改并安装"></a>2. 修改并安装</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载部署helm包</span></span><br><span class="line">git clone git@github.com:sonatype/nxrm3-helm-repository.git</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改values.yaml文件，位置nxrm3-helm-repository/nexus-repository-manager/values.yaml</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改service <span class="built_in">type</span>为NodePort</span></span><br><span class="line">service:</span><br><span class="line">  name: nexus3</span><br><span class="line">  enabled: true</span><br><span class="line">  labels: &#123;&#125;</span><br><span class="line">  annotations: &#123;&#125;</span><br><span class="line">  type: NodePort</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改storageclass</span></span><br><span class="line">storageClass: &quot;local-path&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署</span></span><br><span class="line">helm install nexus ./ -n nexus</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42081389/article/details/124392018" >Windows Terminal&#x2F;Powershell 设置自动补全, 智能提示 【类似于mac的iterm2功能】_terminal 智能提示-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="3-登录"><a href="#3-登录" class="headerlink" title="3. 登录"></a>3. 登录</h2><p>默认账户admin</p>
+<p>查看密码</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">k exec -it deploy/nexus-nexus-repository-manager -- /bin/cat /nexus-data/admin.password</span><br></pre></td></tr></table></figure></div>
+
+<p>首次登录时会要求修改密码，密码更改后上述查看密码命令会无效。</p>
 
             </div>
 
@@ -392,16 +398,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> powershell自动补全</li>
+        <li><strong>Title:</strong> nexus repository</li>
         <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2025-03-20 12:52:43</li>
+        <li><strong>Created at:</strong> 2025-03-26 15:15:05</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-03-20 12:55:32
+                <strong>Updated at:</strong> 2025-03-26 15:34:51
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2025/03/20/powershell自动补全/
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/03/26/nexus-repository/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -419,29 +425,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2025/03/26/nexus-repository/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">nexus repository</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2025/03/10/argo-airflow%E9%83%A8%E7%BD%B2/"
+                            href="/2025/03/20/powershell%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">argo/airflow部署</span>
+                                    <span class="post-nav-title-item">powershell自动补全</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -506,8 +497,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">powershell自动补全</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%89%A7%E8%A1%8C"><span class="nav-text">1. 执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">nexus repository</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD%E9%95%9C%E5%83%8F"><span class="nav-text">1. 下载镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BF%AE%E6%94%B9%E5%B9%B6%E5%AE%89%E8%A3%85"><span class="nav-text">2. 修改并安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%99%BB%E5%BD%95"><span class="nav-text">3. 登录</span></a></li></ol>
 
     </div>
 </div>
