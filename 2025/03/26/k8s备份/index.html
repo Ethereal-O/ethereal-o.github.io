@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 安装etcd客户端1apt install etcd-client  2. 创建备份1234567mkdir .&#x2F;etcd-backupETCDCTL_API&#x3D;3 etcdctl --endpoints&#x3D;https:&#x2F;&#x2F;127.0.0.1:2379 \                      --cacert&#x3D;&#x2F;etc&#x2F;kubernetes&#x2F;pki&#x2F;etcd&#x2F;ca.crt \">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-26T08:09:53.000Z">
-<meta property="article:modified_time" content="2025-03-26T08:21:15.162Z">
+<meta property="article:modified_time" content="2025-03-26T09:21:08.891Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-26 16:21:15</span>
-            <span class="mobile">2025-03-26 16:21</span>
+            <span class="desktop">2025-03-26 17:21:08</span>
+            <span class="mobile">2025-03-26 17:21</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -385,6 +385,9 @@
                 <h2 id="1-安装etcd客户端"><a href="#1-安装etcd客户端" class="headerlink" title="1. 安装etcd客户端"></a>1. 安装etcd客户端</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install etcd-client</span><br></pre></td></tr></table></figure></div>
 
 <h2 id="2-创建备份"><a href="#2-创建备份" class="headerlink" title="2. 创建备份"></a>2. 创建备份</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir ./etcd-backup</span><br><span class="line"></span><br><span class="line">ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \</span><br><span class="line">                      --cacert=/etc/kubernetes/pki/etcd/ca.crt \</span><br><span class="line">                      --cert=/etc/kubernetes/pki/etcd/server.crt \</span><br><span class="line">                      --key=/etc/kubernetes/pki/etcd/server.key \</span><br><span class="line">snapshot save ./etcd-backup/etcdbackup.db</span><br></pre></td></tr></table></figure></div>
+
+<p>其他备份</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/confirm                               #备份源集群文件</span><br><span class="line">cp -rf /etc/kubernetes/ ~/confirm/    </span><br><span class="line">ll ~/confirm/kubernetes/</span><br><span class="line"></span><br><span class="line">mkdir confirm/data_etcd                       #备份ETCD</span><br><span class="line">cp -rf /var/lib/etcd/* ~/confirm/data_etcd  </span><br><span class="line"></span><br><span class="line">cp /usr/bin/kubeadm /usr/bin/kubeadm.bak</span><br></pre></td></tr></table></figure></div>
 
 <h2 id="3-测试备份是否成功"><a href="#3-测试备份是否成功" class="headerlink" title="3. 测试备份是否成功"></a>3. 测试备份是否成功</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ETCDCTL_API=3 etcdctl --write-out=table snapshot status ./etcd-backup/etcdbackup.db </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ETCDCTL_API=3 etcdctl snapshot restore etcd-backup/etcdbackup.db</span><br></pre></td></tr></table></figure></div>
 
@@ -421,7 +424,7 @@
         <li><strong>Created at:</strong> 2025-03-26 16:09:53</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-03-26 16:21:15
+                <strong>Updated at:</strong> 2025-03-26 17:21:08
             </li>
         
         <li>
@@ -442,6 +445,21 @@
 
             
                 <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2025/03/26/smb-nfs-csi/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">smb&amp;nfs csi</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
                     
                     
                         <div class="article-next">
