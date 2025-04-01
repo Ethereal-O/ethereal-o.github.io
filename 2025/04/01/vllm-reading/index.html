@@ -13,18 +13,24 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/archives/2023/10/"/>
+    <link rel="canonical" href="http://example.com/2025/04/01/vllm-reading/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2023/10/index.html">
+        <meta name="description" content="1. 代码梳理1.1 逻辑1.1.1 初始化初始化模型: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): executor_class(vllm_config&#x3D;vllm_config, )【根据配置加载executor】-&gt;_init_executor(vllm&#x2F;executor&#x2F;cpu_executor.py):">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vllm reading">
+<meta property="og:url" content="http://example.com/2025/04/01/vllm-reading/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 代码梳理1.1 逻辑1.1.1 初始化初始化模型: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): executor_class(vllm_config&#x3D;vllm_config, )【根据配置加载executor】-&gt;_init_executor(vllm&#x2F;executor&#x2F;cpu_executor.py):">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
+<meta property="article:published_time" content="2025-04-01T06:21:35.000Z">
+<meta property="article:modified_time" content="2025-04-01T11:59:01.864Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
     
     
     <!--- Icon Part-->
@@ -36,7 +42,7 @@
     
     <title>
         
-            Archive: 2023/10 -
+            vllm reading -
         
         Ethereal&#39;s Blog
     </title>
@@ -318,326 +324,235 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="archive-container ">
-        
-<div class="archive-list-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">vllm reading</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-04-01 14:21:35</span>
+        <span class="mobile">2025-04-01 14:21</span>
+        <span class="hover-info">Created</span>
+    </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2025</span>
-                <span class="archive-year-post-count">[10]</span>
-            </div>
-            <ul class="article-list">
-              
-              <li class="article-item" date-is='04-01'>
-                <a href="/2025/04/01/vllm-reading/">
-                  <span class="article-title">vllm reading</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-26'>
-                <a href="/2025/03/26/smb-nfs-csi/">
-                  <span class="article-title">smb&amp;nfs csi</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-26'>
-                <a href="/2025/03/26/k8s%E5%A4%87%E4%BB%BD/">
-                  <span class="article-title">k8s备份</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-26'>
-                <a href="/2025/03/26/nexus-repository/">
-                  <span class="article-title">nexus repository</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-20'>
-                <a href="/2025/03/20/powershell%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8/">
-                  <span class="article-title">powershell自动补全</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-10'>
-                <a href="/2025/03/10/argo-airflow%E9%83%A8%E7%BD%B2/">
-                  <span class="article-title">argo/airflow部署</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-10'>
-                <a href="/2025/03/10/k8s%E6%90%AD%E5%BB%BA%E9%AB%98%E5%8F%AF%E7%94%A8pg%E9%9B%86%E7%BE%A4/">
-                  <span class="article-title">k8s搭建高可用pg集群</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-04'>
-                <a href="/2025/03/04/ceph%E9%83%A8%E7%BD%B2/">
-                  <span class="article-title">ceph部署</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='02-24'>
-                <a href="/2025/02/24/k8s%E4%BD%BF%E7%94%A8gpu/">
-                  <span class="article-title">k8s使用gpu</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='02-07'>
-                <a href="/2025/02/07/kafka-with-others/">
-                  <span class="article-title">kafka with others</span>
-                </a>
-              </li>
-              
-            </ul>
-        </section>
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-04-01 19:59:01</span>
+            <span class="mobile">2025-04-01 19:59</span>
+            <span class="hover-info">Updated</span>
+        </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2024</span>
-                <span class="archive-year-post-count">[26]</span>
-            </div>
-            <ul class="article-list">
-              
-              <li class="article-item" date-is='12-22'>
-                <a href="/2024/12/22/nfs-ganesha%E8%B7%AF%E5%BE%84%E6%A2%B3%E7%90%86/">
-                  <span class="article-title">nfs-ganesha路径梳理</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-02'>
-                <a href="/2024/12/02/lustre%E5%AD%A6%E4%B9%A0/">
-                  <span class="article-title">lustre学习</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-20'>
-                <a href="/2024/11/20/redis-insight/">
-                  <span class="article-title">redis-insight</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-13'>
-                <a href="/2024/11/13/wireguard%E8%BF%81%E7%A7%BB%E6%96%B9%E6%A1%88/">
-                  <span class="article-title">wireguard迁移方案</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-31'>
-                <a href="/2024/10/31/kubevirt%E5%85%A5%E9%97%A8/">
-                  <span class="article-title">kubevirt入门</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-16'>
-                <a href="/2024/10/16/openharmony%E8%BD%AF%E6%80%BB%E7%BA%BF/">
-                  <span class="article-title">openharmony软总线</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='09-28'>
-                <a href="/2024/09/28/helm%E9%83%A8%E7%BD%B2%E6%98%93%E7%94%A8ubuntu/">
-                  <span class="article-title">helm部署易用ubuntu</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='09-27'>
-                <a href="/2024/09/27/%E6%96%B0k8s%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88/">
-                  <span class="article-title">新k8s部署方案</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='09-26'>
-                <a href="/2024/09/26/mysql%E4%B8%BB%E4%B8%BB%E5%A4%87%E4%BB%BD/">
-                  <span class="article-title">mysql主主备份</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='09-24'>
-                <a href="/2024/09/24/ssh%E8%BD%AC%E5%8F%91/">
-                  <span class="article-title">ssh转发</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='09-24'>
-                <a href="/2024/09/24/helm%E5%AD%A6%E4%B9%A0/">
-                  <span class="article-title">helm学习</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='08-01'>
-                <a href="/2024/08/01/nv-k8s/">
-                  <span class="article-title">nv-k8s</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='08-01'>
-                <a href="/2024/08/01/jenkins/">
-                  <span class="article-title">jenkins</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-13'>
-                <a href="/2024/07/13/OH%E8%B0%83%E7%94%A8NAPI%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                  <span class="article-title">OH调用NAPI数据库</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-02'>
-                <a href="/2024/07/02/csi/">
-                  <span class="article-title">csi</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-02'>
-                <a href="/2024/07/02/k8s%E4%BD%BF%E7%94%A8csi/">
-                  <span class="article-title">k8s使用csi</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='06-14'>
-                <a href="/2024/06/14/nfs-ganesha%E7%BC%96%E8%AF%91/">
-                  <span class="article-title">nfs-ganesha编译</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='05-19'>
-                <a href="/2024/05/19/%E7%BB%84raid/">
-                  <span class="article-title">组raid</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='05-08'>
-                <a href="/2024/05/08/OH%E9%9A%94%E7%A6%BB%E6%A0%B8%E5%BF%83/">
-                  <span class="article-title">OH隔离核心</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-16'>
-                <a href="/2024/03/16/windows-clang%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
-                  <span class="article-title">windows clang踩坑记录</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-07'>
-                <a href="/2024/03/07/%E5%AD%98%E5%82%A8%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
-                  <span class="article-title">存储基本知识</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='03-01'>
-                <a href="/2024/03/01/%E7%83%A7%E5%86%99OpenHarmony%E9%95%9C%E5%83%8F%E5%88%B0DAYU200%E6%9D%BF%E5%AD%90%E4%B8%8A/">
-                  <span class="article-title">烧写OpenHarmony镜像到DAYU200板子上</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='02-26'>
-                <a href="/2024/02/26/docker%E6%B8%85%E7%90%86/">
-                  <span class="article-title">docker清理</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='02-21'>
-                <a href="/2024/02/21/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E9%98%85%E8%AF%BB/">
-                  <span class="article-title">STL源码剖析阅读</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='01-31'>
-                <a href="/2024/01/31/k8s%E8%8A%82%E7%82%B9%E6%90%AD%E5%BB%BA/">
-                  <span class="article-title">k8s节点搭建</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='01-08'>
-                <a href="/2024/01/08/k8s%E6%90%AD%E5%BB%BAinfluxdb%E5%92%8Ckafka%E9%9B%86%E7%BE%A4/">
-                  <span class="article-title">k8s搭建influxdb和kafka集群</span>
-                </a>
-              </li>
-              
-            </ul>
-        </section>
+
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2023</span>
-                <span class="archive-year-post-count">[11]</span>
-            </div>
-            <ul class="article-list">
-              
-              <li class="article-item" date-is='12-28'>
-                <a href="/2023/12/28/JPA%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%E4%B8%8E%E6%96%B0%E4%BA%8B%E5%8A%A1%E7%BB%93%E5%90%88/">
-                  <span class="article-title">JPA延迟加载与新事务结合</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-18'>
-                <a href="/2023/12/18/%E7%A7%BB%E6%A4%8DPLC%E7%A8%8B%E5%BA%8F%E5%88%B0OpenHarmony%E4%B8%8A/">
-                  <span class="article-title">移植PLC程序到OpenHarmony上</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-17'>
-                <a href="/2023/12/17/%E5%B5%8C%E5%A5%97transaction%E4%B8%AD%E7%9A%84try-catch/">
-                  <span class="article-title">嵌套transaction中的try catch</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='12-07'>
-                <a href="/2023/12/07/mysql%E9%9B%86%E7%BE%A4-k8s%E9%9B%86%E7%BE%A4/">
-                  <span class="article-title">mysql集群+k8s集群</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-12'>
-                <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">
-                  <span class="article-title">备份QQ聊天记录</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='11-07'>
-                <a href="/2023/11/07/%E9%83%A8%E7%BD%B2VPN%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%B3Azure%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                  <span class="article-title">部署VPN服务器至Azure服务器</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-27'>
-                <a href="/2023/10/27/Github-actions/">
-                  <span class="article-title">Github actions</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='10-22'>
-                <a href="/2023/10/22/%E7%A7%BB%E5%8A%A8%E5%9B%BA%E6%80%81%E5%A4%9A%E7%B3%BB%E7%BB%9F/">
-                  <span class="article-title">移动固态多系统</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='08-12'>
-                <a href="/2023/08/12/MiAC2100IPv6/">
-                  <span class="article-title">MiAC2100IPv6</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-25'>
-                <a href="/2023/07/25/maven-for-JNA/">
-                  <span class="article-title">maven for JNA</span>
-                </a>
-              </li>
-              
-              <li class="article-item" date-is='07-12'>
-                <a href="/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/">
-                  <span class="article-title">k8s集群搭建</span>
-                </a>
-              </li>
-              
-            </ul>
-        </section>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
     
 </div>
 
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-代码梳理"><a href="#1-代码梳理" class="headerlink" title="1. 代码梳理"></a>1. 代码梳理</h2><h3 id="1-1-逻辑"><a href="#1-1-逻辑" class="headerlink" title="1.1 逻辑"></a>1.1 逻辑</h3><h4 id="1-1-1-初始化"><a href="#1-1-1-初始化" class="headerlink" title="1.1.1 初始化"></a>1.1.1 初始化</h4><p>初始化模型: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): executor_class(vllm_config&#x3D;vllm_config, )【根据配置加载executor】-&gt;_init_executor(vllm&#x2F;executor&#x2F;cpu_executor.py): self.driver_worker &#x3D; self._create_worker()【创建driver worker进程】; self._run_workers(“load_model”)【调用worker进程加载模型】-&gt;__init__(vllm&#x2F;worker&#x2F;cpu_worker.py): ModelRunnerClass(…)【根据配置创建modelRunner】-&gt;load_model(vllm&#x2F;worker&#x2F;cpu_model_runner.py):get_model()【加载模型】-&gt;get_model(vllm&#x2F;model_executor&#x2F;model_loader&#x2F;__init__.py):get_model_loader()【找到对应的模型加载类】;get_model_architecture(model_config)[0]-&gt;ModelRegistry.resolve_model_cls(architectures)-&gt;BartForConditionalGeneration(vllm&#x2F;model_executor&#x2F;models&#x2F;bart.py)</p>
+<p>初始化kv_cache: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): </p>
+<p>            determine_num_available_blocks()-&gt;self.driver_method_invoker(self.driver_worker,”determine_num_available_blocks”)-&gt;determine_num_available_blocks()</p>
+<p>            _initialize_kv_caches()-&gt;initialize_cache(vllm&#x2F;executor&#x2F;cpu_executor.py)-&gt;initialize_cache(vllm&#x2F;worker&#x2F;cpu_worker.py):_validate_num_cpu_blocks(); _init_cache_engine()-&gt;</p>
+<p>初始化调度器: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): self.scheduler &#x3D; …-&gt;</p>
+<p>初始化输出器: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): SequenceGroupOutputProcessor.create_output_processor</p>
+<h4 id="1-1-2-运行"><a href="#1-1-2-运行" class="headerlink" title="1.1.2 运行"></a>1.1.2 运行</h4><p>step(vllm&#x2F;engine&#x2F;llm_engine.py)-&gt;schedule(vllm&#x2F;core&#x2F;scheduler.py)-&gt;默认调度策略</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg"
+                      alt="v2-7657eeecc40011e57c2f85e9632c2a85_r"
+                ></p>
+<h3 id="1-2-新增内容"><a href="#1-2-新增内容" class="headerlink" title="1.2 新增内容"></a>1.2 新增内容</h3><p>本项目基于 vLLM 设计并构建了一个支持 Prefill 和 Decode 动态拆分合并的推理引擎系统。现有的 PD 分离架构侧重于满足时延要求（TTFT、TBT）要求，但资源利用率和吞吐量低；而 PD 混合架构有较高资源利用率，但Prefill和Decode请求间的干扰可能导致时延无法满足。因此我们在 PD 混合部署的基础上，允许 Prefill 和 Decode 请求通过动态拆分合并机制组成 batch，从而在保证资源利用率的同时尽可能满足时延要求。</p>
+<p>为了实现上述目标，本项目需要实现两个模块：Prefill 和 Decode 性能建模模块以及调度模块。在给定的硬件和模型信息下，Prefill 和 Decode 性能建模模块负责建立大模型推理的性能模型，以预测 任意batch 的执行时间。调度模块则需要根据请求的 SLO 信息、当前工作负载以及性能模型的预测结果，调度请求的执行，以最大化有效吞吐量（goodput）。</p>
+<h4 id="Prefill和Decode性能建模模块"><a href="#Prefill和Decode性能建模模块" class="headerlink" title="Prefill和Decode性能建模模块"></a>Prefill和Decode性能建模模块</h4><p>Prefill 和 Decode 性能建模模块负责为调度模块提供任意 batch 的执行时长预测结果。该模块通过分析 Prefill 和 Decode 的执行特性，并结合模型及硬件信息，提出了建模公式。该公式能够支持对包含任意 Prefill 和 Decode 请求的 batch 的执行时间进行预测。</p>
+<p>考虑大语言模型的执行特性，参考DistServe对Prefill和Decode单独建模的方式，我们提出Prefill和Decode的混合建模，具体考虑了如下因素：</p>
+<ul>
+<li>$t$: batch中prefill请求的token的数量和。</li>
+<li>$t_{2} $: batch中prefill请求的token的数量平方和。</li>
+<li>$t_3$：batch中decode请求token的数量和。</li>
+<li>$B_d$：batch中decode请求的数量。</li>
+</ul>
+<p>我们提出如下建模公式：$T_{batch} &#x3D; C_1*(t + B_d) + C_2<em>t_2 + C_3</em>t_3 + C_4$。</p>
+<p>在4090设备上基于vLLM测试meta-llama&#x2F;Llama-3.2-3B模型时，我们发现上述建模公式还会受到如下因素影响：</p>
+<ul>
+<li>Tile Quantization：矩阵维度不能被GPU计算单元数整除，导致出现跳变现象。</li>
+<li>Attention串行计算：vLLM中使用了两个不同算子分别计算Prefill和Decode请求的Attention部分，因此需要分别考虑两部分Attention计算的时延。</li>
+<li>Swap开销：vLLM会将KV Cache在主存和显存间换入换出，有额外耗时。</li>
+</ul>
+<p>考虑上述三个因素，我们完善后的建模公式如下：$T_{batch} &#x3D; C_1*(t + B_d) + C_2<em>t_2 + C_3</em>t_3 + C_4((t + B_d + 63) &#x2F; 64) + C_5* (B_d &gt; 0) + C_6 * num_swap + C_7$。其中$C_n$为待拟合参数；$C_4$项与Tile Quantization相关；$C_5$项与Attention串行计算相关；$C_6$项与Swap开销相关且可以通过离线测试确定取值。</p>
+<p>基于上述建模公式，利用离线测试得到的真实数据，可对公式中的参数进行拟合得到具体数值。在基于4090硬件对meta-llama&#x2F;Llama-3.2-3B的实际测试中，建模预测结果与真实结果误差在5%内。</p>
+<p>相关代码在modeling_submit分支：</p>
+<ul>
+<li>modeling&#x2F;pd_mixed_fitting.py</li>
+<li>vllm&#x2F;utils.py的RecordManager类</li>
+<li>vllm&#x2F;engine&#x2F;llm_engine.py的record_batch方法</li>
+</ul>
+<h4 id="调度模块"><a href="#调度模块" class="headerlink" title="调度模块"></a>调度模块</h4><p>调度模块基于TTFT和TBT要求调度请求的执行，目标是最大化goodput。具体而言，调度模块会依据性能建模模块的预测结果，构建一个既不会违背最紧急请求SLO要求，又能尽可能最大化算力使用的batch，从而在保证时延的同时提升资源利用率。</p>
+<h5 id="请求的动态拆分合并"><a href="#请求的动态拆分合并" class="headerlink" title="请求的动态拆分合并"></a>请求的动态拆分合并</h5><p>在 vLLM 中，请求分为三类：Decode 请求、Prefill 请求和 swapped 请求。在我们设计的请求动态拆分合并机制中，调度器不对这三种请求进行区分。每轮调度时，调度器会根据 SLO 的余量对这三类请求进行排序，SLO 余量越少的请求越紧急，优先级越高，将优先被调度。</p>
+<p>每轮调度，调度器以当前最紧急请求的SLO余量作为当前batch的最大允许时间（batch_slo），同时会维护当前轮次已调度请求的信息（scheduled_batch）。在判断下一个请求是否能够在本轮被调度时，调度器会将当前请求加入scheduled_batch中，然后基于性能建模模块预测其执行时间。如果预测的执行时间小于batch_slo，则成功加入；否则，移除该请求，不在本轮调度。</p>
+<h5 id="Early-reject机制"><a href="#Early-reject机制" class="headerlink" title="Early reject机制"></a>Early reject机制</h5><p>为了防止因执行某个过长的请求导致多个正在排队级联超时，我们引入了early reject机制。在判断是否应该调度某个请求时，我们会依据建模模块预测的执行时间，以及剩余待调度请求的SLO余量，计算如果调度当前请求会导致多少后续排队请求超时。如果会造成多个请求级联超时，则在本轮拒绝调度该请求。此外，每次调度时，调度器会扫描请求队列，并拒绝已经超时的请求。</p>
+<p>主要代码在test_submit分支：</p>
+<ul>
+<li>vllm&#x2F;core&#x2F;scheduler.py</li>
+</ul>
+<p><em><strong>调度模块核心是_schedule_chunked_prefill_slo_aware</strong></em>：会不断加入scheduled_batch，直到发现条件不满足，选择踢掉prefill重试，直到没有prefill的任务，再执行</p>
+<h2 id="2-相似工作（SGLang）"><a href="#2-相似工作（SGLang）" class="headerlink" title="2. 相似工作（SGLang）"></a>2. 相似工作（SGLang）</h2><p><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.06180" >[2309.06180] Efficient Memory Management for Large Language Model Serving with PagedAttention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/18942501855" >SGLang和vLLM 大模型推理引擎对比 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/691045737" >图解大模型计算加速系列：vLLM源码解析1，整体架构 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692540949" >图解大模型计算加速系列：vLLM源码解析2，调度器策略(Scheduler) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm/blob/main/vllm/core/scheduler.py" >vllm&#x2F;vllm&#x2F;core&#x2F;scheduler.py at main · vllm-project&#x2F;vllm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.06180" >[2309.06180] Efficient Memory Management for Large Language Model Serving with PagedAttention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> vllm reading</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-04-01 14:21:35</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2025-04-01 19:59:01
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/01/vllm-reading/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/03/26/smb-nfs-csi/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">smb&amp;nfs csi</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">vllm reading</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1. 代码梳理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%80%BB%E8%BE%91"><span class="nav-text">1.1 逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%96%B0%E5%A2%9E%E5%86%85%E5%AE%B9"><span class="nav-text">1.2 新增内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E4%BC%BC%E5%B7%A5%E4%BD%9C%EF%BC%88SGLang%EF%BC%89"><span class="nav-text">2. 相似工作（SGLang）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
     </div>
 </div>
+            </div>
+        
+    </div>
+</div>
+
 
                 
 
@@ -710,6 +625,27 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
@@ -821,6 +757,16 @@
 
 
 <div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
     
 </div>
 
