@@ -25,10 +25,13 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="1. 配置ip123456789101112131415nmtui # 配置某个静态ip作为k8s连接地址 ## 注意，如果上层不接受IP或无需配置，则可以跳过此步骤，直接以当前IP作为浮动IP# 重启应用配置 nmcli connection up eno1readonly cluster_float_ip&#x3D;&quot;192.168.29.100&quot;vim &#x2F;etc&#x2F;hosts添加自己">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/285b0d9ff978531f2f5881a1ba9a4606.png">
+<meta property="og:image" content="file:///D:/Ethereal/Pictures/Typedown/003b337f-3529-4995-bef9-94559e8b3604.png?msec=1743578730166">
 <meta property="article:published_time" content="2024-09-27T14:55:06.000Z">
-<meta property="article:modified_time" content="2025-03-29T07:55:25.231Z">
+<meta property="article:modified_time" content="2025-04-02T07:27:19.900Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/285b0d9ff978531f2f5881a1ba9a4606.png">
     
     
     <!--- Icon Part-->
@@ -357,8 +360,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-29 15:55:25</span>
-            <span class="mobile">2025-03-29 15:55</span>
+            <span class="desktop">2025-04-02 15:27:19</span>
+            <span class="mobile">2025-04-02 15:27</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -478,7 +481,175 @@ kubectl get secret --namespace grafana grafana -o jsonpath=&quot;&#123;.data.adm
 <h3 id="13-4-暴露metrics"><a href="#13-4-暴露metrics" class="headerlink" title="13.4 暴露metrics"></a>13.4 暴露metrics</h3><p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2336856" >[1228]Python prometheus-client使用方式-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <h2 id="14-更新配置文件"><a href="#14-更新配置文件" class="headerlink" title="14. 更新配置文件"></a>14. 更新配置文件</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改yaml配置文件路径/etc/kubernetes/manifests/kube-apiserver.yaml</span></span><br><span class="line">vim /etc/kubernetes/manifests/kube-apiserver.yaml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">当修改完成后自动重启pod</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">其余配置路径/etc/kubernetes/controller-manager.conf</span></span><br><span class="line">vim /etc/kubernetes/controller-manager.conf</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="15-参考"><a href="#15-参考" class="headerlink" title="15. 参考"></a>15. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ldjjbzh626/article/details/128400797" >k8s集群部署时etcd容器不停重启问题及处理_6443: connect: connection refused-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="15-架构"><a href="#15-架构" class="headerlink" title="15. 架构"></a>15. 架构</h2><h3 id="15-1-端到端流程"><a href="#15-1-端到端流程" class="headerlink" title="15.1 端到端流程"></a>15.1 端到端流程</h3><h4 id="15-1-1-deployment"><a href="#15-1-1-deployment" class="headerlink" title="15.1.1 deployment"></a>15.1.1 deployment</h4><ol>
+<li><p>用户编写某个对象的yaml文件并通过kubectl提交，例如deployment</p>
+</li>
+<li><p>kubectl访问api-server，api-server将数据写入etcd</p>
+</li>
+<li><p>可选：kube-controller-manager根据用户提交的类型创建新的资源</p>
+<ol>
+<li><p>对于deployment，需要创建replicaset，通过api-server写入新的replicaset</p>
+</li>
+<li><p>对于新的replicaset，需要创建pod，通过api-server写入新的pod</p>
+</li>
+</ol>
+</li>
+<li><p>kube-scheduler监听到pod已经创建，进入调度阶段，调度pod到一个节点上，写入api-server，更新pod位置信息</p>
+</li>
+<li><p>kubelet创建pod</p>
+<ol>
+<li><p>监听到有pod需要在当前节点上创建</p>
+</li>
+<li><p><strong>kubelet</strong> 调用 <strong>容器运行时</strong>（如 containerd）创建 Pod 的沙盒容器（<code>pause</code> 容器）</p>
+</li>
+<li><p>向cni申请创建一个ip（此时由cni负责构建网络）</p>
+</li>
+<li><p>向api-server更新ip信息</p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="15-1-2-service"><a href="#15-1-2-service" class="headerlink" title="15.1.2 service"></a>15.1.2 service</h4><ol>
+<li><p>用户编写某个对象的yaml文件并通过kubectl提交</p>
+</li>
+<li><p>kubectl访问api-server，api-server将数据写入etcd</p>
+</li>
+<li><p>controller-manager监听到新的service创建，通过Endpoints Controller选择合适的pod，写入api-server</p>
+</li>
+<li><p>kube-proxy或cilium监听endpoints更新，在每个节点上更新路径</p>
+<ol>
+<li>通过iptables、ipvs方式或ebpf方式（cilium）</li>
+</ol>
+</li>
+<li><p>DNS服务监听service更新，并写入对应的DNS表</p>
+</li>
+</ol>
+<h3 id="15-2-cilium架构"><a href="#15-2-cilium架构" class="headerlink" title="15.2 cilium架构"></a>15.2 cilium架构</h3><h4 id="15-2-1-cilium-operator"><a href="#15-2-1-cilium-operator" class="headerlink" title="15.2.1 cilium-operator"></a>15.2.1 cilium-operator</h4><ul>
+<li><p>用于创建cilium的CRD资源，例如ip池</p>
+</li>
+<li><p>包含ipam，用于ip分配</p>
+</li>
+<li><p>用于与外部数据库同步数据</p>
+</li>
+</ul>
+<h4 id="15-2-2-cilium-envoy"><a href="#15-2-2-cilium-envoy" class="headerlink" title="15.2.2 cilium-envoy"></a>15.2.2 cilium-envoy</h4><ul>
+<li>负责L7级别的功能，例如service的负载均衡策略</li>
+</ul>
+<h4 id="15-2-3-cilium"><a href="#15-2-3-cilium" class="headerlink" title="15.2.3 cilium"></a>15.2.3 cilium</h4><ul>
+<li>负责底层的转发，通过ebpf构建clusterIP到pod的路径</li>
+</ul>
+<h3 id="15-3-kube-controller-manager组成"><a href="#15-3-kube-controller-manager组成" class="headerlink" title="15.3 kube-controller-manager组成"></a>15.3 kube-controller-manager组成</h3><p>路径位于<a class="link"   target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/blob/master/cmd/kube-controller-manager/names/controller_names.go" >kubernetes&#x2F;cmd&#x2F;kube-controller-manager&#x2F;names&#x2F;controller_names.go at master · kubernetes&#x2F;kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/blog_migrate/285b0d9ff978531f2f5881a1ba9a4606.png"
+                      alt="285b0d9ff978531f2f5881a1ba9a4606"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="file:///D:/Ethereal/Pictures/Typedown/003b337f-3529-4995-bef9-94559e8b3604.png?msec=1743578730166"
+                      alt="003b337f35294995bef994559e8b3604"
+                ></p>
+<ul>
+<li><p>replication controller: （<em><strong>已经废弃</strong></em>）保证replicaset中pod数目保持预期</p>
+</li>
+<li><p>node controller: 监听并更新node的相关信息</p>
+</li>
+<li><p>cronjob controller: 管理cronJob</p>
+</li>
+<li><p>daemonset controller: 监听daemonset创建并更新pod</p>
+</li>
+<li><p>deployment controller: 监听deployment创建并更新replicaset</p>
+</li>
+<li><p>endpoint controller: 更新service对应的pod列表</p>
+</li>
+<li><p>grabage controller: 监听资源对象事件，更新对象之间的依赖关系，并根据对象的删除策略来决定是否删除其关联对象。</p>
+</li>
+<li><p>namespace controller: 管理namespace的信息以及配置</p>
+</li>
+<li><p>job controller: 负责管理job，类似cronjob controller</p>
+</li>
+<li><p>pod autoscaler: 负责管理自动扩展，允许根据资源情况更新deployment或statefulset等对象当前的replicaset创建的pod数目</p>
+</li>
+<li><p>replicaset: 保证replicaset中pod数目保持预期</p>
+</li>
+<li><p>service controller: 检查service与外部的配置，例如LoadBalancer方式创建的service需要与外部loadbalancer云服务进行通信</p>
+</li>
+<li><p>serviceaccounttoken controller: 监听Service Account和Namespace的事件，如果在一个Namespace中没有default Service Account，那么Service Account会给Namespace创建一个默认（default）的Service Account。管理用户token</p>
+</li>
+<li><p>statefulset controller: 监听statefulset创建并更新replicaset</p>
+</li>
+<li><p>volume controller: （已经废弃）</p>
+</li>
+<li><p>PV controller: 监听pvc创建，寻找合适pv绑定，或者调用csi创建pv（in-tree和out-tree方式）；负责pv挂载与卸载到对应pod</p>
+</li>
+<li><p>resource quota controller: 阻止超限创建，例如当申请的pod需要的内存加上现在已经申请的内存超过最大内存时，拒绝创建</p>
+</li>
+<li><p>distruption controller: 在更新等场景时保证Pod最低运行数目</p>
+</li>
+<li><p>certificate… controller: 管理证书</p>
+</li>
+<li><p>ttl controller: 设置资源可以存在时间，到期自动删除</p>
+</li>
+<li><p>ttl after finished controller: 到期资源删除后操作管理</p>
+</li>
+<li><p>root ca certificate publisher controller: 对kube-root-ca.crt的configmap进行管理</p>
+</li>
+<li><p>KubeAPIServerClusterTrustBundlePublisherController: 也是证书管理</p>
+</li>
+<li><p>SELinuxWarningController: 识别对于不同selinux场景下使用相同资源，给予警告</p>
+</li>
+<li><p>bootstrapsigner controller: 启动集群或加入集群控制器</p>
+</li>
+<li><p>taint eviction controller: 设定taint</p>
+</li>
+<li><p>clusterRole aggregation controller: 集群权限控制管理器</p>
+</li>
+</ul>
+<h3 id="15-4-参考"><a href="#15-4-参考" class="headerlink" title="15.4 参考"></a>15.4 参考</h3><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/chunmiao3032/article/details/125579058" >apiserver、kube-scheduler、kube-controller-manager原理分析_kube-api kube-controller kube-scheduler-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.thebyte.com.cn/kubernetes/controller-manager-scheduler.html" >Controller-Manager 和 Scheduler | 深入架构原理与实践 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/orchidzjl/p/13651608.html" >k8s中Controller-Manager和Scheduler的选主逻辑 - JL_Zhou - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/reference/command-line-tools-reference/kube-controller-manager/" >kube-controller-manager | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/589302926" >Cilium完全替换kube-proxy - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000044626755" >程序员 - Cilium CNI深度指南 - 个人文章 - SegmentFault 思否 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.cilium.io/en/stable/internals/cilium_operator/" >Cilium Operator — Cilium 1.17.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://juejin.cn/post/7416924104038907945" >Kubernetes 中 Cilium 网络架构详解与流量处理流程1. Cilium 和 Cilium-Operator - 掘金 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/645472234" >Cilium 系列-3-Cilium 的基本组件和重要概念 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/636366486" >Cilium 如何处理 L7 流量 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://skyao.io/learning-cilium/go/" >Go Extension - Cilium学习笔记 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://jimmysong.io/book/cilium-handbook/networking/envoy/" >使用 Envoy 作为 Cilium 的 L7 代理 - Jimmy Song <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/replicationcontroller/" >ReplicationController | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1403890" >深入分析Kubernetes DaemonSet Controller-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/liusy01/p/14290129.html" >k8s之ServiceAccount - 上古伪神 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/355731233" >4.3 使用ReplicaSet而不是ReplicationController - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/tasks/run-application/horizontal-pod-autoscale/" >Pod 水平自动扩缩 | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/daniel-hutao/p/15424620.html" >Kubernetes Job Controller 原理和源码分析（一） - 胡说云原生 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/00d2af2acd5b" >Garbage Controller - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1499113" >kubernetes垃圾回收器GarbageCollector Controller源码分析（一）-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1403890" >深入分析Kubernetes DaemonSet Controller-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/" >CronJob | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/Su-per-man/p/10942856.html" >k8s 组件介绍-kube-controller-manager - 疯狂的米粒儿 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2239412" >Kubernetes Controller 实现机制深度解析-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/cron-jobs/" >CronJob | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/east4ming/article/details/131954464" >Cilium系列-6-从地址伪装从IPtables切换为eBPF_cliium ipv4nativeroutingcidr-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.cilium.io/en/stable/network/ebpf/iptables/" >Iptables Usage — Cilium 1.17.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/lianngkyle/p/15550784.html" >k8s endpoints controller源码分析 - 良凯尔 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/issues/115995" >Code optimize on kubernetes&#x2F;cmd&#x2F;kube-controller-manager&#x2F;app&#x2F;controllermanager.go · Issue #115995 · kubernetes&#x2F;kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/blob/master/cmd/kube-controller-manager/names/controller_names.go" >kubernetes&#x2F;cmd&#x2F;kube-controller-manager&#x2F;names&#x2F;controller_names.go at master · kubernetes&#x2F;kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/lianngkyle/p/14877823.html" >kube-controller-manager源码分析-PV controller分析 - 良凯尔 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1602169" >【玩转腾讯云】K8s存储 —— Attach&#x2F;Detach Controller与TKE现网案例分析-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/ac43a0876a5b" >K8S Pod 保护之 PodDisruptionBudget - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/authorization-resources/cluster-role-v1/" >ClusterRole | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.bookstack.cn/read/karmada-1.12-zh/5505237c5f079b95.md#bootstrapsigner" >配置 - 配置控制器 - 《Karmada v1.12 中文文档》 - 书栈网 · BookStack <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/bootstrap-tokens/" >使用启动引导令牌（Bootstrap Tokens）认证 | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/tasks/configure-pod-container/security-context/" >为 Pod 或容器配置安全上下文 | Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://v1-31.kubernetes.ac.cn/docs/reference/kubernetes-api/authentication-resources/cluster-trust-bundle-v1alpha1/" >ClusterTrustBundle v1alpha1 | Kubernetes (K8s) 中文 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/3503c0efd444" >kube controller manager之root-ca-cert-publisher 简单记录 - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/TwiN/k8s-ttl-controller" >TwiN&#x2F;k8s-ttl-controller: Kubernetes controller that enables timed resource deletion using TTL annotation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/367827614" >Kubernetes Pod 之 PodDisruptionBudget 简单理解 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42987484/article/details/103935574#:~:text=%E6%9C%AC%E6%96%87%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E4%BA%86Kubernetes%E7%9A%84scheduler%E7%BB%84%E4%BB%B6%EF%BC%8C%E5%8C%85%E6%8B%AC%E5%85%B6%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E3%80%81%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B%E3%80%81%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%EF%BC%88%E9%A2%84%E9%80%89%E7%AD%96%E7%95%A5%E4%B8%8E%E4%BC%98%E9%80%89%E7%AD%96%E7%95%A5%EF%BC%89%E3%80%81%E4%BC%98%E5%85%88%E7%BA%A7%E4%B8%8E%E6%8A%A2%E5%8D%A0%E6%9C%BA%E5%88%B6%E3%80%82,%E8%AE%A8%E8%AE%BA%E4%BA%86scheduler%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E6%9C%80%E4%BD%B3%E8%8A%82%E7%82%B9%EF%BC%8C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86Pod%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%EF%BC%8C%E5%B9%B6%E6%8E%A2%E8%AE%A8%E4%BA%86%E8%B0%83%E5%BA%A6%E5%99%A8%E7%9A%84%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2%E9%80%89%E9%A1%B9%E3%80%82%20%E9%80%9A%E8%BF%87%E5%AF%B9scheduler%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%EF%BC%8C%E8%AF%BB%E8%80%85%E5%8F%AF%E4%BB%A5%E6%9B%B4%E5%A5%BD%E5%9C%B0%E6%8E%8C%E6%8F%A1Kubernetes%E9%9B%86%E7%BE%A4%E8%B5%84%E6%BA%90%E7%9A%84%E7%AE%A1%E7%90%86%E5%92%8C%E8%B0%83%E5%BA%A6%E3%80%82" >k8s学习笔记（8）— kubernetes核心组件之scheduler详解_kubernetes scheduler-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="16-参考"><a href="#16-参考" class="headerlink" title="16. 参考"></a>16. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ldjjbzh626/article/details/128400797" >k8s集群部署时etcd容器不停重启问题及处理_6443: connect: connection refused-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2024/08/01/nv-k8s/" >nv-k8s - Ethereal’s Blog (ethereal-o.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2023/07/12/k8s%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" >k8s集群搭建 - Ethereal’s Blog (ethereal-o.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/cby-chen/kubernetes" >cby-chen&#x2F;Kubernetes: kubernetes (k8s) 二进制高可用安装，Binary installation of kubernetes (k8s) — 开源不易，帮忙点个star，谢谢了🌹 (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -519,7 +690,7 @@ kubectl get secret --namespace grafana grafana -o jsonpath=&quot;&#123;.data.adm
         <li><strong>Created at:</strong> 2024-09-27 22:55:06</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-03-29 15:55:25
+                <strong>Updated at:</strong> 2025-04-02 15:27:19
             </li>
         
         <li>
@@ -629,7 +800,7 @@ kubectl get secret --namespace grafana grafana -o jsonpath=&quot;&#123;.data.adm
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">新k8s部署方案</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%85%8D%E7%BD%AEip"><span class="nav-text">1. 配置ip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="nav-text">2. 初始化配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%8E%B7%E5%8F%96%E4%BE%9D%E8%B5%96"><span class="nav-text">3. 获取依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%8E%B7%E5%8F%96k8s"><span class="nav-text">3. 获取k8s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%85%8D%E7%BD%AEk8s"><span class="nav-text">4. 配置k8s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"><span class="nav-text">5. 配置网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8%EF%BC%88%E6%B3%A8%E6%84%8F%E8%B7%B3%E8%BF%87%E8%B0%83%E5%BA%A6%E6%AD%A5%E9%AA%A4%E7%9A%84pod%E6%97%A0%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BAPV%EF%BC%89"><span class="nav-text">6. 配置本地存储（注意跳过调度步骤的pod无法自动创建PV）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E4%BF%AE%E6%94%B9%E7%BD%91%E7%BB%9C%E4%BB%A3%E7%90%86"><span class="nav-text">7. 修改网络代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E9%83%A8%E7%BD%B2Metrics"><span class="nav-text">8. 部署Metrics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E9%83%A8%E7%BD%B2%E5%AE%8C%E6%88%90%EF%BC%88%E8%BF%90%E8%A1%8C%E6%97%B6%E6%96%87%E4%BB%B6%EF%BC%8C%E4%BE%8B%E5%A6%82%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%E4%BD%8D%E4%BA%8E-x2F-var-x2F-lib-x2F-kubelet%EF%BC%89"><span class="nav-text">9. 部署完成（运行时文件，例如集群状态位于&#x2F;var&#x2F;lib&#x2F;kubelet）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E7%A6%BB%E7%BA%BF%E4%B8%8B%E8%BD%BD%E8%84%9A%E6%9C%AC"><span class="nav-text">10. 离线下载脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E8%AF%81%E4%B9%A6"><span class="nav-text">11. 证书</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#11-1-%E6%A3%80%E6%9F%A5%E8%AF%81%E4%B9%A6%E6%98%AF%E5%90%A6%E8%BF%87%E6%9C%9F"><span class="nav-text">11.1 检查证书是否过期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-2-%E5%A4%87%E4%BB%BD%E5%8E%9F%E6%96%87%E4%BB%B6"><span class="nav-text">11.2 备份原文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-3-%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6"><span class="nav-text">11.3 更新证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-4-kubelet%E8%AF%81%E4%B9%A6%E8%87%AA%E5%8A%A8%E7%BB%AD%E7%AD%BE"><span class="nav-text">11.4 kubelet证书自动续签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-5-%E4%BD%BF%E7%94%A8%E5%BC%80%E6%BA%90%E7%BB%84%E4%BB%B6%E6%9B%B4%E6%96%B0%EF%BC%88%E9%9C%80%E8%A6%81%E9%87%8D%E7%BC%96%E8%AF%91k8s%EF%BC%89"><span class="nav-text">11.5 使用开源组件更新（需要重编译k8s）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-dashboard"><span class="nav-text">12. dashboard</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#12-1-%E5%87%86%E5%A4%87%E7%A6%BB%E7%BA%BFhelm%E9%83%A8%E7%BD%B2%E6%96%87%E4%BB%B6"><span class="nav-text">12.1 准备离线helm部署文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-%E9%83%A8%E7%BD%B2"><span class="nav-text">12.2 部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-%E5%88%9B%E5%BB%BA%E8%B4%A6%E6%88%B7"><span class="nav-text">12.3 创建账户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-4-%E8%AE%BF%E9%97%AE"><span class="nav-text">12.4 访问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-prometheus-grafana"><span class="nav-text">13. prometheus + grafana</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#13-1-%E5%87%86%E5%A4%87%E7%A6%BB%E7%BA%BFhelm%E9%83%A8%E7%BD%B2%E6%96%87%E4%BB%B6"><span class="nav-text">13.1 准备离线helm部署文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-2-%E9%83%A8%E7%BD%B2"><span class="nav-text">13.2 部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-3-%E4%BD%BF%E7%94%A8python%E8%AE%BF%E9%97%AE"><span class="nav-text">13.3 使用python访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-4-%E6%9A%B4%E9%9C%B2metrics"><span class="nav-text">13.4 暴露metrics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-%E6%9B%B4%E6%96%B0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">14. 更新配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-%E5%8F%82%E8%80%83"><span class="nav-text">15. 参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%85%8D%E7%BD%AEip"><span class="nav-text">1. 配置ip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="nav-text">2. 初始化配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%8E%B7%E5%8F%96%E4%BE%9D%E8%B5%96"><span class="nav-text">3. 获取依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%8E%B7%E5%8F%96k8s"><span class="nav-text">3. 获取k8s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%85%8D%E7%BD%AEk8s"><span class="nav-text">4. 配置k8s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"><span class="nav-text">5. 配置网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8%EF%BC%88%E6%B3%A8%E6%84%8F%E8%B7%B3%E8%BF%87%E8%B0%83%E5%BA%A6%E6%AD%A5%E9%AA%A4%E7%9A%84pod%E6%97%A0%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BAPV%EF%BC%89"><span class="nav-text">6. 配置本地存储（注意跳过调度步骤的pod无法自动创建PV）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E4%BF%AE%E6%94%B9%E7%BD%91%E7%BB%9C%E4%BB%A3%E7%90%86"><span class="nav-text">7. 修改网络代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E9%83%A8%E7%BD%B2Metrics"><span class="nav-text">8. 部署Metrics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E9%83%A8%E7%BD%B2%E5%AE%8C%E6%88%90%EF%BC%88%E8%BF%90%E8%A1%8C%E6%97%B6%E6%96%87%E4%BB%B6%EF%BC%8C%E4%BE%8B%E5%A6%82%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%E4%BD%8D%E4%BA%8E-x2F-var-x2F-lib-x2F-kubelet%EF%BC%89"><span class="nav-text">9. 部署完成（运行时文件，例如集群状态位于&#x2F;var&#x2F;lib&#x2F;kubelet）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E7%A6%BB%E7%BA%BF%E4%B8%8B%E8%BD%BD%E8%84%9A%E6%9C%AC"><span class="nav-text">10. 离线下载脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E8%AF%81%E4%B9%A6"><span class="nav-text">11. 证书</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#11-1-%E6%A3%80%E6%9F%A5%E8%AF%81%E4%B9%A6%E6%98%AF%E5%90%A6%E8%BF%87%E6%9C%9F"><span class="nav-text">11.1 检查证书是否过期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-2-%E5%A4%87%E4%BB%BD%E5%8E%9F%E6%96%87%E4%BB%B6"><span class="nav-text">11.2 备份原文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-3-%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6"><span class="nav-text">11.3 更新证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-4-kubelet%E8%AF%81%E4%B9%A6%E8%87%AA%E5%8A%A8%E7%BB%AD%E7%AD%BE"><span class="nav-text">11.4 kubelet证书自动续签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-5-%E4%BD%BF%E7%94%A8%E5%BC%80%E6%BA%90%E7%BB%84%E4%BB%B6%E6%9B%B4%E6%96%B0%EF%BC%88%E9%9C%80%E8%A6%81%E9%87%8D%E7%BC%96%E8%AF%91k8s%EF%BC%89"><span class="nav-text">11.5 使用开源组件更新（需要重编译k8s）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-dashboard"><span class="nav-text">12. dashboard</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#12-1-%E5%87%86%E5%A4%87%E7%A6%BB%E7%BA%BFhelm%E9%83%A8%E7%BD%B2%E6%96%87%E4%BB%B6"><span class="nav-text">12.1 准备离线helm部署文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-%E9%83%A8%E7%BD%B2"><span class="nav-text">12.2 部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-%E5%88%9B%E5%BB%BA%E8%B4%A6%E6%88%B7"><span class="nav-text">12.3 创建账户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-4-%E8%AE%BF%E9%97%AE"><span class="nav-text">12.4 访问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-prometheus-grafana"><span class="nav-text">13. prometheus + grafana</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#13-1-%E5%87%86%E5%A4%87%E7%A6%BB%E7%BA%BFhelm%E9%83%A8%E7%BD%B2%E6%96%87%E4%BB%B6"><span class="nav-text">13.1 准备离线helm部署文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-2-%E9%83%A8%E7%BD%B2"><span class="nav-text">13.2 部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-3-%E4%BD%BF%E7%94%A8python%E8%AE%BF%E9%97%AE"><span class="nav-text">13.3 使用python访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-4-%E6%9A%B4%E9%9C%B2metrics"><span class="nav-text">13.4 暴露metrics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-%E6%9B%B4%E6%96%B0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">14. 更新配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-%E6%9E%B6%E6%9E%84"><span class="nav-text">15. 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#15-1-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%B5%81%E7%A8%8B"><span class="nav-text">15.1 端到端流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-2-cilium%E6%9E%B6%E6%9E%84"><span class="nav-text">15.2 cilium架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-3-kube-controller-manager%E7%BB%84%E6%88%90"><span class="nav-text">15.3 kube-controller-manager组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-4-%E5%8F%82%E8%80%83"><span class="nav-text">15.4 参考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-%E5%8F%82%E8%80%83"><span class="nav-text">16. 参考</span></a></li></ol>
 
     </div>
 </div>
