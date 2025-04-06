@@ -13,24 +13,22 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2025/04/01/vllm-reading/"/>
+    <link rel="canonical" href="http://example.com/2025/04/06/llm-learning/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 代码梳理1.1 逻辑1.1.1 初始化初始化模型: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): executor_class(vllm_config&#x3D;vllm_config, )【根据配置加载executor】-&gt;_init_executor(vllm&#x2F;executor&#x2F;cpu_executor.py):">
+        <meta name="description" content="1. LoRA主要参考 Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vllm reading">
-<meta property="og:url" content="http://example.com/2025/04/01/vllm-reading/index.html">
+<meta property="og:title" content="llm learning">
+<meta property="og:url" content="http://example.com/2025/04/06/llm-learning/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 代码梳理1.1 逻辑1.1.1 初始化初始化模型: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): executor_class(vllm_config&#x3D;vllm_config, )【根据配置加载executor】-&gt;_init_executor(vllm&#x2F;executor&#x2F;cpu_executor.py):">
+<meta property="og:description" content="1. LoRA主要参考 Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
-<meta property="article:published_time" content="2025-04-01T06:21:35.000Z">
-<meta property="article:modified_time" content="2025-04-01T11:59:01.864Z">
+<meta property="article:published_time" content="2025-04-06T09:07:30.000Z">
+<meta property="article:modified_time" content="2025-04-06T10:21:22.247Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
     
     
     <!--- Icon Part-->
@@ -42,7 +40,7 @@
     
     <title>
         
-            vllm reading -
+            llm learning -
         
         Ethereal&#39;s Blog
     </title>
@@ -330,7 +328,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">vllm reading</h1>
+                    <h1 class="article-title-regular">llm learning</h1>
                 </div>
             
                 
@@ -352,15 +350,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-04-01 14:21:35</span>
-        <span class="mobile">2025-04-01 14:21</span>
+        <span class="desktop">2025-04-06 17:07:30</span>
+        <span class="mobile">2025-04-06 17:07</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-04-01 19:59:01</span>
-            <span class="mobile">2025-04-01 19:59</span>
+            <span class="desktop">2025-04-06 18:21:22</span>
+            <span class="mobile">2025-04-06 18:21</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -384,59 +382,97 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="1-代码梳理"><a href="#1-代码梳理" class="headerlink" title="1. 代码梳理"></a>1. 代码梳理</h2><h3 id="1-1-逻辑"><a href="#1-1-逻辑" class="headerlink" title="1.1 逻辑"></a>1.1 逻辑</h3><h4 id="1-1-1-初始化"><a href="#1-1-1-初始化" class="headerlink" title="1.1.1 初始化"></a>1.1.1 初始化</h4><p>初始化模型: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): executor_class(vllm_config&#x3D;vllm_config, )【根据配置加载executor】-&gt;_init_executor(vllm&#x2F;executor&#x2F;cpu_executor.py): self.driver_worker &#x3D; self._create_worker()【创建driver worker进程】; self._run_workers(“load_model”)【调用worker进程加载模型】-&gt;__init__(vllm&#x2F;worker&#x2F;cpu_worker.py): ModelRunnerClass(…)【根据配置创建modelRunner】-&gt;load_model(vllm&#x2F;worker&#x2F;cpu_model_runner.py):get_model()【加载模型】-&gt;get_model(vllm&#x2F;model_executor&#x2F;model_loader&#x2F;__init__.py):get_model_loader()【找到对应的模型加载类】;get_model_architecture(model_config)[0]-&gt;ModelRegistry.resolve_model_cls(architectures)-&gt;BartForConditionalGeneration(vllm&#x2F;model_executor&#x2F;models&#x2F;bart.py)</p>
-<p>初始化kv_cache: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): </p>
-<p>            determine_num_available_blocks()-&gt;self.driver_method_invoker(self.driver_worker,”determine_num_available_blocks”)-&gt;determine_num_available_blocks()</p>
-<p>            _initialize_kv_caches()-&gt;initialize_cache(vllm&#x2F;executor&#x2F;cpu_executor.py)-&gt;initialize_cache(vllm&#x2F;worker&#x2F;cpu_worker.py):_validate_num_cpu_blocks(); _init_cache_engine()-&gt;</p>
-<p>初始化调度器: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): self.scheduler &#x3D; …-&gt;</p>
-<p>初始化输出器: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): SequenceGroupOutputProcessor.create_output_processor</p>
-<h4 id="1-1-2-运行"><a href="#1-1-2-运行" class="headerlink" title="1.1.2 运行"></a>1.1.2 运行</h4><p>step(vllm&#x2F;engine&#x2F;llm_engine.py)-&gt;schedule(vllm&#x2F;core&#x2F;scheduler.py)-&gt;默认调度策略</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg"
-                      alt="v2-7657eeecc40011e57c2f85e9632c2a85_r"
-                ></p>
-<h3 id="1-2-新增内容"><a href="#1-2-新增内容" class="headerlink" title="1.2 新增内容"></a>1.2 新增内容</h3><p>本项目基于 vLLM 设计并构建了一个支持 Prefill 和 Decode 动态拆分合并的推理引擎系统。现有的 PD 分离架构侧重于满足时延要求（TTFT、TBT）要求，但资源利用率和吞吐量低；而 PD 混合架构有较高资源利用率，但Prefill和Decode请求间的干扰可能导致时延无法满足。因此我们在 PD 混合部署的基础上，允许 Prefill 和 Decode 请求通过动态拆分合并机制组成 batch，从而在保证资源利用率的同时尽可能满足时延要求。</p>
-<p>为了实现上述目标，本项目需要实现两个模块：Prefill 和 Decode 性能建模模块以及调度模块。在给定的硬件和模型信息下，Prefill 和 Decode 性能建模模块负责建立大模型推理的性能模型，以预测 任意batch 的执行时间。调度模块则需要根据请求的 SLO 信息、当前工作负载以及性能模型的预测结果，调度请求的执行，以最大化有效吞吐量（goodput）。</p>
-<h4 id="Prefill和Decode性能建模模块"><a href="#Prefill和Decode性能建模模块" class="headerlink" title="Prefill和Decode性能建模模块"></a>Prefill和Decode性能建模模块</h4><p>Prefill 和 Decode 性能建模模块负责为调度模块提供任意 batch 的执行时长预测结果。该模块通过分析 Prefill 和 Decode 的执行特性，并结合模型及硬件信息，提出了建模公式。该公式能够支持对包含任意 Prefill 和 Decode 请求的 batch 的执行时间进行预测。</p>
-<p>考虑大语言模型的执行特性，参考DistServe对Prefill和Decode单独建模的方式，我们提出Prefill和Decode的混合建模，具体考虑了如下因素：</p>
-<ul>
-<li>$t$: batch中prefill请求的token的数量和。</li>
-<li>$t_{2} $: batch中prefill请求的token的数量平方和。</li>
-<li>$t_3$：batch中decode请求token的数量和。</li>
-<li>$B_d$：batch中decode请求的数量。</li>
-</ul>
-<p>我们提出如下建模公式：$T_{batch} &#x3D; C_1*(t + B_d) + C_2<em>t_2 + C_3</em>t_3 + C_4$。</p>
-<p>在4090设备上基于vLLM测试meta-llama&#x2F;Llama-3.2-3B模型时，我们发现上述建模公式还会受到如下因素影响：</p>
-<ul>
-<li>Tile Quantization：矩阵维度不能被GPU计算单元数整除，导致出现跳变现象。</li>
-<li>Attention串行计算：vLLM中使用了两个不同算子分别计算Prefill和Decode请求的Attention部分，因此需要分别考虑两部分Attention计算的时延。</li>
-<li>Swap开销：vLLM会将KV Cache在主存和显存间换入换出，有额外耗时。</li>
-</ul>
-<p>考虑上述三个因素，我们完善后的建模公式如下：$T_{batch} &#x3D; C_1*(t + B_d) + C_2<em>t_2 + C_3</em>t_3 + C_4((t + B_d + 63) &#x2F; 64) + C_5* (B_d &gt; 0) + C_6 * num_swap + C_7$。其中$C_n$为待拟合参数；$C_4$项与Tile Quantization相关；$C_5$项与Attention串行计算相关；$C_6$项与Swap开销相关且可以通过离线测试确定取值。</p>
-<p>基于上述建模公式，利用离线测试得到的真实数据，可对公式中的参数进行拟合得到具体数值。在基于4090硬件对meta-llama&#x2F;Llama-3.2-3B的实际测试中，建模预测结果与真实结果误差在5%内。</p>
-<p>相关代码在modeling_submit分支：</p>
-<ul>
-<li>modeling&#x2F;pd_mixed_fitting.py</li>
-<li>vllm&#x2F;utils.py的RecordManager类</li>
-<li>vllm&#x2F;engine&#x2F;llm_engine.py的record_batch方法</li>
-</ul>
-<h4 id="调度模块"><a href="#调度模块" class="headerlink" title="调度模块"></a>调度模块</h4><p>调度模块基于TTFT和TBT要求调度请求的执行，目标是最大化goodput。具体而言，调度模块会依据性能建模模块的预测结果，构建一个既不会违背最紧急请求SLO要求，又能尽可能最大化算力使用的batch，从而在保证时延的同时提升资源利用率。</p>
-<h5 id="请求的动态拆分合并"><a href="#请求的动态拆分合并" class="headerlink" title="请求的动态拆分合并"></a>请求的动态拆分合并</h5><p>在 vLLM 中，请求分为三类：Decode 请求、Prefill 请求和 swapped 请求。在我们设计的请求动态拆分合并机制中，调度器不对这三种请求进行区分。每轮调度时，调度器会根据 SLO 的余量对这三类请求进行排序，SLO 余量越少的请求越紧急，优先级越高，将优先被调度。</p>
-<p>每轮调度，调度器以当前最紧急请求的SLO余量作为当前batch的最大允许时间（batch_slo），同时会维护当前轮次已调度请求的信息（scheduled_batch）。在判断下一个请求是否能够在本轮被调度时，调度器会将当前请求加入scheduled_batch中，然后基于性能建模模块预测其执行时间。如果预测的执行时间小于batch_slo，则成功加入；否则，移除该请求，不在本轮调度。</p>
-<h5 id="Early-reject机制"><a href="#Early-reject机制" class="headerlink" title="Early reject机制"></a>Early reject机制</h5><p>为了防止因执行某个过长的请求导致多个正在排队级联超时，我们引入了early reject机制。在判断是否应该调度某个请求时，我们会依据建模模块预测的执行时间，以及剩余待调度请求的SLO余量，计算如果调度当前请求会导致多少后续排队请求超时。如果会造成多个请求级联超时，则在本轮拒绝调度该请求。此外，每次调度时，调度器会扫描请求队列，并拒绝已经超时的请求。</p>
-<p>主要代码在test_submit分支：</p>
-<ul>
-<li>vllm&#x2F;core&#x2F;scheduler.py</li>
-</ul>
-<p><em><strong>调度模块核心是_schedule_chunked_prefill_slo_aware</strong></em>：会不断加入scheduled_batch，直到发现条件不满足，选择踢掉prefill重试，直到没有prefill的任务，再执行</p>
-<h2 id="2-相似工作（SGLang）"><a href="#2-相似工作（SGLang）" class="headerlink" title="2. 相似工作（SGLang）"></a>2. 相似工作（SGLang）</h2><p><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.06180" >[2309.06180] Efficient Memory Management for Large Language Model Serving with PagedAttention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/18942501855" >SGLang和vLLM 大模型推理引擎对比 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/691045737" >图解大模型计算加速系列：vLLM源码解析1，整体架构 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692540949" >图解大模型计算加速系列：vLLM源码解析2，调度器策略(Scheduler) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm/blob/main/vllm/core/scheduler.py" >vllm&#x2F;vllm&#x2F;core&#x2F;scheduler.py at main · vllm-project&#x2F;vllm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.06180" >[2309.06180] Efficient Memory Management for Large Language Model Serving with PagedAttention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+                <h2 id="1-LoRA"><a href="#1-LoRA" class="headerlink" title="1. LoRA"></a>1. LoRA</h2><p>主要参考</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN" >Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-YI LEE）2024生成式人工智能导论课程的完整中文镜像作业。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/16.%20%E7%94%A8%20LoRA%20%E5%BE%AE%E8%B0%83%20Stable%20Diffusion%EF%BC%9A%E6%8B%86%E5%BC%80%E7%82%BC%E4%B8%B9%E7%82%89%EF%BC%8C%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%20AI%20%E7%BB%98%E7%94%BB.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;16. 用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="1-1-安装必要包"><a href="#1-1-安装必要包" class="headerlink" title="1.1 安装必要包"></a>1.1 安装必要包</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torch torchvision transformers diffusers peft Pillow tqdm pyyaml accelerate</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-2-设置huggingface镜像"><a href="#1-2-设置huggingface镜像" class="headerlink" title="1.2 设置huggingface镜像"></a>1.2 设置huggingface镜像</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> HF_ENDPOINT=https://hf-mirror.com</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&quot;HF_ENDPOINT&quot;</span>] = <span class="string">&quot;https://hf-mirror.com/&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-3-代码梳理"><a href="#1-3-代码梳理" class="headerlink" title="1.3 代码梳理"></a>1.3 代码梳理</h3><h4 id="1-3-1-加载模型"><a href="#1-3-1-加载模型" class="headerlink" title="1.3.1 加载模型"></a>1.3.1 加载模型</h4><ol>
+<li><p>加载噪声调度器：<code>noise_scheduler = DDPMScheduler.from_pretrained</code></p>
+</li>
+<li><p>加载 Tokenizer：<code>tokenizer = CLIPTokenizer.from_pretrained</code></p>
+</li>
+<li><p>加载 CLIP 文本编码器：<code>text_encoder = CLIPTextModel.from_pretrained</code></p>
+</li>
+<li><p>加载 VAE 模型：<code>vae = AutoencoderKL.from_pretrained</code></p>
+</li>
+<li><p>加载 UNet 模型：<code>unet = UNet2DConditionModel.from_pretrained</code></p>
+</li>
+<li><p>转换为LoRA模型：<code>get_peft_model(text_encoder, lora_config)</code>或<code>PeftModel.from_pretrained(text_encoder, ...)</code></p>
+</li>
+<li><p>获取可训练LoRA参数：<code>text_encoder.print_trainable_parameters()</code></p>
+</li>
+<li><p>冻结不需要训练模型的参数：<code>vae.requires_grad_(False)</code></p>
+</li>
+</ol>
+<h4 id="1-3-2-准备数据"><a href="#1-3-2-准备数据" class="headerlink" title="1.3.2 准备数据"></a>1.3.2 准备数据</h4><ol>
+<li><p>自己定义数据类：<code>Text2ImageDataset</code>（定义<code>__init__</code>、<code>__getitem__</code>、<code>__len__</code>方法）</p>
+</li>
+<li><p>设定数据集预处理方法：<code>transforms.Compose</code></p>
+</li>
+<li><p>加载数据集加载方法：<code>torch.utils.data.DataLoader</code>与<code>collate_fn</code></p>
+</li>
+</ol>
+<h4 id="1-3-3-准备学习器"><a href="#1-3-3-准备学习器" class="headerlink" title="1.3.3 准备学习器"></a>1.3.3 准备学习器</h4><p><code>prepare_optimizer</code>使用AdamW学习器</p>
+<h4 id="1-3-4-准备学习率调节器"><a href="#1-3-4-准备学习率调节器" class="headerlink" title="1.3.4 准备学习率调节器"></a>1.3.4 准备学习率调节器</h4><p><code>get_scheduler</code></p>
+<h4 id="1-3-5-切入训练模式"><a href="#1-3-5-切入训练模式" class="headerlink" title="1.3.5 切入训练模式"></a>1.3.5 切入训练模式</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unet.train()</span><br><span class="line">text_encoder.train()</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="1-3-6-计算损失"><a href="#1-3-6-计算损失" class="headerlink" title="1.3.6 计算损失"></a>1.3.6 计算损失</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取原图像向量</span></span><br><span class="line"><span class="comment">## 编码图像为潜在表示（latent）</span></span><br><span class="line">latents = vae.encode(batch[<span class="string">&quot;pixel_values&quot;</span>].to(DEVICE, dtype=args.weight_dtype)).latent_dist.sample()</span><br><span class="line">latents = latents * vae.config.scaling_factor  <span class="comment">## 根据 VAE 的缩放因子调整潜在空间</span></span><br><span class="line"><span class="comment">## 加入噪声</span></span><br><span class="line">noise = torch.randn_like(latents)  <span class="comment"># 生成与潜在表示相同形状的随机噪声</span></span><br><span class="line">timesteps = torch.randint(<span class="number">0</span>, noise_scheduler.config.num_train_timesteps, (latents.shape[<span class="number">0</span>],), device=DEVICE).long()</span><br><span class="line">noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)</span><br><span class="line"><span class="comment">## 获取文本编码</span></span><br><span class="line">encoder_hidden_states = text_encoder(batch[<span class="string">&quot;input_ids&quot;</span>].to(DEVICE))[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">## 预测噪声</span></span><br><span class="line">model_pred = unet(noisy_latents, timesteps, encoder_hidden_states)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">## 计算损失</span></span><br><span class="line">loss = F.mse_loss(model_pred.<span class="built_in">float</span>(), target.<span class="built_in">float</span>(), reduction=<span class="string">&quot;mean&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="1-3-7-反向传播"><a href="#1-3-7-反向传播" class="headerlink" title="1.3.7 反向传播"></a>1.3.7 反向传播</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loss.backward()</span><br><span class="line">optimizer.step()</span><br><span class="line">lr_scheduler.step()</span><br></pre></td></tr></table></figure></div>
+
+<p>其中，loss给可以调整的参数加上loss标记，做反向传播；optimizer根据学习率与计算方式将梯度应用到当前的参数上；lr_scheduler更新学习率</p>
+<h4 id="1-3-8-推理"><a href="#1-3-8-推理" class="headerlink" title="1.3.8 推理"></a>1.3.8 推理</h4><ol>
+<li><p>切换为评估模式：<code>text_encoder.eval()</code></p>
+</li>
+<li><p>创建SD执行流：<code>DiffusionPipeline.from_pretrained</code></p>
+</li>
+<li><p>加载文本：<code>load_validation_prompts</code></p>
+</li>
+<li><p>创建初始图像：采用随机数<code>torch.Generator</code></p>
+</li>
+<li><p>推理</p>
+</li>
+</ol>
+<h2 id="2-Beam-Search"><a href="#2-Beam-Search" class="headerlink" title="2. Beam Search"></a>2. Beam Search</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/460733009" >图文、代码详解BeamSearch - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>产生预测的方式：全部搜索（不可能）、贪心（不一定全局最优）、多路（束搜索）</p>
+<h2 id="3-采样"><a href="#3-采样" class="headerlink" title="3. 采样"></a>3. 采样</h2><p>top-k：排序后直接取前k个</p>
+<p>top-p：排序后取大于p的</p>
+<h2 id="4-DPO微调"><a href="#4-DPO微调" class="headerlink" title="4. DPO微调"></a>4. DPO微调</h2><p>可以同时对正向和反向的文本进行编码，并根据两者计算loss</p>
+<h2 id="5-量化"><a href="#5-量化" class="headerlink" title="5. 量化"></a>5. 量化</h2><ol>
+<li><p>对称量化</p>
+</li>
+<li><p>非对称量化</p>
+</li>
+</ol>
+<p>区别在于量化值区间是否限制了量化前后零点对应</p>
+<h2 id="6-token与embedding"><a href="#6-token与embedding" class="headerlink" title="6. token与embedding"></a>6. token与embedding</h2><ol>
+<li><p>token：用于将文本映射成序列号</p>
+</li>
+<li><p>embedding：用于丰富token含义</p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42426841/article/details/142670977" >用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画_lora微调stable diffusion-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/2301_78285120/article/details/145434580" >使用 Lora进行微调DeepSeek大模型_deepseek lora-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora" >tloen&#x2F;alpaca-lora: Instruct-tune LLaMA on consumer hardware <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/666000885" >大模型轻量级微调（LoRA）：训练速度、显存占用分析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN" >Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-YI LEE）2024生成式人工智能导论课程的完整中文镜像作业。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_47748259/article/details/135502977" >Stable Diffusion（SD）核心基础知识——（文生图、图生图）_sd模型-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/663712983?s_r=0" >如何快速下载huggingface模型——全方法总结 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/lanlinjnc/article/details/136709225" >huggingface-cli下载数据（含国内镜像源方法）_huggingface-cli download-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/445009191" >理解Pytorch的loss.backward()和optimizer.step() - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_48958956/article/details/137292748" >OSError: Can‘t load tokenizer for ‘bert-base-chinese‘_oserror: can’t load tokenizer for ‘bert-base-chine-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26005193497" >ComfyUI：Stable Diffusion 及 LoRA、VAE 、ControlNet模型解析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/679772356" >AIGC-Stable Diffusion之VAE - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/17.%20%E6%B5%85%E8%B0%88%20RTN%20%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%EF%BC%9A%E9%9D%9E%E5%AF%B9%E7%A7%B0%20vs%20%E5%AF%B9%E7%A7%B0.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;17. 浅谈 RTN 模型量化：非对称 vs 对称.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/g.%20%E5%B5%8C%E5%85%A5%E5%B1%82%20nn.Embedding()%20%E8%AF%A6%E8%A7%A3%E5%92%8C%E8%A6%81%E7%82%B9%E6%8F%90%E9%86%92%EF%BC%88PyTorch%EF%BC%89.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;g. 嵌入层 nn.Embedding() 详解和要点提醒（PyTorch）.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/18.%20%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0%E5%8F%8A%20GGUF%20%26%20GGML%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%A7%A3%E6%9E%90.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;18. 模型量化技术概述及 GGUF &amp; GGML 文件格式解析.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/547087460" >对称量化 VS 非对称量化 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/11.%20DPO%20%E5%BE%AE%E8%B0%83%E7%A4%BA%E4%BE%8B%EF%BC%9A%E6%A0%B9%E6%8D%AE%E4%BA%BA%E7%B1%BB%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96%20LLM%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;11. DPO 微调示例：根据人类偏好优化 LLM 大语言模型.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -444,16 +480,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> vllm reading</li>
+        <li><strong>Title:</strong> llm learning</li>
         <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2025-04-01 14:21:35</li>
+        <li><strong>Created at:</strong> 2025-04-06 17:07:30</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-04-01 19:59:01
+                <strong>Updated at:</strong> 2025-04-06 18:21:22
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/01/vllm-reading/
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/06/llm-learning/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -471,29 +507,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2025/04/06/llm-learning/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">llm learning</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2025/03/26/smb-nfs-csi/"
+                            href="/2025/04/01/vllm-reading/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">smb&amp;nfs csi</span>
+                                    <span class="post-nav-title-item">vllm reading</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -558,8 +579,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">vllm reading</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1. 代码梳理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%80%BB%E8%BE%91"><span class="nav-text">1.1 逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%96%B0%E5%A2%9E%E5%86%85%E5%AE%B9"><span class="nav-text">1.2 新增内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E4%BC%BC%E5%B7%A5%E4%BD%9C%EF%BC%88SGLang%EF%BC%89"><span class="nav-text">2. 相似工作（SGLang）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">llm learning</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LoRA"><span class="nav-text">1. LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E5%8C%85"><span class="nav-text">1.1 安装必要包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%AE%BE%E7%BD%AEhuggingface%E9%95%9C%E5%83%8F"><span class="nav-text">1.2 设置huggingface镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1.3 代码梳理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Beam-Search"><span class="nav-text">2. Beam Search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%87%87%E6%A0%B7"><span class="nav-text">3. 采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-DPO%E5%BE%AE%E8%B0%83"><span class="nav-text">4. DPO微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%87%8F%E5%8C%96"><span class="nav-text">5. 量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-token%E4%B8%8Eembedding"><span class="nav-text">6. token与embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
