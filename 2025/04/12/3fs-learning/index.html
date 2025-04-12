@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/77283e57bfb84be9ae9611f74328f826~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=ekheeig3LqLy%252B4Rg242n4whhekQ%253D">
 <meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/d3dca3319c754407887928192a51d4cc~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=0L6CZpl8cucfnltA7m6AdLSmrWM%253D">
 <meta property="article:published_time" content="2025-04-12T07:16:42.000Z">
-<meta property="article:modified_time" content="2025-04-12T08:50:23.366Z">
+<meta property="article:modified_time" content="2025-04-12T09:20:58.540Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
@@ -364,8 +364,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-04-12 16:50:23</span>
-            <span class="mobile">2025-04-12 16:50</span>
+            <span class="desktop">2025-04-12 17:20:58</span>
+            <span class="mobile">2025-04-12 17:20</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -524,14 +524,12 @@
                       alt="picture.image"
                 ></p>
 <ul>
-<li><p><strong>布局</strong></p>
-<p><img  
+<li><strong>布局</strong><br><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/d3dca3319c754407887928192a51d4cc~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=0L6CZpl8cucfnltA7m6AdLSmrWM%253D"
                       alt="picture.image"
-                ></p>
-</li>
+                ></li>
 </ul>
 <h3 id="1-4-数据恢复"><a href="#1-4-数据恢复" class="headerlink" title="1.4 数据恢复"></a>1.4 数据恢复</h3><p>存储服务崩溃、重启、介质故障，对应的存储 Target 不参与数据写操作，会被移动到 chain 的末尾。</p>
 <ol>
@@ -556,6 +554,133 @@
 </ul>
 <h2 id="2-思考"><a href="#2-思考" class="headerlink" title="2. 思考"></a>2. 思考</h2><h3 id="2-1-分层kv-cache"><a href="#2-1-分层kv-cache" class="headerlink" title="2.1 分层kv-cache"></a>2.1 分层kv-cache</h3><p>3FS提供kv-cache的来源，本地nvme作为kv-cache的缓存，一级位于显存中。使用类似vllm的方式加载或分配kv-cache。</p>
 <h3 id="2-2-向量索引"><a href="#2-2-向量索引" class="headerlink" title="2.2 向量索引"></a>2.2 向量索引</h3><p>使用向量数据库索引，根据索引拉取3FS的kvcache。</p>
+<h4 id="2-2-1-基于树的索引"><a href="#2-2-1-基于树的索引" class="headerlink" title="2.2.1 基于树的索引"></a>2.2.1 基于树的索引</h4><ul>
+<li><p><strong>KD-Tree (K-Dimensional Tree)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：递归地将数据空间沿坐标轴分割成超矩形区域，构建二叉树。</p>
+</li>
+<li><p><strong>优点</strong>：适合低维数据（维度 &lt; 20），支持精确搜索。</p>
+</li>
+<li><p><strong>缺点</strong>：高维数据性能急剧下降（“维度灾难”）。</p>
+</li>
+<li><p><strong>应用场景</strong>：小规模低维数据集（如地理坐标搜索）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Ball Tree</strong></p>
+<ul>
+<li><p><strong>原理</strong>：将数据划分为嵌套的超球体，减少距离计算次数。</p>
+</li>
+<li><p><strong>优点</strong>：相比 KD-Tree，在高维数据中表现更好。</p>
+</li>
+<li><p><strong>缺点</strong>：构建和查询成本较高，适合中等维度。</p>
+</li>
+<li><p><strong>应用场景</strong>：中等维度数据（如特征向量分类）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Annoy (Approximate Nearest Neighbors Oh Yeah)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：通过随机投影构建多棵树，利用投票机制提升搜索效率。</p>
+</li>
+<li><p><strong>优点</strong>：内存占用低，支持并行查询。</p>
+</li>
+<li><p><strong>缺点</strong>：需要调参（树的数量、搜索节点数）。</p>
+</li>
+<li><p><strong>应用场景</strong>：中等规模高维数据（如 Spotify 音乐推荐）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-2-基于哈希的索引"><a href="#2-2-2-基于哈希的索引" class="headerlink" title="2.2.2 基于哈希的索引"></a>2.2.2 基于哈希的索引</h4><p><strong>LSH (Locality-Sensitive Hashing)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：通过哈希函数将相似向量映射到相同桶中，牺牲精度换速度。</p>
+</li>
+<li><p><strong>优点</strong>：查询速度快，适合超大规模数据。</p>
+</li>
+<li><p><strong>缺点</strong>：参数敏感，召回率较低。</p>
+</li>
+<li><p><strong>变体</strong>：Multi-probe LSH（提升召回率）。</p>
+</li>
+<li><p><strong>应用场景</strong>：海量数据快速粗筛（如去重、预过滤）。</p>
+</li>
+</ul>
+<h4 id="2-2-3-基于图的索引"><a href="#2-2-3-基于图的索引" class="headerlink" title="2.2.3 基于图的索引"></a>2.2.3 基于图的索引</h4><ul>
+<li><p><strong>HNSW (Hierarchical Navigable Small World)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：构建多层图结构，上层为稀疏图用于快速导航，下层为稠密图用于精细搜索。</p>
+</li>
+<li><p><strong>优点</strong>：高召回率、低延迟，支持动态更新。</p>
+</li>
+<li><p><strong>缺点</strong>：内存占用较高。</p>
+</li>
+<li><p><strong>应用场景</strong>：高性能实时搜索（如 Milvus、Elasticsearch）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>NSW (Navigable Small World)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：单层图结构，通过贪心算法逐步逼近目标节点。</p>
+</li>
+<li><p><strong>优点</strong>：实现简单，适合中小规模数据。</p>
+</li>
+<li><p><strong>缺点</strong>：性能随数据量增长下降明显。</p>
+</li>
+<li><p><strong>应用场景</strong>：小规模实时搜索。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-4-基于量化的索引"><a href="#2-2-4-基于量化的索引" class="headerlink" title="2.2.4 基于量化的索引"></a>2.2.4 基于量化的索引</h4><ul>
+<li><p><strong>PQ (Product Quantization)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：将高维向量切分为子向量，分别量化并构建码本，用笛卡尔积压缩向量。</p>
+</li>
+<li><p><strong>优点</strong>：大幅减少内存占用，适合超大规模数据。</p>
+</li>
+<li><p><strong>缺点</strong>：量化误差可能影响精度。</p>
+</li>
+<li><p><strong>应用场景</strong>：大规模图像检索（如 Facebook Faiss）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>IVF (Inverted File Index)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：先聚类（如 K-Means），再对每个簇构建倒排索引，搜索时仅遍历最近簇。</p>
+</li>
+<li><p><strong>优点</strong>：结合聚类加速，适合非均匀分布数据。</p>
+</li>
+<li><p><strong>缺点</strong>：聚类质量影响性能。</p>
+</li>
+<li><p><strong>变体</strong>：IVF-PQ（结合量化进一步压缩）。</p>
+</li>
+<li><p><strong>应用场景</strong>：大规模相似性搜索（如 Faiss 的 IVF 系列）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-3-5-混合与优化方案"><a href="#2-3-5-混合与优化方案" class="headerlink" title="2.3.5 混合与优化方案"></a>2.3.5 混合与优化方案</h4><ul>
+<li><p><strong>SCANN (Scalable Nearest Neighbors)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：结合树、哈希和量化，动态选择最优搜索路径。</p>
+</li>
+<li><p><strong>优点</strong>：平衡速度与精度，适合超大规模数据。</p>
+</li>
+<li><p><strong>应用场景</strong>：Google 的大规模向量检索。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>DiskANN</strong></p>
+<ul>
+<li><p><strong>原理</strong>：结合图索引与磁盘存储优化，减少内存依赖。</p>
+</li>
+<li><p><strong>优点</strong>：支持内存受限场景。</p>
+</li>
+<li><p><strong>应用场景</strong>：十亿级数据检索（如微软 Bing 搜索）。</p>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS" >deepseek-ai&#x2F;3FS: A high-performance distributed file system designed to address the challenges of AI training and inference workloads. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/docs/design_notes.md" >3FS&#x2F;docs&#x2F;design_notes.md at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/621480049" >一文快速入门 ClickHouse - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -568,6 +693,12 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27317616324" >DeepSeek：3FS系统介绍 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://developer.volcengine.com/articles/7480397583173877797" >DeepSeek 3FS 架构分析和思考（上篇） - 文章 - 开发者社区 - 火山引擎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/wsqyz/article/details/145938239" >DeepSeek文件系统3FS设计文档-中文翻译-解读_deepseek 3fs 设计文档-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zilliz.com.cn/blog/How-to-choose-the-most-suitable-vector-index-in-RAG-construction" >RAG搭建中，如何选择最合适的向量索引？ - Zilliz 向量数据库 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://community.transwarp.cn/article/900" >向量数据库（三）向量数据库的底层架构及HNSW等索引算法讲解 - 星环开发者社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27399676042" >1W2000字 一文读懂向量数据库：原理、索引技术与选型指南 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42586468/article/details/140368129" >LLM-向量数据库中的索引算法总结_向量数据库索引-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/652730120" >向量数据库（第 3 部分）：并非所有索引都是一样的 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Z4400840/article/details/144964802" >草履虫都看得懂的向量数据库教程，一文就够了_向量数据库使用-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -580,7 +711,7 @@
         <li><strong>Created at:</strong> 2025-04-12 15:16:42</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-04-12 16:50:23
+                <strong>Updated at:</strong> 2025-04-12 17:20:58
             </li>
         
         <li>
