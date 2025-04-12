@@ -13,22 +13,29 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2025/04/06/llm-learning/"/>
+    <link rel="canonical" href="http://example.com/2025/04/12/3fs-learning/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. LoRA主要参考 Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-">
+        <meta name="description" content="1. 设计1.1 架构1.1.1 客户端 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个 Iov 文件和一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="llm learning">
-<meta property="og:url" content="http://example.com/2025/04/06/llm-learning/index.html">
+<meta property="og:title" content="3fs learning">
+<meta property="og:url" content="http://example.com/2025/04/12/3fs-learning/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. LoRA主要参考 Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-">
+<meta property="og:description" content="1. 设计1.1 架构1.1.1 客户端 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个 Iov 文件和一个">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-04-06T09:07:30.000Z">
-<meta property="article:modified_time" content="2025-04-06T10:21:22.247Z">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-fe5d3f294916ce8b6d95f630208702c6_1440w.jpg">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/676be3fe09ec4dc39d134b1b3258a449~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=1fXFqtu0nC%252B83%252BkQdGLvq2M%252BbC4%253D">
+<meta property="og:image" content="https://picx.zhimg.com/v2-0edac3d23a41091586120e2a134a0085_r.jpg">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/77283e57bfb84be9ae9611f74328f826~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=ekheeig3LqLy%252B4Rg242n4whhekQ%253D">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/d3dca3319c754407887928192a51d4cc~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=0L6CZpl8cucfnltA7m6AdLSmrWM%253D">
+<meta property="article:published_time" content="2025-04-12T07:16:42.000Z">
+<meta property="article:modified_time" content="2025-04-12T08:50:23.366Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
     
     
     <!--- Icon Part-->
@@ -40,7 +47,7 @@
     
     <title>
         
-            llm learning -
+            3fs learning -
         
         Ethereal&#39;s Blog
     </title>
@@ -328,7 +335,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">llm learning</h1>
+                    <h1 class="article-title-regular">3fs learning</h1>
                 </div>
             
                 
@@ -350,15 +357,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-04-06 17:07:30</span>
-        <span class="mobile">2025-04-06 17:07</span>
+        <span class="desktop">2025-04-12 15:16:42</span>
+        <span class="mobile">2025-04-12 15:16</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-04-06 18:21:22</span>
-            <span class="mobile">2025-04-06 18:21</span>
+            <span class="desktop">2025-04-12 16:50:23</span>
+            <span class="mobile">2025-04-12 16:50</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -382,97 +389,185 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="1-LoRA"><a href="#1-LoRA" class="headerlink" title="1. LoRA"></a>1. LoRA</h2><p>主要参考</p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN" >Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-YI LEE）2024生成式人工智能导论课程的完整中文镜像作业。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/16.%20%E7%94%A8%20LoRA%20%E5%BE%AE%E8%B0%83%20Stable%20Diffusion%EF%BC%9A%E6%8B%86%E5%BC%80%E7%82%BC%E4%B8%B9%E7%82%89%EF%BC%8C%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%20AI%20%E7%BB%98%E7%94%BB.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;16. 用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<h3 id="1-1-安装必要包"><a href="#1-1-安装必要包" class="headerlink" title="1.1 安装必要包"></a>1.1 安装必要包</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torch torchvision transformers diffusers peft Pillow tqdm pyyaml accelerate</span><br></pre></td></tr></table></figure></div>
-
-<h3 id="1-2-设置huggingface镜像"><a href="#1-2-设置huggingface镜像" class="headerlink" title="1.2 设置huggingface镜像"></a>1.2 设置huggingface镜像</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> HF_ENDPOINT=https://hf-mirror.com</span></span><br></pre></td></tr></table></figure></div>
-
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&quot;HF_ENDPOINT&quot;</span>] = <span class="string">&quot;https://hf-mirror.com/&quot;</span></span><br></pre></td></tr></table></figure></div>
-
-<h3 id="1-3-代码梳理"><a href="#1-3-代码梳理" class="headerlink" title="1.3 代码梳理"></a>1.3 代码梳理</h3><h4 id="1-3-1-加载模型"><a href="#1-3-1-加载模型" class="headerlink" title="1.3.1 加载模型"></a>1.3.1 加载模型</h4><ol>
-<li><p>加载噪声调度器：<code>noise_scheduler = DDPMScheduler.from_pretrained</code></p>
+                <h2 id="1-设计"><a href="#1-设计" class="headerlink" title="1. 设计"></a>1. 设计</h2><h3 id="1-1-架构"><a href="#1-1-架构" class="headerlink" title="1.1 架构"></a>1.1 架构</h3><h4 id="1-1-1-客户端"><a href="#1-1-1-客户端" class="headerlink" title="1.1.1 客户端"></a>1.1.1 客户端</h4><ul>
+<li><p>fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）</p>
 </li>
-<li><p>加载 Tokenizer：<code>tokenizer = CLIPTokenizer.from_pretrained</code></p>
+<li><p>Native client（USRBIO）</p>
+<ul>
+<li><p>File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。</p>
 </li>
-<li><p>加载 CLIP 文本编码器：<code>text_encoder = CLIPTextModel.from_pretrained</code></p>
+<li><p>数据通路走native client：自己开发的library动态库</p>
 </li>
-<li><p>加载 VAE 模型：<code>vae = AutoencoderKL.from_pretrained</code></p>
+<li><p>每个 USRBIO 实例使用一个 Iov 文件和一个 Ior 文件</p>
+<ul>
+<li>Iov 文件用来作为读写数据的 buffer<ul>
+<li>用户提前规划好需要使用的总容量</li>
+<li>文件创建之后 FUSE Daemon 将该其注册成 RDMA memory buffer，进而实现整个链路的零拷贝</li>
+</ul>
 </li>
-<li><p>加载 UNet 模型：<code>unet = UNet2DConditionModel.from_pretrained</code></p>
+<li>Ior 文件用来实现 IoRing<ul>
+<li>用户提前规划好并发度</li>
+<li>在整个文件上抽象出了提交队列和完成队列，具体布局参考上图</li>
+<li>文件的尾部是提交完成队列的信号量，FUSE Daemon 在处理完 IO 后通过这个信号量通知到用户进程</li>
+</ul>
 </li>
-<li><p>转换为LoRA模型：<code>get_peft_model(text_encoder, lora_config)</code>或<code>PeftModel.from_pretrained(text_encoder, ...)</code></p>
+</ul>
 </li>
-<li><p>获取可训练LoRA参数：<code>text_encoder.print_trainable_parameters()</code></p>
+<li><p>一个挂载点的所有 USRBIO 共享 3 个 submit sem 文件</p>
+<ul>
+<li><p>这三个文件作为 IO 提交事件的信号量（submit sem），每一个文件代表一个优先级</p>
 </li>
-<li><p>冻结不需要训练模型的参数：<code>vae.requires_grad_(False)</code></p>
+<li><p>一旦某个 USRBIO 实例有 IO 需要提交，会通过该信号量通知到 FUSE Daemon</p>
+</li>
+</ul>
+</li>
+<li><p>所有的共享内存文件在挂载点 3fs-virt&#x2F;iovs&#x2F; 目录下均建有 symlink，指向 &#x2F;dev&#x2F;shm 下的对应文件。</p>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I="
+                      alt="picture.image"
+                ></p>
+</li>
+</ul>
+<h4 id="1-1-2-服务端"><a href="#1-1-2-服务端" class="headerlink" title="1.1.2 服务端"></a>1.1.2 服务端</h4><ul>
+<li><p>cluster manager：集群状态管理，使用例如etcd等保证，实际使用<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=254486149&content_type=Article&match_order=1&q=FoundationDB&zhida_source=entity" >FoundationDB <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+</li>
+<li><p>meta service：使用FoundationDB存储元数据。</p>
+</li>
+<li><p>storage service：利用<strong>Chain Replication with Apportioned Queries</strong>保证一致性。</p>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic1.zhimg.com/v2-fe5d3f294916ce8b6d95f630208702c6_1440w.jpg"
+                      alt="v2-fe5d3f294916ce8b6d95f630208702c6_1440w"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/676be3fe09ec4dc39d134b1b3258a449~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=1fXFqtu0nC%252B83%252BkQdGLvq2M%252BbC4%253D"
+                      alt="picture.image"
+                ></p>
+<h3 id="1-2-无缓存（针对大模型场景随机读设计，缓存失效）"><a href="#1-2-无缓存（针对大模型场景随机读设计，缓存失效）" class="headerlink" title="1.2 无缓存（针对大模型场景随机读设计，缓存失效）"></a>1.2 无缓存（针对大模型场景随机读设计，缓存失效）</h3><p>在存储系统发展的早期，DRAM 缓存加 HDD 是主流方案，缓存设计弥补了硬件性能的巨大差距。随着 SSD 的引入，DRAM+SSD 的组合成为优化热点数据的利器。然而，全闪存时代的到来让复杂的缓存机制逐渐成为瓶颈。NVMe SSD 的超高性能，使得 DRAM 缓存在某些场景下反而拖慢了系统效率。</p>
+<h3 id="1-3-链式-CRAQ"><a href="#1-3-链式-CRAQ" class="headerlink" title="1.3 链式(CRAQ)"></a>1.3 链式(<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=254415613&content_type=Article&match_order=1&q=CRAQ&zhida_source=entity" >CRAQ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</h3><h4 id="1-3-1-具体操作流程"><a href="#1-3-1-具体操作流程" class="headerlink" title="1.3.1 具体操作流程"></a>1.3.1 具体操作流程</h4><p>CARQ标准实现写操作流程：</p>
+<ol>
+<li>客户端把请求发给chain中的head target.</li>
+<li>head target本地执行完写请求后，把请求转发给 second target， second target同样先完成本地写操作后转发tail target.</li>
+<li>tail target 写成功后，会返回ack给前一个target，同样的ack最后返回给head target.</li>
+<li>head target返回给client，应答客户端成功。</li>
+</ol>
+<p><strong>3FS的的具体写操作</strong></p>
+<ol>
+<li><a class="link"   href="https://link.zhihu.com/?target=http://1.storage/" >storage <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> service接收到write request后，需要检查request带的chain的版本是否是本地最新的版本。如果不是，拒绝该write请求。</li>
+<li>写操作：target service数据通过RDMA Read操作实现，也就说是通过pull的方式拉取的。</li>
+<li><strong>不支持对同一个chunk的并发操作</strong>。在head target实现对同一个chunk的并发操作的串行访问：当数据写入到target的memory buffer中时，会对该chunk加lock锁住。</li>
+<li>每个storage service节点上可能存在同一个chunk的两个版本：committed version和 pending version. 版本号都是单调增加的：pending version &#x3D; committed version + 1</li>
+<li>在tail target，如果写操作成功，更新commited version为最新的pending version，并返回给前一个（predecessor） target</li>
+<li>当每个target收到后面（successor）target的成功的ack返回消息，committed version就会变为最新的pending version，并把ack信息继续返回给predecessor target，本地的chunk lock会被释放。</li>
+<li>head target会做同样的操作：修改commited version，释放chunk lock，返回客户端写操作成功的ack消息。</li>
+</ol>
+<p><strong>3FS读操作</strong></p>
+<p>3FS的读操作可以发送给任意一个chunk副本：</p>
+<ol>
+<li><p>当storage service收到读请求，检查如果对应的data chunk只有一个committed version，就把该版本的数据直接返回给client</p>
+<ol>
+<li><p>NodeX 检查本地 commitVer 和 updateVer 是否相等；</p>
+<ul>
+<li>步骤 2.1：如果不等，说明有其它 flying 的写请求，通知 Client 重试；</li>
+<li>步骤 2.2：如果相等，则从本地 chunk 读取数据，并通过 RDMA 写给 Client；</li>
+</ul>
 </li>
 </ol>
-<h4 id="1-3-2-准备数据"><a href="#1-3-2-准备数据" class="headerlink" title="1.3.2 准备数据"></a>1.3.2 准备数据</h4><ol>
-<li><p>自己定义数据类：<code>Text2ImageDataset</code>（定义<code>__init__</code>、<code>__getitem__</code>、<code>__len__</code>方法）</p>
 </li>
-<li><p>设定数据集预处理方法：<code>transforms.Compose</code></p>
+<li><p><strong>和原始的CRAQ不同，3FS的实现并没有去tail target上去查询确认版本信息</strong>。而是提供了两个选项：</p>
+<ol>
+<li><p>直接返回给客户端一个special status code，用户等一段时间后去重试。</p>
 </li>
-<li><p>加载数据集加载方法：<code>torch.utils.data.DataLoader</code>与<code>collate_fn</code></p>
-</li>
-</ol>
-<h4 id="1-3-3-准备学习器"><a href="#1-3-3-准备学习器" class="headerlink" title="1.3.3 准备学习器"></a>1.3.3 准备学习器</h4><p><code>prepare_optimizer</code>使用AdamW学习器</p>
-<h4 id="1-3-4-准备学习率调节器"><a href="#1-3-4-准备学习率调节器" class="headerlink" title="1.3.4 准备学习率调节器"></a>1.3.4 准备学习率调节器</h4><p><code>get_scheduler</code></p>
-<h4 id="1-3-5-切入训练模式"><a href="#1-3-5-切入训练模式" class="headerlink" title="1.3.5 切入训练模式"></a>1.3.5 切入训练模式</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unet.train()</span><br><span class="line">text_encoder.train()</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="1-3-6-计算损失"><a href="#1-3-6-计算损失" class="headerlink" title="1.3.6 计算损失"></a>1.3.6 计算损失</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取原图像向量</span></span><br><span class="line"><span class="comment">## 编码图像为潜在表示（latent）</span></span><br><span class="line">latents = vae.encode(batch[<span class="string">&quot;pixel_values&quot;</span>].to(DEVICE, dtype=args.weight_dtype)).latent_dist.sample()</span><br><span class="line">latents = latents * vae.config.scaling_factor  <span class="comment">## 根据 VAE 的缩放因子调整潜在空间</span></span><br><span class="line"><span class="comment">## 加入噪声</span></span><br><span class="line">noise = torch.randn_like(latents)  <span class="comment"># 生成与潜在表示相同形状的随机噪声</span></span><br><span class="line">timesteps = torch.randint(<span class="number">0</span>, noise_scheduler.config.num_train_timesteps, (latents.shape[<span class="number">0</span>],), device=DEVICE).long()</span><br><span class="line">noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)</span><br><span class="line"><span class="comment">## 获取文本编码</span></span><br><span class="line">encoder_hidden_states = text_encoder(batch[<span class="string">&quot;input_ids&quot;</span>].to(DEVICE))[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">## 预测噪声</span></span><br><span class="line">model_pred = unet(noisy_latents, timesteps, encoder_hidden_states)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">## 计算损失</span></span><br><span class="line">loss = F.mse_loss(model_pred.<span class="built_in">float</span>(), target.<span class="built_in">float</span>(), reduction=<span class="string">&quot;mean&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="1-3-7-反向传播"><a href="#1-3-7-反向传播" class="headerlink" title="1.3.7 反向传播"></a>1.3.7 反向传播</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loss.backward()</span><br><span class="line">optimizer.step()</span><br><span class="line">lr_scheduler.step()</span><br></pre></td></tr></table></figure></div>
-
-<p>其中，loss给可以调整的参数加上loss标记，做反向传播；optimizer根据学习率与计算方式将梯度应用到当前的参数上；lr_scheduler更新学习率</p>
-<h4 id="1-3-8-推理"><a href="#1-3-8-推理" class="headerlink" title="1.3.8 推理"></a>1.3.8 推理</h4><ol>
-<li><p>切换为评估模式：<code>text_encoder.eval()</code></p>
-</li>
-<li><p>创建SD执行流：<code>DiffusionPipeline.from_pretrained</code></p>
-</li>
-<li><p>加载文本：<code>load_validation_prompts</code></p>
-</li>
-<li><p>创建初始图像：采用随机数<code>torch.Generator</code></p>
-</li>
-<li><p>推理</p>
+<li><p>客户端对数据一致性要求不敏感，可以直接返回pending version版本的数据给客户端。</p>
 </li>
 </ol>
-<h2 id="2-Beam-Search"><a href="#2-Beam-Search" class="headerlink" title="2. Beam Search"></a>2. Beam Search</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/460733009" >图文、代码详解BeamSearch - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p>产生预测的方式：全部搜索（不可能）、贪心（不一定全局最优）、多路（束搜索）</p>
-<h2 id="3-采样"><a href="#3-采样" class="headerlink" title="3. 采样"></a>3. 采样</h2><p>top-k：排序后直接取前k个</p>
-<p>top-p：排序后取大于p的</p>
-<h2 id="4-DPO微调"><a href="#4-DPO微调" class="headerlink" title="4. DPO微调"></a>4. DPO微调</h2><p>可以同时对正向和反向的文本进行编码，并根据两者计算loss</p>
-<h2 id="5-量化"><a href="#5-量化" class="headerlink" title="5. 量化"></a>5. 量化</h2><ol>
-<li><p>对称量化</p>
-</li>
-<li><p>非对称量化</p>
 </li>
 </ol>
-<p>区别在于量化值区间是否限制了量化前后零点对应</p>
-<h2 id="6-token与embedding"><a href="#6-token与embedding" class="headerlink" title="6. token与embedding"></a>6. token与embedding</h2><ol>
-<li><p>token：用于将文本映射成序列号</p>
+<p><strong>错误处理</strong></p>
+<p>如果chain中的target故障，就把该target从chain中删除，然后请求重试。</p>
+<p>3FS系统中的具体处理方法是把故障的target添加到chain链的末尾并标记为offline状态。</p>
+<h4 id="1-3-2-优化"><a href="#1-3-2-优化" class="headerlink" title="1.3.2 优化"></a>1.3.2 优化</h4><ul>
+<li><p><strong>写操作顺序确认（Write-All）</strong>：虽然写操作需沿链顺序传播到所有节点，但RDMA的特性显著优化了这一过程：</p>
+<ul>
+<li><p><strong>RDMA的单边操作（One-Sided）</strong>：节点间通过RDMA直接写入下一节点的内存，无需目标节点CPU介入，降低写延迟。</p>
 </li>
-<li><p>embedding：用于丰富token含义</p>
+<li><p><strong>流水线化传输</strong>：链中节点可并行处理RDMA写入请求，利用高带宽网络实现高效流水线，减少整体写时延。</p>
 </li>
+</ul>
+</li>
+<li><p><strong>读操作完全卸载</strong>：由于读请求由任意节点直接通过RDMA响应，主机的CPU无需处理网络协议栈，释放计算资源用于其他任务（如元数据管理或写协调）。</p>
+</li>
+<li><p><strong>批量处理与高效同步</strong>：RDMA支持大规模并发数据传输，CRAQ的版本控制机制（如元数据一致性标记）可快速同步，避免传统网络协议中的ACK风暴。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://picx.zhimg.com/v2-0edac3d23a41091586120e2a134a0085_r.jpg"
+                      alt="v2-0edac3d23a41091586120e2a134a0085_r"
+                ></p>
+</li>
+</ul>
+<h3 id="1-3-小文件以及布局"><a href="#1-3-小文件以及布局" class="headerlink" title="1.3 小文件以及布局"></a>1.3 小文件以及布局</h3><ul>
+<li><h4 id="FFRecord"><a href="#FFRecord" class="headerlink" title="FFRecord"></a>FFRecord</h4></li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/77283e57bfb84be9ae9611f74328f826~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=ekheeig3LqLy%252B4Rg242n4whhekQ%253D"
+                      alt="picture.image"
+                ></p>
+<ul>
+<li><p><strong>布局</strong></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/d3dca3319c754407887928192a51d4cc~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=0L6CZpl8cucfnltA7m6AdLSmrWM%253D"
+                      alt="picture.image"
+                ></p>
+</li>
+</ul>
+<h3 id="1-4-数据恢复"><a href="#1-4-数据恢复" class="headerlink" title="1.4 数据恢复"></a>1.4 数据恢复</h3><p>存储服务崩溃、重启、介质故障，对应的存储 Target 不参与数据写操作，会被移动到 chain 的末尾。</p>
+<ol>
+<li>数据恢复流程</li>
 </ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42426841/article/details/142670977" >用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画_lora微调stable diffusion-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/2301_78285120/article/details/145434580" >使用 Lora进行微调DeepSeek大模型_deepseek lora-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora" >tloen&#x2F;alpaca-lora: Instruct-tune LLaMA on consumer hardware <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/666000885" >大模型轻量级微调（LoRA）：训练速度、显存占用分析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN" >Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-YI LEE）2024生成式人工智能导论课程的完整中文镜像作业。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_47748259/article/details/135502977" >Stable Diffusion（SD）核心基础知识——（文生图、图生图）_sd模型-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/663712983?s_r=0" >如何快速下载huggingface模型——全方法总结 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/lanlinjnc/article/details/136709225" >huggingface-cli下载数据（含国内镜像源方法）_huggingface-cli download-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/445009191" >理解Pytorch的loss.backward()和optimizer.step() - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_48958956/article/details/137292748" >OSError: Can‘t load tokenizer for ‘bert-base-chinese‘_oserror: can’t load tokenizer for ‘bert-base-chine-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26005193497" >ComfyUI：Stable Diffusion 及 LoRA、VAE 、ControlNet模型解析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/679772356" >AIGC-Stable Diffusion之VAE - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/17.%20%E6%B5%85%E8%B0%88%20RTN%20%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%EF%BC%9A%E9%9D%9E%E5%AF%B9%E7%A7%B0%20vs%20%E5%AF%B9%E7%A7%B0.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;17. 浅谈 RTN 模型量化：非对称 vs 对称.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/g.%20%E5%B5%8C%E5%85%A5%E5%B1%82%20nn.Embedding()%20%E8%AF%A6%E8%A7%A3%E5%92%8C%E8%A6%81%E7%82%B9%E6%8F%90%E9%86%92%EF%BC%88PyTorch%EF%BC%89.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;g. 嵌入层 nn.Embedding() 详解和要点提醒（PyTorch）.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/18.%20%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0%E5%8F%8A%20GGUF%20%26%20GGML%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%A7%A3%E6%9E%90.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;18. 模型量化技术概述及 GGUF &amp; GGML 文件格式解析.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/547087460" >对称量化 VS 非对称量化 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/11.%20DPO%20%E5%BE%AE%E8%B0%83%E7%A4%BA%E4%BE%8B%EF%BC%9A%E6%A0%B9%E6%8D%AE%E4%BA%BA%E7%B1%BB%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96%20LLM%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;11. DPO 微调示例：根据人类偏好优化 LLM 大语言模型.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>步骤 1：Local Node 向 Remote Node 发起 meta 获取，Remote Node 读取本地 meta；</li>
+<li>步骤 2：Remote Node 向 Local Node 返回元数据信息，Local Node 比对数据差异；</li>
+<li>步骤 3：若数据有差异，Local Node 读取本地 chunk 数据到内存；</li>
+<li>步骤 4：Remote Node 单边读取 Local Node chunk 内存数据；</li>
+<li>步骤 5：Remote Node 申请新 chunk，并把数据写入新 chunk。</li>
+</ul>
+<ol start="2">
+<li>Sync Data 原则：</li>
+</ol>
+<ul>
+<li>如果 chunk Local Node 存在 Remote Node 不存在，需要同步；</li>
+<li>如果 Remote Node 存在 Local Node不存在，需要删除；</li>
+<li>如果 Local Node 的 chain version 大于Remote Node，需要同步；</li>
+<li>如果 Local Node 和Remote Node chain version 一样大，但是 commit version 不同，需要同步；</li>
+<li>其他情况，包括完全相同的数据，或者正在写入的请求数据，不需要同步。</li>
+</ul>
+<h2 id="2-思考"><a href="#2-思考" class="headerlink" title="2. 思考"></a>2. 思考</h2><h3 id="2-1-分层kv-cache"><a href="#2-1-分层kv-cache" class="headerlink" title="2.1 分层kv-cache"></a>2.1 分层kv-cache</h3><p>3FS提供kv-cache的来源，本地nvme作为kv-cache的缓存，一级位于显存中。使用类似vllm的方式加载或分配kv-cache。</p>
+<h3 id="2-2-向量索引"><a href="#2-2-向量索引" class="headerlink" title="2.2 向量索引"></a>2.2 向量索引</h3><p>使用向量数据库索引，根据索引拉取3FS的kvcache。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS" >deepseek-ai&#x2F;3FS: A high-performance distributed file system designed to address the challenges of AI training and inference workloads. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/docs/design_notes.md" >3FS&#x2F;docs&#x2F;design_notes.md at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/621480049" >一文快速入门 ClickHouse - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://sf-zhou.github.io/coroutine/folly_coro_cancellation.html" >Folly Coroutines Cancellation 的实现 | SF-Zhou’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs/" >幻方力量 | 高速文件系统 3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26964619693" >Deepseek开源第五炮：3FS文件系统详解 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27355706799" >DeepSeek 3FS：端到端无缓存的存储新范式 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26982661774" >DeepSeek Fire-Flyer File System(3FS) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2501140" >DeepSeek开源周 Day05：从3FS盘点分布式文件存储系统-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27317616324" >DeepSeek：3FS系统介绍 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.volcengine.com/articles/7480397583173877797" >DeepSeek 3FS 架构分析和思考（上篇） - 文章 - 开发者社区 - 火山引擎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/wsqyz/article/details/145938239" >DeepSeek文件系统3FS设计文档-中文翻译-解读_deepseek 3fs 设计文档-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -480,16 +575,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> llm learning</li>
+        <li><strong>Title:</strong> 3fs learning</li>
         <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2025-04-06 17:07:30</li>
+        <li><strong>Created at:</strong> 2025-04-12 15:16:42</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-04-06 18:21:22
+                <strong>Updated at:</strong> 2025-04-12 16:50:23
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/06/llm-learning/
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/12/3fs-learning/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -507,29 +602,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2025/04/12/3fs-learning/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">3fs learning</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2025/04/01/vllm-reading/"
+                            href="/2025/04/06/llm-learning/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">vllm reading</span>
+                                    <span class="post-nav-title-item">llm learning</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -594,8 +674,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">llm learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LoRA"><span class="nav-text">1. LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E5%8C%85"><span class="nav-text">1.1 安装必要包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%AE%BE%E7%BD%AEhuggingface%E9%95%9C%E5%83%8F"><span class="nav-text">1.2 设置huggingface镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1.3 代码梳理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Beam-Search"><span class="nav-text">2. Beam Search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%87%87%E6%A0%B7"><span class="nav-text">3. 采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-DPO%E5%BE%AE%E8%B0%83"><span class="nav-text">4. DPO微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%87%8F%E5%8C%96"><span class="nav-text">5. 量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-token%E4%B8%8Eembedding"><span class="nav-text">6. token与embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">3fs learning</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%97%A0%E7%BC%93%E5%AD%98%EF%BC%88%E9%92%88%E5%AF%B9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9C%BA%E6%99%AF%E9%9A%8F%E6%9C%BA%E8%AF%BB%E8%AE%BE%E8%AE%A1%EF%BC%8C%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-text">1.2 无缓存（针对大模型场景随机读设计，缓存失效）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%93%BE%E5%BC%8F-CRAQ"><span class="nav-text">1.3 链式(CRAQ )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%8F%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%B8%83%E5%B1%80"><span class="nav-text">1.3 小文件以及布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-text">1.4 数据恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83"><span class="nav-text">2. 思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%86%E5%B1%82kv-cache"><span class="nav-text">2.1 分层kv-cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-text">2.2 向量索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
