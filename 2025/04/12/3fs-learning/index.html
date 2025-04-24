@@ -31,8 +31,10 @@
 <meta property="og:image" content="https://picx.zhimg.com/v2-0edac3d23a41091586120e2a134a0085_r.jpg">
 <meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/77283e57bfb84be9ae9611f74328f826~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=ekheeig3LqLy%252B4Rg242n4whhekQ%253D">
 <meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/d3dca3319c754407887928192a51d4cc~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=0L6CZpl8cucfnltA7m6AdLSmrWM%253D">
+<meta property="og:image" content="https://pica.zhimg.com/v2-524abb99eba02c545caf5b093bfc9b3e_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-8c4145ee4528ae85fe7a887af2068bc5_1440w.jpg">
 <meta property="article:published_time" content="2025-04-12T07:16:42.000Z">
-<meta property="article:modified_time" content="2025-04-12T09:20:58.540Z">
+<meta property="article:modified_time" content="2025-04-24T11:42:52.356Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
@@ -364,8 +366,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-04-12 17:20:58</span>
-            <span class="mobile">2025-04-12 17:20</span>
+            <span class="desktop">2025-04-24 19:42:52</span>
+            <span class="mobile">2025-04-24 19:42</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -681,6 +683,32 @@
 </ul>
 </li>
 </ul>
+<h3 id="2-3-milvus"><a href="#2-3-milvus" class="headerlink" title="2.3 milvus"></a>2.3 milvus</h3><ul>
+<li><p>利用其他数据库、消息中间件、向量算法库构建向量数据库</p>
+</li>
+<li><p>提供分片能力：分shard（自动）、partition（通过键值分区）、segment（最小粒度）</p>
+</li>
+<li><p>逻辑：</p>
+<ul>
+<li><p>slow path：先放入DataNode存储，然后离线转入IndexNode构建索引，构建结束之后转入QueryNode提供查询服务</p>
+</li>
+<li><p>fast path：直接转入QueryNode提供查询服务</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pica.zhimg.com/v2-524abb99eba02c545caf5b093bfc9b3e_1440w.jpg"
+                      alt="v2-524abb99eba02c545caf5b093bfc9b3e_1440w"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic4.zhimg.com/v2-8c4145ee4528ae85fe7a887af2068bc5_1440w.jpg"
+                      alt="v2-8c4145ee4528ae85fe7a887af2068bc5_1440w"
+                ></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS" >deepseek-ai&#x2F;3FS: A high-performance distributed file system designed to address the challenges of AI training and inference workloads. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/docs/design_notes.md" >3FS&#x2F;docs&#x2F;design_notes.md at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/621480049" >一文快速入门 ClickHouse - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -699,6 +727,14 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42586468/article/details/140368129" >LLM-向量数据库中的索引算法总结_向量数据库索引-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/652730120" >向量数据库（第 3 部分）：并非所有索引都是一样的 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Z4400840/article/details/144964802" >草履虫都看得懂的向量数据库教程，一文就够了_向量数据库使用-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/473617910" >前所未有的 Milvus 源码架构解析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://milvus.io/docs/zh/data_processing.md" >数据处理 | Milvus 文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/lsb2002/article/details/132222947" >为AI而生的数据库：Milvus详解及实战_向量数据库 milvus-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://milvus.io/docs/zh/quickstart.md" >快速入门 | Milvus 文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2338267" >云原生向量数据库Milvus知识大全，看完这篇就够了[基本概念、系统架构、主要组件、应用场景]-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/fenglingguitar/article/details/142486888" >Milvus - 架构设计详解-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.baidu.com/article/detail.html?id=3448663" >Milvus向量数据库全面解析：架构、原理与实践指南-百度开发者中心 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.milvus-io.com/reference/architecture/architecture_overview" >Milvus 架构概述 – Milvus向量库中文文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -711,7 +747,7 @@
         <li><strong>Created at:</strong> 2025-04-12 15:16:42</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-04-12 17:20:58
+                <strong>Updated at:</strong> 2025-04-24 19:42:52
             </li>
         
         <li>
@@ -732,6 +768,21 @@
 
             
                 <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2025/04/24/dynamo-learning/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">dynamo learning</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
                     
                     
                         <div class="article-next">
@@ -806,7 +857,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">3fs learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%97%A0%E7%BC%93%E5%AD%98%EF%BC%88%E9%92%88%E5%AF%B9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9C%BA%E6%99%AF%E9%9A%8F%E6%9C%BA%E8%AF%BB%E8%AE%BE%E8%AE%A1%EF%BC%8C%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-text">1.2 无缓存（针对大模型场景随机读设计，缓存失效）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%93%BE%E5%BC%8F-CRAQ"><span class="nav-text">1.3 链式(CRAQ )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%8F%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%B8%83%E5%B1%80"><span class="nav-text">1.3 小文件以及布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-text">1.4 数据恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83"><span class="nav-text">2. 思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%86%E5%B1%82kv-cache"><span class="nav-text">2.1 分层kv-cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-text">2.2 向量索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%97%A0%E7%BC%93%E5%AD%98%EF%BC%88%E9%92%88%E5%AF%B9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9C%BA%E6%99%AF%E9%9A%8F%E6%9C%BA%E8%AF%BB%E8%AE%BE%E8%AE%A1%EF%BC%8C%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-text">1.2 无缓存（针对大模型场景随机读设计，缓存失效）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%93%BE%E5%BC%8F-CRAQ"><span class="nav-text">1.3 链式(CRAQ )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%8F%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%B8%83%E5%B1%80"><span class="nav-text">1.3 小文件以及布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-text">1.4 数据恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83"><span class="nav-text">2. 思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%86%E5%B1%82kv-cache"><span class="nav-text">2.1 分层kv-cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-text">2.2 向量索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-milvus"><span class="nav-text">2.3 milvus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
