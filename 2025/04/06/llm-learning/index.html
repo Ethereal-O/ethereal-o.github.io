@@ -25,10 +25,12 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="1. LoRA主要参考 Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg">
 <meta property="article:published_time" content="2025-04-06T09:07:30.000Z">
-<meta property="article:modified_time" content="2025-04-06T10:21:22.247Z">
+<meta property="article:modified_time" content="2025-05-06T12:27:51.813Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg">
     
     
     <!--- Icon Part-->
@@ -357,8 +359,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-04-06 18:21:22</span>
-            <span class="mobile">2025-04-06 18:21</span>
+            <span class="desktop">2025-05-06 20:27:51</span>
+            <span class="mobile">2025-05-06 20:27</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -456,6 +458,66 @@
 <li><p>embedding：用于丰富token含义</p>
 </li>
 </ol>
+<h2 id="7-Transformer"><a href="#7-Transformer" class="headerlink" title="7.  Transformer"></a>7.  Transformer</h2><ul>
+<li><p>Mask: KV Cache因为mask才可以进行。因为mask的缘故，使得计算只需要求和前面的即可。</p>
+</li>
+<li><p>多级：更多层次地提取特征，相关性只是第一层通过注意力机制提取的特征。每级最终会经过FFN进一步归纳提取特征。</p>
+<ul>
+<li><p>为什么多级不会损失位置信息？提前在embedding时候将位置信息拼接到后面了</p>
+</li>
+<li><p>RoPE：旋转位置编码，引入的位置信息包含更多的相对位置信息</p>
+</li>
+</ul>
+</li>
+<li><p>计算权重：最终的经过FFN后的特征，再通过简单的线性层即可映射到词表空间，每个元素都是概率。通过搜索即可得到最大概率对应的词 。</p>
+</li>
+<li><p>多头注意力：将输入经过embedding之后的切成多份。</p>
+</li>
+<li><p>交叉注意力：Q与KV来自不同的样本，此时类似transformer经典的encode-decode架构</p>
+</li>
+<li><p>Multi-Head Latent Attention (MLA)：通过低秩联合压缩技术，减少 K 和 V 矩阵的存储和计算开销</p>
+<ul>
+<li><p>对 K 和 V 矩阵进行低秩联合压缩</p>
+</li>
+<li><p>对查询矩阵 Q 进行低秩压缩</p>
+</li>
+<li><p>修改注意力计算方式</p>
+</li>
+</ul>
+</li>
+<li><p>CacheBlend</p>
+<ul>
+<li><p>目标</p>
+<ul>
+<li>提前缓存KV Cache</li>
+</ul>
+</li>
+<li><p>困难</p>
+<ul>
+<li><p>KV Cache中携带位置信息</p>
+</li>
+<li><p>交叉注意力</p>
+</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li><p>使用RoPE，将绝对的位置信息改为通过矩阵旋转即可得到的位置信息 </p>
+</li>
+<li><p>观察到交叉注意力比较稀疏，因此只选取一些计算</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg"
+                      alt="1850883-20250329150518961-375532481"
+                ></p>
+</li>
+</ul>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42426841/article/details/142670977" >用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画_lora微调stable diffusion-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/2301_78285120/article/details/145434580" >使用 Lora进行微调DeepSeek大模型_deepseek lora-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora" >tloen&#x2F;alpaca-lora: Instruct-tune LLaMA on consumer hardware <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -473,6 +535,23 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/18.%20%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0%E5%8F%8A%20GGUF%20%26%20GGML%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%A7%A3%E6%9E%90.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;18. 模型量化技术概述及 GGUF &amp; GGML 文件格式解析.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/547087460" >对称量化 VS 非对称量化 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/11.%20DPO%20%E5%BE%AE%E8%B0%83%E7%A4%BA%E4%BE%8B%EF%BC%9A%E6%A0%B9%E6%8D%AE%E4%BA%BA%E7%B1%BB%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96%20LLM%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;11. DPO 微调示例：根据人类偏好优化 LLM 大语言模型.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/rossiXYZ/p/18799503" >探秘Transformer系列之（20）— KV Cache - 罗西的思考 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://martinlwx.github.io/zh-cn/llm-inference-optimization-kv-cache/" >LLM 推理加速 - KV Cache - MartinLwx’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/414084879?source_id=1005" >注意力机制到底在做什么，Q&#x2F;K&#x2F;V怎么来的？一文读懂Attention注意力机制 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/109983672" >拆 Transformer 系列二：Multi- Head Attention 机制详解 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/2401_85328934/article/details/141635998" >神经网络算法 - 一文搞懂 Softmax 函数-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/338817680" >Transformer模型详解（图解最完整版） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zgpeace/article/details/126635650" >翻译: 详细图解Transformer多头自注意力机制 Attention Is All You Need-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/653658936" >(80 条消息) 为什么加速LLM推断有KV Cache而没有Q Cache？ - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/662498827" >大模型推理加速：看图学KV Cache - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/414084879?source_id=1005" >注意力机制到底在做什么，Q&#x2F;K&#x2F;V怎么来的？一文读懂Attention注意力机制 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/357868650" >(80 条消息) Transformer中的Attention机制，注意力分布概率是如何求得的？ - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://leinux.netlify.app/2025/04/07/transformer" >Transformer 架构 « Leinux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/bd/art/647109286" >十分钟读懂旋转编码（RoPE） <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/15153745590" >Multi-Head Latent Attention (MLA) 详细介绍（来自Deepseek V3的回答） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/166608727" >举个例子讲下transformer的输入输出细节及其他 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/685853516#:~:text=%E5%A6%82%E4%B8%8A%E5%9B%BE%E6%89%80%E7%A4%BA%EF%BC%8C%20kv%20cache%E6%98%AFattention%E8%AE%A1%E7%AE%97%E4%B8%AD%E7%9A%84%E5%85%A8%E9%87%8Fkv%20%E7%BC%93%E5%AD%98%EF%BC%8C%E4%B8%BB%E8%A6%81%E4%BD%9C%E7%94%A8%E5%9C%A8decode%E9%98%B6%E6%AE%B5%EF%BC%8C%E7%9B%AE%E7%9A%84%E6%98%AF%E5%B0%86%E8%BE%93%E5%85%A5Q%E4%BC%98%E5%8C%96%E6%88%90%E8%BE%93%E5%85%A5q%E3%80%82%20%E6%88%91%E4%BB%AC%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%EF%BC%8C%20%E5%81%87%E8%AE%BE%E9%80%9A%E8%BF%87decode%E9%98%B6%E6%AE%B5%E9%80%9A%E8%BF%87%E8%87%AA%E5%9B%9E%E5%BD%92%E7%94%9F%E6%88%90%E2%80%98%20Apples,are%20a%20boring%20fruit%E2%80%99%E8%BF%99%E5%8F%A5%E8%AF%9D%EF%BC%8C%E5%BD%93%E7%94%9F%E6%88%90%E5%88%B0%E2%80%98fruit%E2%80%99%E8%BF%99%E4%B8%AA%E8%AF%8D%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89KV%20cache%EF%BC%8C%E8%BE%93%E5%85%A5%E4%B8%BAQ%EF%BC%88%E2%80%98Apples%20are%20a%20boring%E2%80%99%EF%BC%89%EF%BC%8C%E8%BF%9B%E8%A1%8Cattention%E8%AE%A1%E7%AE%97%E3%80%82" >大模型百倍推理加速之KV cache篇 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/7781800255" >详解 CacheBlend：RAG 场景 KV 复用，打破前缀相同的限制 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -485,7 +564,7 @@
         <li><strong>Created at:</strong> 2025-04-06 17:07:30</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-04-06 18:21:22
+                <strong>Updated at:</strong> 2025-05-06 20:27:51
             </li>
         
         <li>
@@ -595,7 +674,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">llm learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LoRA"><span class="nav-text">1. LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E5%8C%85"><span class="nav-text">1.1 安装必要包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%AE%BE%E7%BD%AEhuggingface%E9%95%9C%E5%83%8F"><span class="nav-text">1.2 设置huggingface镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1.3 代码梳理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Beam-Search"><span class="nav-text">2. Beam Search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%87%87%E6%A0%B7"><span class="nav-text">3. 采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-DPO%E5%BE%AE%E8%B0%83"><span class="nav-text">4. DPO微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%87%8F%E5%8C%96"><span class="nav-text">5. 量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-token%E4%B8%8Eembedding"><span class="nav-text">6. token与embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LoRA"><span class="nav-text">1. LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E5%8C%85"><span class="nav-text">1.1 安装必要包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%AE%BE%E7%BD%AEhuggingface%E9%95%9C%E5%83%8F"><span class="nav-text">1.2 设置huggingface镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1.3 代码梳理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Beam-Search"><span class="nav-text">2. Beam Search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%87%87%E6%A0%B7"><span class="nav-text">3. 采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-DPO%E5%BE%AE%E8%B0%83"><span class="nav-text">4. DPO微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%87%8F%E5%8C%96"><span class="nav-text">5. 量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-token%E4%B8%8Eembedding"><span class="nav-text">6. token与embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Transformer"><span class="nav-text">7.  Transformer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
