@@ -13,26 +13,24 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2025/04/24/dynamo-learning/"/>
+    <link rel="canonical" href="http://example.com/2025/05/08/airflow-optimizing/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 背景vllm使用pagedAttention（LLM(17)：从 FlashAttention 到 PagedAttention, 如何进一步优化 Attention 性能 - 知乎 ）加速推理，但是其没有做到以下几点：    内容 参考    GPU利用率（PD分离） DistServe   智能路由（动态vllm的worker选取） DeepSeek   内存管理（缓存管理，将KVcac">
+        <meta name="description" content="1. 调度优化1.1 概念理解1.1.1 Executor是airflow部署的模式，更改后必须重启airflow才可以生效。  本地Executor  Airflow 任务在调度器进程内部本地运行。优点: 非常易于使用，速度快，延迟极低，设置要求少。缺点: 功能有限，并与 Airflow 调度器共享资源。   远程Executor  队列&#x2F;批处理 Executor  CeleryExe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dynamo learning">
-<meta property="og:url" content="http://example.com/2025/04/24/dynamo-learning/index.html">
+<meta property="og:title" content="airflow optimizing">
+<meta property="og:url" content="http://example.com/2025/05/08/airflow-optimizing/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 背景vllm使用pagedAttention（LLM(17)：从 FlashAttention 到 PagedAttention, 如何进一步优化 Attention 性能 - 知乎 ）加速推理，但是其没有做到以下几点：    内容 参考    GPU利用率（PD分离） DistServe   智能路由（动态vllm的worker选取） DeepSeek   内存管理（缓存管理，将KVcac">
+<meta property="og:description" content="1. 调度优化1.1 概念理解1.1.1 Executor是airflow部署的模式，更改后必须重启airflow才可以生效。  本地Executor  Airflow 任务在调度器进程内部本地运行。优点: 非常易于使用，速度快，延迟极低，设置要求少。缺点: 功能有限，并与 Airflow 调度器共享资源。   远程Executor  队列&#x2F;批处理 Executor  CeleryExe">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://pic1.zhimg.com/v2-e2de41ee973c6d46cdd10a46d53410dc_1440w.jpg">
-<meta property="og:image" content="https://pica.zhimg.com/v2-43375829a654b7e0d706825bb4f46702_1440w.jpg">
-<meta property="og:image" content="https://pica.zhimg.com/v2-87bf5472f482def6023e8f6c4cb25522_1440w.jpg">
-<meta property="article:published_time" content="2025-04-24T11:00:33.000Z">
-<meta property="article:modified_time" content="2025-04-24T11:42:56.483Z">
+<meta property="og:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
+<meta property="article:published_time" content="2025-05-08T09:21:54.000Z">
+<meta property="article:modified_time" content="2025-05-08T15:16:21.274Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic1.zhimg.com/v2-e2de41ee973c6d46cdd10a46d53410dc_1440w.jpg">
+<meta name="twitter:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
     
     
     <!--- Icon Part-->
@@ -44,7 +42,7 @@
     
     <title>
         
-            dynamo learning -
+            airflow optimizing -
         
         Ethereal&#39;s Blog
     </title>
@@ -332,7 +330,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">dynamo learning</h1>
+                    <h1 class="article-title-regular">airflow optimizing</h1>
                 </div>
             
                 
@@ -354,15 +352,15 @@
                             <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-04-24 19:33</span>
-        <span class="mobile">2025-04-24 19</span>
+        <span class="desktop">2025-05-08 17:21:54</span>
+        <span class="mobile">2025-05-08 17:21</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-04-24 19:42:56</span>
-            <span class="mobile">2025-04-24 19:42</span>
+            <span class="desktop">2025-05-08 23:16:21</span>
+            <span class="mobile">2025-05-08 23:16</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -386,90 +384,208 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>vllm使用pagedAttention（<a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/638468472" >LLM(17)：从 FlashAttention 到 PagedAttention, 如何进一步优化 Attention 性能 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>）加速推理，但是其没有做到以下几点：</p>
-<table>
+                <h2 id="1-调度优化"><a href="#1-调度优化" class="headerlink" title="1. 调度优化"></a>1. 调度优化</h2><h3 id="1-1-概念理解"><a href="#1-1-概念理解" class="headerlink" title="1.1 概念理解"></a>1.1 概念理解</h3><h4 id="1-1-1-Executor"><a href="#1-1-1-Executor" class="headerlink" title="1.1.1 Executor"></a>1.1.1 Executor</h4><p>是airflow部署的模式，更改后必须重启airflow才可以生效。</p>
+<ul>
+<li><p>本地Executor</p>
+<ul>
+<li>Airflow 任务在调度器进程内部本地运行。<br><strong>优点</strong>: 非常易于使用，速度快，延迟极低，设置要求少。<br><strong>缺点</strong>: 功能有限，并与 Airflow 调度器共享资源。</li>
+</ul>
+</li>
+<li><p>远程Executor</p>
+<ul>
+<li><p>队列&#x2F;批处理 Executor</p>
+<ul>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/celery_executor.html"  title="(in apache-airflow-providers-celery v3.10.6)">CeleryExecutor <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li><p>在k8s中，会部署一个worker节点和一个redis节点（作为broker），scheduler只管推送至queue中，然后worker轮询方式获取任务。</p>
+</li>
+<li><p>scheduler会轮询检查DAG状态，将上一个已经完成的任务标记为完成并启动下一个任务的执行。</p>
+</li>
+</ul>
+<p>因此，在启动任务前，存在以下步骤：</p>
+<ol>
+<li><p>parser分析DAG流图（主要因素：分析）</p>
+</li>
+<li><p>scheduler轮询检查是否有可以开始的任务，并放入queue内（主要时间因素：轮询）</p>
+</li>
+<li><p>queue通过数据库锁更新DAG状态（主要时间因素：锁）</p>
+</li>
+<li><p>worker轮询检查是否有新的任务可以被执行（主要时间因素：轮询）</p>
+</li>
+<li><p>获取任务（主要时间因素：下载任务）</p>
+</li>
+<li><p>启动执行</p>
+</li>
+<li><p>向数据库通知任务完成，更新状态</p>
+</li>
+</ol>
+<p><img src="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png" alt="_images/run_task_on_celery_executor.png"></p>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow-providers-amazon/stable/executors/batch-executor.html"  title="(in apache-airflow-providers-amazon v9.6.1)">BatchExecutor <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>通过docker执行任务</li>
+</ul>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow-providers-edge3/stable/edge_executor.html"  title="(in apache-airflow-providers-edge3 v1.0.0)">EdgeExecutor <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> (实验性预发布)</p>
+<ul>
+<li>涉及边设备</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>容器化 Executor</p>
+<ul>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow-providers-cncf-kubernetes/stable/kubernetes_executor.html"  title="(in apache-airflow-providers-cncf-kubernetes v10.4.3)">KubernetesExecutor <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li><p>通过Kubernetes来调度任务，所有的任务都被拆分成pod粒度</p>
+<ul>
+<li>pod启动时延（参考论文<a class="link"   target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3694715.3695947" >Unifying serverless and microservice workloads with SigmaOS | Proceedings of the ACM SIGOPS 30th Symposium on Operating Systems Principles <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>），主要是网络开销</li>
+</ul>
+</li>
+<li><p>必须关闭flower, workers和redis</p>
+</li>
+<li><p>有用的场景</p>
+<ul>
+<li><p>有长时间运行的任务时，如果在任务运行时进行部署，任务将一直运行直到完成（或超时等）。但使用 CeleryExecutor，如果你设置了宽限期，任务只会运行到宽限期结束，届时任务将被终止。</p>
+</li>
+<li><p>任务在资源需求或镜像方面不是很统一</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow-providers-amazon/stable/executors/ecs-executor.html"  title="(in apache-airflow-providers-amazon v9.6.1)">EcsExecutor <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>Amazon Elastic Container Service</li>
+</ul>
+</li>
+<li><p>CeleryKubenetesExecutor</p>
+<ul>
+<li>celery和kubenetes的结合，根据queue决定是使用celery还是Kubenetes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>并行使用多个Executor</p>
+</li>
+</ul>
+<p>参数设置：</p>
+<ul>
+<li>executor: CeleryKubernetesExecutor（helm内）</li>
+</ul>
+<h4 id="1-1-2-Parser"><a href="#1-1-2-Parser" class="headerlink" title="1.1.2 Parser"></a>1.1.2 Parser</h4><p>解析并更新DAG设置</p>
+<p>参数设置</p>
+<ul>
+<li>parsing_processes（AIRFLOW__DAG_PROCESSOR__PARSING_PROCESSES）：</li>
+</ul>
+<h4 id="1-1-3-Scheduler"><a href="#1-1-3-Scheduler" class="headerlink" title="1.1.3 Scheduler"></a>1.1.3 Scheduler</h4><p>参数设置：</p>
+<ul>
+<li><p>[core] parallelism（AIRFLOW__CORE__PARALLELISM）：这定义了每个 Airflow 调度器可以同时运行的最大任务实例数量，与 worker 数量无关。通常，此值乘以集群中调度器的数量，就是元数据数据库中处于 running 状态的任务实例的最大数量。该值必须大于或等于 1。</p>
+</li>
+<li><p>[scheduler] dag_stale_not_seen_duration（AIRFLOW__SCHEDULER__DAG_STALE_NOT_SEEN_DURATION）：经过此秒数后，未被 Dag 处理器更新的 DAG 将被停用。</p>
+</li>
+<li><p>[scheduler] max_dagruns_per_loop_to_schedule（AIRFLOW__SCHEDULER__MAX_DAGRUNS_PER_LOOP_TO_SCHEDULE）：调度程序在调度和排队任务时应检查（并锁定）多少个 DagRun。</p>
+</li>
+<li><p>[scheduler] max_dagruns_to_create_per_loop（AIRFLOW__SCHEDULER__MAX_DAGRUNS_TO_CREATE_PER_LOOP）：每个调度程序循环中为多少个 DAG 创建 DagRun 的最大数量。</p>
+</li>
+<li><p>[scheduler] max_tis_per_query（AIRFLOW__SCHEDULER__MAX_TIS_PER_QUERY）：此项确定在每个调度程序循环中评估多少个任务实例进行调度。将其设置为 0 以使用 <code>[core] parallelism</code> 的值。</p>
+</li>
+<li><p>[scheduler] num_runs（AIRFLOW__SCHEDULER__NUM_RUNS）：尝试调度每个 DAG 文件的次数 -1 表示无限次数。</p>
+</li>
+<li><p>[scheduler] orphaned_tasks_check_interval（AIRFLOW__SCHEDULER__ORPHANED_TASKS_CHECK_INTERVAL）：调度程序应多久（以秒为单位）检查一次孤立任务和 SchedulerJobs。</p>
+</li>
+<li><p>[scheduler] <strong>scheduler_heartbeat_sec（AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC）</strong>：调度器不断尝试触发新任务（有关更多信息，请参阅文档中的调度器部分）。这定义了调度器应多久运行一次（以秒为单位）。</p>
+</li>
+<li><p>[scheduler] scheduler_idle_sleep_time（AIRFLOW__SCHEDULER__SCHEDULER_IDLE_SLEEP_TIME）：控制调度器在循环之间休眠多长时间，但前提是循环中没有可做的事情。也就是说，如果它调度了某个任务，那么它将立即开始下一个循环迭代。</p>
+</li>
+<li><p>[scheduler] task_instance_heartbeat_sec（AIRFLOW__SCHEDULER__TASK_QUEUED_TIMEOUT）：任务在被重试或设置为失败之前可以处于排队状态的时间量。</p>
+</li>
+</ul>
+<h4 id="1-1-3-Broker"><a href="#1-1-3-Broker" class="headerlink" title="1.1.3 Broker"></a>1.1.3 Broker</h4><table>
 <thead>
 <tr>
-<th>内容</th>
-<th>参考</th>
+<th><strong>Broker类型</strong></th>
+<th><strong>特点</strong></th>
+<th><strong>适用场景</strong></th>
 </tr>
 </thead>
 <tbody><tr>
-<td>GPU利用率（PD分离）</td>
-<td>DistServe</td>
+<td><strong>RabbitMQ</strong></td>
+<td>高可靠、支持AMQP协议、功能丰富（如优先级队列）</td>
+<td>生产环境首选，对消息可靠性要求高</td>
 </tr>
 <tr>
-<td>智能路由（动态vllm的worker选取）</td>
-<td>DeepSeek</td>
+<td><strong>Redis</strong></td>
+<td>简单轻量、性能高、支持Pub&#x2F;Sub模式</td>
+<td>中小规模集群，对性能要求较高</td>
 </tr>
 <tr>
-<td>内存管理（缓存管理，将KVcache卸载至SSD，参考3FS）</td>
-<td>Mooncake, AIBrix, LMCache</td>
-</tr>
-<tr>
-<td>请求量波动的处理（NIXL）</td>
-<td>AzureTrace</td>
+<td><strong>其他</strong></td>
+<td>如Amazon SQS、Kafka（需定制）</td>
+<td>特殊场景（如云原生、大数据架构）</td>
 </tr>
 </tbody></table>
-<p>因此，它是参考现在<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=255339195&content_type=Article&match_order=1&q=DistServe&zhida_source=entity" >DistServe <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>、Mooncake、<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=255339195&content_type=Article&match_order=1&q=Deepseek&zhida_source=entity" >Deepseek <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>这几个PD分离架构的分布式推理系统的产物。它是一个框架，底层调用了vllm等引擎。</p>
-<h2 id="2-亮点"><a href="#2-亮点" class="headerlink" title="2. 亮点"></a>2. 亮点</h2><ol>
-<li>GPU 资源利用率低</li>
-</ol>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://pic1.zhimg.com/v2-e2de41ee973c6d46cdd10a46d53410dc_1440w.jpg"
-                     
-                ></p>
-<p>传统推理流程里，预填充（Prefill）计算量大，而解码（Decode）又容易卡住，导致GPU资源浪费。Dynamo 通过 Prefill &amp; Decode 解耦，让GPU分工更合理，单节点GPU吞吐提升30%，多节点吞吐直接翻倍。</p>
-<p>-&gt; 解耦推理（Disaggregated Serving），Prefill &amp; Decode分开处理，优化GPU资源利用率，吞吐提升30%-2X。</p>
-<p>在Dynamo全局资源分配阶段，即由router选择work id的时候，它有一个KV感知（KV Aware）的计算过程。分配work的时候，不但考虑<strong>KV cache的匹配度（KV match）</strong>，还考虑<strong>worker的负载（load）。</strong></p>
+<h4 id="1-1-4-Wroker"><a href="#1-1-4-Wroker" class="headerlink" title="1.1.4 Wroker"></a>1.1.4 Wroker</h4><p>参数设置：没有celery本身参数？celery中存在参数bundle_refresh_check_interval指定轮询间隔：猜测以下参数类似：min_heartbeat_interval</p>
 <ul>
-<li>KV Cache匹配度，是指目标计算的cache内容和worker中的历史内容有多少匹配，匹配度越高代表可重复利用量越高，则需要计算量越少；</li>
-<li>worker负载：worker内的计算资源的使用量。</li>
+<li>[worker] min_heartbeat_interval（AIRFLOW__WORKERS__MIN_HEARTBEAT_INTERVAL）：工作节点与 API 服务器检查任务实例心跳状态以确认其仍然处于活动状态的最小间隔（以秒为单位）。</li>
 </ul>
-<ol start="2">
-<li>KV缓存计算浪费</li>
-</ol>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://pica.zhimg.com/v2-43375829a654b7e0d706825bb4f46702_1440w.jpg"
-                     
-                ></p>
-<p>LLM运行时，KV缓存存放的是Transformer模型的中间状态，但很多推理框架乱丢缓存，导致重复计算，增加不必要的延迟。Dynamo 采用 KV 感知的智能路由，直接把请求引导到缓存命中率高的GPU，减少冗余计算。实测首Token时间（TTFT）提高3倍，平均请求延迟减少2倍。</p>
-<p>-&gt; 智能路由（Smart Router），采用KV缓存感知调度，减少不必要计算，TTFT 提升 3 倍，平均延迟减少 2 倍。这块的机制也参考了DeepSeek，目前有两种路由策略，相比DeepSeek更通用，但是DeepSeek的策略考虑了细粒度专家EP，对于推R1目前应该还是最佳。</p>
-<ol start="3">
-<li>KV 缓存占用过多GPU显存</li>
-</ol>
-<p>LLM 的推理过程中，KV缓存很快会填满GPU，导致推理崩溃或者受限。Dynamo 让KV缓存支持多层存储，比如CPU内存、SSD，甚至远程存储，减少对GPU显存的压力。测试表明，KV缓存转存CPU后，TTFT还能提升40%。通过KVPublisher的事件机制来对KVIndexer进行缓存管理，可以参考MoonCake。</p>
-<p>-&gt; 分布式KV缓存管理（KV Cache Manager），支持KV缓存转存 CPU&#x2F;SSD，减少GPU内存负担，TTFT提升40%。</p>
-<ol start="4">
-<li>数据传输效率低</li>
-</ol>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://pica.zhimg.com/v2-87bf5472f482def6023e8f6c4cb25522_1440w.jpg"
-                     
-                ></p>
-<p>传统的推理数据传输方式低效，特别是在多节点分布式推理时，通信延迟会影响推理速度。Dynamo 采用 NIXL（Nvidia Inference TranXfer Library），优化了多层存储的数据流转，提升整体吞吐量和推理效率。 </p>
-<p>-&gt; NIXL高效数据传输，自动优化不同存储层级的数据流转，降低数据同步开销，提升整体推理吞吐。</p>
-<h2 id="3-DeepSeek开源周"><a href="#3-DeepSeek开源周" class="headerlink" title="3. DeepSeek开源周"></a>3. DeepSeek开源周</h2><p>DeepSeek 开源周的五个项目分别是：</p>
+<h3 id="1-2-测试分析"><a href="#1-2-测试分析" class="headerlink" title="1.2 测试分析"></a>1.2 测试分析</h3><p>通过打印时间发现主要分成两部分：</p>
 <ul>
-<li><strong>FlashMLA</strong>（快速多头潜在注意力）：针对大型语言模型推理的高效解码内核，主要提升 GPU 显存利用率和推理速度。</li>
-<li><strong>DeepEP</strong>（Expert Parallel）：面向混合专家（MoE）模型的高效通信库，加速多 GPU 多节点环境下的通信并降低延迟。</li>
-<li><strong>DeepGEMM</strong>：面向通用矩阵乘法（GEMM）的轻量级高性能库，支持 FP8 精度，提升大规模矩阵运算效率。</li>
-<li><strong>DualPipe &amp; EPLB</strong>：一套并行训练优化方案，包括 DualPipe（双向流水线并行算法）和 EPLB（专家并行负载均衡），显著提高大模型分布式训练效率。</li>
-<li><strong>3FS</strong>（“源神”分布式文件系统）：专为 AI 训练和推理设计的高性能并行文件系统，解决海量数据的高速存取与管理。</li>
+<li><p>从下发命令到排队时间（取决于scheduler轮询并开始下发新任务间隔）</p>
+<ul>
+<li>通过缩短心跳时间可以减少结束到queue时间：scheduler_heartbeat_sec</li>
 </ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27127875284" >5万字详解：深度求索（DeepSeek）开源周报告 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://ggaaooppeenngg.github.io/zh-CN/2025/01/23/vLLM%E7%9A%84PD%E5%88%86%E7%A6%BB/" >vLLM的PD分离 | ggaaooppeenngg <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31583638702" >怎么看英伟达GTC新发布的推理框架Dynamo - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35082030/article/details/138225284" >使用vllm部署自己的大模型_vllm部署大模型-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2515122" >在 TKE 上使用 NVIDIA Dynamo 部署 PD 分离的大模型-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/15465759171" >(4 封私信 &#x2F; 80 条消息) 如何评价Nvidia发布的大模型推理PD分离架构Dynamo？ - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.cn/dynamo" >Dynamo 推理框架 | NVIDIA 开发者 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>从排队到执行时间（取决于worker启动新任务间隔）</p>
+<ul>
+<li>queue时间还没有发现更改方式（AIRFLOW__WORKERS__MIN_HEARTBEAT_INTERVAL没有效果）</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-3-尝试优化"><a href="#1-3-尝试优化" class="headerlink" title="1.3 尝试优化"></a>1.3 尝试优化</h3><p>缩短轮询时间，增加并行度</p>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">AIRFLOW__SCHEDULER__PARSING_PROCESSES:</span> <span class="number">4</span></span><br><span class="line"><span class="comment"># [core] 设置 parallelism 和 dag_concurrency</span></span><br><span class="line"><span class="attr">AIRFLOW__CORE__PARALLELISM:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">AIRFLOW__CORE__DAG_CONCURRENCY:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">AIRFLOW__CELERY__CELERYD_CONSUMER_POLL_INTERVAL:</span> <span class="number">0.2</span></span><br><span class="line"><span class="attr">AIRFLOW__WORKERS__MIN_HEARTBEAT_INTERVAL:</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></div>
+
+<p>运行日志</p>
+<p>打印时间</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[2025-05-08 10:40:28,959: INFO/MainProcess] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[cdb45479-493d-4328-ae0c-5cb793c76a62] received</span><br><span class="line">[2025-05-08 10:40:28,974: INFO/ForkPoolWorker-15] [cdb45479-493d-4328-ae0c-5cb793c76a62] Executing command in Celery: [&#x27;airflow&#x27;, &#x27;tasks&#x27;, &#x27;run&#x27;, &#x27;download_bing&#x27;, &#x27;save_task&#x27;, &#x27;manual__2025-05-08T10:40:16.745026+00:00&#x27;, &#x27;--local&#x27;, &#x27;--subdir&#x27;, &#x27;DAGS_FOLDER/test.py&#x27;]</span><br><span class="line">[2025-05-08 10:40:29,139: INFO/ForkPoolWorker-15] Filling up the DagBag from /opt/airflow/dags/test.py</span><br><span class="line">[2025-05-08 10:40:29,375: INFO/ForkPoolWorker-15] Running &lt;TaskInstance: download_bing.save_task manual__2025-05-08T10:40:16.745026+00:00 [queued]&gt; on host airflow-worker-0.airflow-worker.airflow.svc.cluster.local</span><br><span class="line">[2025-05-08 10:40:40,264: INFO/ForkPoolWorker-15] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[cdb45479-493d-4328-ae0c-5cb793c76a62] succeeded in 11.302474641997833s: None</span><br><span class="line">[2025-05-08 10:41:03,570: INFO/MainProcess] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[f0164707-0bc2-401e-931c-855c7fc9a0c4] received</span><br><span class="line">[2025-05-08 10:41:03,583: INFO/ForkPoolWorker-15] [f0164707-0bc2-401e-931c-855c7fc9a0c4] Executing command in Celery: [&#x27;airflow&#x27;, &#x27;tasks&#x27;, &#x27;run&#x27;, &#x27;download_bing&#x27;, &#x27;request_task&#x27;, &#x27;manual__2025-05-08T10:41:03.285683+00:00&#x27;, &#x27;--local&#x27;, &#x27;--subdir&#x27;, &#x27;DAGS_FOLDER/test.py&#x27;]</span><br><span class="line">[2025-05-08 10:41:03,719: INFO/ForkPoolWorker-15] Filling up the DagBag from /opt/airflow/dags/test.py</span><br><span class="line">[2025-05-08 10:41:03,923: INFO/ForkPoolWorker-15] Running &lt;TaskInstance: download_bing.request_task manual__2025-05-08T10:41:03.285683+00:00 [queued]&gt; on host airflow-worker-0.airflow-worker.airflow.svc.cluster.local</span><br><span class="line">[2025-05-08 10:41:14,857: INFO/ForkPoolWorker-15] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[f0164707-0bc2-401e-931c-855c7fc9a0c4] succeeded in 11.284130732004996s: None</span><br><span class="line">[2025-05-08 10:41:15,644: INFO/MainProcess] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[e8a51a0d-d621-4895-aa5a-ad2d1cc416f2] received</span><br><span class="line">[2025-05-08 10:41:15,657: INFO/ForkPoolWorker-15] [e8a51a0d-d621-4895-aa5a-ad2d1cc416f2] Executing command in Celery: [&#x27;airflow&#x27;, &#x27;tasks&#x27;, &#x27;run&#x27;, &#x27;download_bing&#x27;, &#x27;save_task&#x27;, &#x27;manual__2025-05-08T10:41:03.285683+00:00&#x27;, &#x27;--local&#x27;, &#x27;--subdir&#x27;, &#x27;DAGS_FOLDER/test.py&#x27;]</span><br><span class="line">[2025-05-08 10:41:15,794: INFO/ForkPoolWorker-15] Filling up the DagBag from /opt/airflow/dags/test.py</span><br><span class="line">[2025-05-08 10:41:15,989: INFO/ForkPoolWorker-15] Running &lt;TaskInstance: download_bing.save_task manual__2025-05-08T10:41:03.285683+00:00 [queued]&gt; on host airflow-worker-0.airflow-worker.airflow.svc.cluster.local</span><br><span class="line">[2025-05-08 10:41:26,872: INFO/ForkPoolWorker-15] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[e8a51a0d-d621-4895-aa5a-ad2d1cc416f2] succeeded in 11.225932340006693s: None</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2025-05-08, 10:41:04 UTC] &#123;logging_mixin.py:188&#125; INFO - 1746700864.6873255</span><br><span class="line">[2025-05-08, 10:41:16 UTC] &#123;logging_mixin.py:188&#125; INFO - 1746700876.7167912</span><br></pre></td></tr></table></figure></div>
+
+<p>新任务进入排队（10:41:03,570）-&gt;worker开始执行（10:41:03,923）-&gt;真正开始执行（10:41:04）</p>
+<h3 id="1-4-对比选型"><a href="#1-4-对比选型" class="headerlink" title="1.4 对比选型"></a>1.4 对比选型</h3><h4 id="1-4-1-argo"><a href="#1-4-1-argo" class="headerlink" title="1.4.1 argo"></a>1.4.1 argo</h4><ul>
+<li><p>支持更复杂的工作流设计，包括<strong>循环、递归和条件逻辑</strong>，适合需要高度控制和灵活性的复杂任务。其工作流以 YAML 或 JSON 格式定义</p>
+</li>
+<li><p>使用 Kubernetes 的 CronJob 来调度工作流，调度能力依赖于 Kubernetes</p>
+</li>
+</ul>
+<h4 id="1-4-2-kubeflow"><a href="#1-4-2-kubeflow" class="headerlink" title="1.4.2 kubeflow"></a>1.4.2 kubeflow</h4><p>同样需要每个任务启动新的Pod</p>
+<ul>
+<li><p><strong>Kubeflow</strong> 在 <strong>机器学习、分布式计算、资源密集型任务</strong> 中更快。因为依赖于k8s，可以更好利用资源。</p>
+<ul>
+<li><strong>Airflow</strong> 在 <strong>轻量级任务、短时任务调度、非容器化环境</strong> 中更快。</li>
+</ul>
+</li>
+<li><p>其中kubeflow pipeline基于argo实现，相比于argo能有更多ML内容，增强了持久化层。</p>
+</li>
+<li><p>kubeflow也不支持定义循环。</p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://airflow.apache.ac.cn/docs/apache-airflow/stable/configurations-ref.html#task-instance-heartbeat-sec" >配置参考 — Airflow 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow/stable/core-concepts/params.html" >参数 — Airflow 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.apache.ac.cn/docs/apache-airflow/stable/administration-and-deployment/scheduler.html#what-resources-might-limit-scheduler-s-performance" >调度器 — Airflow 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.apache.ac.cn/docs/apache-airflow-providers-celery/stable/celery_executor.html" >Celery Executor — apache-airflow-providers-celery 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40046357/article/details/129273102" >Airflow Celery Executor 架构与任务执行过程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.apache.ac.cn/docs/apache-airflow-providers-celery/stable/celery_kubernetes_executor.html" >CeleryKubernetes 执行器 — apache-airflow-providers-celery 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.apache.ac.cn/docs/apache-airflow-providers-celery/stable/cli-ref.html" >Celery 执行器命令 — apache-airflow-providers-celery 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://old-panda.com/posts/airflow-performance-tuning/" >记一次 Airflow 性能调优 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.apache.org/docs/apache-airflow-providers-celery/stable/celery_executor.html" >Celery Executor — apache-airflow-providers-celery Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/375666107" >高性能分布式任务队列Celery功能探究 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.apache.ac.cn/docs/helm-chart/stable/manage-dags-files.html" >管理 DAG 文件 — helm-chart 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow/stable/core-concepts/executor/index.html#executor-types" >Executor — Airflow 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/stable/userguide/configuration.html#std-setting-worker_consumer_poll_interval" >Configuration and defaults — Celery 5.5.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/search?q=repo:apache/airflow+TaskInstance&type=code" >Code search results <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -477,16 +593,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> dynamo learning</li>
+        <li><strong>Title:</strong> airflow optimizing</li>
         <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2025-04-24 19:00:33</li>
+        <li><strong>Created at:</strong> 2025-05-08 17:21:54</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-04-24 19:42:56
+                <strong>Updated at:</strong> 2025-05-08 23:16:21
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/24/dynamo-learning/
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/05/08/airflow-optimizing/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -504,29 +620,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2025/05/08/airflow-optimizing/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">airflow optimizing</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2025/04/12/3fs-learning/"
+                            href="/2025/04/24/dynamo-learning/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">3fs learning</span>
+                                    <span class="post-nav-title-item">dynamo learning</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -591,8 +692,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">dynamo learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1. 背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%AE%E7%82%B9"><span class="nav-text">2. 亮点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-DeepSeek%E5%BC%80%E6%BA%90%E5%91%A8"><span class="nav-text">3. DeepSeek开源周</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">airflow optimizing</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%B0%83%E5%BA%A6%E4%BC%98%E5%8C%96"><span class="nav-text">1. 调度优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3"><span class="nav-text">1.1 概念理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%B5%8B%E8%AF%95%E5%88%86%E6%9E%90"><span class="nav-text">1.2 测试分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%9D%E8%AF%95%E4%BC%98%E5%8C%96"><span class="nav-text">1.3 尝试优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%AF%B9%E6%AF%94%E9%80%89%E5%9E%8B"><span class="nav-text">1.4 对比选型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
