@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://pica.zhimg.com/v2-524abb99eba02c545caf5b093bfc9b3e_1440w.jpg">
 <meta property="og:image" content="https://pic4.zhimg.com/v2-8c4145ee4528ae85fe7a887af2068bc5_1440w.jpg">
 <meta property="article:published_time" content="2025-04-12T07:16:42.000Z">
-<meta property="article:modified_time" content="2025-05-09T12:27:16.812Z">
+<meta property="article:modified_time" content="2025-05-10T10:47:25.102Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
@@ -366,8 +366,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-09 20:27:16</span>
-            <span class="mobile">2025-05-09 20:27</span>
+            <span class="desktop">2025-05-10 18:47:25</span>
+            <span class="mobile">2025-05-10 18:47</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -612,6 +612,22 @@
 </ul>
 </li>
 </ol>
+<h3 id="1-6-3FS-KV接口"><a href="#1-6-3FS-KV接口" class="headerlink" title="1.6 3FS-KV接口"></a>1.6 3FS-KV接口</h3><ul>
+<li><p>接入vllm</p>
+</li>
+<li><p>类似kv，通过USRBIO接口</p>
+</li>
+<li><p>kvcache index（meta data）放在内存中</p>
+<ul>
+<li><p>周期性更新，但是不需要保证最新，因为可以通过计算获取</p>
+</li>
+<li><p>也要持久化</p>
+</li>
+</ul>
+</li>
+<li><p>kvcache data放在3FS中，通过USRBIO访问</p>
+</li>
+</ul>
 <h2 id="2-思考"><a href="#2-思考" class="headerlink" title="2. 思考"></a>2. 思考</h2><h3 id="2-1-分层kv-cache"><a href="#2-1-分层kv-cache" class="headerlink" title="2.1 分层kv-cache"></a>2.1 分层kv-cache</h3><p>3FS提供kv-cache的来源，本地nvme作为kv-cache的缓存，一级位于显存中。使用类似vllm的方式加载或分配kv-cache。</p>
 <h3 id="2-2-向量索引"><a href="#2-2-向量索引" class="headerlink" title="2.2 向量索引"></a>2.2 向量索引</h3><p>使用向量数据库索引，根据索引拉取3FS的kvcache。</p>
 <h4 id="2-2-1-基于树的索引"><a href="#2-2-1-基于树的索引" class="headerlink" title="2.2.1 基于树的索引"></a>2.2.1 基于树的索引</h4><ul>
@@ -797,6 +813,10 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs-4/" >3FS优化 03 | 数据读取模式适配 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs-3/" >3FS优化 03 | 网络配置管理 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs-2/" >3FS优化 02 | 客户端内存使用优化 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/issues/109" >How does KVCache Client works on 3FS? · Issue #109 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26958884790" >陈巍：DeepSeek 开源Day（5）3FS&amp;smallpond深入分析（收录于：DeepSeek技术详解系列） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/src/lib/rs/hf3fs-usrbio-sys/src/lib.rs" >3FS&#x2F;src&#x2F;lib&#x2F;rs&#x2F;hf3fs-usrbio-sys&#x2F;src&#x2F;lib.rs at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jiqizhixin.com/articles/2025-04-18-8" >3FS系列（三）：从源码到实测：3FS USRBIO静态库的编译与性能体验 ｜ 机器之心 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -809,7 +829,7 @@
         <li><strong>Created at:</strong> 2025-04-12 15:16:42</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-09 20:27:16
+                <strong>Updated at:</strong> 2025-05-10 18:47:25
             </li>
         
         <li>
@@ -919,7 +939,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">3fs learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%97%A0%E7%BC%93%E5%AD%98%EF%BC%88%E9%92%88%E5%AF%B9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9C%BA%E6%99%AF%E9%9A%8F%E6%9C%BA%E8%AF%BB%E8%AE%BE%E8%AE%A1%EF%BC%8C%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-text">1.2 无缓存（针对大模型场景随机读设计，缓存失效）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%93%BE%E5%BC%8F-CRAQ"><span class="nav-text">1.3 链式(CRAQ )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%8F%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%B8%83%E5%B1%80"><span class="nav-text">1.3 小文件以及布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-text">1.4 数据恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-3FS-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-KV-Cache%EF%BC%9F"><span class="nav-text">1.5 3FS 如何优化 KV Cache？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83"><span class="nav-text">2. 思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%86%E5%B1%82kv-cache"><span class="nav-text">2.1 分层kv-cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-text">2.2 向量索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-milvus"><span class="nav-text">2.3 milvus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%97%A0%E7%BC%93%E5%AD%98%EF%BC%88%E9%92%88%E5%AF%B9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9C%BA%E6%99%AF%E9%9A%8F%E6%9C%BA%E8%AF%BB%E8%AE%BE%E8%AE%A1%EF%BC%8C%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-text">1.2 无缓存（针对大模型场景随机读设计，缓存失效）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%93%BE%E5%BC%8F-CRAQ"><span class="nav-text">1.3 链式(CRAQ )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%8F%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%B8%83%E5%B1%80"><span class="nav-text">1.3 小文件以及布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-text">1.4 数据恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-3FS-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-KV-Cache%EF%BC%9F"><span class="nav-text">1.5 3FS 如何优化 KV Cache？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-3FS-KV%E6%8E%A5%E5%8F%A3"><span class="nav-text">1.6 3FS-KV接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83"><span class="nav-text">2. 思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%86%E5%B1%82kv-cache"><span class="nav-text">2.1 分层kv-cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-text">2.2 向量索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-milvus"><span class="nav-text">2.3 milvus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
