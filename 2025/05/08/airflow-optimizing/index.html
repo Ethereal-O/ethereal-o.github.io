@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
 <meta property="article:published_time" content="2025-05-08T09:21:54.000Z">
-<meta property="article:modified_time" content="2025-05-09T05:54:20.473Z">
+<meta property="article:modified_time" content="2025-05-10T07:02:16.559Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
@@ -359,8 +359,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-09 13:54:20</span>
-            <span class="mobile">2025-05-09 13:54</span>
+            <span class="desktop">2025-05-10 15:02:16</span>
+            <span class="mobile">2025-05-10 15:02</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -544,11 +544,10 @@
 </ul>
 </li>
 </ul>
-<h3 id="1-3-尝试优化"><a href="#1-3-尝试优化" class="headerlink" title="1.3 尝试优化"></a>1.3 尝试优化</h3><p>缩短轮询时间，增加并行度</p>
+<h3 id="1-3-尝试优化"><a href="#1-3-尝试优化" class="headerlink" title="1.3 尝试优化"></a>1.3 尝试优化</h3><h4 id="1-3-1-优化方式"><a href="#1-3-1-优化方式" class="headerlink" title="1.3.1 优化方式"></a>1.3.1 优化方式</h4><p>缩短轮询时间，增加并行度</p>
 <div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">AIRFLOW__SCHEDULER__PARSING_PROCESSES:</span> <span class="number">4</span></span><br><span class="line"><span class="comment"># [core] 设置 parallelism 和 dag_concurrency</span></span><br><span class="line"><span class="attr">AIRFLOW__CORE__PARALLELISM:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">AIRFLOW__CORE__DAG_CONCURRENCY:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">AIRFLOW__CELERY__CELERYD_CONSUMER_POLL_INTERVAL:</span> <span class="number">0.2</span></span><br><span class="line"><span class="attr">AIRFLOW__WORKERS__MIN_HEARTBEAT_INTERVAL:</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></div>
 
-<p>运行日志</p>
-<p>打印时间</p>
+<h4 id="1-3-2-运行日志"><a href="#1-3-2-运行日志" class="headerlink" title="1.3.2 运行日志"></a>1.3.2 运行日志</h4><p>打印时间</p>
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[2025-05-08 10:40:28,959: INFO/MainProcess] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[cdb45479-493d-4328-ae0c-5cb793c76a62] received</span><br><span class="line">[2025-05-08 10:40:28,974: INFO/ForkPoolWorker-15] [cdb45479-493d-4328-ae0c-5cb793c76a62] Executing command in Celery: [&#x27;airflow&#x27;, &#x27;tasks&#x27;, &#x27;run&#x27;, &#x27;download_bing&#x27;, &#x27;save_task&#x27;, &#x27;manual__2025-05-08T10:40:16.745026+00:00&#x27;, &#x27;--local&#x27;, &#x27;--subdir&#x27;, &#x27;DAGS_FOLDER/test.py&#x27;]</span><br><span class="line">[2025-05-08 10:40:29,139: INFO/ForkPoolWorker-15] Filling up the DagBag from /opt/airflow/dags/test.py</span><br><span class="line">[2025-05-08 10:40:29,375: INFO/ForkPoolWorker-15] Running &lt;TaskInstance: download_bing.save_task manual__2025-05-08T10:40:16.745026+00:00 [queued]&gt; on host airflow-worker-0.airflow-worker.airflow.svc.cluster.local</span><br><span class="line">[2025-05-08 10:40:40,264: INFO/ForkPoolWorker-15] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[cdb45479-493d-4328-ae0c-5cb793c76a62] succeeded in 11.302474641997833s: None</span><br><span class="line">[2025-05-08 10:41:03,570: INFO/MainProcess] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[f0164707-0bc2-401e-931c-855c7fc9a0c4] received</span><br><span class="line">[2025-05-08 10:41:03,583: INFO/ForkPoolWorker-15] [f0164707-0bc2-401e-931c-855c7fc9a0c4] Executing command in Celery: [&#x27;airflow&#x27;, &#x27;tasks&#x27;, &#x27;run&#x27;, &#x27;download_bing&#x27;, &#x27;request_task&#x27;, &#x27;manual__2025-05-08T10:41:03.285683+00:00&#x27;, &#x27;--local&#x27;, &#x27;--subdir&#x27;, &#x27;DAGS_FOLDER/test.py&#x27;]</span><br><span class="line">[2025-05-08 10:41:03,719: INFO/ForkPoolWorker-15] Filling up the DagBag from /opt/airflow/dags/test.py</span><br><span class="line">[2025-05-08 10:41:03,923: INFO/ForkPoolWorker-15] Running &lt;TaskInstance: download_bing.request_task manual__2025-05-08T10:41:03.285683+00:00 [queued]&gt; on host airflow-worker-0.airflow-worker.airflow.svc.cluster.local</span><br><span class="line">[2025-05-08 10:41:14,857: INFO/ForkPoolWorker-15] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[f0164707-0bc2-401e-931c-855c7fc9a0c4] succeeded in 11.284130732004996s: None</span><br><span class="line">[2025-05-08 10:41:15,644: INFO/MainProcess] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[e8a51a0d-d621-4895-aa5a-ad2d1cc416f2] received</span><br><span class="line">[2025-05-08 10:41:15,657: INFO/ForkPoolWorker-15] [e8a51a0d-d621-4895-aa5a-ad2d1cc416f2] Executing command in Celery: [&#x27;airflow&#x27;, &#x27;tasks&#x27;, &#x27;run&#x27;, &#x27;download_bing&#x27;, &#x27;save_task&#x27;, &#x27;manual__2025-05-08T10:41:03.285683+00:00&#x27;, &#x27;--local&#x27;, &#x27;--subdir&#x27;, &#x27;DAGS_FOLDER/test.py&#x27;]</span><br><span class="line">[2025-05-08 10:41:15,794: INFO/ForkPoolWorker-15] Filling up the DagBag from /opt/airflow/dags/test.py</span><br><span class="line">[2025-05-08 10:41:15,989: INFO/ForkPoolWorker-15] Running &lt;TaskInstance: download_bing.save_task manual__2025-05-08T10:41:03.285683+00:00 [queued]&gt; on host airflow-worker-0.airflow-worker.airflow.svc.cluster.local</span><br><span class="line">[2025-05-08 10:41:26,872: INFO/ForkPoolWorker-15] Task airflow.providers.celery.executors.celery_executor_utils.execute_command[e8a51a0d-d621-4895-aa5a-ad2d1cc416f2] succeeded in 11.225932340006693s: None</span><br></pre></td></tr></table></figure></div>
 
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2025-05-08, 10:41:04 UTC] &#123;logging_mixin.py:188&#125; INFO - 1746700864.6873255</span><br><span class="line">[2025-05-08, 10:41:16 UTC] &#123;logging_mixin.py:188&#125; INFO - 1746700876.7167912</span><br></pre></td></tr></table></figure></div>
@@ -558,10 +557,26 @@
 
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2025-05-09, 05:19:10 UTC] &#123;logging_mixin.py:188&#125; INFO - 1746767950.8249474</span><br><span class="line">[2025-05-09, 05:19:22 UTC] &#123;logging_mixin.py:188&#125; INFO - 1746767962.2026312</span><br></pre></td></tr></table></figure></div>
 
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">airflow tasks run download_bing save_task manual__2025-05-09T05:19:09.480045+00:00</span></span><br><span class="line">...</span><br><span class="line">[2025-05-10T04:49:16.545+0000] &#123;cli_action_loggers.py:67&#125; DEBUG - Calling callbacks: [&lt;function default_action_log at 0x7e4c4b906820&gt;]</span><br><span class="line">[2025-05-10T04:49:16.572+0000] &#123;plugins_manager.py:328&#125; DEBUG - Loading plugins</span><br><span class="line">[2025-05-10T04:49:16.573+0000] &#123;plugins_manager.py:254&#125; DEBUG - Loading plugins from directory: /opt/***/plugins</span><br><span class="line">[2025-05-10T04:49:16.573+0000] &#123;plugins_manager.py:234&#125; DEBUG - Loading plugins from entrypoints</span><br><span class="line">[2025-05-10T04:49:16.595+0000] &#123;plugins_manager.py:237&#125; DEBUG - Importing entry_point plugin openlineage</span><br><span class="line">[2025-05-10T04:49:16.727+0000] &#123;plugins_manager.py:346&#125; DEBUG - Loading 1 plugin(s) took 0.15 seconds</span><br><span class="line">[2025-05-10T04:49:16.728+0000] &#123;dagbag.py:540&#125; INFO - Filling up the DagBag from /opt/***/dags</span><br><span class="line">[2025-05-10T04:49:16.730+0000] &#123;dagbag.py:332&#125; DEBUG - Importing /opt/***/dags/test.py</span><br><span class="line">[2025-05-10T04:49:16.752+0000] &#123;dagbag.py:506&#125; DEBUG - Loaded DAG &lt;DAG: download_bing&gt;</span><br><span class="line">[2025-05-10T04:49:16.753+0000] &#123;dagbag.py:332&#125; DEBUG - Importing /opt/***/dags/hello.py</span><br><span class="line">[2025-05-10T04:49:16.757+0000] &#123;dagbag.py:506&#125; DEBUG - Loaded DAG &lt;DAG: b_hello&gt;</span><br><span class="line">[2025-05-10T04:49:16.910+0000] &#123;plugins_manager.py:322&#125; DEBUG - Plugins are already loaded. Skipping.</span><br><span class="line">[2025-05-10T04:49:16.911+0000] &#123;plugins_manager.py:506&#125; DEBUG - Integrate DAG plugins</span><br><span class="line">[2025-05-10T04:49:16.915+0000] &#123;taskinstance.py:991&#125; DEBUG - previous_execution_date was called</span><br><span class="line">[2025-05-10T04:49:16.923+0000] &#123;task_command.py:423&#125; INFO - Running &lt;TaskInstance: download_bing.save_task manual__2025-05-09T05:19:09.480045+00:00 [success]&gt; on host ***-worker-0.***-worker.***.svc.cluster.local</span><br><span class="line">[2025-05-10T04:49:16.923+0000] &#123;settings.py:386&#125; DEBUG - Disposing DB connection pool (PID 32686)</span><br><span class="line">[2025-05-10T04:49:16.924+0000] &#123;settings.py:249&#125; DEBUG - Setting up DB connection pool (PID 32686)</span><br><span class="line">[2025-05-10T04:49:16.924+0000] &#123;settings.py:318&#125; DEBUG - settings.prepare_engine_args(): Using NullPool</span><br><span class="line">[2025-05-10T04:49:18.554+0000] &#123;cli_action_loggers.py:85&#125; DEBUG - Calling callbacks: []</span><br><span class="line">[2025-05-10T04:49:18.554+0000] &#123;settings.py:386&#125; DEBUG - Disposing DB connection pool (PID 32686)</span><br></pre></td></tr></table></figure></div>
 
+<h4 id="1-3-3-调用链"><a href="#1-3-3-调用链" class="headerlink" title="1.3.3 调用链"></a>1.3.3 调用链</h4><p>task_run(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</p>
+<p>-&gt; 1. get_dag(airflow&#x2F;utils&#x2F;cli.py)    <strong>2. DAG::get_task(airflow&#x2F;models&#x2F;dag.py)    3. _get_ti(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</strong>   4. TaskInstance::init_run_context(airflow-core&#x2F;src&#x2F;airflow&#x2F;models&#x2F;taskinstance.py)</p>
+<p>-&gt; 4. TaskInstance::get_template_context(airflow&#x2F;models&#x2F;taskinstance.py)</p>
+<p>-&gt; 4. integrate_macros_plugins(airflow&#x2F;plugins_manager.py)</p>
+<p>-&gt; 5. reconfigure_orm(airflow&#x2F;settings.py)</p>
+<p>-&gt; 6. _run_raw_task(airflow&#x2F;models&#x2F;taskinstance.py)</p>
+<p>观察发现可能是以下几个函数调用时间过长：</p>
+<ol>
+<li><p>DAG::get_task(airflow&#x2F;models&#x2F;dag.py)</p>
+</li>
+<li><p>_get_ti(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</p>
+</li>
+<li><p><strong>_run_raw_task(airflow&#x2F;models&#x2F;taskinstance.py)</strong></p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2025-05-10T04:49:18.554+0000] &#123;cli_action_loggers.py:85&#125; DEBUG - Calling callbacks: []</span><br><span class="line">[2025-05-10T04:49:18.554+0000] &#123;settings.py:386&#125; DEBUG - Disposing DB connection pool (PID 32686)</span><br></pre></td></tr></table></figure></div>
 
-
-
+<p>都是执行程序结束后的退出时的调用</p>
 <h3 id="1-4-对比选型"><a href="#1-4-对比选型" class="headerlink" title="1.4 对比选型"></a>1.4 对比选型</h3><h4 id="1-4-1-argo"><a href="#1-4-1-argo" class="headerlink" title="1.4.1 argo"></a>1.4.1 argo</h4><ul>
 <li><p>支持更复杂的工作流设计，包括<strong>循环、递归和条件逻辑</strong>，适合需要高度控制和灵活性的复杂任务。其工作流以 YAML 或 JSON 格式定义</p>
 </li>
@@ -606,7 +621,7 @@
         <li><strong>Created at:</strong> 2025-05-08 17:21:54</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-09 13:54:20
+                <strong>Updated at:</strong> 2025-05-10 15:02:16
             </li>
         
         <li>
