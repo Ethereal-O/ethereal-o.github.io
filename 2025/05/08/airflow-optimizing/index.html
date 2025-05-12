@@ -26,8 +26,9 @@
 <meta property="og:description" content="1. 调度优化1.1 概念理解1.1.1 Executor是airflow部署的模式，更改后必须重启airflow才可以生效。  本地Executor  Airflow 任务在调度器进程内部本地运行。优点: 非常易于使用，速度快，延迟极低，设置要求少。缺点: 功能有限，并与 Airflow 调度器共享资源。   远程Executor  队列&#x2F;批处理 Executor  CeleryExe">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
+<meta property="og:image" content="https://developer.qcloudimg.com/http-save/yehe-1293914/99b06eba24bb908bec12eb3ad08a8cba.png">
 <meta property="article:published_time" content="2025-05-08T09:21:54.000Z">
-<meta property="article:modified_time" content="2025-05-10T07:58:46.718Z">
+<meta property="article:modified_time" content="2025-05-12T08:47:20.043Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
@@ -359,8 +360,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-10 15:58:46</span>
-            <span class="mobile">2025-05-10 15:58</span>
+            <span class="desktop">2025-05-12 16:47:20</span>
+            <span class="mobile">2025-05-12 16:47</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -478,7 +479,7 @@
 <h4 id="1-1-2-Parser"><a href="#1-1-2-Parser" class="headerlink" title="1.1.2 Parser"></a>1.1.2 Parser</h4><p>解析并更新DAG设置</p>
 <p>参数设置</p>
 <ul>
-<li>parsing_processes（AIRFLOW__DAG_PROCESSOR__PARSING_PROCESSES）：</li>
+<li>parsing_processes（AIRFLOW__DAG_PROCESSOR__PARSING_PROCESSES）：DAG processor 可以并行运行多个进程来解析 dags。这定义了将运行的进程数量。</li>
 </ul>
 <h4 id="1-1-3-Scheduler"><a href="#1-1-3-Scheduler" class="headerlink" title="1.1.3 Scheduler"></a>1.1.3 Scheduler</h4><p>参数设置：</p>
 <ul>
@@ -577,24 +578,39 @@
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2025-05-10T04:49:18.554+0000] &#123;cli_action_loggers.py:85&#125; DEBUG - Calling callbacks: []</span><br><span class="line">[2025-05-10T04:49:18.554+0000] &#123;settings.py:386&#125; DEBUG - Disposing DB connection pool (PID 32686)</span><br></pre></td></tr></table></figure></div>
 
 <p>都是执行程序结束后的退出时的调用</p>
-<h3 id="1-4-对比选型"><a href="#1-4-对比选型" class="headerlink" title="1.4 对比选型"></a>1.4 对比选型</h3><h4 id="1-4-1-argo"><a href="#1-4-1-argo" class="headerlink" title="1.4.1 argo"></a>1.4.1 argo</h4><ul>
-<li><p>支持更复杂的工作流设计，包括<strong>循环、递归和条件逻辑</strong>，适合需要高度控制和灵活性的复杂任务。其工作流以 YAML 或 JSON 格式定义</p>
-</li>
-<li><p>使用 Kubernetes 的 CronJob 来调度工作流，调度能力依赖于 Kubernetes</p>
-</li>
+<h3 id="1-4-对比选型"><a href="#1-4-对比选型" class="headerlink" title="1.4 对比选型"></a>1.4 对比选型</h3><h4 id="1-4-1-argo"><a href="#1-4-1-argo" class="headerlink" title="1.4.1 argo"></a>1.4.1 argo</h4><p>优点</p>
+<ul>
+<li>支持更复杂的工作流设计，包括<strong>循环、递归和条件逻辑</strong>，适合需要高度控制和灵活性的复杂任务。其工作流以 YAML 或 JSON 格式定义</li>
 </ul>
-<h4 id="1-4-2-kubeflow"><a href="#1-4-2-kubeflow" class="headerlink" title="1.4.2 kubeflow"></a>1.4.2 kubeflow</h4><p>同样需要每个任务启动新的Pod</p>
+<p>缺点</p>
+<ul>
+<li>使用 Kubernetes 的 CronJob 来调度工作流，调度能力依赖于 Kubernetes</li>
+</ul>
+<h4 id="1-4-2-kubeflow"><a href="#1-4-2-kubeflow" class="headerlink" title="1.4.2 kubeflow"></a>1.4.2 kubeflow</h4><p>优点</p>
 <ul>
 <li><p><strong>Kubeflow</strong> 在 <strong>机器学习、分布式计算、资源密集型任务</strong> 中更快。因为依赖于k8s，可以更好利用资源。</p>
 <ul>
 <li><strong>Airflow</strong> 在 <strong>轻量级任务、短时任务调度、非容器化环境</strong> 中更快。</li>
 </ul>
 </li>
+<li><p>提供很多ML相关包，例如类似jupter notebook的kubeflow notebooks</p>
+</li>
 <li><p>其中kubeflow pipeline基于argo实现，相比于argo能有更多ML内容，增强了持久化层。</p>
 </li>
-<li><p>kubeflow也不支持定义循环。</p>
-</li>
 </ul>
+<p>缺点</p>
+<ul>
+<li>同样需要每个任务启动新的Pod</li>
+</ul>
+<ul>
+<li>kubeflow也不支持定义循环</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://developer.qcloudimg.com/http-save/yehe-1293914/99b06eba24bb908bec12eb3ad08a8cba.png"
+                      alt="99b06eba24bb908bec12eb3ad08a8cba"
+                ></p>
 <h3 id="1-5-Celery优化"><a href="#1-5-Celery优化" class="headerlink" title="1.5 Celery优化"></a>1.5 Celery优化</h3><h4 id="1-5-1-Broker-Connection-Pools（连接池数目）"><a href="#1-5-1-Broker-Connection-Pools（连接池数目）" class="headerlink" title="1.5.1 Broker Connection Pools（连接池数目）"></a>1.5.1 Broker Connection Pools（连接池数目）</h4><ul>
 <li><a target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/stable/userguide/configuration.html#std-setting-broker_pool_limit"><code>broker_pool_limit</code></a></li>
 </ul>
@@ -665,6 +681,9 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/stable/userguide/optimizing.html" >Optimizing — Celery 5.5.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/stable/userguide/concurrency/index.html" >Concurrency — Celery 5.5.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/stable/userguide/configuration.html" >Configuration and defaults — Celery 5.5.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/133391977?source_id=1005" >Kubeflow-K8S的机器学习工具包，太牛了！ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2317882" >从零搭建机器学习平台Kubeflow-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>S的机器学习工具包，太牛了！](<a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/133391977?source_id=1005" >https://www.zhihu.com/tardis/zm/art/133391977?source_id=1005 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</p>
 
             </div>
 
@@ -677,7 +696,7 @@
         <li><strong>Created at:</strong> 2025-05-08 17:21:54</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-10 15:58:46
+                <strong>Updated at:</strong> 2025-05-12 16:47:20
             </li>
         
         <li>
