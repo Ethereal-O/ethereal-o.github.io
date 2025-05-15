@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
 <meta property="og:image" content="https://developer.qcloudimg.com/http-save/yehe-1293914/99b06eba24bb908bec12eb3ad08a8cba.png">
 <meta property="article:published_time" content="2025-05-08T09:21:54.000Z">
-<meta property="article:modified_time" content="2025-05-15T04:39:28.768Z">
+<meta property="article:modified_time" content="2025-05-15T08:09:38.938Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
@@ -360,8 +360,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-15 12:39:28</span>
-            <span class="mobile">2025-05-15 12:39</span>
+            <span class="desktop">2025-05-15 16:09:38</span>
+            <span class="mobile">2025-05-15 16:09</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -560,7 +560,42 @@
 
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">airflow tasks run download_bing save_task manual__2025-05-09T05:19:09.480045+00:00</span></span><br><span class="line">...</span><br><span class="line">[2025-05-10T04:49:16.545+0000] &#123;cli_action_loggers.py:67&#125; DEBUG - Calling callbacks: [&lt;function default_action_log at 0x7e4c4b906820&gt;]</span><br><span class="line">[2025-05-10T04:49:16.572+0000] &#123;plugins_manager.py:328&#125; DEBUG - Loading plugins</span><br><span class="line">[2025-05-10T04:49:16.573+0000] &#123;plugins_manager.py:254&#125; DEBUG - Loading plugins from directory: /opt/***/plugins</span><br><span class="line">[2025-05-10T04:49:16.573+0000] &#123;plugins_manager.py:234&#125; DEBUG - Loading plugins from entrypoints</span><br><span class="line">[2025-05-10T04:49:16.595+0000] &#123;plugins_manager.py:237&#125; DEBUG - Importing entry_point plugin openlineage</span><br><span class="line">[2025-05-10T04:49:16.727+0000] &#123;plugins_manager.py:346&#125; DEBUG - Loading 1 plugin(s) took 0.15 seconds</span><br><span class="line">[2025-05-10T04:49:16.728+0000] &#123;dagbag.py:540&#125; INFO - Filling up the DagBag from /opt/***/dags</span><br><span class="line">[2025-05-10T04:49:16.730+0000] &#123;dagbag.py:332&#125; DEBUG - Importing /opt/***/dags/test.py</span><br><span class="line">[2025-05-10T04:49:16.752+0000] &#123;dagbag.py:506&#125; DEBUG - Loaded DAG &lt;DAG: download_bing&gt;</span><br><span class="line">[2025-05-10T04:49:16.753+0000] &#123;dagbag.py:332&#125; DEBUG - Importing /opt/***/dags/hello.py</span><br><span class="line">[2025-05-10T04:49:16.757+0000] &#123;dagbag.py:506&#125; DEBUG - Loaded DAG &lt;DAG: b_hello&gt;</span><br><span class="line">[2025-05-10T04:49:16.910+0000] &#123;plugins_manager.py:322&#125; DEBUG - Plugins are already loaded. Skipping.</span><br><span class="line">[2025-05-10T04:49:16.911+0000] &#123;plugins_manager.py:506&#125; DEBUG - Integrate DAG plugins</span><br><span class="line">[2025-05-10T04:49:16.915+0000] &#123;taskinstance.py:991&#125; DEBUG - previous_execution_date was called</span><br><span class="line">[2025-05-10T04:49:16.923+0000] &#123;task_command.py:423&#125; INFO - Running &lt;TaskInstance: download_bing.save_task manual__2025-05-09T05:19:09.480045+00:00 [success]&gt; on host ***-worker-0.***-worker.***.svc.cluster.local</span><br><span class="line">[2025-05-10T04:49:16.923+0000] &#123;settings.py:386&#125; DEBUG - Disposing DB connection pool (PID 32686)</span><br><span class="line">[2025-05-10T04:49:16.924+0000] &#123;settings.py:249&#125; DEBUG - Setting up DB connection pool (PID 32686)</span><br><span class="line">[2025-05-10T04:49:16.924+0000] &#123;settings.py:318&#125; DEBUG - settings.prepare_engine_args(): Using NullPool</span><br><span class="line">[2025-05-10T04:49:18.554+0000] &#123;cli_action_loggers.py:85&#125; DEBUG - Calling callbacks: []</span><br><span class="line">[2025-05-10T04:49:18.554+0000] &#123;settings.py:386&#125; DEBUG - Disposing DB connection pool (PID 32686)</span><br></pre></td></tr></table></figure></div>
 
-<h4 id="1-3-3-调用链"><a href="#1-3-3-调用链" class="headerlink" title="1.3.3 调用链"></a>1.3.3 调用链</h4><p>task_run(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</p>
+<h4 id="1-3-3-修改Broker"><a href="#1-3-3-修改Broker" class="headerlink" title="1.3.3 修改Broker"></a>1.3.3 修改Broker</h4><p>rabbitmq时间损耗：</p>
+<ol>
+<li><p>加入环境变量优化前</p>
+<ol>
+<li>1747293379.924484-&gt;1747293381.4033878（1.479）</li>
+</ol>
+</li>
+<li><p>加入环境变量优化后</p>
+<ol>
+<li><p>1747294250.2575343-&gt;1747294251.8361712（1.579）</p>
+</li>
+<li><p>1747294511.4867296-&gt;1747294513.37435（1.888）</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>redis时间损耗：</p>
+<ol>
+<li><p>加入环境变量优化前</p>
+<ol>
+<li><p>1747296261.2109053-&gt;1747296263.5157278（2.305）</p>
+</li>
+<li><p>1747295348.6995502-&gt;1747295350.9857132（2.286）</p>
+</li>
+</ol>
+</li>
+<li><p>加入环境变量优化后</p>
+<ol>
+<li><p>1747295391.1667778-&gt;1747295393.4209657（2.26）</p>
+</li>
+<li><p>1747296451.4672449-&gt;1747296453.208179（1.741）</p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="1-3-4-调用链"><a href="#1-3-4-调用链" class="headerlink" title="1.3.4 调用链"></a>1.3.4 调用链</h4><p>task_run(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</p>
 <p>-&gt; 1. get_dag(airflow&#x2F;utils&#x2F;cli.py)    <strong>2. DAG::get_task(airflow&#x2F;models&#x2F;dag.py)    3. _get_ti(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</strong>   4. TaskInstance::init_run_context(airflow-core&#x2F;src&#x2F;airflow&#x2F;models&#x2F;taskinstance.py)</p>
 <p>-&gt; 4. TaskInstance::get_template_context(airflow&#x2F;models&#x2F;taskinstance.py)</p>
 <p>-&gt; 4. integrate_macros_plugins(airflow&#x2F;plugins_manager.py)</p>
@@ -699,7 +734,7 @@
         <li><strong>Created at:</strong> 2025-05-08 17:21:54</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-15 12:39:28
+                <strong>Updated at:</strong> 2025-05-15 16:09:38
             </li>
         
         <li>
