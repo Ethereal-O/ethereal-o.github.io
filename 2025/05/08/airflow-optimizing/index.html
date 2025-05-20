@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
 <meta property="og:image" content="https://developer.qcloudimg.com/http-save/yehe-1293914/99b06eba24bb908bec12eb3ad08a8cba.png">
 <meta property="article:published_time" content="2025-05-08T09:21:54.000Z">
-<meta property="article:modified_time" content="2025-05-15T08:09:38.938Z">
+<meta property="article:modified_time" content="2025-05-20T14:15:23.459Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://airflow.org.cn/docs/apache-airflow-providers-celery/stable/_images/run_task_on_celery_executor.png">
@@ -360,8 +360,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-15 16:09:38</span>
-            <span class="mobile">2025-05-15 16:09</span>
+            <span class="desktop">2025-05-20 22:15:23</span>
+            <span class="mobile">2025-05-20 22:15</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -595,7 +595,17 @@
 </ol>
 </li>
 </ol>
-<h4 id="1-3-4-调用链"><a href="#1-3-4-调用链" class="headerlink" title="1.3.4 调用链"></a>1.3.4 调用链</h4><p>task_run(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</p>
+<h4 id="1-3-4-使用KubernetesPodOperator"><a href="#1-3-4-使用KubernetesPodOperator" class="headerlink" title="1.3.4 使用KubernetesPodOperator"></a>1.3.4 使用KubernetesPodOperator</h4><p>使用官方版本helm，并且注意要将配置修改：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">multiNamespaceMode: true</span><br></pre></td></tr></table></figure></div>
+
+<p>编写如下脚本：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> airflow <span class="keyword">import</span> DAG</span><br><span class="line"><span class="keyword">from</span> airflow.operators.python <span class="keyword">import</span> PythonOperator</span><br><span class="line"><span class="keyword">from</span> airflow.providers.cncf.kubernetes.operators.pod <span class="keyword">import</span> KubernetesPodOperator</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> DAG(</span><br><span class="line">    dag_id=<span class="string">&#x27;download_bing&#x27;</span>,</span><br><span class="line">    tags=[<span class="string">&#x27;test&#x27;</span>], <span class="comment"># DAG的tag标签，用于分类</span></span><br><span class="line">) <span class="keyword">as</span> dag:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">request</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;hello&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(time.time())</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">import</span> requests</span><br><span class="line">        resp = requests.get(<span class="string">&quot;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=1&amp;n=10&amp;mkt=en-US&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> resp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">save</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;hello2&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(time.time())</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;/opt/airflow/results.txt&quot;</span>, <span class="string">&quot;a+&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(text)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用PythonOperator执行Python函数</span></span><br><span class="line">    request_task = PythonOperator(</span><br><span class="line">        task_id=<span class="string">&quot;request_task&quot;</span>,</span><br><span class="line">        python_callable=request</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    save_task = PythonOperator(</span><br><span class="line">        task_id=<span class="string">&quot;save_task&quot;</span>,</span><br><span class="line">        python_callable=save</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    k = KubernetesPodOperator(</span><br><span class="line">        task_id=<span class="string">&quot;example_task&quot;</span>,</span><br><span class="line">        name=<span class="string">&quot;example_pod&quot;</span>,</span><br><span class="line">        namespace=<span class="string">&quot;default&quot;</span>,</span><br><span class="line">        image=<span class="string">&quot;debian&quot;</span>,</span><br><span class="line">        cmds=[<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-cx&quot;</span>],</span><br><span class="line">        arguments=[<span class="string">&quot;date +%Y-%m-%d&#x27; &#x27;%H:%M:%S.%3N&quot;</span>],</span><br><span class="line">        labels=&#123;<span class="string">&quot;example&quot;</span>: <span class="string">&quot;label&quot;</span>&#125;,</span><br><span class="line">        get_logs=<span class="literal">True</span>,</span><br><span class="line">        is_delete_operator_pod=<span class="literal">True</span>,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    request_task &gt;&gt; save_task</span><br><span class="line">    save_task &gt;&gt; k</span><br></pre></td></tr></table></figure></div>
+
+<p>使用KubernetesPodOperator消耗：</p>
+<p>前一个输出：1747749304.166512</p>
+<p>后一个输出（KubernetesPodOperator）：2025-05-20 13:55:07.802</p>
+<p>大约耗费：3.636s</p>
+<h4 id="1-3-5-调用链"><a href="#1-3-5-调用链" class="headerlink" title="1.3.5 调用链"></a>1.3.5 调用链</h4><p>task_run(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</p>
 <p>-&gt; 1. get_dag(airflow&#x2F;utils&#x2F;cli.py)    <strong>2. DAG::get_task(airflow&#x2F;models&#x2F;dag.py)    3. _get_ti(airflow&#x2F;cli&#x2F;commands&#x2F;task_command.py)</strong>   4. TaskInstance::init_run_context(airflow-core&#x2F;src&#x2F;airflow&#x2F;models&#x2F;taskinstance.py)</p>
 <p>-&gt; 4. TaskInstance::get_template_context(airflow&#x2F;models&#x2F;taskinstance.py)</p>
 <p>-&gt; 4. integrate_macros_plugins(airflow&#x2F;plugins_manager.py)</p>
@@ -722,6 +732,8 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/latest/getting-started/backends-and-brokers/index.html#broker-overview" >Backends and Brokers — Celery 5.5.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/latest/getting-started/backends-and-brokers/redis.html#broker-redis" >Using Redis — Celery 5.5.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.celeryq.dev/en/latest/getting-started/backends-and-brokers/rabbitmq.html" >Using RabbitMQ — Celery 5.5.2 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/apache/airflow/discussions/29619" >Airflow Workers Trying to Create Pods in Default Namespace · apache&#x2F;airflow · Discussion #29619 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.techiescamp.com/docs/pods-is-forbidden-error/" >[Solved] pods is forbidden: User system:serviceaccount cannot list resource <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -734,7 +746,7 @@
         <li><strong>Created at:</strong> 2025-05-08 17:21:54</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-15 16:09:38
+                <strong>Updated at:</strong> 2025-05-20 22:15:23
             </li>
         
         <li>
