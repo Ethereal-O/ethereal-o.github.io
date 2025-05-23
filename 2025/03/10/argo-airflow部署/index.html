@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. argo1.1 准备离线helm部署文件1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859wget https:&#x2F;&#x2F;github.com&#x2F;argoproj&#x2F;argo-helm&#x2F;releases&#x2F;downloa&#x2F;argo-wor">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-10T10:32:21.000Z">
-<meta property="article:modified_time" content="2025-05-22T11:24:05.762Z">
+<meta property="article:modified_time" content="2025-05-23T04:02:51.305Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-22 19:24:05</span>
-            <span class="mobile">2025-05-22 19:24</span>
+            <span class="desktop">2025-05-23 12:02:51</span>
+            <span class="mobile">2025-05-23 12:02</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -470,7 +470,7 @@
 </ul>
 <p>部署多Executor会遇到以下问题：</p>
 <ul>
-<li>无法加载KubernetesExecutor运行时的日志信息</li>
+<li>无法加载KubernetesExecutor运行时的日志信息（持久化日志应该就可以解决问题）</li>
 </ul>
 <h2 id="3-社区版airflow"><a href="#3-社区版airflow" class="headerlink" title="3. 社区版airflow"></a>3. 社区版airflow</h2><h3 id="3-1-准备离线helm部署文件"><a href="#3-1-准备离线helm部署文件" class="headerlink" title="3.1 准备离线helm部署文件"></a>3.1 准备离线helm部署文件</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/airflow-helm/charts/releases/download/airflow-8.9.0/airflow-8.9.0.tgz</span><br><span class="line">tar xvf airflow-8.9.0.tgz</span><br><span class="line">vim values.yaml # 替换web和flower的ClusterIP为NodePort</span><br><span class="line">server:</span><br><span class="line">  service:</span><br><span class="line">    annotations: &#123;&#125;</span><br><span class="line">    sessionAffinity: &quot;None&quot;</span><br><span class="line">    sessionAffinityConfig: &#123;&#125;</span><br><span class="line">    type: NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改PVC of postgresql</span></span><br><span class="line">persistence:</span><br><span class="line">    ## if postgres will use Persistent Volume Claims to store data</span><br><span class="line">    ## - [WARNING] if false, data will be LOST as postgres Pods restart</span><br><span class="line">    ##</span><br><span class="line">    enabled: true</span><br><span class="line"></span><br><span class="line">    ## the name of the StorageClass used by the PVC</span><br><span class="line">    ##</span><br><span class="line">    storageClass: &quot;local-path&quot;</span><br></pre></td></tr></table></figure></div>
 
@@ -527,6 +527,7 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://airflow.org.cn/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html" >升级到 Airflow 3 — Airflow 文档 - Airflow 工作流管理平台 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://cwiki.apache.org/confluence/display/AIRFLOW/Airflow+3.0" >Airflow 3.0 - Airflow - Apache Software Foundation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.astronomer.io/docs/learn/2.x/airflow-executors-explained/?tab=traditional#run-multiple-executors-concurrently" >Apache Airflow® Executors | Astronomer Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/apache/airflow/issues/16777" >Official Helm chart - unable to get persistent logs using KubernetesExecutor and PV · Issue #16777 · apache&#x2F;airflow <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -539,7 +540,7 @@
         <li><strong>Created at:</strong> 2025-03-10 18:32:21</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-22 19:24:05
+                <strong>Updated at:</strong> 2025-05-23 12:02:51
             </li>
         
         <li>
