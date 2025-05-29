@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. vermeer代码理解1.1 架构1.1.1 MasterKey responsibilities:  Job submission and management  Task distribution across worker nodes  Worker node health monitoring  Result collection and aggregation  Client co">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-05-21T08:41:41.000Z">
-<meta property="article:modified_time" content="2025-05-21T09:21:36.663Z">
+<meta property="article:modified_time" content="2025-05-29T17:30:02.454Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -357,8 +357,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-21 17:21:36</span>
-            <span class="mobile">2025-05-21 17:21</span>
+            <span class="desktop">2025-05-30 01:30:02</span>
+            <span class="mobile">2025-05-30 01:30</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -408,6 +408,55 @@
 <h5 id="1-2-1-2-worker初始化"><a href="#1-2-1-2-worker初始化" class="headerlink" title="1.2.1.2 worker初始化"></a>1.2.1.2 worker初始化</h5><p>Main(apps&#x2F;worker&#x2F;worker_main.go)-&gt;Init(apps&#x2F;worker&#x2F;service.go)-&gt;SayHelloMaster(apps&#x2F;master&#x2F;bl&#x2F;grpc_handlers.go)</p>
 <h4 id="1-2-2-下发任务"><a href="#1-2-2-下发任务" class="headerlink" title="1.2.2 下发任务"></a>1.2.2 下发任务</h4><h5 id="1-2-2-1-master下发任务"><a href="#1-2-2-1-master下发任务" class="headerlink" title="1.2.2.1 master下发任务"></a>1.2.2.1 master下发任务</h5><p>POST(apps&#x2F;master&#x2F;services&#x2F;http_tasks.go)（客户端触发提交）-&gt;CreateTaskInfo()&#x2F;QueueExecuteTasks(apps&#x2F;master&#x2F;bl&#x2F;task_bl.go)-&gt;QueueTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;[PushTask(apps&#x2F;master&#x2F;schedules&#x2F;space_queue.go)-&gt;PushTask(apps&#x2F;master&#x2F;schedules&#x2F;task_queue.go)]&#x2F;[dispatch(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;doDispatch(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;HeadTasks()&#x2F;startChan-&gt;唤醒waitingTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;（这里通过workerMgr.ApplyGroup拿到wroker代理）handleStartTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;startWaitingTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;StartTask(apps&#x2F;master&#x2F;bl&#x2F;task_starter.go)-&gt;StartComputeTask(apps&#x2F;master&#x2F;bl&#x2F;task_starter.go)-&gt;AsyncCompute(apps&#x2F;master&#x2F;bl&#x2F;grpc_handlers.go)-&gt;Send()]</p>
 <h5 id="1-2-2-2-worker接受任务"><a href="#1-2-2-2-worker接受任务" class="headerlink" title="1.2.2.2 worker接受任务"></a>1.2.2.2 worker接受任务</h5><p>Main(apps&#x2F;worker&#x2F;worker_main.go)-&gt;Run(apps&#x2F;worker&#x2F;service.go)-&gt;HandleComputeTask(apps&#x2F;worker&#x2F;grpc_handlers.go)-&gt;StartCompute(apps&#x2F;worker&#x2F;compute_bl.go)-&gt;ComputeTaskStatus()</p>
+<h4 id="1-2-3-Space与Graph"><a href="#1-2-3-Space与Graph" class="headerlink" title="1.2.3 Space与Graph"></a>1.2.3 Space与Graph</h4><h5 id="1-2-3-1-Space"><a href="#1-2-3-1-Space" class="headerlink" title="1.2.3.1 Space"></a>1.2.3.1 Space</h5><p>概念：指的是Client用于创建Graph的空间。Space由Client指定，进一步通过Token方式传入，可以通过TokenFactory创建。用法详见（client&#x2F;client.go）。</p>
+<h5 id="1-2-3-2-Graph"><a href="#1-2-3-2-Graph" class="headerlink" title="1.2.3.2 Graph"></a>1.2.3.2 Graph</h5><p>概念：指的是Client在自己Space中创建的工作流。</p>
+<h5 id="1-2-3-3-Worker"><a href="#1-2-3-3-Worker" class="headerlink" title="1.2.3.3 Worker"></a>1.2.3.3 Worker</h5><p>概念：指的是实际可以处理任务的节点。</p>
+<h5 id="1-2-3-4-WorkerGroup"><a href="#1-2-3-4-WorkerGroup" class="headerlink" title="1.2.3.4 WorkerGroup"></a>1.2.3.4 WorkerGroup</h5><p>概念：一组Worker，是调度的最小粒度。</p>
+<h5 id="1-2-3-5-流程"><a href="#1-2-3-5-流程" class="headerlink" title="1.2.3.5 流程"></a>1.2.3.5 流程</h5><ol>
+<li><p>Client指定Space，通过Token传入。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
+</li>
+<li><p>Client向Master创建Space（目前只能通过Admin创建）。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
+</li>
+<li><p>Client向Master创建Graph（目前只能通过Admin创建），从当前Client的Token中获取Space，在该Space中创建。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
+</li>
+<li><p>Client向Master请求将Worker分配到WorkerGroup。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
+</li>
+<li><p>Client向Master请求将WorkerGroup分配到Space或Graph。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
+</li>
+<li><p>客户端下发任务。(apps&#x2F;master&#x2F;services&#x2F;http_tasks.go)通过<code>CreateTaskInfo</code>创建Task，其中包含Task所属的Space和Graph。</p>
+</li>
+<li><p>调度器从队列中拿出任务。(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)</p>
+</li>
+<li><p>试图分配agent(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
+<ol>
+<li><p>加载graph：getAgent(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)-&gt;getAgentFromWorker(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
+</li>
+<li><p>开始计算：getAgent(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)-&gt;getAgentFromGraph(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)-&gt;(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
+</li>
+</ol>
+</li>
+<li><p>AssignTask(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
+</li>
+</ol>
+<h5 id="1-2-3-6-当初始化时确定Group"><a href="#1-2-3-6-当初始化时确定Group" class="headerlink" title="1.2.3.6 当初始化时确定Group"></a>1.2.3.6 当初始化时确定Group</h5><p>思考：首先group信息从worker配置加载，因此必须从worker向master传递。而worker启动时会向master发送sayHello消息，因此必须在这里多传入group信息（需要注意空值采用<code>$</code>）</p>
+<ol>
+<li><p>更改SayHello(apps&#x2F;worker&#x2F;service.go+apps&#x2F;protos&#x2F;master_grpc.pb.go)</p>
+</li>
+<li><p>master收到消息后会进行以下步骤：</p>
+<ol>
+<li><p>检查等待重名的worker离开（自动清理）</p>
+</li>
+<li><p>**创建新的worker(CreateWorker)**：在此处，会尝试从对象存储中加载worker，填入group信息。因此需要考虑冲突的情况。（目前认为对象存储中的信息优先级高于默认的worker传入的信息）</p>
+</li>
+<li><p>添加worker(AddWorker)。注意，这里addWorker，已经能够根据worker中的group信息，自动添加group（通过workersByName，而之后查询group内的worker也只是遍历(apps&#x2F;master&#x2F;workers&#x2F;worker_manager.go)）。因此只需要在此处之前分配group信息即可。</p>
+</li>
+<li><p>初始化worker</p>
+</li>
+<li><p>恢复graph</p>
+</li>
+</ol>
+</li>
+</ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://deepwiki.com/hugegraph/hugegraph-vermeer/1.2-key-features" >Key Features | hugegraph&#x2F;hugegraph-vermeer | DeepWiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://hugegraph.apache.org/cn/docs/quickstart/hugegraph-vermeer/" >HugeGraph-Vermeer Quick Start | HugeGraph <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://deepwiki.com/hugegraph/hugegraph-vermeer/1.1-architecture" >Architecture | hugegraph&#x2F;hugegraph-vermeer | DeepWiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -423,7 +472,7 @@
         <li><strong>Created at:</strong> 2025-05-21 16:41:41</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-21 17:21:36
+                <strong>Updated at:</strong> 2025-05-30 01:30:02
             </li>
         
         <li>
