@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/05/29/migrating-airflow-to-argo/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. 迁移动机 分布式管理工作流（不需要在一个python文件中定义）  易于复制部署   2. 迁移缺点 必须依赖于kubenetes，必须启动pod，不利于短时间任务的执行  3. 迁移步骤 数据迁移  工作流迁移  任务迁移  任务关系迁移    重新设定定时任务（利用K8s CronJob）  或者使用Argo的Cron WorkflowsCron Workflows - Argo Wor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="migrating airflow to argo">
+<meta property="og:url" content="http://example.com/2025/05/29/migrating-airflow-to-argo/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 迁移动机 分布式管理工作流（不需要在一个python文件中定义）  易于复制部署   2. 迁移缺点 必须依赖于kubenetes，必须启动pod，不利于短时间任务的执行  3. 迁移步骤 数据迁移  工作流迁移  任务迁移  任务关系迁移    重新设定定时任务（利用K8s CronJob）  或者使用Argo的Cron WorkflowsCron Workflows - Argo Wor">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-29T07:31:04.000Z">
+<meta property="article:modified_time" content="2025-05-29T09:50:13.831Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            migrating airflow to argo -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">migrating airflow to argo</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-05-29 15:31:04</span>
+        <span class="mobile">2025-05-29 15:31</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-05-29 17:50:13</span>
+            <span class="mobile">2025-05-29 17:50</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-迁移动机"><a href="#1-迁移动机" class="headerlink" title="1. 迁移动机"></a>1. 迁移动机</h2><ol>
+<li><p>分布式管理工作流（不需要在一个python文件中定义）</p>
+</li>
+<li><p>易于复制部署</p>
+</li>
+</ol>
+<h2 id="2-迁移缺点"><a href="#2-迁移缺点" class="headerlink" title="2. 迁移缺点"></a>2. 迁移缺点</h2><ol>
+<li>必须依赖于kubenetes，必须启动pod，不利于短时间任务的执行</li>
+</ol>
+<h2 id="3-迁移步骤"><a href="#3-迁移步骤" class="headerlink" title="3. 迁移步骤"></a>3. 迁移步骤</h2><ol>
+<li><p>数据迁移</p>
+</li>
+<li><p>工作流迁移</p>
+<ol>
+<li><p>任务迁移</p>
+</li>
+<li><p>任务关系迁移</p>
+</li>
+</ol>
+</li>
+<li><p>重新设定定时任务（利用K8s CronJob）</p>
+<ol>
+<li>或者使用Argo的Cron Workflows<a class="link"   target="_blank" rel="noopener" href="https://argo-workflows.readthedocs.io/en/latest/cron-workflows/" >Cron Workflows - Argo Workflows - The workflow engine for Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ol>
+</li>
+</ol>
+<h2 id="4-迁移注意事项"><a href="#4-迁移注意事项" class="headerlink" title="4. 迁移注意事项"></a>4. 迁移注意事项</h2><h3 id="4-1-获取触发时间"><a href="#4-1-获取触发时间" class="headerlink" title="4.1 获取触发时间"></a>4.1 获取触发时间</h3><p>由于api不同，在任务中使用环境变量获取时间是不一样的。argo可以通过以下方法获取：</p>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">=</span> <span class="string">sprig.dateModify(&#x27;-168h&#x27;</span>, <span class="string">sprig.toDate(&#x27;2006-01-02T15:04:05Z07:00&#x27;</span>, <span class="string">sprig.date(&#x27;2006-01-02T15:04:05Z07:00&#x27;</span>, <span class="string">workflow.creationTimestamp)))</span> &#125;&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-2-任务定义"><a href="#4-2-任务定义" class="headerlink" title="4.2 任务定义"></a>4.2 任务定义</h3><p>由于每个任务都需要使用yaml文件定义，所以可能需要重复写非常多的yaml文件。可以使用模板或内联模板来复用（<a class="link"   target="_blank" rel="noopener" href="https://argo-workflows.readthedocs.io/en/latest/inline-templates/" >Inline Templates - Argo Workflows - The workflow engine for Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>）</p>
+<h3 id="4-3-数据迁移"><a href="#4-3-数据迁移" class="headerlink" title="4.3 数据迁移"></a>4.3 数据迁移</h3><p>可以使用<strong>DBT</strong>工具转换。</p>
+<p>问题：</p>
+<ul>
+<li>RDDs失败</li>
+<li>Python models不支持Incremental tables<ul>
+<li>Use a Python model for the latest table and a SQL model for the incremental</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-其他注意事项"><a href="#4-4-其他注意事项" class="headerlink" title="4.4 其他注意事项"></a>4.4 其他注意事项</h3><ul>
+<li>不能与Kubeflow并存</li>
+</ul>
+<h2 id="5-迁移示例"><a href="#5-迁移示例" class="headerlink" title="5. 迁移示例"></a>5. 迁移示例</h2><h3 id="5-1-原airflow代码"><a href="#5-1-原airflow代码" class="headerlink" title="5.1 原airflow代码"></a>5.1 原airflow代码</h3><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> airflow <span class="keyword">import</span> DAG</span><br><span class="line"><span class="keyword">from</span> airflow.decorators <span class="keyword">import</span> task</span><br><span class="line"><span class="keyword">from</span> airflow.operators.python <span class="keyword">import</span> PythonOperator</span><br><span class="line"><span class="keyword">from</span> airflow.providers.cncf.kubernetes.operators.pod <span class="keyword">import</span> KubernetesPodOperator</span><br><span class="line"><span class="keyword">from</span> airflow.operators.bash <span class="keyword">import</span> BashOperator</span><br><span class="line"><span class="keyword">from</span> kubernetes.client <span class="keyword">import</span> models <span class="keyword">as</span> k8s</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">with</span> DAG(</span><br><span class="line">    dag_id=<span class="string">&#x27;download_bing&#x27;</span>,</span><br><span class="line">    tags=[<span class="string">&#x27;test&#x27;</span>], <span class="comment"># DAG的tag标签，用于分类</span></span><br><span class="line">) <span class="keyword">as</span> dag:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">request</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;hello&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(time.time())</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">import</span> requests</span><br><span class="line">        resp = requests.get(<span class="string">&quot;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=1&amp;n=10&amp;mkt=en-US&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> resp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">save</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;hello2&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(time.time())</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;/opt/airflow/results.txt&quot;</span>, <span class="string">&quot;a+&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(text)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用PythonOperator执行Python函数</span></span><br><span class="line">    request_task = PythonOperator(</span><br><span class="line">        task_id=<span class="string">&quot;request_task&quot;</span>,</span><br><span class="line">        python_callable=request</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    save_task = PythonOperator(</span><br><span class="line">        task_id=<span class="string">&quot;save_task&quot;</span>,</span><br><span class="line">        executor=<span class="string">&quot;KubernetesExecutor&quot;</span>,</span><br><span class="line">        python_callable=save</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    k = KubernetesPodOperator(</span><br><span class="line">        task_id=<span class="string">&quot;example_task&quot;</span>,</span><br><span class="line">        name=<span class="string">&quot;example_pod&quot;</span>,</span><br><span class="line">        namespace=<span class="string">&quot;default&quot;</span>,</span><br><span class="line">        executor=<span class="string">&quot;KubernetesExecutor&quot;</span>,</span><br><span class="line">        image=<span class="string">&quot;ubuntu&quot;</span>,</span><br><span class="line">        cmds=[<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-cx&quot;</span>],</span><br><span class="line">        arguments=[<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27;&quot;</span>],</span><br><span class="line">        labels=&#123;<span class="string">&quot;example&quot;</span>: <span class="string">&quot;label&quot;</span>&#125;,</span><br><span class="line">        get_logs=<span class="literal">True</span>,</span><br><span class="line">        is_delete_operator_pod=<span class="literal">True</span>,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    b = BashOperator(</span><br><span class="line">        task_id=<span class="string">&quot;my_task_in_its_own_pod&quot;</span>,</span><br><span class="line">        executor=<span class="string">&quot;KubernetesExecutor&quot;</span>,</span><br><span class="line">        bash_command=<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27;&quot;</span>,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    executor_config_sidecar = &#123;</span><br><span class="line">            <span class="string">&quot;pod_override&quot;</span>: k8s.V1Pod(</span><br><span class="line">                spec=k8s.V1PodSpec(</span><br><span class="line">                    containers=[</span><br><span class="line">                        k8s.V1Container(</span><br><span class="line">                            name=<span class="string">&quot;base&quot;</span>,</span><br><span class="line">                            volume_mounts=[k8s.V1VolumeMount(mount_path=<span class="string">&quot;/shared/&quot;</span>, name=<span class="string">&quot;shared-empty-dir&quot;</span>)],</span><br><span class="line">                        ),</span><br><span class="line">                        k8s.V1Container(</span><br><span class="line">                            name=<span class="string">&quot;sidecar&quot;</span>,</span><br><span class="line">                            image=<span class="string">&quot;ubuntu&quot;</span>,</span><br><span class="line">                            args=[<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27; &gt; /shared/test.txt&quot;</span>],</span><br><span class="line">                            command=[<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-cx&quot;</span>],</span><br><span class="line">                            volume_mounts=[k8s.V1VolumeMount(mount_path=<span class="string">&quot;/shared/&quot;</span>, name=<span class="string">&quot;shared-empty-dir&quot;</span>)],</span><br><span class="line">                        ),</span><br><span class="line">                    ],</span><br><span class="line">                    volumes=[</span><br><span class="line">                        k8s.V1Volume(name=<span class="string">&quot;shared-empty-dir&quot;</span>, empty_dir=k8s.V1EmptyDirVolumeSource()),</span><br><span class="line">                    ],</span><br><span class="line">                )</span><br><span class="line">            ),</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(<span class="params">executor=<span class="string">&quot;KubernetesExecutor&quot;</span>,executor_config=executor_config_sidecar</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_sharedvolume_mount</span>():</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Tests whether the volume has been mounted.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello world&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(time.time())</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                return_code = os.system(<span class="string">&quot;cat /shared/test.txt&quot;</span>)</span><br><span class="line">                <span class="keyword">if</span> return_code != <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">raise</span> ValueError(<span class="string">f&quot;Error when checking volume mount. Return code <span class="subst">&#123;return_code&#125;</span>&quot;</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;/shared/test.txt&quot;</span>, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                        <span class="built_in">print</span>(f.readlines())</span><br><span class="line">            <span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">if</span> i &gt; <span class="number">4</span>:</span><br><span class="line">                    <span class="keyword">raise</span> e</span><br><span class="line"></span><br><span class="line">    sidecar_task = test_sharedvolume_mount()</span><br><span class="line"></span><br><span class="line">    request_task &gt;&gt; [save_task, sidecar_task, b, k]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># save_task &gt;&gt; [sidecar_task, b, k]</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="5-2-argo工作流"><a href="#5-2-argo工作流" class="headerlink" title="5.2 argo工作流"></a>5.2 argo工作流</h3><div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">argoproj.io/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Workflow</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">generateName:</span> <span class="string">download-bing-</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">shared-empty-dir</span></span><br><span class="line">      <span class="attr">emptyDir:</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="attr">templates:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">main</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">request-task</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">request-task</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">parallel-tasks</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">parallel-tasks</span></span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">parallel-tasks</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">save-task</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">save-task</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">sidecar-task</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">sidecar-task</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-task-in-its-own-pod</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">bash-task</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">example-task</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">k8s-pod-task</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 请求任务</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">request-task</span></span><br><span class="line">    <span class="attr">container:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">python:3.9-slim</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">python</span>, <span class="string">-c</span>]</span><br><span class="line">      <span class="attr">args:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">|</span></span><br><span class="line"><span class="string">          import time</span></span><br><span class="line"><span class="string">          print(&#x27;hello&#x27;)</span></span><br><span class="line"><span class="string">          print(time.time())</span></span><br><span class="line"><span class="string">          # 实际请求代码已注释</span></span><br><span class="line"><span class="string">          # import requests</span></span><br><span class="line"><span class="string">          # resp = requests.get(&quot;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=1&amp;n=10&amp;mkt=en-US&quot;)</span></span><br><span class="line"><span class="string">          # print(resp.text)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">  <span class="comment"># 保存任务</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">save-task</span></span><br><span class="line">    <span class="attr">container:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">python:3.9-slim</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">python</span>, <span class="string">-c</span>]</span><br><span class="line">      <span class="attr">args:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">|</span></span><br><span class="line"><span class="string">          import time</span></span><br><span class="line"><span class="string">          print(&#x27;hello2&#x27;)</span></span><br><span class="line"><span class="string">          print(time.time())</span></span><br><span class="line"><span class="string">          # 实际保存代码已注释</span></span><br><span class="line"><span class="string">          # with open(&quot;/results.txt&quot;, &quot;a+&quot;, encoding=&quot;utf-8&quot;) as f:</span></span><br><span class="line"><span class="string">          #   f.write(&quot;sample text&quot;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">  <span class="comment"># Bash 任务</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">bash-task</span></span><br><span class="line">    <span class="attr">container:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ubuntu</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">bash</span>, <span class="string">-c</span>]</span><br><span class="line">      <span class="attr">args:</span> [<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27;&quot;</span>]</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Kubernetes Pod 任务</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">k8s-pod-task</span></span><br><span class="line">    <span class="attr">container:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ubuntu</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">bash</span>, <span class="string">-cx</span>]</span><br><span class="line">      <span class="attr">args:</span> [<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27;&quot;</span>]</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Sidecar 任务</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">sidecar-task</span></span><br><span class="line">    <span class="attr">script:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">python:3.9-slim</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">python</span>]</span><br><span class="line">      <span class="attr">source:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        import os</span></span><br><span class="line"><span class="string">        import time</span></span><br><span class="line"><span class="string">        print(&quot;hello world&quot;)</span></span><br><span class="line"><span class="string">        print(time.time())</span></span><br><span class="line"><span class="string">        for i in range(5):</span></span><br><span class="line"><span class="string">            try:</span></span><br><span class="line"><span class="string">                return_code = os.system(&quot;cat /shared/test.txt&quot;)</span></span><br><span class="line"><span class="string">                if return_code != 0:</span></span><br><span class="line"><span class="string">                    raise ValueError(f&quot;Error when checking volume mount. Return code &#123;return_code&#125;&quot;)</span></span><br><span class="line"><span class="string">                else:</span></span><br><span class="line"><span class="string">                    with open(&quot;/shared/test.txt&quot;, &#x27;r&#x27;) as f:</span></span><br><span class="line"><span class="string">                        print(f.readlines())</span></span><br><span class="line"><span class="string">            except ValueError as e:</span></span><br><span class="line"><span class="string">                if i &gt; 4:</span></span><br><span class="line"><span class="string">                    raise e</span></span><br><span class="line"><span class="string"></span>      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">shared-empty-dir</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/shared</span></span><br><span class="line">    <span class="attr">sidecars:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">sidecar</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ubuntu</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">bash</span>, <span class="string">-cx</span>]</span><br><span class="line">      <span class="attr">args:</span> [<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27; &gt; /shared/test.txt&quot;</span>]</span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">shared-empty-dir</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/shared</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="5-3-argo定时工作流"><a href="#5-3-argo定时工作流" class="headerlink" title="5.3 argo定时工作流"></a>5.3 argo定时工作流</h3><div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">argoproj.io/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">CronWorkflow</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">download-bing-cron</span>  <span class="comment"># 定时任务名称</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">schedule:</span> <span class="string">&quot;0 * * * *&quot;</span>     <span class="comment"># 每小时执行一次（根据需求调整）</span></span><br><span class="line">  <span class="attr">concurrencyPolicy:</span> <span class="string">Replace</span> <span class="comment"># 若上次任务未完成则替换</span></span><br><span class="line">  <span class="attr">startingDeadlineSeconds:</span> <span class="number">60</span> <span class="comment"># 超时设置</span></span><br><span class="line">  <span class="attr">workflowSpec:</span></span><br><span class="line">    <span class="attr">entrypoint:</span> <span class="string">main</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">shared-empty-dir</span></span><br><span class="line">        <span class="attr">emptyDir:</span> &#123;&#125;</span><br><span class="line">    <span class="attr">templates:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">main</span></span><br><span class="line">      <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">request-task</span></span><br><span class="line">          <span class="attr">template:</span> <span class="string">request-task</span></span><br><span class="line">      <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">parallel-tasks</span></span><br><span class="line">          <span class="attr">template:</span> <span class="string">parallel-tasks</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">parallel-tasks</span></span><br><span class="line">      <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">save-task</span></span><br><span class="line">          <span class="attr">template:</span> <span class="string">save-task</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">sidecar-task</span></span><br><span class="line">          <span class="attr">template:</span> <span class="string">sidecar-task</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-task-in-its-own-pod</span></span><br><span class="line">          <span class="attr">template:</span> <span class="string">bash-task</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">example-task</span></span><br><span class="line">          <span class="attr">template:</span> <span class="string">k8s-pod-task</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 请求任务</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">request-task</span></span><br><span class="line">      <span class="attr">container:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">python:3.9-slim</span></span><br><span class="line">        <span class="attr">command:</span> [<span class="string">python</span>, <span class="string">-c</span>]</span><br><span class="line">        <span class="attr">args:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">|</span></span><br><span class="line"><span class="string">            import time</span></span><br><span class="line"><span class="string">            print(&#x27;hello&#x27;)</span></span><br><span class="line"><span class="string">            print(time.time())</span></span><br><span class="line"><span class="string">            # 实际请求代码已注释</span></span><br><span class="line"><span class="string">            # import requests</span></span><br><span class="line"><span class="string">            # resp = requests.get(&quot;https://www.bing.com/HPImageArchive.aspx?format=js&amp;idx=1&amp;n=10&amp;mkt=en-US&quot;)</span></span><br><span class="line"><span class="string">            # print(resp.text)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    <span class="comment"># 保存任务</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">save-task</span></span><br><span class="line">      <span class="attr">container:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">python:3.9-slim</span></span><br><span class="line">        <span class="attr">command:</span> [<span class="string">python</span>, <span class="string">-c</span>]</span><br><span class="line">        <span class="attr">args:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">|</span></span><br><span class="line"><span class="string">            import time</span></span><br><span class="line"><span class="string">            print(&#x27;hello2&#x27;)</span></span><br><span class="line"><span class="string">            print(time.time())</span></span><br><span class="line"><span class="string">            # 实际保存代码已注释</span></span><br><span class="line"><span class="string">            # with open(&quot;/results.txt&quot;, &quot;a+&quot;, encoding=&quot;utf-8&quot;) as f:</span></span><br><span class="line"><span class="string">            #   f.write(&quot;sample text&quot;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    <span class="comment"># Bash 任务</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">bash-task</span></span><br><span class="line">      <span class="attr">container:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">ubuntu</span></span><br><span class="line">        <span class="attr">command:</span> [<span class="string">bash</span>, <span class="string">-c</span>]</span><br><span class="line">        <span class="attr">args:</span> [<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27;&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Kubernetes Pod 任务</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">k8s-pod-task</span></span><br><span class="line">      <span class="attr">container:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">ubuntu</span></span><br><span class="line">        <span class="attr">command:</span> [<span class="string">bash</span>, <span class="string">-cx</span>]</span><br><span class="line">        <span class="attr">args:</span> [<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27;&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Sidecar 任务</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">sidecar-task</span></span><br><span class="line">      <span class="attr">script:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">python:3.9-slim</span></span><br><span class="line">        <span class="attr">command:</span> [<span class="string">python</span>]</span><br><span class="line">        <span class="attr">source:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          import os</span></span><br><span class="line"><span class="string">          import time</span></span><br><span class="line"><span class="string">          print(&quot;hello world&quot;)</span></span><br><span class="line"><span class="string">          print(time.time())</span></span><br><span class="line"><span class="string">          for i in range(5):</span></span><br><span class="line"><span class="string">              try:</span></span><br><span class="line"><span class="string">                  return_code = os.system(&quot;cat /shared/test.txt&quot;)</span></span><br><span class="line"><span class="string">                  if return_code != 0:</span></span><br><span class="line"><span class="string">                      raise ValueError(f&quot;Error when checking volume mount. Return code &#123;return_code&#125;&quot;)</span></span><br><span class="line"><span class="string">                  else:</span></span><br><span class="line"><span class="string">                      with open(&quot;/shared/test.txt&quot;, &#x27;r&#x27;) as f:</span></span><br><span class="line"><span class="string">                          print(f.readlines())</span></span><br><span class="line"><span class="string">              except ValueError as e:</span></span><br><span class="line"><span class="string">                  if i &gt; 4:</span></span><br><span class="line"><span class="string">                      raise e</span></span><br><span class="line"><span class="string"></span>        <span class="attr">volumeMounts:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">shared-empty-dir</span></span><br><span class="line">            <span class="attr">mountPath:</span> <span class="string">/shared</span></span><br><span class="line">      <span class="attr">sidecars:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">sidecar</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">ubuntu</span></span><br><span class="line">        <span class="attr">command:</span> [<span class="string">bash</span>, <span class="string">-cx</span>]</span><br><span class="line">        <span class="attr">args:</span> [<span class="string">&quot;date +&#x27;%Y-%m-%d %H:%M:%S.%3N&#x27; &gt; /shared/test.txt&quot;</span>]</span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">shared-empty-dir</span></span><br><span class="line">            <span class="attr">mountPath:</span> <span class="string">/shared</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="5-4-模板"><a href="#5-4-模板" class="headerlink" title="5.4 模板"></a>5.4 模板</h3><h4 id="5-4-1-定义模板后引用"><a href="#5-4-1-定义模板后引用" class="headerlink" title="5.4.1 定义模板后引用"></a>5.4.1 定义模板后引用</h4><div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">argoproj.io/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">WorkflowTemplate</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">shared-templates</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">templates:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">common-task</span></span><br><span class="line">    <span class="attr">container:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">python:3.8</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">python</span>, <span class="string">-c</span>]</span><br><span class="line">      <span class="attr">args:</span> [<span class="string">&quot;print(&#x27;<span class="template-variable">&#123;&#123;inputs.parameters.message&#125;&#125;</span>&#x27;)&quot;</span>]</span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">argoproj.io/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Workflow</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">templates:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">main</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">use-shared-template</span></span><br><span class="line">        <span class="attr">templateRef:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">shared-templates</span>     <span class="comment"># 模板名称</span></span><br><span class="line">          <span class="attr">template:</span> <span class="string">common-task</span>      <span class="comment"># 模板内的任务名</span></span><br><span class="line">        <span class="attr">arguments:</span></span><br><span class="line">          <span class="attr">parameters:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">message</span></span><br><span class="line">            <span class="attr">value:</span> <span class="string">&quot;Reused template!&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="5-4-2-直接定义模板与工作流"><a href="#5-4-2-直接定义模板与工作流" class="headerlink" title="5.4.2 直接定义模板与工作流"></a>5.4.2 直接定义模板与工作流</h4><div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">argoproj.io/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Workflow</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">generateName:</span> <span class="string">inline-template-example-</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">main-dag</span></span><br><span class="line">  <span class="attr">templates:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">main-dag</span></span><br><span class="line">    <span class="attr">dag:</span></span><br><span class="line">      <span class="attr">tasks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">step1</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">say-hello</span></span><br><span class="line">        <span class="attr">arguments:</span></span><br><span class="line">          <span class="attr">parameters:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">message</span></span><br><span class="line">            <span class="attr">value:</span> <span class="string">&quot;Hello from Step 1!&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">step2</span></span><br><span class="line">        <span class="attr">template:</span> <span class="string">say-hello</span></span><br><span class="line">        <span class="attr">arguments:</span></span><br><span class="line">          <span class="attr">parameters:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">message</span></span><br><span class="line">            <span class="attr">value:</span> <span class="string">&quot;Hello from Step 2!&quot;</span></span><br><span class="line">        <span class="attr">depends:</span> <span class="string">step1</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 内联模板定义 (直接在 workflow 中声明)</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">say-hello</span></span><br><span class="line">    <span class="attr">inputs:</span></span><br><span class="line">      <span class="attr">parameters:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">message</span></span><br><span class="line">    <span class="attr">container:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">alpine:latest</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">sh</span>, <span class="string">-c</span>]</span><br><span class="line">      <span class="attr">args:</span> [<span class="string">&quot;echo &#x27;<span class="template-variable">&#123;&#123;inputs.parameters.message&#125;&#125;</span>&#x27; &amp;&amp; sleep 1&quot;</span>]  <span class="comment"># 输出参数并等待1秒</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="5-4-3-内联模板"><a href="#5-4-3-内联模板" class="headerlink" title="5.4.3 内联模板"></a>5.4.3 内联模板</h4><div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">argoproj.io/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Workflow</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">generateName:</span> <span class="string">steps-inline-</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">workflows.argoproj.io/test:</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">workflows.argoproj.io/description:</span> <span class="string">|</span></span><br><span class="line"><span class="string">      This workflow demonstrates running a steps with inline templates.</span></span><br><span class="line"><span class="string"></span>    <span class="attr">workflows.argoproj.io/version:</span> <span class="string">&quot;&gt;= 3.2.0&quot;</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entrypoint:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">templates:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">main</span></span><br><span class="line">      <span class="attr">steps:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">a</span></span><br><span class="line">            <span class="attr">inline:</span></span><br><span class="line">              <span class="attr">container:</span></span><br><span class="line">                <span class="attr">image:</span> <span class="string">argoproj/argosay:v2</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://developers.freee.co.jp/entry/migrate-to-argo-wf" >探索数据处理管道到 Argo 工作流的迁移 - freee Developers Hub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://argo-workflows.readthedocs.io/en/latest/inline-templates/" >Inline Templates - Argo Workflows - The workflow engine for Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://engineering.mercari.com/en/blog/entry/20241214-from-airflow-to-argo-workflows-and-dbt-python-models/" >From Airflow to Argo Workflows and dbt Python models | Mercari Engineering <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://techblog.enechain.com/entry/migrating-data-pipelines-to-argo-workflows" >将数据管道迁移到 Argo 工作流的故事 - enechain 技术博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://qa.1r1g.com/sf/ask/4255135251/" >Kubeflow 与其他选项 | 那些遇到过的问题 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://argo-workflows.readthedocs.io/en/latest/#documentation" >Argo Workflows - The workflow engine for Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://groups.google.com/g/kubeflow-discuss/c/VcqWvJvwnh4" >Airflow to Argo migration at Github <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://my.oschina.net/u/3874284/blog/10924051" >云原生离线工作流编排利器 – 分布式工作流 Argo 集群 - OSCHINA - 中文开源技术交流社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://argo-workflows.readthedocs.io/en/latest/cron-workflows/" >Cron Workflows - Argo Workflows - The workflow engine for Kubernetes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/information/%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84argo%E5%B7%A5%E4%BD%9C%E6%B5%81%E4%B8%AD%E9%87%8D%E7%94%A8%E6%A8%A1%E6%9D%BF%2F%E6%AD%A5%E9%AA%A4" >在不同的argo工作流中重用模板&#x2F;步骤 - 腾讯云开发者社区 - 腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.lixueduan.com/posts/devops/argo-workflow/05-how-to-trigger-workflow/" >ArgoWorkflow教程(五)—Workflow 的多种触发模式：手动、定时任务与事件触发 - <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.gitcode.com/7dcffb189bd35f4c9c4a5be14ffc80fa.html" >blog.gitcode.com&#x2F;7dcffb189bd35f4c9c4a5be14ffc80fa.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> migrating airflow to argo</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-05-29 15:31:04</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2025-05-29 17:50:13
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/05/29/migrating-airflow-to-argo/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/05/29/univpn/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">univpn</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">migrating airflow to argo</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%BF%81%E7%A7%BB%E5%8A%A8%E6%9C%BA"><span class="nav-text">1. 迁移动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BF%81%E7%A7%BB%E7%BC%BA%E7%82%B9"><span class="nav-text">2. 迁移缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%BF%81%E7%A7%BB%E6%AD%A5%E9%AA%A4"><span class="nav-text">3. 迁移步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%BF%81%E7%A7%BB%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">4. 迁移注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E8%8E%B7%E5%8F%96%E8%A7%A6%E5%8F%91%E6%97%B6%E9%97%B4"><span class="nav-text">4.1 获取触发时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%BB%BB%E5%8A%A1%E5%AE%9A%E4%B9%89"><span class="nav-text">4.2 任务定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB"><span class="nav-text">4.3 数据迁移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">4.4 其他注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%81%E7%A7%BB%E7%A4%BA%E4%BE%8B"><span class="nav-text">5. 迁移示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%8E%9Fairflow%E4%BB%A3%E7%A0%81"><span class="nav-text">5.1 原airflow代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-argo%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">5.2 argo工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-argo%E5%AE%9A%E6%97%B6%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">5.3 argo定时工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E6%A8%A1%E6%9D%BF"><span class="nav-text">5.4 模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

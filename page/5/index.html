@@ -335,7 +335,7 @@
                         <div class="label">Categories</div>
                     </a>
                     <a class="item" href="/archives">
-                        <div class="number">56</div>
+                        <div class="number">57</div>
                         <div class="label">Posts</div>
                     </a>
                 </div>
@@ -352,6 +352,44 @@
                 
                     <div class="home-content-container fade-in-down-animation">
     <ul class="home-article-list">
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2024/03/07/%E5%AD%98%E5%82%A8%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
+                        存储基本知识
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        1. iops (input&#x2F;output per second) + vfs
+通常，计算IOPS的基本公式是：（总的读+写的操作量）&#x2F; 时间（秒）
+目前PCIe4.0固态硬盘，一些高性能产品的顺序读取速度可达7000MB&#x2...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Thu Mar 07 2024 16:00:46 GMT+0800">
+                
+                    2024-03-07
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/03/07/%E5%AD%98%E5%82%A8%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">Read more<span class="seo-reader-text">存储基本知识</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+            </li>
         
             <li class="home-article-item">
 
@@ -704,46 +742,6 @@ std::allocator只使用new和delete操作，如书中所言是简单包装。...
 
             </li>
         
-            <li class="home-article-item">
-
-                
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">
-                        备份QQ聊天记录
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        备份QQ应用使用手机自带的备份APP备份应用。备份教程 
-小米手机提取聊天记录
-使用WinHex 修改二进制文件，将头部的一些字符删除，直到使得”apps&#x2F;“位于开头，如下图所示。
-使用解压软件解压。
-打开QQ_History_Backup...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Sun Nov 12 2023 17:42:40 GMT+0800">
-                
-                    2023-11-12
-                
-            </span>
-        </span>
-        
-        
-    </div>
-
-    <a href="/2023/11/12/%E5%A4%87%E4%BB%BDQQ%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95/">Read more<span class="seo-reader-text">备份QQ聊天记录</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
     </ul>
 
     <div class="home-paginator">
@@ -763,225 +761,65 @@ std::allocator只使用new和delete操作，如书中所言是简单包装。...
         </div>
 
         <div class="main-content-footer">
-            @import '../../common/variables'
-
-.footer
-  margin-top 20px !important
-  padding-top 20px !important
-  height auto
-  min-height 100px
-  font-size 1rem
-  color var(--third-text-color)
-  background-color alpha($primary-color, 0.15)
-  border-radius 0 !important
-  redefine-container(
-    0,
-    0,
-    0,
-    0,
-    false
-  )
-  position relative
-
-  span
-    vertical-align baseline !important
-
-  .odometer
-    vertical-align baseline !important
-
-  a
-    color var(--third-text-color)
-
-    &:hover
-      color var(--primary-color)
-
-  .theme-info
-    text-align left
-    position absolute
-    left 20px
-    top 45%
-    transform translateY(-50%)
-
-    .powered-by-container
-      margin-bottom 10px
-      font-size 0.8rem
-
-      a
-        font-size 1rem
-
-      svg
-        position relative
-        top 2px
-
-    .theme-version-container
-      font-size 0.8rem
-
-      a
-        font-size 1rem
-
-    +redefine-tablet()
-      position relative
-      text-align center
-      top 0 !important
-      left 0 !important
-      transform none !important
-
-    +redefine-mobile()
-      position relative
-      text-align center
-      top 0 !important
-      left 0 !important
-      transform none !important
-
-  .copyright-info
-    text-align center
-
-  .website-count
-    text-align right
-    position absolute
-    right 20px
-    top 45%
-    transform translateY(-50%)
-
-    .busuanzi_container_site_pv
-      display block !important
-      font-size 0.8rem
-
-    .busuanzi_value_site_uv
-      font-size 1rem !important
-
-    .busuanzi_container_site_uv
-      display block !important
-      font-size 0.8rem
-
-    .busuanzi_value_site_pv
-      font-size 1rem !important
-
-    +redefine-tablet()
-      position relative
-      text-align center
-      top 0 !important
-      right 0 !important
-      transform none !important
-
-      .busuanzi_container_site_pv
-        display inline-block !important
-
-      .busuanzi_container_site_uv
-        display inline-block !important
-
-    +redefine-mobile()
-      position relative
-      text-align center
-      top 0 !important
-      right 0 !important
-      transform none !important
-
-      .busuanzi_container_site_pv
-        display inline-block !important
-
-      .busuanzi_container_site_uv
-        display inline-block !important
-
-  .info-container
-    padding-bottom 10px
-    text-align center
-    margin-top 10px
-    font-weight 450
-
-  .info-item
-    margin 5px 0
-
-  .icon-animate
-    animation icon-animate 1.2s ease-in-out infinite
-
-  .odometer.odometer-auto-theme, .odometer.odometer-theme-default
-    display inline-block
-    vertical-align middle
-    *vertical-align auto
-    *zoom 1
-    *display inline
-    position relative
-
-  .odometer.odometer-auto-theme .odometer-digit, .odometer.odometer-theme-default .odometer-digit
-    display inline-block
-    vertical-align middle
-    *vertical-align auto
-    *zoom 1
-    *display inline
-    position relative
-
-  .odometer.odometer-auto-theme .odometer-digit .odometer-digit-spacer, .odometer.odometer-theme-default .odometer-digit .odometer-digit-spacer
-    display inline-block
-    vertical-align middle
-    *vertical-align auto
-    *zoom 1
-    *display inline
-    visibility hidden
-
-  .odometer.odometer-auto-theme .odometer-digit .odometer-digit-inner, .odometer.odometer-theme-default .odometer-digit .odometer-digit-inner
-    text-align left
-    display block
-    position absolute
-    top 0
-    left 0
-    right 0
-    bottom 0
-    overflow hidden
-
-  .odometer.odometer-auto-theme .odometer-digit .odometer-ribbon, .odometer.odometer-theme-default .odometer-digit .odometer-ribbon
-    display block
-
-  .odometer.odometer-auto-theme .odometer-digit .odometer-ribbon-inner, .odometer.odometer-theme-default .odometer-digit .odometer-ribbon-inner
-    display block
-    -webkit-backface-visibility hidden
-
-  .odometer.odometer-auto-theme .odometer-digit .odometer-value, .odometer.odometer-theme-default .odometer-digit .odometer-value
-    display block
-    -webkit-transform translateZ(0)
-
-  .odometer.odometer-auto-theme .odometer-digit .odometer-value.odometer-last-value, .odometer.odometer-theme-default .odometer-digit .odometer-value.odometer-last-value
-    position absolute
-
-  .odometer.odometer-auto-theme.odometer-animating-up .odometer-ribbon-inner, .odometer.odometer-theme-default.odometer-animating-up .odometer-ribbon-inner
-    -webkit-transition -webkit-transform 999ms
-    -moz-transition -moz-transform 999ms
-    -ms-transition -ms-transform 999ms
-    -o-transition -o-transform 999ms
-    transition transform 999ms
-
-  .odometer.odometer-auto-theme.odometer-animating-up.odometer-animating .odometer-ribbon-inner, .odometer.odometer-theme-default.odometer-animating-up.odometer-animating .odometer-ribbon-inner
-    -webkit-transform translateY(-100%)
-    -moz-transform translateY(-100%)
-    -ms-transform translateY(-100%)
-    -o-transform translateY(-100%)
-    transform translateY(-100%)
-
-  .odometer.odometer-auto-theme.odometer-animating-down .odometer-ribbon-inner, .odometer.odometer-theme-default.odometer-animating-down .odometer-ribbon-inner
-    -webkit-transform translateY(-100%)
-    -moz-transform translateY(-100%)
-    -ms-transform translateY(-100%)
-    -o-transform translateY(-100%)
-    transform translateY(-100%)
-
-  .odometer.odometer-auto-theme.odometer-animating-down.odometer-animating .odometer-ribbon-inner, .odometer.odometer-theme-default.odometer-animating-down.odometer-animating .odometer-ribbon-inner
-    -webkit-transition -webkit-transform 999ms
-    -moz-transition -moz-transform 999ms
-    -ms-transition -ms-transform 999ms
-    -o-transition -o-transform 999ms
-    transition transform 999ms
-    -webkit-transform translateY(0)
-    -moz-transform translateY(0)
-    -ms-transform translateY(0)
-    -o-transform translateY(0)
-    transform translateY(0)
-
-  .odometer.odometer-auto-theme, .odometer.odometer-theme-default
-    line-height 1.1em
-
-  .odometer.odometer-auto-theme .odometer-value, .odometer.odometer-theme-default .odometer-value
-    text-align center
-
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
         </div>
     </div>
 
