@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 安装最新版本工具链1.1 直接添加源1sudo add-apt-repository ppa:ubuntu-toolchain-r&#x2F;test  1.2 检查libc版本要求libc6 (&gt;&#x3D; 2.38)，但是22为2.35 22需要进行额外操作如下：（注意，可能导致严重后果！） 123456# 编辑&#x2F;etc&#x2F;sudo vim &#x2F;etc&#x2F;apt&#x2F;sources.list## 添">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-04T07:23:13.000Z">
-<meta property="article:modified_time" content="2025-06-05T04:00:57.802Z">
+<meta property="article:modified_time" content="2025-06-05T04:21:32.914Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-06-05 12:57</span>
-            <span class="mobile">2025-06-05 12</span>
+            <span class="desktop">2025-06-05 12:21:32</span>
+            <span class="mobile">2025-06-05 12:21</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -482,6 +482,8 @@
 <h3 id="3-2-编译时引用的标准库"><a href="#3-2-编译时引用的标准库" class="headerlink" title="3.2 编译时引用的标准库"></a>3.2 编译时引用的标准库</h3><p>位于<code>/usr/lib/gcc/x86_64-linux-gnu/15</code></p>
 <h2 id="4-CMake-4-0"><a href="#4-CMake-4-0" class="headerlink" title="4. CMake 4.0"></a>4. CMake 4.0</h2><p><a class="link"   target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/release/4.0.html" >CMake 4.0 Release Notes — CMake 4.0.2 Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p>基本没有特别针对modules进行改动，仍然是实验特性。</p>
+<p>介绍视频如下：</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.kitware.com/webinars/cmake-4-0-what-you-need-to-know/?thank-you=true" >CMake 4.0: What You Need to Know <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/2301_81214730/article/details/139738542" >VSCODE的环境配置问题：gcc: fatal error: cannot execute ‘cc1’: spawn: No such file or directory_gcc: fatal error: cannot execute ‘cc1’: spawn: no -CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/DHJ151250/p/17990879" >为研究C++20语法，在ubuntu22上安装支持g++13和gcc13 - 杰之行 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/Tifahfyf/p/18417321" >在ubuntu中安装较新版本的gcc和gdb - 及途又八 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -510,6 +512,9 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://dev59.com/O9d1pIgBRmDukGFEl9d2" >如何使用CMake构建一个使用C++23标准库模块（导入std）的项目？ c++-modules - Dev59 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.kitware.com/import-std-in-cmake-3-30/" >import std in CMake 3.30 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1887450436237231492" >2025年c++import std使用 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.kitware.com/webinars/cmake-4-0-what-you-need-to-know/?thank-you=true" >CMake 4.0: What You Need to Know <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.oschina.net/news/342179/cmake-4-0-0-released" >Cmake 4.0.0 发布，开源构建系统 - OSCHINA - 中文开源技术交流社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/variable/CMAKE_CXX_MODULE_STD.html" >CMAKE_CXX_MODULE_STD — CMake 4.0.2 Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -522,7 +527,7 @@
         <li><strong>Created at:</strong> 2025-06-04 15:23:13</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-06-05 12:00:57
+                <strong>Updated at:</strong> 2025-06-05 12:21:32
             </li>
         
         <li>
