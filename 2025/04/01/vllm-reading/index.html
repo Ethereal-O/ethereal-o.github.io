@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
 <meta property="article:published_time" content="2025-04-01T06:21:35.000Z">
-<meta property="article:modified_time" content="2025-04-01T11:59:01.864Z">
+<meta property="article:modified_time" content="2025-06-05T08:58:23.398Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
@@ -395,8 +395,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-04-01 19:59:01</span>
-            <span class="mobile">2025-04-01 19:59</span>
+            <span class="desktop">2025-06-05 16:58:23</span>
+            <span class="mobile">2025-06-05 16:58</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -426,13 +426,29 @@
 <p>            _initialize_kv_caches()-&gt;initialize_cache(vllm&#x2F;executor&#x2F;cpu_executor.py)-&gt;initialize_cache(vllm&#x2F;worker&#x2F;cpu_worker.py):_validate_num_cpu_blocks(); _init_cache_engine()-&gt;</p>
 <p>初始化调度器: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): self.scheduler &#x3D; …-&gt;</p>
 <p>初始化输出器: __init__(vllm&#x2F;engine&#x2F;llm_engine.py): SequenceGroupOutputProcessor.create_output_processor</p>
-<h4 id="1-1-2-运行"><a href="#1-1-2-运行" class="headerlink" title="1.1.2 运行"></a>1.1.2 运行</h4><p>step(vllm&#x2F;engine&#x2F;llm_engine.py)-&gt;schedule(vllm&#x2F;core&#x2F;scheduler.py)-&gt;默认调度策略</p>
+<h4 id="1-1-2-调度运行"><a href="#1-1-2-调度运行" class="headerlink" title="1.1.2 调度运行"></a>1.1.2 调度运行</h4><p>step(vllm&#x2F;engine&#x2F;llm_engine.py)-&gt;schedule(vllm&#x2F;core&#x2F;scheduler.py)-&gt;默认调度策略</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg"
                       alt="v2-7657eeecc40011e57c2f85e9632c2a85_r"
                 ></p>
+<h4 id="1-1-3-kv-cache运行"><a href="#1-1-3-kv-cache运行" class="headerlink" title="1.1.3 kv cache运行"></a>1.1.3 kv cache运行</h4><p>-&gt;step(vllm&#x2F;engine&#x2F;llm_engine.py)</p>
+<p>GPU: [-&gt;execute_model(vllm&#x2F;executor&#x2F;gpu_executor.py)</p>
+<p>-&gt;execute_model(vllm&#x2F;worker&#x2F;worker_base.py)</p>
+<p>-&gt;prepare_input(vllm&#x2F;worker&#x2F;worker_base.py)</p>
+<p>-&gt;_get_driver_input_and_broadcast(vllm&#x2F;worker&#x2F;multi_step_worker.py)</p>
+<p>-&gt;prepare_model_input(vllm&#x2F;worker&#x2F;multi_step_model_runner.py)</p>
+<p>-&gt;prepare_model_input(vllm&#x2F;worker&#x2F;model_runner.py)</p>
+<p>-&gt;_prepare_model_input_tensors(vllm&#x2F;worker&#x2F;model_runner.py) <strong>&lt;核心：加载tensor&gt;</strong></p>
+<p>-&gt;build(vllm&#x2F;worker&#x2F;model_runner.py)]</p>
+<p>CPU: [-&gt;execute_model(vllm&#x2F;executor&#x2F;cpu_executor.py)</p>
+<p>-&gt;execute_model(vllm&#x2F;worker&#x2F;worker_base.py)</p>
+<p>-&gt;prepare_input(vllm&#x2F;worker&#x2F;worker_base.py)</p>
+<p>-&gt;_get_driver_input_and_broadcast(vllm&#x2F;worker&#x2F;worker_base.py)</p>
+<p>-&gt;prepare_model_input(vllm&#x2F;worker&#x2F;cpu_model_runner.py)</p>
+<p>-&gt;_prepare_model_input_tensors(vllm&#x2F;worker&#x2F;cpu_model_runner.py)</p>
+<p>-&gt;build(vllm&#x2F;worker&#x2F;cpu_model_runner.py)]</p>
 <h3 id="1-2-新增内容"><a href="#1-2-新增内容" class="headerlink" title="1.2 新增内容"></a>1.2 新增内容</h3><p>本项目基于 vLLM 设计并构建了一个支持 Prefill 和 Decode 动态拆分合并的推理引擎系统。现有的 PD 分离架构侧重于满足时延要求（TTFT、TBT）要求，但资源利用率和吞吐量低；而 PD 混合架构有较高资源利用率，但Prefill和Decode请求间的干扰可能导致时延无法满足。因此我们在 PD 混合部署的基础上，允许 Prefill 和 Decode 请求通过动态拆分合并机制组成 batch，从而在保证资源利用率的同时尽可能满足时延要求。</p>
 <p>为了实现上述目标，本项目需要实现两个模块：Prefill 和 Decode 性能建模模块以及调度模块。在给定的硬件和模型信息下，Prefill 和 Decode 性能建模模块负责建立大模型推理的性能模型，以预测 任意batch 的执行时间。调度模块则需要根据请求的 SLO 信息、当前工作负载以及性能模型的预测结果，调度请求的执行，以最大化有效吞吐量（goodput）。</p>
 <h4 id="Prefill和Decode性能建模模块"><a href="#Prefill和Decode性能建模模块" class="headerlink" title="Prefill和Decode性能建模模块"></a>Prefill和Decode性能建模模块</h4><p>Prefill 和 Decode 性能建模模块负责为调度模块提供任意 batch 的执行时长预测结果。该模块通过分析 Prefill 和 Decode 的执行特性，并结合模型及硬件信息，提出了建模公式。该公式能够支持对包含任意 Prefill 和 Decode 请求的 batch 的执行时间进行预测。</p>
@@ -485,7 +501,7 @@
         <li><strong>Created at:</strong> 2025-04-01 14:21:35</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-04-01 19:59:01
+                <strong>Updated at:</strong> 2025-06-05 16:58:23
             </li>
         
         <li>
