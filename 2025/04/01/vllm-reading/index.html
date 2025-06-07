@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
 <meta property="article:published_time" content="2025-04-01T06:21:35.000Z">
-<meta property="article:modified_time" content="2025-06-05T09:53:42.626Z">
+<meta property="article:modified_time" content="2025-06-07T05:46:39.384Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
@@ -395,8 +395,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-06-05 17:53:42</span>
-            <span class="mobile">2025-06-05 17:53</span>
+            <span class="desktop">2025-06-07 13:46:39</span>
+            <span class="mobile">2025-06-07 13:46</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -496,12 +496,40 @@
 <li>vllm&#x2F;core&#x2F;scheduler.py</li>
 </ul>
 <p><em><strong>调度模块核心是_schedule_chunked_prefill_slo_aware</strong></em>：会不断加入scheduled_batch，直到发现条件不满足，选择踢掉prefill重试，直到没有prefill的任务，再执行</p>
-<h2 id="2-相似工作（SGLang）"><a href="#2-相似工作（SGLang）" class="headerlink" title="2. 相似工作（SGLang）"></a>2. 相似工作（SGLang）</h2><p><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.06180" >[2309.06180] Efficient Memory Management for Large Language Model Serving with PagedAttention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="2-部署"><a href="#2-部署" class="headerlink" title="2. 部署"></a>2. 部署</h2><h3 id="2-1-下载模型"><a href="#2-1-下载模型" class="headerlink" title="2.1 下载模型"></a>2.1 下载模型</h3><p>可以使用ModelScope下载</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install modelscope</span><br><span class="line">modelscope download --model qwen/qwen2-0.5b</span><br></pre></td></tr></table></figure></div>
+
+<p>下载路径为<code>~/.cache/modelscope/hub/models/qwen/qwen2-0.5b</code></p>
+<h3 id="2-2-部署安装vllm"><a href="#2-2-部署安装vllm" class="headerlink" title="2.2 部署安装vllm"></a>2.2 部署安装vllm</h3><h4 id="2-2-1-直接安装（只支持GPU）"><a href="#2-2-1-直接安装（只支持GPU）" class="headerlink" title="2.2.1 直接安装（只支持GPU）"></a>2.2.1 直接安装（只支持GPU）</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install vLLM</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="2-2-2-源码安装"><a href="#2-2-2-源码安装" class="headerlink" title="2.2.2 源码安装"></a>2.2.2 源码安装</h4><h5 id="2-2-2-1-下载"><a href="#2-2-2-1-下载" class="headerlink" title="2.2.2.1 下载"></a>2.2.2.1 下载</h5><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:vllm-project/vllm.git</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="2-2-2-2-安装依赖"><a href="#2-2-2-2-安装依赖" class="headerlink" title="2.2.2.2 安装依赖"></a>2.2.2.2 安装依赖</h5><p>注意CMake版本有要求，可以参考<a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2025/06/04/ubuntu-toolchain-r-ubuntu-test%E5%B7%A5%E5%85%B7%E9%93%BE/" >ubuntu-toolchain-r-ubuntu-test工具链 - Ethereal’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>更新</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update  -y</span><br><span class="line">sudo apt-get install -y gcc-12 g++-12 libnuma-dev</span><br><span class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 10 --slave /usr/bin/g++ g++ /usr/bin/g++-12</span><br><span class="line">pip install --upgrade pip</span><br><span class="line">pip install wheel packaging ninja &quot;setuptools&gt;=49.4.0&quot; numpy</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">pip install -v -r requirements-cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu</span></span><br><span class="line">pip install -v -r requirements/cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="2-2-2-3-安装"><a href="#2-2-2-3-安装" class="headerlink" title="2.2.2.3 安装"></a>2.2.2.3 安装</h5><p>基于CPU：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VLLM_TARGET_DEVICE=cpu python setup.py install</span><br></pre></td></tr></table></figure></div>
+
+<p>默认：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py install</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="2-2-3-使用"><a href="#2-2-3-使用" class="headerlink" title="2.2.3 使用"></a>2.2.3 使用</h4><p>启动服务器：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vllm serve ~/.cache/modelscope/hub/models/qwen/qwen2-0.5b</span><br></pre></td></tr></table></figure></div>
+
+<p>测试：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:8000/v1/completions -H &quot;Content-Type: application/json&quot;   -d &#x27;&#123;</span><br><span class="line">    &quot;model&quot;: &quot;/home/ethereal/.cache/modelscope/hub/models/qwen/qwen2-0.5b&quot;,</span><br><span class="line">    &quot;prompt&quot;: [&quot;&lt;｜begin▁of▁sentence｜&gt;你好，DeepSeek!&lt;｜end▁of▁sentence｜&gt;&quot;],</span><br><span class="line">    &quot;max_tokens&quot;: 100,</span><br><span class="line">    &quot;temperature&quot;: 0.6</span><br><span class="line">  &#125;&#x27;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-相似工作（SGLang）"><a href="#3-相似工作（SGLang）" class="headerlink" title="3. 相似工作（SGLang）"></a>3. 相似工作（SGLang）</h2><p><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.06180" >[2309.06180] Efficient Memory Management for Large Language Model Serving with PagedAttention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/18942501855" >SGLang和vLLM 大模型推理引擎对比 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/691045737" >图解大模型计算加速系列：vLLM源码解析1，整体架构 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692540949" >图解大模型计算加速系列：vLLM源码解析2，调度器策略(Scheduler) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm/blob/main/vllm/core/scheduler.py" >vllm&#x2F;vllm&#x2F;core&#x2F;scheduler.py at main · vllm-project&#x2F;vllm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.06180" >[2309.06180] Efficient Memory Management for Large Language Model Serving with PagedAttention <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/22968294287" >本地vllm部署DeepSeek，但CPU - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/obullxl/p/18353447/NTopic2024081101" >vLLM CPU和GPU模式署和推理 Qwen2 等大语言模型详细教程 - 老牛啊 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/18213578034" >vLLM 入门教程：如何配置和运行 vLLM - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm" >vllm-project&#x2F;vllm: A high-throughput and memory-efficient inference and serving engine for LLMs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2025/06/04/ubuntu-toolchain-r-ubuntu-test%E5%B7%A5%E5%85%B7%E9%93%BE/" >ubuntu-toolchain-r-ubuntu-test工具链 - Ethereal’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -514,7 +542,7 @@
         <li><strong>Created at:</strong> 2025-04-01 14:21:35</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-06-05 17:53:42
+                <strong>Updated at:</strong> 2025-06-07 13:46:39
             </li>
         
         <li>
@@ -624,7 +652,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">vllm reading</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1. 代码梳理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%80%BB%E8%BE%91"><span class="nav-text">1.1 逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%96%B0%E5%A2%9E%E5%86%85%E5%AE%B9"><span class="nav-text">1.2 新增内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E4%BC%BC%E5%B7%A5%E4%BD%9C%EF%BC%88SGLang%EF%BC%89"><span class="nav-text">2. 相似工作（SGLang）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1. 代码梳理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%80%BB%E8%BE%91"><span class="nav-text">1.1 逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%96%B0%E5%A2%9E%E5%86%85%E5%AE%B9"><span class="nav-text">1.2 新增内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%83%A8%E7%BD%B2"><span class="nav-text">2. 部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E6%A8%A1%E5%9E%8B"><span class="nav-text">2.1 下载模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%83%A8%E7%BD%B2%E5%AE%89%E8%A3%85vllm"><span class="nav-text">2.2 部署安装vllm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%B8%E4%BC%BC%E5%B7%A5%E4%BD%9C%EF%BC%88SGLang%EF%BC%89"><span class="nav-text">3. 相似工作（SGLang）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
