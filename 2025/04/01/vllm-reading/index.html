@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
 <meta property="article:published_time" content="2025-04-01T06:21:35.000Z">
-<meta property="article:modified_time" content="2025-06-07T05:46:39.384Z">
+<meta property="article:modified_time" content="2025-06-07T06:07:18.086Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic2.zhimg.com/v2-7657eeecc40011e57c2f85e9632c2a85_r.jpg">
@@ -395,8 +395,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-06-07 13:46:39</span>
-            <span class="mobile">2025-06-07 13:46</span>
+            <span class="desktop">2025-06-07 14:07:18</span>
+            <span class="mobile">2025-06-07 14:07</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -507,7 +507,7 @@
 <h5 id="2-2-2-2-安装依赖"><a href="#2-2-2-2-安装依赖" class="headerlink" title="2.2.2.2 安装依赖"></a>2.2.2.2 安装依赖</h5><p>注意CMake版本有要求，可以参考<a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2025/06/04/ubuntu-toolchain-r-ubuntu-test%E5%B7%A5%E5%85%B7%E9%93%BE/" >ubuntu-toolchain-r-ubuntu-test工具链 - Ethereal’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>更新</p>
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update  -y</span><br><span class="line">sudo apt-get install -y gcc-12 g++-12 libnuma-dev</span><br><span class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 10 --slave /usr/bin/g++ g++ /usr/bin/g++-12</span><br><span class="line">pip install --upgrade pip</span><br><span class="line">pip install wheel packaging ninja &quot;setuptools&gt;=49.4.0&quot; numpy</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">pip install -v -r requirements-cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu</span></span><br><span class="line">pip install -v -r requirements/cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu</span><br></pre></td></tr></table></figure></div>
 
-<h5 id="2-2-2-3-安装"><a href="#2-2-2-3-安装" class="headerlink" title="2.2.2.3 安装"></a>2.2.2.3 安装</h5><p>基于CPU：</p>
+<h5 id="2-2-2-3-安装或更新（更新直接再次运行即可）"><a href="#2-2-2-3-安装或更新（更新直接再次运行即可）" class="headerlink" title="2.2.2.3 安装或更新（更新直接再次运行即可）"></a>2.2.2.3 安装或更新（更新直接再次运行即可）</h5><p>基于CPU：</p>
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VLLM_TARGET_DEVICE=cpu python setup.py install</span><br></pre></td></tr></table></figure></div>
 
 <p>默认：</p>
@@ -542,7 +542,7 @@
         <li><strong>Created at:</strong> 2025-04-01 14:21:35</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-06-07 13:46:39
+                <strong>Updated at:</strong> 2025-06-07 14:07:18
             </li>
         
         <li>
