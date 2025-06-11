@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg">
 <meta property="article:published_time" content="2025-04-06T09:07:30.000Z">
-<meta property="article:modified_time" content="2025-06-11T06:08:58.067Z">
+<meta property="article:modified_time" content="2025-06-11T07:40:10.364Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg">
@@ -395,8 +395,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-06-11 14:08:58</span>
-            <span class="mobile">2025-06-11 14:08</span>
+            <span class="desktop">2025-06-11 15:40:10</span>
+            <span class="mobile">2025-06-11 15:40</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -423,7 +423,7 @@
                 <h2 id="1-LoRA"><a href="#1-LoRA" class="headerlink" title="1. LoRA"></a>1. LoRA</h2><p>主要参考</p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN" >Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-YI LEE）2024生成式人工智能导论课程的完整中文镜像作业。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/16.%20%E7%94%A8%20LoRA%20%E5%BE%AE%E8%B0%83%20Stable%20Diffusion%EF%BC%9A%E6%8B%86%E5%BC%80%E7%82%BC%E4%B8%B9%E7%82%89%EF%BC%8C%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%20AI%20%E7%BB%98%E7%94%BB.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;16. 用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<h3 id="1-1-安装必要包"><a href="#1-1-安装必要包" class="headerlink" title="1.1 安装必要包"></a>1.1 安装必要包</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install torch torchvision transformers diffusers peft Pillow tqdm pyyaml accelerate</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<h3 id="1-1-安装必要包"><a href="#1-1-安装必要包" class="headerlink" title="1.1 安装必要包"></a>1.1 安装必要包</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install torch torchvision transformers diffusers peft Pillow tqdm pyyaml accelerate</span><br><span class="line">pip3 install torch==2.4.1 torchvision torchaudio -f https://mirrors.aliyun.com/pytorch-wheels/cu121/</span><br></pre></td></tr></table></figure></div>
 
 <h3 id="1-2-设置huggingface镜像"><a href="#1-2-设置huggingface镜像" class="headerlink" title="1.2 设置huggingface镜像"></a>1.2 设置huggingface镜像</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> HF_ENDPOINT=https://hf-mirror.com</span></span><br></pre></td></tr></table></figure></div>
 
@@ -728,7 +728,7 @@
         <li><strong>Created at:</strong> 2025-04-06 17:07:30</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-06-11 14:08:58
+                <strong>Updated at:</strong> 2025-06-11 15:40:10
             </li>
         
         <li>
