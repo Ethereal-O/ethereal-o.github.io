@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/06/20/沐曦集群使用vllm/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. 提前下载好文件下载地址：https:&#x2F;&#x2F;pub-docstore.metax-tech.com:7001&#x2F;   账号：wuluo  可以分享后使用，例如：https:&#x2F;&#x2F;pub-docstore.metax-tech.com:7001&#x2F;sharing&#x2F;PsE45bzdD  编写爬虫脚本（目前还没有跑通，浏览器崩溃）： 1234567891011121314151617181920212223">
+<meta property="og:type" content="article">
+<meta property="og:title" content="沐曦集群使用vllm">
+<meta property="og:url" content="http://example.com/2025/06/20/%E6%B2%90%E6%9B%A6%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8vllm/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 提前下载好文件下载地址：https:&#x2F;&#x2F;pub-docstore.metax-tech.com:7001&#x2F;   账号：wuluo  可以分享后使用，例如：https:&#x2F;&#x2F;pub-docstore.metax-tech.com:7001&#x2F;sharing&#x2F;PsE45bzdD  编写爬虫脚本（目前还没有跑通，浏览器崩溃）： 1234567891011121314151617181920212223">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-20T05:01:19.000Z">
+<meta property="article:modified_time" content="2025-06-20T06:01:57.544Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            沐曦集群使用vllm -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">沐曦集群使用vllm</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-06-20 13:01:19</span>
+        <span class="mobile">2025-06-20 13:01</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-06-20 14:01:57</span>
+            <span class="mobile">2025-06-20 14:01</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-提前下载好文件"><a href="#1-提前下载好文件" class="headerlink" title="1. 提前下载好文件"></a>1. 提前下载好文件</h2><p>下载地址：<a class="link"   target="_blank" rel="noopener" href="https://pub-docstore.metax-tech.com:7001/" >https://pub-docstore.metax-tech.com:7001/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>账号：wuluo</li>
+</ul>
+<p>可以分享后使用，例如：<a class="link"   target="_blank" rel="noopener" href="https://pub-docstore.metax-tech.com:7001/sharing/PsE45bzdD" >https://pub-docstore.metax-tech.com:7001/sharing/PsE45bzdD <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>编写爬虫脚本（目前还没有跑通，浏览器崩溃）：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.firefox.options <span class="keyword">import</span> Options</span><br><span class="line"><span class="keyword">from</span> pyvirtualdisplay <span class="keyword">import</span> Display</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.firefox.firefox_binary <span class="keyword">import</span> FirefoxBinary</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">download_dir = os.path.join(os.getcwd(), <span class="string">&quot;firefox_downloads&quot;</span>)</span><br><span class="line">driver_path = <span class="string">&quot;/root/yjk/softwares/geckodriver&quot;</span></span><br><span class="line">url = <span class="string">&quot;https://pub-docstore.metax-tech.com:7001/sharing/PsE45bzdD&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">start_download</span>():</span><br><span class="line">    <span class="comment"># 如果目录不存在，则创建它</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(download_dir):</span><br><span class="line">        os.makedirs(download_dir)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个虚拟显示</span></span><br><span class="line">    display = Display(visible=<span class="number">0</span>, size=(<span class="number">1280</span>, <span class="number">768</span>))</span><br><span class="line">    display.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 配置Firefox选项</span></span><br><span class="line">    firefox_options = Options()</span><br><span class="line">    <span class="comment"># 设置下载相关的首选项</span></span><br><span class="line">    firefox_options.set_preference(<span class="string">&quot;browser.download.folderList&quot;</span>, <span class="number">2</span>)  <span class="comment"># 0是桌面; 1是默认“下载”&#x27; 2是自定义文件夹</span></span><br><span class="line">    firefox_options.set_preference(<span class="string">&quot;browser.download.dir&quot;</span>, download_dir) <span class="comment"># 设置自定义下载路径</span></span><br><span class="line">    firefox_options.set_preference(<span class="string">&quot;browser.download.useDownloadDir&quot;</span>, <span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 对于特定文件类型，禁用下载前的询问弹窗</span></span><br><span class="line">    <span class="comment"># &quot;application/octet-stream&quot; 是一个通用的二进制文件类型</span></span><br><span class="line">    firefox_options.set_preference(<span class="string">&quot;browser.helperApps.neverAsk.saveToDisk&quot;</span>,</span><br><span class="line">                                <span class="string">&quot;application/zip, application/octet-stream, application/x-zip-compressed, application/x-tar, application/pdf&quot;</span>)</span><br><span class="line">    firefox_options.headless = <span class="literal">True</span> <span class="comment"># 以headless模式运行，具体代码如下：</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建Firefox</span></span><br><span class="line">    service = Service(driver_path)</span><br><span class="line">    browser = webdriver.Firefox(options=firefox_options, service=service)</span><br><span class="line">    browser.get(url)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 等待页面加载完成 ---</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;等待页面加载...&quot;</span>)</span><br><span class="line">    browser.implicitly_wait(<span class="number">10</span>)  <span class="comment"># 等待10秒钟，直到页面加载完成</span></span><br><span class="line"></span><br><span class="line">    button = browser.find_element(By.XPATH, <span class="string">&#x27;//*[@id=&quot;ext-gen43&quot;]&#x27;</span>)</span><br><span class="line">    button.click()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 等待下载完成 (此逻辑与浏览器无关) ---</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;开始等待下载完成...&quot;</span>)</span><br><span class="line">    timeout = <span class="number">60</span> * <span class="number">30</span> <span class="comment"># 设置60秒的超时时间</span></span><br><span class="line">    start_time = time.time()</span><br><span class="line">    download_complete = <span class="literal">False</span></span><br><span class="line">    new_file_path = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    files_before = <span class="built_in">set</span>(os.listdir(download_dir))</span><br><span class="line">    <span class="keyword">while</span> time.time() - start_time &lt; timeout:</span><br><span class="line">        files_after = <span class="built_in">set</span>(os.listdir(download_dir))</span><br><span class="line">        new_files = files_after - files_before</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> time.time() - start_time &gt; <span class="number">10</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> browser.service.process:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;Browser has quit unexpectedly&#x27;</span>)</span><br><span class="line">            browser.save_screenshot(<span class="string">&#x27;1.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> new_files:</span><br><span class="line">            filename = new_files.pop()</span><br><span class="line">            <span class="comment"># Firefox 下载时可能会创建 .part 文件，当下载完成时，.part 后缀会消失</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> filename.endswith(<span class="string">&#x27;.part&#x27;</span>):</span><br><span class="line">                new_file_path = os.path.join(download_dir, filename)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;✅ 下载完成！文件位于: <span class="subst">&#123;new_file_path&#125;</span>&quot;</span>)</span><br><span class="line">                download_complete = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> download_complete:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;❌ 下载超时！在<span class="subst">&#123;timeout&#125;</span>秒内未完成下载。&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 6. 使用找到的文件 ---</span></span><br><span class="line">    <span class="keyword">if</span> new_file_path:</span><br><span class="line">        file_size = os.path.getsize(new_file_path)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;文件大小: <span class="subst">&#123;file_size / <span class="number">1024</span> / <span class="number">1024</span>:<span class="number">.2</span>f&#125;</span> MB&quot;</span>)</span><br><span class="line"></span><br><span class="line">    browser.quit()</span><br><span class="line">    display.stop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    start_download()</span><br></pre></td></tr></table></figure></div>
+
+<p>目前通过挂载的方式将文件存储在以下位置：<code>sudo mount -t nfs 10.118.14.133:/zion0/nfsdir /nfsdir0</code></p>
+<h2 id="2-通过镜像加载运行"><a href="#2-通过镜像加载运行" class="headerlink" title="2. 通过镜像加载运行"></a>2. 通过镜像加载运行</h2><p>镜像位置位于<code>/nfsdir0/WT-X201/2.32.0.x/images/pytorch</code>，可以导入vllm镜像，位置位于<code>/nfsdir0/WT-X201/2.32.0.x/images/AI/py310/vllm_2.32.0.11-torch2.4-py310-ubuntu20.04-amd64.tar</code>，pytorch位置位于<code>/nfsdir0/WT-X201/2.32.0.x/images/pytorch/hpcc-x201-pytorch_2.32.0.3-torch2.4-py310-ubuntu20.04-amd64.tar</code>。</p>
+<p>使用以下命令导入：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker load &lt; /nfsdir0/WT-X201/2.32.0.x/images/AI/py310/vllm_2.32.0.11-torch2.4-py310-ubuntu20.04-amd64.tar</span><br></pre></td></tr></table></figure></div>
+
+<p>使用<code>set -x</code>可以发现，<code>docker</code>实际执行的命令是<code>nerdctl -n k8s.io --address /data/containerd/run/containerd.sock</code>。</p>
+<p>编写以下脚本运行镜像：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Default Docker image</span></span><br><span class="line">DEFAULT_IMAGE=&quot;vllm:2.32.0.11-torch2.4-py310-ubuntu20.04-amd64&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Check <span class="keyword">if</span> an image name is provided as an argument</span></span><br><span class="line">if [ -n &quot;$1&quot; ]; then</span><br><span class="line">    DOCKER_IMAGE=&quot;$1&quot;</span><br><span class="line">else</span><br><span class="line">    DOCKER_IMAGE=&quot;$DEFAULT_IMAGE&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Start building the docker run <span class="built_in">command</span></span></span><br><span class="line">DOCKER_COMMAND=&quot;nerdctl -n k8s.io --address /data/containerd/run/containerd.sock run&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add the always-included device <span class="keyword">if</span> it exists</span></span><br><span class="line">if [ -e &quot;/dev/htcd&quot; ]; then</span><br><span class="line">    DOCKER_COMMAND+=&quot; --device=/dev/htcd&quot;</span><br><span class="line">else</span><br><span class="line">    echo &quot;Warning: /dev/htcd not found on the host.&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Get all devices under /dev/dri and add them to the <span class="built_in">command</span></span></span><br><span class="line">if [ -d &quot;/dev/dri&quot; ]; then</span><br><span class="line">    for device in /dev/dri/*; do</span><br><span class="line">        if [ -c &quot;$device&quot; ]; then # Check if it&#x27;s a character device</span><br><span class="line">            DOCKER_COMMAND+=&quot; --device=$device&quot;</span><br><span class="line">        fi</span><br><span class="line">    done</span><br><span class="line">else</span><br><span class="line">    echo &quot;Error: /dev/dri directory not found on the host. Graphics devices might not be available.&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add the rest of your docker <span class="built_in">command</span> using the chosen image</span></span><br><span class="line">DOCKER_COMMAND+=&quot; -it $&#123;DOCKER_IMAGE&#125; /bin/bash&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Print the generated <span class="built_in">command</span></span></span><br><span class="line">echo &quot;Generated Docker command:&quot;</span><br><span class="line">echo &quot;$DOCKER_COMMAND&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Execute the <span class="built_in">command</span> (uncomment the line below to actually run it)</span></span><br><span class="line">eval &quot;$DOCKER_COMMAND&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>脚本版本2：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Enable shell tracing <span class="keyword">for</span> debugging (optional, can be removed once confident)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">set</span> -x</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">--- IMPORTANT: Find your DOCKER/NERDCTL executable path ---</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. Deactivate conda: `conda deactivate`</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. Run: `<span class="built_in">which</span> docker`</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">3. If it points to a script/symlink that calls nerdctl, use that script<span class="string">&#x27;s path.</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">   Otherwise, use the direct binary path shown by `which docker`.</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Example: DOCKER_BIN=&quot;/usr/bin/docker&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">If `which docker` gives no output outside conda, you&#x27;</span>ll need to find it manually:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">`find / -name docker -<span class="built_in">type</span> f 2&gt;/dev/null | grep -E <span class="string">&quot;(bin/docker|sbin/docker)&quot;</span>`</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Once found, replace the placeholder below with the actual path.</span></span><br><span class="line">DOCKER_BIN=&quot;nerdctl -n k8s.io --address /data/containerd/run/containerd.sock&quot; # &lt;--- REPLACE THIS WITH YOUR ACTUAL DOCKER/NERDCTL PATH</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Default Docker image (used <span class="keyword">if</span> not provided as the second argument)</span></span><br><span class="line">DEFAULT_IMAGE=&quot;vllm:2.32.0.11-torch2.4-py310-ubuntu20.04-amd64&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">--- Argument Parsing ---</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Check <span class="keyword">for</span> at least one argument (mapping directory)</span></span><br><span class="line">if [ -z &quot;$1&quot; ]; then</span><br><span class="line">    echo &quot;Usage: $0 &lt;host_dir_to_map&gt; [docker_image_name]&quot;</span><br><span class="line">    echo &quot;  &lt;host_dir_to_map&gt;: The host directory to mount into the container (e.g., /home/user/data:/app/data)&quot;</span><br><span class="line">    echo &quot;  [docker_image_name]: Optional. The Docker image to use. Defaults to $&#123;DEFAULT_IMAGE&#125;&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">MAPPED_DIR=&quot;$1&quot; # First argument is the directory mapping</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Check <span class="keyword">for</span> the second argument (Docker image name)</span></span><br><span class="line">if [ -n &quot;$2&quot; ]; then</span><br><span class="line">    DOCKER_IMAGE=&quot;$2&quot;</span><br><span class="line">else</span><br><span class="line">    DOCKER_IMAGE=&quot;$DEFAULT_IMAGE&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Start building the docker run <span class="built_in">command</span></span></span><br><span class="line">DOCKER_COMMAND=&quot;$&#123;DOCKER_BIN&#125; run&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add the directory mapping</span></span><br><span class="line">DOCKER_COMMAND+=&quot; -v $&#123;MAPPED_DIR&#125;&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add the always-included device <span class="keyword">if</span> it exists</span></span><br><span class="line">if [ -e &quot;/dev/htcd&quot; ]; then</span><br><span class="line">    DOCKER_COMMAND+=&quot; --device=/dev/htcd&quot;</span><br><span class="line">else</span><br><span class="line">    echo &quot;Warning: /dev/htcd not found on the host.&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Get all devices under /dev/dri and add them to the <span class="built_in">command</span></span></span><br><span class="line">if [ -d &quot;/dev/dri&quot; ]; then</span><br><span class="line">    for device in /dev/dri/*; do</span><br><span class="line">        if [ -c &quot;$device&quot; ]; then # Check if it&#x27;s a character device</span><br><span class="line">            DOCKER_COMMAND+=&quot; --device=$device&quot;</span><br><span class="line">        fi</span><br><span class="line">    done</span><br><span class="line">else</span><br><span class="line">    echo &quot;Error: /dev/dri directory not found on the host. Graphics devices might not be available.&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add the rest of your docker <span class="built_in">command</span> using the chosen image</span></span><br><span class="line">DOCKER_COMMAND+=&quot; -it $&#123;DOCKER_IMAGE&#125; /bin/bash&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Print the generated <span class="built_in">command</span> before execution</span></span><br><span class="line">echo &quot;-------------------------------------&quot;</span><br><span class="line">echo &quot;Generated command string (before eval):&quot;</span><br><span class="line">echo &quot;$DOCKER_COMMAND&quot;</span><br><span class="line">echo &quot;-------------------------------------&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Execute the <span class="built_in">command</span> (uncomment the line below to actually run it)</span></span><br><span class="line">eval &quot;$DOCKER_COMMAND&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Disable shell tracing (<span class="keyword">if</span> enabled)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">set</span> +x</span></span><br></pre></td></tr></table></figure></div>
+
+<p>测试命令<code>ht-smi</code>，<code>import vllm</code>，<code>import torch</code>和<code>print(torch.cuda.is_available())</code></p>
+<h2 id="3-测试结果"><a href="#3-测试结果" class="headerlink" title="3. 测试结果"></a>3. 测试结果</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Average latency: 0.22ms</span><br><span class="line">P50 latency: 0.15ms</span><br><span class="line">P90 latency: 0.16ms</span><br><span class="line">P99 latency: 1.97ms</span><br><span class="line">Average throughput: 84.45 GB/s</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://dev59.com/e6Xja4cB1Zd3GeqPWMWD" >在Python中，如何检查Selenium WebDriver是否已经退出？ - Dev59 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.codeleading.com/article/40855996489/" >Python + Selenium: 使用webdriver判断浏览器是否关闭 - 代码先锋网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/kk_lzvvkpj/article/details/133385441" >简单但好用：4种Selenium截图方法了解一下_selenium 截图-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/mozilla/geckodriver/issues/690" >Failed to decode response from marionette - Error to open Webdriver using python · Issue #690 · mozilla&#x2F;geckodriver <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/m1f2c3/article/details/98590386" >Selenium与自动化测试技巧-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30635053/article/details/95613561" >记录一次爬虫报错：Message: Failed to decode response from marionette-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/m0_46190471/article/details/111477197" >wheel安装+使用wheel安装第三方库+临时换源安装和永久换源安装-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45720073/article/details/126321824" >pip使用中科大源、清华源或修改默认源为中科大源、清华源_清华源后缀-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://sw-developer.metax-tech.com/forum.php?mod=viewthread&tid=133" >代码移植 - 新手社区 - 沐曦开发者论坛 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1887817944463032702" >(3 封私信 &#x2F; 81 条消息) 新一代书生·浦语大模型(InternLM3)沐曦训推实践 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://139.224.199.21/forum.php?mod=viewthread&tid=152" >vllm部署求助 - LLM - 沐曦开发者论坛 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.docker.com/reference/compose-file/services/#devices" >Services top-level elements | Docker Docs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://sw-developer.metax-tech.com/forum.php?mod=viewthread&tid=186" >沐曦C500 VGPU使用 - 运维 - 沐曦开发者论坛 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.daocloud.io/kpanda/user-guide/gpu/metax/offline-metax#_3" >离线安装沐曦 GPU 管理 - DaoCloud Enterprise <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1924792" >Docker容器如何优雅使用NVIDIA GPU-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 沐曦集群使用vllm</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-06-20 13:01:19</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2025-06-20 14:01:57
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/06/20/沐曦集群使用vllm/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/06/08/g-%E7%BC%96%E8%AF%91/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">g++编译</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">沐曦集群使用vllm</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8F%90%E5%89%8D%E4%B8%8B%E8%BD%BD%E5%A5%BD%E6%96%87%E4%BB%B6"><span class="nav-text">1. 提前下载好文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%80%9A%E8%BF%87%E9%95%9C%E5%83%8F%E5%8A%A0%E8%BD%BD%E8%BF%90%E8%A1%8C"><span class="nav-text">2. 通过镜像加载运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-text">3. 测试结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
