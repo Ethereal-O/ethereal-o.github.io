@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/07/11/bcc-tools/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. 安装1.1 直接安装（缺少部分工具，例如biopattern）1sudo apt-get install bpfcc-tools linux-headers-$(uname -r)  安装结束之后文件位于&#x2F;sbin下，例如&#x2F;sbin&#x2F;biolatency-bpfcc 1.2 源码编译（较全）1.2.1 安装依赖12345678910111213141516171819202122232425">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bcc-tools">
+<meta property="og:url" content="http://example.com/2025/07/11/bcc-tools/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 安装1.1 直接安装（缺少部分工具，例如biopattern）1sudo apt-get install bpfcc-tools linux-headers-$(uname -r)  安装结束之后文件位于&#x2F;sbin下，例如&#x2F;sbin&#x2F;biolatency-bpfcc 1.2 源码编译（较全）1.2.1 安装依赖12345678910111213141516171819202122232425">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-10T16:56:08.000Z">
+<meta property="article:modified_time" content="2025-07-10T17:04:47.512Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            bcc-tools -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">bcc-tools</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv4</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-07-11 00:56:08</span>
+        <span class="mobile">2025-07-11 00:56</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-07-11 01:04:47</span>
+            <span class="mobile">2025-07-11 01:04</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><h3 id="1-1-直接安装（缺少部分工具，例如biopattern）"><a href="#1-1-直接安装（缺少部分工具，例如biopattern）" class="headerlink" title="1.1 直接安装（缺少部分工具，例如biopattern）"></a>1.1 直接安装（缺少部分工具，例如biopattern）</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install bpfcc-tools linux-headers-$(uname -r)</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>安装结束之后文件位于<code>/sbin</code>下，例如<code>/sbin/biolatency-bpfcc</code></strong></p>
+<h3 id="1-2-源码编译（较全）"><a href="#1-2-源码编译（较全）" class="headerlink" title="1.2 源码编译（较全）"></a>1.2 源码编译（较全）</h3><h4 id="1-2-1-安装依赖"><a href="#1-2-1-安装依赖" class="headerlink" title="1.2.1 安装依赖"></a>1.2.1 安装依赖</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For Focal (20.04.1 LTS)</span></span><br><span class="line">sudo apt install -y zip bison build-essential cmake flex git libedit-dev \</span><br><span class="line">  libllvm12 llvm-12-dev libclang-12-dev python zlib1g-dev libelf-dev libfl-dev python3-setuptools \</span><br><span class="line">  liblzma-dev arping netperf iperf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For Hirsute (21.04) or Impish (21.10)</span></span><br><span class="line">sudo apt install -y zip bison build-essential cmake flex git libedit-dev \</span><br><span class="line">  libllvm12 llvm-12-dev libclang-12-dev python3 zlib1g-dev libelf-dev libfl-dev python3-setuptools \</span><br><span class="line">  liblzma-dev arping netperf iperf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For Jammy (22.04)</span></span><br><span class="line">sudo apt install -y zip bison build-essential cmake flex git libedit-dev \</span><br><span class="line">  libllvm14 llvm-14-dev libclang-14-dev python3 zlib1g-dev libelf-dev libfl-dev python3-setuptools \</span><br><span class="line">  liblzma-dev libdebuginfod-dev arping netperf iperf</span><br><span class="line"><span class="meta prompt_">  </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For Lunar Lobster (23.04)</span></span><br><span class="line">sudo apt install -y zip bison build-essential cmake flex git libedit-dev \</span><br><span class="line">  libllvm15 llvm-15-dev libclang-15-dev python3 zlib1g-dev libelf-dev libfl-dev python3-setuptools \</span><br><span class="line">  liblzma-dev libdebuginfod-dev arping netperf iperf libpolly-15-dev</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For Mantic Minotaur (23.10)</span></span><br><span class="line">sudo apt install -y zip bison build-essential cmake flex git libedit-dev \</span><br><span class="line">  libllvm16 llvm-16-dev libclang-16-dev python3 zlib1g-dev libelf-dev libfl-dev python3-setuptools \</span><br><span class="line">  liblzma-dev libdebuginfod-dev arping netperf iperf libpolly-16-dev</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For Noble Numbat (24.04)</span></span><br><span class="line">sudo apt install -y zip bison build-essential cmake flex git libedit-dev \</span><br><span class="line">  libllvm18 llvm-18-dev libclang-18-dev python3 zlib1g-dev libelf-dev libfl-dev python3-setuptools \</span><br><span class="line">  liblzma-dev libdebuginfod-dev arping netperf iperf libpolly-18-dev</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For other versions</span></span><br><span class="line">sudo apt-get -y install zip bison build-essential cmake flex git libedit-dev \</span><br><span class="line">  libllvm3.7 llvm-3.7-dev libclang-3.7-dev python zlib1g-dev libelf-dev python3-setuptools \</span><br><span class="line">  liblzma-dev arping netperf iperf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For Lua support</span></span><br><span class="line">sudo apt-get -y install luajit luajit-5.1-dev</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="1-2-2-下载并安装"><a href="#1-2-2-下载并安装" class="headerlink" title="1.2.2 下载并安装"></a>1.2.2 下载并安装</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iovisor/bcc.git</span><br><span class="line">mkdir bcc/build; cd bcc/build</span><br><span class="line">cmake ..</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">cmake -DPYTHON_CMD=python3 .. # build python3 binding</span><br><span class="line">pushd src/python/</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">popd</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="1-2-3-纠错"><a href="#1-2-3-纠错" class="headerlink" title="1.2.3 纠错"></a>1.2.3 纠错</h4><p>将刚刚编译好的Python手动安装</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r src/python/bcc-python3/bcc/* /usr/lib/python3/dist-packages/bcc/</span><br></pre></td></tr></table></figure></div>
+
+<p>主要参考：</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/iovisor/bcc/issues/4583" >AttributeError: &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libbcc.so.0: undefined symbol: bpf_module_create_b · Issue #4583 · iovisor&#x2F;bcc <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/libocdf/article/details/130466925" >AttributeError: &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libbcc.so.0: undefined symbol: bpf_module_create_b_bccso-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/iovisor/bcc/issues/4114" >undefined symbol: bpf_module_create_b · Issue #4114 · iovisor&#x2F;bcc <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><strong>安装结束后位于<code>/usr/share/bcc/tools/</code>，例如<code>/usr/share/bcc/tools/biopattern</code></strong></p>
+<h2 id="2-使用"><a href="#2-使用" class="headerlink" title="2. 使用"></a>2. 使用</h2><p>直接运行即可。</p>
+<p>目前写了一个Python脚本，还没跑通：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> fcntl <span class="comment"># Needed for non-blocking reads</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># --- Global event to signal threads to stop ---</span></span><br><span class="line">stop_event = threading.Event()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">user_input_thread</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;A simple thread that waits for the user to press Enter and then sets the stop event.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">input</span>(<span class="string">&quot;Tool is running... Press [Enter] to stop and save results.\n&quot;</span>)</span><br><span class="line">    stop_event.<span class="built_in">set</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># ==============================================================================</span></span><br><span class="line"><span class="comment"># --- PARSER FUNCTIONS ---</span></span><br><span class="line"><span class="comment"># Each function is responsible for processing the raw text output of a specific tool.</span></span><br><span class="line"><span class="comment"># ==============================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_biosnoop_output</span>(<span class="params">raw_data: <span class="built_in">str</span></span>) -&gt; (<span class="built_in">list</span>, <span class="built_in">list</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Custom parser for biosnoop&#x27;s output.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Using &#x27;biosnoop&#x27; parser...&quot;</span>)</span><br><span class="line">    headers = [<span class="string">&quot;TIME&quot;</span>, <span class="string">&quot;COMM&quot;</span>, <span class="string">&quot;PID&quot;</span>, <span class="string">&quot;DISK&quot;</span>, <span class="string">&quot;T&quot;</span>, <span class="string">&quot;SECTOR&quot;</span>, <span class="string">&quot;BYTES&quot;</span>, <span class="string">&quot;LAT(ms)&quot;</span>]</span><br><span class="line">    data_rows = []</span><br><span class="line">    lines = raw_data.strip().split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    start_line = <span class="number">1</span> <span class="keyword">if</span> lines <span class="keyword">and</span> lines[<span class="number">0</span>].strip().startswith(<span class="string">&quot;TIME&quot;</span>) <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines[start_line:]:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> line.strip(): <span class="keyword">continue</span></span><br><span class="line">        parts = re.split(<span class="string">r&#x27;\s+&#x27;</span>, line.strip(), maxsplit=<span class="built_in">len</span>(headers)-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(parts) == <span class="built_in">len</span>(headers):</span><br><span class="line">            data_rows.append(parts)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> headers, data_rows</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_biotop_output</span>(<span class="params">raw_data: <span class="built_in">str</span></span>) -&gt; (<span class="built_in">list</span>, <span class="built_in">list</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Custom parser for biotop&#x27;s output, which only processes the final screen.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Using &#x27;biotop&#x27; parser...&quot;</span>)</span><br><span class="line">    headers = [<span class="string">&quot;PID&quot;</span>, <span class="string">&quot;COMM&quot;</span>, <span class="string">&quot;D&quot;</span>, <span class="string">&quot;DISK&quot;</span>, <span class="string">&quot;I/O&quot;</span>, <span class="string">&quot;Kbytes&quot;</span>, <span class="string">&quot;AVGms&quot;</span>]</span><br><span class="line">    data_rows = []</span><br><span class="line">    last_header_index = raw_data.rfind(<span class="string">&quot;PID&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> last_header_index == -<span class="number">1</span>: <span class="keyword">return</span> headers, []</span><br><span class="line"></span><br><span class="line">    relevant_data = raw_data[last_header_index:]</span><br><span class="line">    lines = relevant_data.strip().split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines[<span class="number">1</span>:]:</span><br><span class="line">        line = line.strip()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> line <span class="keyword">or</span> <span class="string">&quot;Ending&quot;</span> <span class="keyword">in</span> line: <span class="keyword">continue</span></span><br><span class="line">        parts = re.split(<span class="string">r&#x27;\s+&#x27;</span>, line, maxsplit=<span class="built_in">len</span>(headers)-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(parts) == <span class="built_in">len</span>(headers):</span><br><span class="line">            data_rows.append(parts)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> headers, data_rows</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_biopattern_output</span>(<span class="params">raw_data: <span class="built_in">str</span></span>) -&gt; (<span class="built_in">list</span>, <span class="built_in">list</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Custom parser for biopattern&#x27;s output.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Using &#x27;biopattern&#x27; parser...&quot;</span>)</span><br><span class="line">    headers = [<span class="string">&quot;DISK&quot;</span>, <span class="string">&quot;%RND&quot;</span>, <span class="string">&quot;%SEQ&quot;</span>, <span class="string">&quot;COUNT&quot;</span>, <span class="string">&quot;KBYTES&quot;</span>]</span><br><span class="line">    data_rows = []</span><br><span class="line">    last_header_index = raw_data.rfind(<span class="string">&quot;DISK&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> last_header_index == -<span class="number">1</span>: <span class="keyword">return</span> headers, []</span><br><span class="line"></span><br><span class="line">    relevant_data = raw_data[last_header_index:]</span><br><span class="line">    lines = relevant_data.strip().split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines[<span class="number">1</span>:]:</span><br><span class="line">        line = line.strip()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> line <span class="keyword">or</span> <span class="string">&quot;Tracing&quot;</span> <span class="keyword">in</span> line <span class="keyword">or</span> <span class="string">&quot;Ending&quot;</span> <span class="keyword">in</span> line: <span class="keyword">continue</span></span><br><span class="line">        parts = re.split(<span class="string">r&#x27;\s+&#x27;</span>, line)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(parts) == <span class="built_in">len</span>(headers):</span><br><span class="line">            data_rows.append(parts)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> headers, data_rows</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_histogram_output</span>(<span class="params">raw_data: <span class="built_in">str</span>, tool_name: <span class="built_in">str</span></span>) -&gt; (<span class="built_in">list</span>, <span class="built_in">list</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;A generic parser for histogram-based tools like biolatency and bitesize.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Using &#x27;<span class="subst">&#123;tool_name&#125;</span>&#x27; (histogram) parser...&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> tool_name == <span class="string">&quot;biolatency&quot;</span>:</span><br><span class="line">        headers = [<span class="string">&quot;Disk&quot;</span>, <span class="string">&quot;Latency Range&quot;</span>, <span class="string">&quot;Unit&quot;</span>, <span class="string">&quot;Count&quot;</span>, <span class="string">&quot;Distribution&quot;</span>]</span><br><span class="line">    <span class="keyword">elif</span> tool_name == <span class="string">&quot;bitesize&quot;</span>:</span><br><span class="line">        headers = [<span class="string">&quot;Size Range (KBytes)&quot;</span>, <span class="string">&quot;Count&quot;</span>, <span class="string">&quot;Distribution&quot;</span>]</span><br><span class="line">    <span class="keyword">else</span>: <span class="comment"># Fallback</span></span><br><span class="line">        headers = [<span class="string">&quot;Range&quot;</span>, <span class="string">&quot;Count&quot;</span>, <span class="string">&quot;Distribution&quot;</span>]</span><br><span class="line"></span><br><span class="line">    data_rows = []</span><br><span class="line">    current_disk = <span class="string">&quot;all&quot;</span></span><br><span class="line">    current_unit = <span class="string">&quot;us&quot;</span> <span class="keyword">if</span> <span class="string">&quot; (us)&quot;</span> <span class="keyword">in</span> raw_data <span class="keyword">else</span> <span class="string">&quot;ms&quot;</span></span><br><span class="line"></span><br><span class="line">    lines = raw_data.strip().split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">        line = line.strip()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> line <span class="keyword">or</span> <span class="string">&quot;Tracing&quot;</span> <span class="keyword">in</span> line <span class="keyword">or</span> <span class="string">&quot;Ending&quot;</span> <span class="keyword">in</span> line: <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        disk_match = re.<span class="keyword">match</span>(<span class="string">r&#x27;disk = (\S+)&#x27;</span>, line)</span><br><span class="line">        <span class="keyword">if</span> disk_match:</span><br><span class="line">            current_disk = disk_match.group(<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        hist_match = re.<span class="keyword">match</span>(<span class="string">r&#x27;(\S+\s*-&gt;\s*\S+|\S+)\s*:\s*(\d+)\s*\|(.*)\|&#x27;</span>, line)</span><br><span class="line">        <span class="keyword">if</span> hist_match:</span><br><span class="line">            groups = hist_match.groups()</span><br><span class="line">            rng, count, dist = groups[<span class="number">0</span>].strip(), groups[<span class="number">1</span>], groups[<span class="number">2</span>].strip()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> tool_name == <span class="string">&quot;biolatency&quot;</span>:</span><br><span class="line">                data_rows.append([current_disk, rng, current_unit, count, dist])</span><br><span class="line">            <span class="keyword">elif</span> tool_name == <span class="string">&quot;bitesize&quot;</span>:</span><br><span class="line">                data_rows.append([rng, count, dist])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> headers, data_rows</span><br><span class="line"></span><br><span class="line"><span class="comment"># --- Parser Map ---</span></span><br><span class="line"><span class="comment"># Associates tool names with their parsing functions.</span></span><br><span class="line">PARSERS = &#123;</span><br><span class="line">    <span class="string">&quot;biosnoop&quot;</span>: parse_biosnoop_output,</span><br><span class="line">    <span class="string">&quot;biotop&quot;</span>: parse_biotop_output,</span><br><span class="line">    <span class="string">&quot;biopattern&quot;</span>: parse_biopattern_output,</span><br><span class="line">    <span class="string">&quot;biolatency&quot;</span>: <span class="keyword">lambda</span> data: parse_histogram_output(data, <span class="string">&quot;biolatency&quot;</span>),</span><br><span class="line">    <span class="string">&quot;bitesize&quot;</span>: <span class="keyword">lambda</span> data: parse_histogram_output(data, <span class="string">&quot;bitesize&quot;</span>),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># ==============================================================================</span></span><br><span class="line"><span class="comment"># --- MAIN EXECUTION LOGIC ---</span></span><br><span class="line"><span class="comment"># ==============================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;The main function that orchestrates the entire process.&quot;&quot;&quot;</span></span><br><span class="line">    parser = argparse.ArgumentParser(</span><br><span class="line">        description=<span class="string">&quot;A script to monitor system activity using bcc-tools and save the results to a CSV file.&quot;</span>,</span><br><span class="line">        formatter_class=argparse.RawTextHelpFormatter,</span><br><span class="line">        epilog=<span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Examples:</span></span><br><span class="line"><span class="string">  sudo ./monitor_and_save.py biosnoop</span></span><br><span class="line"><span class="string">  sudo ./monitor_and_save.py biopattern -o /tmp/logs</span></span><br><span class="line"><span class="string">  sudo ./monitor_and_save.py biolatency</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Supported tools: <span class="subst">&#123;<span class="string">&#x27;, &#x27;</span>.join(PARSERS.keys())&#125;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">    )</span><br><span class="line">    parser.add_argument(<span class="string">&quot;tool&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;The name of the bcc tool to run.&quot;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&quot;-o&quot;</span>, <span class="string">&quot;--output_dir&quot;</span>, default=<span class="string">&quot;.&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;The directory to save the CSV file (default: current directory).&quot;</span>)</span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    tool_name = args.tool</span><br><span class="line">    output_dir = args.output_dir</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> tool_name <span class="keyword">not</span> <span class="keyword">in</span> PARSERS:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Error: Unsupported tool &#x27;<span class="subst">&#123;tool_name&#125;</span>&#x27;. Please choose from: <span class="subst">&#123;<span class="built_in">list</span>(PARSERS.keys())&#125;</span>&quot;</span>, file=sys.stderr)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> os.geteuid() != <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Error: This script requires root privileges to run bcc-tools. Please use &#x27;sudo&#x27;.&quot;</span>, file=sys.stderr)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    tool_path = <span class="string">f&quot;/usr/sbin/<span class="subst">&#123;tool_name&#125;</span>-bpfcc&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(tool_path):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Error: Tool &#x27;<span class="subst">&#123;tool_path&#125;</span>&#x27; not found. Please ensure bcc-tools are installed correctly.&quot;</span>, file=sys.stderr)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    os.makedirs(output_dir, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- Start Monitoring ---</span></span><br><span class="line">    input_thread = threading.Thread(target=user_input_thread)</span><br><span class="line">    input_thread.start()</span><br><span class="line"></span><br><span class="line">    command = [tool_path]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Starting: <span class="subst">&#123;<span class="string">&#x27; &#x27;</span>.join(command)&#125;</span>...&quot;</span>)</span><br><span class="line"></span><br><span class="line">    process = subprocess.Popen(</span><br><span class="line">        command,</span><br><span class="line">        stdout=subprocess.PIPE,</span><br><span class="line">        stderr=subprocess.PIPE,</span><br><span class="line">        text=<span class="literal">True</span>,</span><br><span class="line">        encoding=<span class="string">&#x27;utf-8&#x27;</span>,</span><br><span class="line">        errors=<span class="string">&#x27;ignore&#x27;</span>,</span><br><span class="line">        preexec_fn=os.setsid</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- Set up non-blocking reads to handle all tool types ---</span></span><br><span class="line">    stdout_fd = process.stdout.fileno()</span><br><span class="line">    flags = fcntl.fcntl(stdout_fd, fcntl.F_GETFL)</span><br><span class="line">    fcntl.fcntl(stdout_fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)</span><br><span class="line"></span><br><span class="line">    captured_output = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">60</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> stop_event.is_set():</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># Try to read a chunk of data. This will not block.</span></span><br><span class="line">            chunk = process.stdout.read(<span class="number">4096</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> chunk:</span><br><span class="line">                <span class="comment"># If we got data, print it immediately and save it.</span></span><br><span class="line">                <span class="built_in">print</span>(chunk, end=<span class="string">&#x27;&#x27;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">                captured_output += chunk</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># An empty chunk means the process exited.</span></span><br><span class="line">                <span class="keyword">if</span> process.poll() <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="comment"># If process is running but there&#x27;s no data, pause briefly.</span></span><br><span class="line">                time.sleep(<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> BlockingIOError:</span><br><span class="line">            <span class="comment"># This is expected when no data is available. Pause and try again.</span></span><br><span class="line">            time.sleep(<span class="number">0.1</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="comment"># Allow Ctrl+C to stop the script.</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">60</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- Stop and Process Results ---</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\nStopping the tool...&quot;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        os.killpg(os.getpgid(process.pid), <span class="number">15</span>) <span class="comment"># Send SIGTERM to the process group</span></span><br><span class="line">        process.wait(timeout=<span class="number">5</span>)</span><br><span class="line">    <span class="keyword">except</span> (ProcessLookupError, PermissionError):</span><br><span class="line">        <span class="keyword">pass</span> <span class="comment"># Process already terminated</span></span><br><span class="line">    <span class="keyword">except</span> subprocess.TimeoutExpired:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Tool did not terminate gracefully, forcing shutdown...&quot;</span>)</span><br><span class="line">        os.killpg(os.getpgid(process.pid), <span class="number">9</span>) <span class="comment"># Send SIGKILL</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Processing captured data...&quot;</span>)</span><br><span class="line">    full_output = captured_output</span><br><span class="line"></span><br><span class="line">    parser_func = PARSERS[tool_name]</span><br><span class="line">    headers, data_rows = parser_func(full_output)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data_rows:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️ Warning: No valid data was parsed. The tool may have run for too short a time.&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- Save to CSV ---</span></span><br><span class="line">    timestamp = datetime.now().strftime(<span class="string">&quot;%Y%m%d_%H%M%S&quot;</span>)</span><br><span class="line">    output_filename = os.path.join(output_dir, <span class="string">f&quot;<span class="subst">&#123;tool_name&#125;</span>_output_<span class="subst">&#123;timestamp&#125;</span>.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(output_filename, <span class="string">&#x27;w&#x27;</span>, newline=<span class="string">&#x27;&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> csvfile:</span><br><span class="line">            writer = csv.writer(csvfile)</span><br><span class="line">            writer.writerow(headers)</span><br><span class="line">            writer.writerows(data_rows)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;✅ Success! Results saved to: <span class="subst">&#123;output_filename&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> IOError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;❌ Error: Could not write to file <span class="subst">&#123;output_filename&#125;</span>. Reason: <span class="subst">&#123;e&#125;</span>&quot;</span>, file=sys.stderr)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/iovisor/bcc/issues?q=is:issue%20state:open%20undefined%20symbol:" >Repo Issues <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/iovisor/bcc/blob/master/INSTALL.md#ubuntu---source" >bcc&#x2F;INSTALL.md at master · iovisor&#x2F;bcc <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://yitrus.github.io/2023/09/02/%E5%AE%89%E8%A3%85bpftrace%E5%92%8Cbcc%E7%9A%84%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" >安装bpftrace和bcc的踩坑记录 | Yi’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/iovisor/bcc/issues/4583" >AttributeError: &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libbcc.so.0: undefined symbol: bpf_module_create_b · Issue #4583 · iovisor&#x2F;bcc <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/libocdf/article/details/130466925" >AttributeError: &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libbcc.so.0: undefined symbol: bpf_module_create_b_bccso-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/huangyabin001/article/details/136765086" >5.99 BCC工具之biopattern.py解读_biopattern 用法-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://false-mask.github.io/linux/bcc-install.html" >BCC工具安装 | 理想三巡 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/fainli/p/18786662" >ubuntu21.10搭建ebpf环境，BCC和bpftrace - fainli - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/JoshuaYu/p/15086912.html" >Ubuntu安装BCC - 骇人的籽 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/Undefined443/p/18763722" >Not uninstalling xxx at &#x2F;usr&#x2F;lib&#x2F;python3&#x2F;dist-packages, outside environment &#x2F;usr 解决 - Undefined443 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/iovisor/bcc/issues/4114" >undefined symbol: bpf_module_create_b · Issue #4114 · iovisor&#x2F;bcc <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> bcc-tools</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-07-11 00:56:08</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2025-07-11 01:04:47
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/07/11/bcc-tools/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/06/20/%E6%B2%90%E6%9B%A6%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8vllm/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">沐曦集群使用vllm</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">bcc-tools</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85"><span class="nav-text">1. 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%9B%B4%E6%8E%A5%E5%AE%89%E8%A3%85%EF%BC%88%E7%BC%BA%E5%B0%91%E9%83%A8%E5%88%86%E5%B7%A5%E5%85%B7%EF%BC%8C%E4%BE%8B%E5%A6%82biopattern%EF%BC%89"><span class="nav-text">1.1 直接安装（缺少部分工具，例如biopattern）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%EF%BC%88%E8%BE%83%E5%85%A8%EF%BC%89"><span class="nav-text">1.2 源码编译（较全）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8"><span class="nav-text">2. 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
