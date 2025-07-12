@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/285b0d9ff978531f2f5881a1ba9a4606.png">
 <meta property="og:image" content="file:///D:/Ethereal/Pictures/Typedown/003b337f-3529-4995-bef9-94559e8b3604.png?msec=1743578730166">
 <meta property="article:published_time" content="2024-09-27T14:55:06.000Z">
-<meta property="article:modified_time" content="2025-05-14T08:59:17.359Z">
+<meta property="article:modified_time" content="2025-07-12T09:32:22.529Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/285b0d9ff978531f2f5881a1ba9a4606.png">
@@ -396,8 +396,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-14 16:59:17</span>
-            <span class="mobile">2025-05-14 16:59</span>
+            <span class="desktop">2025-07-12 17:32:22</span>
+            <span class="mobile">2025-07-12 17:32</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -475,7 +475,7 @@
 
 <h3 id="12-2-部署"><a href="#12-2-部署" class="headerlink" title="12.2 部署"></a>12.2 部署</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install k8s-dashboard /disk2/shared/build_offline_origin/dashboard/kubernetes-dashboard -n kubernetes-dashboard</span><br></pre></td></tr></table></figure></div>
 
-<h3 id="12-3-创建账户"><a href="#12-3-创建账户" class="headerlink" title="12.3 创建账户"></a>12.3 创建账户</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl create serviceaccount dashboard -n kubernetes-dashboard</span><br><span class="line">kubectl create rolebinding def-ns-admin --clusterrole=admin --serviceaccount=default:def-ns-admin</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建临时token kubectl -n kubernetes-dashboard create token dashboard</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">eyJhbGciOiJSUzI1NiIsImtpZCI6IjE1dWJXQmNUdnV3MWtGY1BXbEs4OEY3NkFTeHJteW81ME1ORlVYVHpDY2cifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzQwNTc0OTk4LCJpYXQiOjE3NDA1NzEzOTgsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiNDIzMmJmMmItODMzMi00Mzk5LWE1NDctMDEwYzk4NTUxNzBkIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkYXNoYm9hcmQiLCJ1aWQiOiIxNDQ0NTM3Yy1jMGQzLTQyMzMtYWNmOS0wNWM5NWJjODYxMDEifX0sIm5iZiI6MTc0MDU3MTM5OCwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZCJ9.X4jRDfCbLv5rJSW7Odmh52C7-8uLDIzqLzYIVoYS1tvQnSTXGHeexWu6fhgfCKI85KLKgRJDqIhj_O-kqNctcgUH60WqhorI8xe5x_ih26tn3IvuWh_cmyYinACz5jLxg8YORdZoetuJwJQab3Rs94rwrfJKpgrCNn1pkR_Dez2g7FMBHq89zMTB8PZp_fhXAfazs0UulQAKiPiCQsxh8eIlSNpQw7bIs8jaXEMqimfbC61ULuVE84IgkWT84pqQi6Dl9gMad5-i14WVzdmDlRZa-LO5LtRx1MQmQXrDmKhJm5oDeBV_55oQXytwT4KFLWEIfwUSlrV8DO0drFq20A</span></span><br></pre></td></tr></table></figure></div>
+<h3 id="12-3-创建账户"><a href="#12-3-创建账户" class="headerlink" title="12.3 创建账户"></a>12.3 创建账户</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kubectl create serviceaccount dashboard -n kubernetes-dashboard</span><br><span class="line">kubectl create rolebinding def-ns-admin --clusterrole=admin --serviceaccount=default:def-ns-admin</span><br><span class="line">kubectl create clusterrolebinding dashboard-cluster-admin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建临时token</span> </span><br><span class="line">kubectl -n kubernetes-dashboard create token dashboard</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">eyJhbGciOiJSUzI1NiIsImtpZCI6IjE1dWJXQmNUdnV3MWtGY1BXbEs4OEY3NkFTeHJteW81ME1ORlVYVHpDY2cifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzQwNTc0OTk4LCJpYXQiOjE3NDA1NzEzOTgsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiNDIzMmJmMmItODMzMi00Mzk5LWE1NDctMDEwYzk4NTUxNzBkIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkYXNoYm9hcmQiLCJ1aWQiOiIxNDQ0NTM3Yy1jMGQzLTQyMzMtYWNmOS0wNWM5NWJjODYxMDEifX0sIm5iZiI6MTc0MDU3MTM5OCwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZCJ9.X4jRDfCbLv5rJSW7Odmh52C7-8uLDIzqLzYIVoYS1tvQnSTXGHeexWu6fhgfCKI85KLKgRJDqIhj_O-kqNctcgUH60WqhorI8xe5x_ih26tn3IvuWh_cmyYinACz5jLxg8YORdZoetuJwJQab3Rs94rwrfJKpgrCNn1pkR_Dez2g7FMBHq89zMTB8PZp_fhXAfazs0UulQAKiPiCQsxh8eIlSNpQw7bIs8jaXEMqimfbC61ULuVE84IgkWT84pqQi6Dl9gMad5-i14WVzdmDlRZa-LO5LtRx1MQmQXrDmKhJm5oDeBV_55oQXytwT4KFLWEIfwUSlrV8DO0drFq20A</span></span><br></pre></td></tr></table></figure></div>
 
 <p>创建正式token</p>
 <div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">admin-user</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">kubernetes.io/service-account.name:</span> <span class="string">&quot;dashboard&quot;</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">kubernetes.io/service-account-token</span></span><br></pre></td></tr></table></figure></div>
@@ -731,7 +731,7 @@ kubectl get secret --namespace grafana grafana -o jsonpath=&quot;&#123;.data.adm
         <li><strong>Created at:</strong> 2024-09-27 22:55:06</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-14 16:59:17
+                <strong>Updated at:</strong> 2025-07-12 17:32:22
             </li>
         
         <li>
