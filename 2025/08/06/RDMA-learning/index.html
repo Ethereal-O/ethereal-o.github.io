@@ -18,15 +18,15 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="RDMA：Soft-RoCE 环境搭建实验  01&#x2F;service.c · wq&#x2F;RDMA-EXAMPLE - 码云 - 开源中国  参考(22 封私信 &#x2F; 80 条消息) 使用 C++ 20 协程封装 RDMA 操作 - 知乎  深入解析RDMA：从原理到C++实践_rdma c++-CSDN博客  使用Soft-RoCE实践RDMA_softroce-CSDN博客">
+        <meta name="description" content="1. 安装环境 安装扩展内核模块  1sudo apt install linux-modules-extra-$(uname -r)   安装rdma  RDMA：Soft-RoCE 环境搭建实验   运行程序  async-ucx&#x2F;.github&#x2F;workflows&#x2F;main.yml at main · madsys-dev&#x2F;async-ucx  123">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RDMA learning">
 <meta property="og:url" content="http://example.com/2025/08/06/RDMA-learning/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="RDMA：Soft-RoCE 环境搭建实验  01&#x2F;service.c · wq&#x2F;RDMA-EXAMPLE - 码云 - 开源中国  参考(22 封私信 &#x2F; 80 条消息) 使用 C++ 20 协程封装 RDMA 操作 - 知乎  深入解析RDMA：从原理到C++实践_rdma c++-CSDN博客  使用Soft-RoCE实践RDMA_softroce-CSDN博客">
+<meta property="og:description" content="1. 安装环境 安装扩展内核模块  1sudo apt install linux-modules-extra-$(uname -r)   安装rdma  RDMA：Soft-RoCE 环境搭建实验   运行程序  async-ucx&#x2F;.github&#x2F;workflows&#x2F;main.yml at main · madsys-dev&#x2F;async-ucx  123">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-08-06T05:06:09.000Z">
-<meta property="article:modified_time" content="2025-08-06T05:08:45.426Z">
+<meta property="article:modified_time" content="2025-08-06T10:35:27.063Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-08-06 13:08:45</span>
-            <span class="mobile">2025-08-06 13:08</span>
+            <span class="desktop">2025-08-06 18:35:27</span>
+            <span class="mobile">2025-08-06 18:35</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -418,8 +418,24 @@
             
 
             <div class="article-content markdown-body">
-                <p><a class="link"   target="_blank" rel="noopener" href="https://cuterwrite.top/p/soft-roce/" >RDMA：Soft-RoCE 环境搭建实验 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+                <h2 id="1-安装环境"><a href="#1-安装环境" class="headerlink" title="1. 安装环境"></a>1. 安装环境</h2><ol>
+<li>安装扩展内核模块</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install linux-modules-extra-$(uname -r)</span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li>安装rdma</li>
+</ol>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cuterwrite.top/p/soft-roce/" >RDMA：Soft-RoCE 环境搭建实验 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ol start="3">
+<li>运行程序</li>
+</ol>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/madsys-dev/async-ucx/blob/main/.github/workflows/main.yml" >async-ucx&#x2F;.github&#x2F;workflows&#x2F;main.yml at main · madsys-dev&#x2F;async-ucx <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl --proto &#x27;=https&#x27; --tlsv1.2 -sSf https://sh.rustup.rs | sh</span><br><span class="line">. &quot;$HOME/.cargo/env&quot;</span><br><span class="line">sudo apt-get -y install pkg-config gcc g++ autoconf</span><br><span class="line">sudo apt-get -y install clang</span><br><span class="line">sudo apt-get -y install ucx-utils libucx-dev</span><br><span class="line">cargo build  --all-features --all-targets</span><br><span class="line">cargo test  --all-features</span><br></pre></td></tr></table></figure></div>
+
 <p><a class="link"   target="_blank" rel="noopener" href="https://gitee.com/wq897/RDMA-EXAMPLE/blob/master/01/service.c" >01&#x2F;service.c · wq&#x2F;RDMA-EXAMPLE - 码云 - 开源中国 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./async-ucx/target/debug/examples/rma</span><br><span class="line">./async-ucx/target/debug/examples/rma </span><br></pre></td></tr></table></figure></div>
+
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/553140760" >(22 封私信 &#x2F; 80 条消息) 使用 C++ 20 协程封装 RDMA 操作 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44727517/article/details/146471038" >深入解析RDMA：从原理到C++实践_rdma c++-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/wq897387/article/details/131870527" >使用Soft-RoCE实践RDMA_softroce-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -427,6 +443,13 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://cuterwrite.top/p/soft-roce/" >RDMA：Soft-RoCE 环境搭建实验 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/361740115" >(22 封私信 &#x2F; 80 条消息) 15. RDMA之RoCE &amp; Soft-RoCE - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://gitee.com/wq897/RDMA-EXAMPLE/blob/master/01/service.c" >01&#x2F;service.c · wq&#x2F;RDMA-EXAMPLE - 码云 - 开源中国 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42952928/article/details/118295861" >RDMA+UCX_openucx-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/madsys-dev/async-ucx/blob/main/.github/workflows/main.yml" >async-ucx&#x2F;.github&#x2F;workflows&#x2F;main.yml at main · madsys-dev&#x2F;async-ucx <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.magicdian.cn/202404/%E4%B8%90%E7%89%88RDMA%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88SoftRoCE%EF%BC%89/" >丐版RDMA环境搭建（SoftRoCE） | 魔趣典藏阁 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/SoftRoCE/rxe-dev/issues/57" >No rdma_rxe · Issue #57 · SoftRoCE&#x2F;rxe-dev <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://rustwiki.org/zh-CN/cargo/commands/cargo-build.html" >cargo build - Cargo 手册 中文版 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/openucx/ucx/tree/master" >openucx&#x2F;ucx: Unified Communication X (mailing list - https://elist.ornl.gov/mailman/listinfo/ucx-group) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/madsys-dev/async-ucx/blob/main/examples/rma.rs" >async-ucx&#x2F;examples&#x2F;rma.rs at main · madsys-dev&#x2F;async-ucx <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -439,7 +462,7 @@
         <li><strong>Created at:</strong> 2025-08-06 13:06:09</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-08-06 13:08:45
+                <strong>Updated at:</strong> 2025-08-06 18:35:27
             </li>
         
         <li>
@@ -534,7 +557,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">RDMA learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"><span class="nav-text">1. 安装环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
