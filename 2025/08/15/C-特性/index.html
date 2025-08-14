@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/08/15/c-特性/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. std::execution&#x2F;coroutine结合核心概念在深入代码之前，我们先了解几个关键概念：  执行上下文 (Execution Context): 代表了可以执行工作的“地方”，例如一个线程池、一个 I&#x2F;O 事件循环或一个 GPU 流。 调度器 (Scheduler): 一个轻量级的句柄，代表了一个执行上下文。它的主要职责是创建一个“调度发送者”（Schedul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++特性">
+<meta property="og:url" content="http://example.com/2025/08/15/C-%E7%89%B9%E6%80%A7/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. std::execution&#x2F;coroutine结合核心概念在深入代码之前，我们先了解几个关键概念：  执行上下文 (Execution Context): 代表了可以执行工作的“地方”，例如一个线程池、一个 I&#x2F;O 事件循环或一个 GPU 流。 调度器 (Scheduler): 一个轻量级的句柄，代表了一个执行上下文。它的主要职责是创建一个“调度发送者”（Schedul">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-08-14T17:35:50.000Z">
+<meta property="article:modified_time" content="2025-08-14T17:56:28.775Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            C++特性 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">C++特性</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv5</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-08-15 01:35:50</span>
+        <span class="mobile">2025-08-15 01:35</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-08-15 01:56:28</span>
+            <span class="mobile">2025-08-15 01:56</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-std-execution-x2F-coroutine结合"><a href="#1-std-execution-x2F-coroutine结合" class="headerlink" title="1. std::execution&#x2F;coroutine结合"></a>1. std::execution&#x2F;coroutine结合</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><p>在深入代码之前，我们先了解几个关键概念：</p>
+<ol>
+<li><strong>执行上下文 (Execution Context):</strong> 代表了可以执行工作的“地方”，例如一个线程池、一个 I&#x2F;O 事件循环或一个 GPU 流。</li>
+<li><strong>调度器 (Scheduler):</strong> 一个轻量级的句柄，代表了一个执行上下文。它的主要职责是创建一个“调度发送者”（Schedule Sender）。</li>
+<li><strong>发送者 (Sender):</strong> 一个描述异步操作的类型。它知道如何启动一个操作，但本身并不执行任何工作。它像一个“蓝图”。</li>
+<li><strong>接收者 (Receiver):</strong> 一个“回调”的泛化，定义了当异步操作完成时（成功、失败或取消）应该做什么。</li>
+<li><strong>操作状态 (Operation State):</strong> 通过 <code>std::execution::connect</code> 将一个发送者和一个接收者连接起来所创建的对象。这个对象封装了执行操作所需的所有状态，并通过调用 <code>std::execution::start</code> 来启动。</li>
+<li><strong>协程 (<code>co_await</code>):</strong> 在我们的设计中，协程将作为连接发送者和接收者的桥梁，管理工作的提交和执行流程。</li>
+</ol>
+<h3 id="使用协程实现的调度器"><a href="#使用协程实现的调度器" class="headerlink" title="使用协程实现的调度器"></a>使用协程实现的调度器</h3><p>我们的目标是创建一个在后台使用一个或多个工作线程的线程池调度器。当 <code>schedule()</code> 被调用时，它返回的发送者会将工作单元（一个函数）提交给这个线程池，并利用协程来等待其执行完成。</p>
+<h4 id="1-简单的线程池执行上下文"><a href="#1-简单的线程池执行上下文" class="headerlink" title="1. 简单的线程池执行上下文"></a>1. 简单的线程池执行上下文</h4><p>首先，我们定义一个简单的线程池作为我们的执行上下文。它包含一个线程队列和一个用于分派任务的 <code>std::vector&lt;std::jthread&gt;</code>。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;concepts&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">simple_thread_pool</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">simple_thread_pool</span><span class="params">(std::<span class="type">size_t</span> thread_count = std::thread::hardware_concurrency())</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (std::<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; thread_count; ++i) &#123;</span><br><span class="line">            threads_.<span class="built_in">emplace_back</span>([<span class="keyword">this</span>] &#123; <span class="built_in">worker_thread</span>(); &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">simple_thread_pool</span>() &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock <span class="title">lock</span><span class="params">(mutex_)</span></span>;</span><br><span class="line">            stop_ = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cv_.<span class="built_in">notify_all</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">submit</span><span class="params">(std::function&lt;<span class="type">void</span>()&gt; work)</span> </span>&#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock <span class="title">lock</span><span class="params">(mutex_)</span></span>;</span><br><span class="line">            work_queue_.<span class="built_in">push</span>(std::<span class="built_in">move</span>(work));</span><br><span class="line">        &#125;</span><br><span class="line">        cv_.<span class="built_in">notify_one</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">worker_thread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            std::function&lt;<span class="type">void</span>()&gt; work;</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="function">std::unique_lock <span class="title">lock</span><span class="params">(mutex_)</span></span>;</span><br><span class="line">                cv_.<span class="built_in">wait</span>(lock, [<span class="keyword">this</span>] &#123; <span class="keyword">return</span> stop_ || !work_queue_.<span class="built_in">empty</span>(); &#125;);</span><br><span class="line">                <span class="keyword">if</span> (stop_ &amp;&amp; work_queue_.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                work = std::<span class="built_in">move</span>(work_queue_.<span class="built_in">front</span>());</span><br><span class="line">                work_queue_.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">work</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::vector&lt;std::jthread&gt; threads_;</span><br><span class="line">    std::queue&lt;std::function&lt;<span class="type">void</span>()&gt;&gt; work_queue_;</span><br><span class="line">    std::mutex mutex_;</span><br><span class="line">    std::condition_variable cv_;</span><br><span class="line">    <span class="type">bool</span> stop_&#123;<span class="literal">false</span>&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="2-协程任务类型-task"><a href="#2-协程任务类型-task" class="headerlink" title="2. 协程任务类型 (task)"></a>2. 协程任务类型 (<code>task</code>)</h4><p>我们将定义一个简单的协程任务类型。当这个任务被 <code>co_await</code> 时，它会将等待它的协程句柄提交给线程池。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;coroutine&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 前向声明</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">coroutine_scheduler</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">task</span> &#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">promise_type</span>;</span><br><span class="line">    <span class="keyword">using</span> handle_type = std::coroutine_handle&lt;promise_type&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">promise_type</span> &#123;</span><br><span class="line">        <span class="function">task <span class="title">get_return_object</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> &#123;handle_type::<span class="built_in">from_promise</span>(*<span class="keyword">this</span>)&#125;; &#125;</span><br><span class="line">        <span class="function">std::suspend_always <span class="title">initial_suspend</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123; <span class="keyword">return</span> &#123;&#125;; &#125;</span><br><span class="line">        <span class="function">std::suspend_always <span class="title">final_suspend</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123; <span class="keyword">return</span> &#123;&#125;; &#125;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">return_void</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">unhandled_exception</span><span class="params">()</span> </span>&#123; std::<span class="built_in">terminate</span>(); &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    handle_type handle;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">schedule_awaiter</span> &#123;</span><br><span class="line">    coroutine_scheduler&amp; scheduler_;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">await_ready</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">await_suspend</span><span class="params">(std::coroutine_handle&lt;&gt; h)</span></span>; <span class="comment">// 实现将移至 scheduler 定义之后</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">await_resume</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-协程调度器-coroutine-scheduler"><a href="#3-协程调度器-coroutine-scheduler" class="headerlink" title="3. 协程调度器 (coroutine_scheduler)"></a>3. 协程调度器 (<code>coroutine_scheduler</code>)</h4><p>这是我们设计的核心。它持有对线程池的引用，并提供 <code>schedule()</code> 方法来创建一个发送者。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;execution&gt;</span> <span class="comment">// 假设的 C++26 头文件</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 调度器需要满足 std::execution::scheduler 概念</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">coroutine_scheduler</span> &#123;</span><br><span class="line">    simple_thread_pool&amp; pool_;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// schedule() 返回一个发送者</span></span><br><span class="line">    <span class="function"><span class="keyword">auto</span> <span class="title">schedule</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">noexcept</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提交协程句柄</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">submit</span><span class="params">(std::coroutine_handle&lt;&gt; h)</span> </span>&#123;</span><br><span class="line">        pool_.<span class="built_in">submit</span>([h]() <span class="keyword">mutable</span> &#123; h.<span class="built_in">resume</span>(); &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重载以支持我们的awaiter</span></span><br><span class="line">    <span class="function">schedule_awaiter <span class="keyword">operator</span> <span class="title">co_await</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> &#123;*<span class="keyword">this</span>&#125;; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 为了满足概念，需要定义相等比较</span></span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>==(<span class="type">const</span> coroutine_scheduler&amp;) <span class="type">const</span> = <span class="keyword">default</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// await_suspend 的实现</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">schedule_awaiter::await_suspend</span><span class="params">(std::coroutine_handle&lt;&gt; h)</span> </span>&#123;</span><br><span class="line">    scheduler_.<span class="built_in">submit</span>(h);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="4-调度发送者-schedule-sender"><a href="#4-调度发送者-schedule-sender" class="headerlink" title="4. 调度发送者 (schedule_sender)"></a>4. 调度发送者 (<code>schedule_sender</code>)</h4><p>当调用 <code>coroutine_scheduler::schedule()</code> 时，会返回此类型的对象。它持有调度器的引用。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Receiver&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">coroutine_operation_state</span> &#123;</span><br><span class="line">    <span class="comment">// ... 实现将在下一步 ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">schedule_sender</span> &#123;</span><br><span class="line">    <span class="keyword">using</span> is_sender = <span class="type">void</span>; <span class="comment">// 标记这是一个发送者</span></span><br><span class="line">    coroutine_scheduler scheduler_;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定义此发送者可以发送的值、错误和停止信号的类型</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt; <span class="keyword">class</span> <span class="title class_">Tuple</span>, <span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt; <span class="keyword">class</span> <span class="title class_">Variant</span>&gt;</span><br><span class="line">    <span class="keyword">using</span> value_types = Variant&lt;Tuple&lt;&gt;&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt; <span class="keyword">class</span> <span class="title class_">Variant</span>&gt;</span><br><span class="line">    <span class="keyword">using</span> error_types = Variant&lt;std::exception_ptr&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> sends_done = std::true_type;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// `connect` 方法将发送者和接收者连接起来，创建操作状态</span></span><br><span class="line">    <span class="keyword">template</span> &lt;std::execution::receiver Receiver&gt;</span><br><span class="line">    <span class="function"><span class="keyword">auto</span> <span class="title">connect</span><span class="params">(Receiver&amp;&amp; r)</span> &amp;&amp; </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> coroutine_operation_state&lt;std::<span class="type">decay_t</span>&lt;Receiver&gt;&gt;&#123;</span><br><span class="line">            scheduler_, std::forward&lt;Receiver&gt;(r)</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// coroutine_scheduler::schedule() 的实现</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">coroutine_scheduler::schedule</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">noexcept</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> schedule_sender&#123;*<span class="keyword">this</span>&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="5-协程驱动的操作状态-coroutine-operation-state"><a href="#5-协程驱动的操作状态-coroutine-operation-state" class="headerlink" title="5. 协程驱动的操作状态 (coroutine_operation_state)"></a>5. 协程驱动的操作状态 (<code>coroutine_operation_state</code>)</h4><p>这是最精妙的部分。<code>connect</code> 的结果是一个操作状态对象。当 <code>start()</code> 被调用时，它会启动一个协程。这个协程 <code>co_await</code> 我们的调度器，从而将后续的执行（即调用接收者的 <code>set_value</code>）提交到线程池中。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;std::execution::receiver Receiver&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">coroutine_operation_state</span> &#123;</span><br><span class="line">    coroutine_scheduler scheduler_;</span><br><span class="line">    Receiver receiver_;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 启动操作的协程</span></span><br><span class="line">    <span class="function">task <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 关键点：等待调度器，这将使协程的剩余部分</span></span><br><span class="line">            <span class="comment">// 在线程池的某个线程上恢复执行。</span></span><br><span class="line">            <span class="keyword">co_await</span> scheduler_; </span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在线程池的线程上，调用接收者的 set_value</span></span><br><span class="line">            std::execution::<span class="built_in">set_value</span>(std::<span class="built_in">move</span>(receiver_));</span><br><span class="line">        &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">            std::execution::<span class="built_in">set_error</span>(std::<span class="built_in">move</span>(receiver_), std::<span class="built_in">current_exception</span>());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// `start()` 启动协程</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">start</span><span class="params">()</span> &amp; <span class="keyword">noexcept</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 创建协程，但它会立即在 initial_suspend 处暂停</span></span><br><span class="line">        task t = <span class="built_in">run</span>(); </span><br><span class="line">        <span class="comment">// 恢复协程，执行到 co_await scheduler_</span></span><br><span class="line">        t.handle.<span class="built_in">resume</span>(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="完整示例与使用"><a href="#完整示例与使用" class="headerlink" title="完整示例与使用"></a>完整示例与使用</h3><p>现在，我们将所有部分组合在一起，并展示如何使用这个由协程驱动的调度器。</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Main thread ID: &quot;</span> &lt;&lt; std::this_thread::<span class="built_in">get_id</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 创建执行上下文</span></span><br><span class="line">    <span class="function">simple_thread_pool <span class="title">pool</span><span class="params">(<span class="number">4</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 创建调度器</span></span><br><span class="line">    coroutine_scheduler scheduler&#123;pool&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 从调度器获取一个发送者</span></span><br><span class="line">    <span class="keyword">auto</span> work_sender = scheduler.<span class="built_in">schedule</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 定义一个接收者</span></span><br><span class="line">    <span class="keyword">auto</span> my_receiver = std::execution::<span class="built_in">then</span>(</span><br><span class="line">        work_sender,</span><br><span class="line">        [] &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Work executed on thread ID: &quot;</span> &lt;&lt; std::this_thread::<span class="built_in">get_id</span>() &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 使用 std::this_thread::sync_wait 等待操作完成</span></span><br><span class="line">    <span class="comment">// sync_wait 会连接(connect)并启动(start)发送者，并阻塞直到操作完成</span></span><br><span class="line">    std::this_thread::<span class="built_in">sync_wait</span>(std::<span class="built_in">move</span>(my_receiver));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>编译与运行（假设的 C++26 环境）:</strong></p>
+<p>如果在一个支持 <code>std::execution</code> 的未来 C++26 编译器中编译此代码，预期的输出将是：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Main thread ID: &lt;ID_of_main_thread&gt;</span><br><span class="line">Work executed on thread ID: &lt;ID_of_a_pool_thread&gt;</span><br></pre></td></tr></table></figure></div>
+
+<p>这清楚地表明，通过我们的协程调度器，工作被成功地从主线程转移到了线程池中的一个工作线程上执行。</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>这个例子展示了协程如何能被用作实现 <code>std::execution</code> 调度器内部机制的强大工具。通过在操作状态中启动一个协程并 <code>co_await</code> 调度器本身，我们能够以一种声明式且高度可读的方式，将执行流无缝地转移到目标执行上下文。</p>
+<p>这种设计不仅优雅，而且充分利用了 C++20 协程的优势，将底层的回调和句柄管理封装在 <code>task</code> 和 <code>awaiter</code> 的实现细节中。随着 C++26 的到来，我们有理由相信，这种协程与 <code>std::execution</code> 的深度集成将成为构建高性能、可扩展的异步系统的标准模式。</p>
+<h3 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h3><ul>
+<li><p>scheduler包sender，sender包operation_state，opration_state通过协程切换上下文到线程池中。</p>
+</li>
+<li><p>协程池不好实现，因为无栈协程，和主线程共享同一份栈，不支持子调用中co_await</p>
+</li>
+</ul>
+<h2 id="2-合约"><a href="#2-合约" class="headerlink" title="2. 合约"></a>2. 合约</h2><h2 id="3-静态反射"><a href="#3-静态反射" class="headerlink" title="3. 静态反射"></a>3. 静态反射</h2><p>rust如何打印枚举类型的名称？通过debug萃取，编译器插桩</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/execution/scheduler" >std::execution::scheduler - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/execution" >执行控制库 (自 C++26 起) - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/XIao_MinK/article/details/119823355" >C++23：std::execution&#x2F;unifex导读-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/experimental/execution.html" >Execution control library (since C++26) - cppreference.com <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/language/coroutines" >协程 (C++20) - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/433118110" >(25 封私信 &#x2F; 80 条消息) c++ execution 与 coroutine (二) : execution概述 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1903385287754778075" >(25 封私信 &#x2F; 80 条消息) ★C++20协程与stdexec(C++26 std::execution)学习笔记 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/619684326" >(25 封私信 &#x2F; 80 条消息) async_simple 源码分析（上） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/624199149" >(25 封私信 &#x2F; 80 条消息) 漫谈C++类型擦除(Type Erasure) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/395250667" >(25 封私信 &#x2F; 80 条消息) 浅谈The C++ Executors - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chengxumiaodaren.com/docs/concurrent/cpp-future/" >C++异步编程详解：future、promise与async | 现代C++并发编程 | C++ 编程指南 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25096571040" >(25 封私信 &#x2F; 80 条消息) C++26启航：Safe C++的破晓时刻 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/661692275" >C++26 静态反射提案解析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> C++特性</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-08-15 01:35:50</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2025-08-15 01:56:28
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/08/15/C-特性/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/08/06/RDMA-learning/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">RDMA learning</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">C++特性</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-std-execution-x2F-coroutine%E7%BB%93%E5%90%88"><span class="nav-text">1. std::execution&#x2F;coroutine结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-text">使用协程实现的调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-text">完整示例与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%88%E7%BA%A6"><span class="nav-text">2. 合约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9D%99%E6%80%81%E5%8F%8D%E5%B0%84"><span class="nav-text">3. 静态反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
