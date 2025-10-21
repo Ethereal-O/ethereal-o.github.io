@@ -18,16 +18,16 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 下载csi12wget https:&#x2F;&#x2F;gh-proxy.com&#x2F;github.com&#x2F;CrunchyData&#x2F;postgres-operator-examples&#x2F;archive&#x2F;refs&#x2F;heads&#x2F;main.ziptar xvf main.zip  2. 修改部署2.1 修改helm&#x2F;postgres&#x2F;values.yaml123456789101112131415">
+        <meta name="description" content="1. 下载csi12wget https:&#x2F;&#x2F;gh-proxy.com&#x2F;github.com&#x2F;CrunchyData&#x2F;postgres-operator-examples&#x2F;archive&#x2F;refs&#x2F;heads&#x2F;main.ziptar xvf main.zip  Crunchy Postgres是主从备份的模式，只有一个节点可以进行写入请求，其余只能读。 2. 修改部署2.1 修改helm&amp;#x2F">
 <meta property="og:type" content="article">
 <meta property="og:title" content="k8s搭建高可用pg集群">
 <meta property="og:url" content="http://example.com/2025/03/10/k8s%E6%90%AD%E5%BB%BA%E9%AB%98%E5%8F%AF%E7%94%A8pg%E9%9B%86%E7%BE%A4/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 下载csi12wget https:&#x2F;&#x2F;gh-proxy.com&#x2F;github.com&#x2F;CrunchyData&#x2F;postgres-operator-examples&#x2F;archive&#x2F;refs&#x2F;heads&#x2F;main.ziptar xvf main.zip  2. 修改部署2.1 修改helm&#x2F;postgres&#x2F;values.yaml123456789101112131415">
+<meta property="og:description" content="1. 下载csi12wget https:&#x2F;&#x2F;gh-proxy.com&#x2F;github.com&#x2F;CrunchyData&#x2F;postgres-operator-examples&#x2F;archive&#x2F;refs&#x2F;heads&#x2F;main.ziptar xvf main.zip  Crunchy Postgres是主从备份的模式，只有一个节点可以进行写入请求，其余只能读。 2. 修改部署2.1 修改helm&amp;#x2F">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-4058312/93427b861fcdb5b25000390de9744b9c.png">
 <meta property="article:published_time" content="2025-03-10T09:59:18.000Z">
-<meta property="article:modified_time" content="2025-05-14T08:37:14.655Z">
+<meta property="article:modified_time" content="2025-10-21T12:10:11.676Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/yehe-4058312/93427b861fcdb5b25000390de9744b9c.png">
@@ -114,241 +114,363 @@
     <div class="main-content-container">
 
         <div class="main-content-header">
-            <header class="navbar-container">
-    
-    <div class="navbar-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                
-                Ethereal&#39;s Blog
-                
-            </a>
-        </div>
+            $logo-title-font-size = 2rem
+$desktop-search-icon-font-size = 1.5rem
+$navbar-bar-line-height = 2.5px
+$logo-image-box-width = 46px
 
-        <div class="right">
-            <!-- PC -->
-            <div class="desktop">
-                <ul class="navbar-list">
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="" 
-                                    href="/"  >
-                                    
-                                        
-                                            <i class="fa-regular fa-house"></i>
-                                        
-                                        HOME
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="" 
-                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
-                                    
-                                        
-                                            <i class="fa-brands fa-github"></i>
-                                        
-                                        GITHUB
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="" 
-                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
-                                    
-                                        
-                                            <i class="fa-brands fa-stack-overflow"></i>
-                                        
-                                        CSDN
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="has-dropdown" 
-                                    href="#" onClick="return false;">
-                                    
-                                        
-                                            <i class="fa-regular fa-link"></i>
-                                        
-                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                                    <ul class="sub-menu">
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
-                                        </a>
-                                        </li>
-                                    
-                                    </ul>
-                                
-                            </li>
-                    
-                    
-                </ul>
-            </div>
-            <!-- Mobile -->
-            <div class="mobile">
-                
-                <div class="icon-item navbar-bar">
-                    <div class="navbar-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+@import '../../common/variables'
 
-    <!-- Mobile drawer -->
-    <div class="navbar-drawer">
-        <ul class="drawer-navbar-list">
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="" 
-                        href="/"  >
-                             
-                                
-                                    <i class="fa-regular fa-house"></i>
-                                
-                                HOME
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                    
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="" 
-                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
-                             
-                                
-                                    <i class="fa-brands fa-github"></i>
-                                
-                                GITHUB
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                    
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="" 
-                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
-                             
-                                
-                                    <i class="fa-brands fa-stack-overflow"></i>
-                                
-                                CSDN
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                    
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="has-dropdown" 
-                        href="#" onClick="return false;">
-                            
-                                
-                                    <i class="fa-regular fa-link"></i>
-                                
-                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                              
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
-                            </li>
-                        
-                    
-            
+.navbar-container
+  font-family 'Chillax-Variable', sans-serif
+  width 100%
+  height 100%
+  box-sizing border-box
+  display flex
+  align-items center
+  justify-content center
+  background $nav-color-bg
+  -webkit-backdrop-filter blur(10px)
+  backdrop-filter blur(10px)
+  padding-top $scroll-progress-bar-height
+  hover-style(
+    false,
+    0,
+    0
+  )
 
-        </ul>
-    </div>
+  .navbar-content
+    position relative
+    height 100%
+    width $main-content-width
+    max-width $content-max-width
+    display flex
+    flex-direction row
+    justify-content space-between
+    align-items center
+    z-index $z-index-5
 
-    <div class="window-mask"></div>
+    &.has-home-banner
+      max-width: $content-max-width * 1.2
 
-</header>
+    +redefine-tablet()
+      width $main-content-width-tablet
 
+    +redefine-mobile()
+      width $main-content-width-mobile
+
+    .left
+      display flex
+      align-items center
+      transition-t('transform', '0', '0.2', 'linear')
+
+      .navbar-shrink &
+        transform scale(0.72)
+        transform-origin left
+
+      if (hexo-config('defaults.logo') && hexo-config('defaults.logo') != '')
+        .logo-image
+          width $logo-image-box-width
+          height $logo-image-box-width
+          margin-right 8px
+
+          +redefine-tablet()
+            width: $logo-image-box-width * 0.9
+            height: $logo-image-box-width * 0.9
+
+          +redefine-mobile()
+            width: $logo-image-box-width * 0.8
+            height: $logo-image-box-width * 0.8
+
+          img
+            border-radius 6px
+            width 100%
+
+      .logo-title
+        font-size $logo-title-font-size
+        font-weight 520
+        // letter-spacing 1px
+        line-height 1
+        color var(--first-text-color)
+
+        h1
+          margin 0
+          font-size $logo-title-font-size
+          font-weight 520
+          //letter-spacing 1px
+          line-height 1
+          color var(--first-text-color)
+
+          +redefine-tablet()
+            font-size: $logo-title-font-size * 0.9
+
+          +redefine-mobile()
+            font-size: $logo-title-font-size * 0.8
+
+        +redefine-tablet()
+          font-size: $logo-title-font-size * 0.9
+
+        +redefine-mobile()
+          font-size: $logo-title-font-size * 0.8
+
+    .right
+      .desktop
+        .navbar-list
+          display flex
+          align-items center
+
+          +redefine-tablet()
+            display none
+
+          .navbar-item
+            float left
+            // padding 5px
+            position relative
+            margin-left 30px
+            font-size 1rem
+            font-weight 450
+            cursor pointer
+            color var(--default-text-color)
+
+            a
+              display block
+              padding 5px
+
+            &:first-child
+              margin-left 0
+
+            a .fa-chevron-down
+              transform rotate(0deg)
+              transition transform 0.3s ease
+
+            &:hover a .fa-chevron-down
+              transform rotate(180deg)
+
+            &:hover .has-dropdown
+              &::after
+                display none !important
+
+            &:hover a, .active
+              &::after
+                content ''
+                position absolute
+                bottom -5px
+                left 50%
+                width 100%
+                height 2px
+                transform translateX(-50%)
+                border-radius $redefine-border-radius-large
+                background var(--primary-color)
+                transition-t('transform, bottom', '0, 0', '0.2, 0.2', 'linear, linear')
+
+                .navbar-shrink &
+                  bottom -($navbar-shrink-height / 2 - 17)
+
+            &.search
+              font-size $desktop-search-icon-font-size
+              margin-left 26px
+
+              i
+                color var(--default-text-color)
+
+            .sub-menu
+              position absolute
+              right auto
+              left 50%
+              -webkit-transform translate(-50%, 0)
+              -o-transform translate(-50%, 0)
+              transform translate(-50%, 0)
+              margin-top 0px
+              width auto
+              text-align center
+              list-style none
+              padding 0 10px
+              border-radius $redefine-border-radius-large
+              // visibility hidden
+              max-height 0px
+              overflow hidden
+              transition-t('all', '0', '0.2', 'linear')
+
+              li a
+                white-space nowrap
+                color var(--default-text-color)
+                font-size 1rem
+                padding 3px 15px
+                display block
+                text-align center
+                border-radius 8px
+                transition-t('all', '0', '0.2', 'linear')
+
+                &:hover
+                  color var(--primary-color)
+                  background-color var(--third-background-color)
+
+        .navbar-list .navbar-item:hover .sub-menu
+          // visibility visible
+          max-height 500px
+          transition-t('all', '0', '0.2', 'ease')
+          redefine-container(
+            false,
+            0,
+            0,
+            10px,
+            5px
+          )
+
+      .mobile
+        display flex
+        justify-content space-between
+        align-items center
+
+        .icon-item
+          display none
+          position relative
+          cursor pointer
+          font-size 18px
+          margin-left 12px
+          width 20px
+          height 20px
+          color var(--default-text-color)
+
+          i
+            color var(--default-text-color)
+
+          &:first-child
+            margin-left 0
+
+          +redefine-tablet()
+            display flex
+            justify-content center
+            align-items center
+
+        .navbar-bar
+          .navbar-bar-middle
+            width 18px
+            height $navbar-bar-line-height
+            position relative
+            background var(--default-text-color)
+
+            .navbar-drawer-show &
+              background transparent
+
+            &::before, &::after
+              content ''
+              position absolute
+              left 0
+              width 100%
+              height $navbar-bar-line-height
+              background var(--default-text-color)
+              transition-t('transform', '0', '0.38', 'ease')
+
+            &::before
+              top -6px
+
+              .navbar-drawer-show &
+                transform translateY(6px) rotate(45deg)
+
+            &::after
+              bottom -6px
+
+              .navbar-drawer-show &
+                transform translateY(-6px) rotate(-45deg)
+
+  .navbar-drawer
+    width 100%
+    padding $navbar-height 0 20px 0
+    position absolute
+    top 0
+    left 0
+    transform scaleY(0)
+    transform-origin top
+    z-index $z-index-2
+    background var(--background-color)
+    transition-t('transform', '0', '0.38', 'ease')
+
+    .navbar-drawer-show &
+      transform scaleY(1)
+
+    .drawer-navbar-list
+      display flex
+      flex-direction column
+      justify-content flex-start
+      align-items center
+
+      .drawer-navbar-item
+        font-size 1rem
+        margin 6px 0
+        height 32px
+
+        a
+          padding 6px 20px
+          border-radius 20px
+          color var(--default-text-color)
+
+          &:hover
+            color var(--second-text-color)
+            border 1px solid var(--default-text-color)
+
+          &.active
+            border 1px solid var(--default-text-color)
+            color var(--second-text-color)
+
+        .has-dropdown
+
+        a .fa-chevron-down
+          transform rotate(0deg)
+          transition transform 0.3s ease
+
+        &:hover a .fa-chevron-down
+          transform rotate(180deg)
+
+        &:hover .has-dropdown
+          &::after
+            display none !important
+
+      .dropdown-item
+        font-size 1rem
+        margin 6px 0
+        height 16px
+
+        a
+          padding 6px 20px
+          border-radius 20px
+          color var(--default-text-color)
+
+          &:hover
+            color var(--second-text-color)
+            border 1px solid var(--default-text-color)
+
+          &.active
+            border 1px solid var(--default-text-color)
+            color var(--second-text-color)
+
+      .sub-menu
+        position relative
+        margin-top 8px
+        width 100%
+        text-align center
+        list-style none
+        padding 0 10px
+        border-radius $redefine-border-radius-large
+        // float left
+
+  .window-mask
+    position absolute
+    top 0
+    width 100%
+    height 100vh
+    background rgba(0, 0, 0, 0.4)
+    z-index $z-index-1
+    visibility hidden
+    opacity 0
+    transition-t('transform, opacity', '0, 0', '0.38, 0.38', 'ease, ease')
+
+    .navbar-drawer-show &
+      visibility visible
+      opacity 1
+
+.navbar-drawer-show
+  overflow hidden
 
         </div>
 
@@ -395,8 +517,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-14 16:37:14</span>
-            <span class="mobile">2025-05-14 16:37</span>
+            <span class="desktop">2025-10-21 20:10:11</span>
+            <span class="mobile">2025-10-21 20:10</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -422,6 +544,7 @@
             <div class="article-content markdown-body">
                 <h2 id="1-下载csi"><a href="#1-下载csi" class="headerlink" title="1. 下载csi"></a>1. 下载csi</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://gh-proxy.com/github.com/CrunchyData/postgres-operator-examples/archive/refs/heads/main.zip</span><br><span class="line">tar xvf main.zip</span><br></pre></td></tr></table></figure></div>
 
+<p>Crunchy Postgres是主从备份的模式，只有一个节点可以进行写入请求，其余只能读。</p>
 <h2 id="2-修改部署"><a href="#2-修改部署" class="headerlink" title="2. 修改部署"></a>2. 修改部署</h2><h3 id="2-1-修改helm-x2F-postgres-x2F-values-yaml"><a href="#2-1-修改helm-x2F-postgres-x2F-values-yaml" class="headerlink" title="2.1 修改helm&#x2F;postgres&#x2F;values.yaml"></a>2.1 修改helm&#x2F;postgres&#x2F;values.yaml</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改持久存储</span></span><br><span class="line">instanceSize: 10Gi</span><br><span class="line">instanceStorageClassName: &quot;default-cephfs&quot;</span><br><span class="line">instanceReplicas: 3</span><br><span class="line">backupsSize: 10Gi</span><br><span class="line">backupsStorageClassName: &quot;default-cephfs&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改service</span></span><br><span class="line">service:</span><br><span class="line">  type: NodePort</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改pg配置，启用远程登录</span></span><br><span class="line">patroni:</span><br><span class="line">  dynamicConfiguration:</span><br><span class="line">    # synchronous_mode: true</span><br><span class="line">    postgresql:</span><br><span class="line">      pg_hba:</span><br><span class="line">      - host replication repl 0.0.0.0/0 md5</span><br><span class="line">      - host all all 0.0.0.0/0 md5</span><br></pre></td></tr></table></figure></div>
 
 <h3 id="2-2-部署"><a href="#2-2-部署" class="headerlink" title="2.2 部署"></a>2.2 部署</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm install postgres /disk2/shared/build_offline_origin/pg/postgres-operator-examples-main/helm/install -n postgres</span><br><span class="line">helm install postgres /disk2/shared/build_offline_origin/pg/postgres-operator-examples-main/helm/postgres -n postgres</span><br></pre></td></tr></table></figure></div>
@@ -509,6 +632,7 @@
 
 <h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6. 参考"></a>6. 参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/basic-setup/create-cluster" >Create a Postgres Cluster <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44008424/article/details/143696308" >在k8s上部署Crunchy Postgres for Kubernetes-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://access.crunchydata.com/documentation/postgres-operator/latest/architecture" >Detailed Architecture <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://developer.aliyun.com/article/953902" >云原生 PostgreSQL 集群 - PGO:来自 Crunchy Data 的 Postgres Operator-阿里云开发者社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials" >Tutorials <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/basic-setup/create-cluster" >Create a Postgres Cluster <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -563,7 +687,7 @@
         <li><strong>Created at:</strong> 2025-03-10 17:59:18</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-14 16:37:14
+                <strong>Updated at:</strong> 2025-10-21 20:10:11
             </li>
         
         <li>

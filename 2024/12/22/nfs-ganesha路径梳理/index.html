@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
 <meta property="article:published_time" content="2024-12-22T12:20:26.000Z">
-<meta property="article:modified_time" content="2025-02-14T08:51:45.411Z">
+<meta property="article:modified_time" content="2025-10-21T12:08:50.390Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
@@ -114,241 +114,363 @@
     <div class="main-content-container">
 
         <div class="main-content-header">
-            <header class="navbar-container">
-    
-    <div class="navbar-content">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                
-                Ethereal&#39;s Blog
-                
-            </a>
-        </div>
+            $logo-title-font-size = 2rem
+$desktop-search-icon-font-size = 1.5rem
+$navbar-bar-line-height = 2.5px
+$logo-image-box-width = 46px
 
-        <div class="right">
-            <!-- PC -->
-            <div class="desktop">
-                <ul class="navbar-list">
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="" 
-                                    href="/"  >
-                                    
-                                        
-                                            <i class="fa-regular fa-house"></i>
-                                        
-                                        HOME
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="" 
-                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
-                                    
-                                        
-                                            <i class="fa-brands fa-github"></i>
-                                        
-                                        GITHUB
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="" 
-                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
-                                    
-                                        
-                                            <i class="fa-brands fa-stack-overflow"></i>
-                                        
-                                        CSDN
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class="has-dropdown" 
-                                    href="#" onClick="return false;">
-                                    
-                                        
-                                            <i class="fa-regular fa-link"></i>
-                                        
-                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
-                                    
-                                </a>
-                                <!-- Submenu -->
-                                
-                                    <ul class="sub-menu">
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
-                                        </a>
-                                        </li>
-                                    
-                                        <li>
-                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
-                                        </a>
-                                        </li>
-                                    
-                                    </ul>
-                                
-                            </li>
-                    
-                    
-                </ul>
-            </div>
-            <!-- Mobile -->
-            <div class="mobile">
-                
-                <div class="icon-item navbar-bar">
-                    <div class="navbar-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+@import '../../common/variables'
 
-    <!-- Mobile drawer -->
-    <div class="navbar-drawer">
-        <ul class="drawer-navbar-list">
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="" 
-                        href="/"  >
-                             
-                                
-                                    <i class="fa-regular fa-house"></i>
-                                
-                                HOME
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                    
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="" 
-                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
-                             
-                                
-                                    <i class="fa-brands fa-github"></i>
-                                
-                                GITHUB
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                    
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="" 
-                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
-                             
-                                
-                                    <i class="fa-brands fa-stack-overflow"></i>
-                                
-                                CSDN
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                    
-            
-                
-                    <li class="drawer-navbar-item flex-center">
-                        <a class="has-dropdown" 
-                        href="#" onClick="return false;">
-                            
-                                
-                                    <i class="fa-regular fa-link"></i>
-                                
-                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
-                            
-                        </a>
-                    </li>
-                    <!-- Submenu -->
-                              
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
-                            </li>
-                        
-                            <li class="dropdown-item flex-center">
-                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
-                            </li>
-                        
-                    
-            
+.navbar-container
+  font-family 'Chillax-Variable', sans-serif
+  width 100%
+  height 100%
+  box-sizing border-box
+  display flex
+  align-items center
+  justify-content center
+  background $nav-color-bg
+  -webkit-backdrop-filter blur(10px)
+  backdrop-filter blur(10px)
+  padding-top $scroll-progress-bar-height
+  hover-style(
+    false,
+    0,
+    0
+  )
 
-        </ul>
-    </div>
+  .navbar-content
+    position relative
+    height 100%
+    width $main-content-width
+    max-width $content-max-width
+    display flex
+    flex-direction row
+    justify-content space-between
+    align-items center
+    z-index $z-index-5
 
-    <div class="window-mask"></div>
+    &.has-home-banner
+      max-width: $content-max-width * 1.2
 
-</header>
+    +redefine-tablet()
+      width $main-content-width-tablet
 
+    +redefine-mobile()
+      width $main-content-width-mobile
+
+    .left
+      display flex
+      align-items center
+      transition-t('transform', '0', '0.2', 'linear')
+
+      .navbar-shrink &
+        transform scale(0.72)
+        transform-origin left
+
+      if (hexo-config('defaults.logo') && hexo-config('defaults.logo') != '')
+        .logo-image
+          width $logo-image-box-width
+          height $logo-image-box-width
+          margin-right 8px
+
+          +redefine-tablet()
+            width: $logo-image-box-width * 0.9
+            height: $logo-image-box-width * 0.9
+
+          +redefine-mobile()
+            width: $logo-image-box-width * 0.8
+            height: $logo-image-box-width * 0.8
+
+          img
+            border-radius 6px
+            width 100%
+
+      .logo-title
+        font-size $logo-title-font-size
+        font-weight 520
+        // letter-spacing 1px
+        line-height 1
+        color var(--first-text-color)
+
+        h1
+          margin 0
+          font-size $logo-title-font-size
+          font-weight 520
+          //letter-spacing 1px
+          line-height 1
+          color var(--first-text-color)
+
+          +redefine-tablet()
+            font-size: $logo-title-font-size * 0.9
+
+          +redefine-mobile()
+            font-size: $logo-title-font-size * 0.8
+
+        +redefine-tablet()
+          font-size: $logo-title-font-size * 0.9
+
+        +redefine-mobile()
+          font-size: $logo-title-font-size * 0.8
+
+    .right
+      .desktop
+        .navbar-list
+          display flex
+          align-items center
+
+          +redefine-tablet()
+            display none
+
+          .navbar-item
+            float left
+            // padding 5px
+            position relative
+            margin-left 30px
+            font-size 1rem
+            font-weight 450
+            cursor pointer
+            color var(--default-text-color)
+
+            a
+              display block
+              padding 5px
+
+            &:first-child
+              margin-left 0
+
+            a .fa-chevron-down
+              transform rotate(0deg)
+              transition transform 0.3s ease
+
+            &:hover a .fa-chevron-down
+              transform rotate(180deg)
+
+            &:hover .has-dropdown
+              &::after
+                display none !important
+
+            &:hover a, .active
+              &::after
+                content ''
+                position absolute
+                bottom -5px
+                left 50%
+                width 100%
+                height 2px
+                transform translateX(-50%)
+                border-radius $redefine-border-radius-large
+                background var(--primary-color)
+                transition-t('transform, bottom', '0, 0', '0.2, 0.2', 'linear, linear')
+
+                .navbar-shrink &
+                  bottom -($navbar-shrink-height / 2 - 17)
+
+            &.search
+              font-size $desktop-search-icon-font-size
+              margin-left 26px
+
+              i
+                color var(--default-text-color)
+
+            .sub-menu
+              position absolute
+              right auto
+              left 50%
+              -webkit-transform translate(-50%, 0)
+              -o-transform translate(-50%, 0)
+              transform translate(-50%, 0)
+              margin-top 0px
+              width auto
+              text-align center
+              list-style none
+              padding 0 10px
+              border-radius $redefine-border-radius-large
+              // visibility hidden
+              max-height 0px
+              overflow hidden
+              transition-t('all', '0', '0.2', 'linear')
+
+              li a
+                white-space nowrap
+                color var(--default-text-color)
+                font-size 1rem
+                padding 3px 15px
+                display block
+                text-align center
+                border-radius 8px
+                transition-t('all', '0', '0.2', 'linear')
+
+                &:hover
+                  color var(--primary-color)
+                  background-color var(--third-background-color)
+
+        .navbar-list .navbar-item:hover .sub-menu
+          // visibility visible
+          max-height 500px
+          transition-t('all', '0', '0.2', 'ease')
+          redefine-container(
+            false,
+            0,
+            0,
+            10px,
+            5px
+          )
+
+      .mobile
+        display flex
+        justify-content space-between
+        align-items center
+
+        .icon-item
+          display none
+          position relative
+          cursor pointer
+          font-size 18px
+          margin-left 12px
+          width 20px
+          height 20px
+          color var(--default-text-color)
+
+          i
+            color var(--default-text-color)
+
+          &:first-child
+            margin-left 0
+
+          +redefine-tablet()
+            display flex
+            justify-content center
+            align-items center
+
+        .navbar-bar
+          .navbar-bar-middle
+            width 18px
+            height $navbar-bar-line-height
+            position relative
+            background var(--default-text-color)
+
+            .navbar-drawer-show &
+              background transparent
+
+            &::before, &::after
+              content ''
+              position absolute
+              left 0
+              width 100%
+              height $navbar-bar-line-height
+              background var(--default-text-color)
+              transition-t('transform', '0', '0.38', 'ease')
+
+            &::before
+              top -6px
+
+              .navbar-drawer-show &
+                transform translateY(6px) rotate(45deg)
+
+            &::after
+              bottom -6px
+
+              .navbar-drawer-show &
+                transform translateY(-6px) rotate(-45deg)
+
+  .navbar-drawer
+    width 100%
+    padding $navbar-height 0 20px 0
+    position absolute
+    top 0
+    left 0
+    transform scaleY(0)
+    transform-origin top
+    z-index $z-index-2
+    background var(--background-color)
+    transition-t('transform', '0', '0.38', 'ease')
+
+    .navbar-drawer-show &
+      transform scaleY(1)
+
+    .drawer-navbar-list
+      display flex
+      flex-direction column
+      justify-content flex-start
+      align-items center
+
+      .drawer-navbar-item
+        font-size 1rem
+        margin 6px 0
+        height 32px
+
+        a
+          padding 6px 20px
+          border-radius 20px
+          color var(--default-text-color)
+
+          &:hover
+            color var(--second-text-color)
+            border 1px solid var(--default-text-color)
+
+          &.active
+            border 1px solid var(--default-text-color)
+            color var(--second-text-color)
+
+        .has-dropdown
+
+        a .fa-chevron-down
+          transform rotate(0deg)
+          transition transform 0.3s ease
+
+        &:hover a .fa-chevron-down
+          transform rotate(180deg)
+
+        &:hover .has-dropdown
+          &::after
+            display none !important
+
+      .dropdown-item
+        font-size 1rem
+        margin 6px 0
+        height 16px
+
+        a
+          padding 6px 20px
+          border-radius 20px
+          color var(--default-text-color)
+
+          &:hover
+            color var(--second-text-color)
+            border 1px solid var(--default-text-color)
+
+          &.active
+            border 1px solid var(--default-text-color)
+            color var(--second-text-color)
+
+      .sub-menu
+        position relative
+        margin-top 8px
+        width 100%
+        text-align center
+        list-style none
+        padding 0 10px
+        border-radius $redefine-border-radius-large
+        // float left
+
+  .window-mask
+    position absolute
+    top 0
+    width 100%
+    height 100vh
+    background rgba(0, 0, 0, 0.4)
+    z-index $z-index-1
+    visibility hidden
+    opacity 0
+    transition-t('transform, opacity', '0, 0', '0.38, 0.38', 'ease, ease')
+
+    .navbar-drawer-show &
+      visibility visible
+      opacity 1
+
+.navbar-drawer-show
+  overflow hidden
 
         </div>
 
@@ -395,8 +517,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-02-14 16:51:45</span>
-            <span class="mobile">2025-02-14 16:51</span>
+            <span class="desktop">2025-10-21 20:08:50</span>
+            <span class="mobile">2025-10-21 20:08</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -516,6 +638,8 @@
 </li>
 <li><p>layoutdriver：使用set_pnfs_layoutdriver与set_layoutdriver设置驱动。加载内核模块之后，nfs简单地写入块设备即可，由块设备负责进行同步（例如使用iscsi）。当前同一filesystem的一种layouttype只支持一种driver。当bio callback需要drain时，调用do_callback_layoutrecall。如果是file，那么需要layoutcommit。</p>
 </li>
+<li><p>pNFS在Linux中支持三种方式（LAYOUT_FLEX_FILES、LAYOUT_BLOCK_VOLUME、LAYOUT_SCSI）。在nfs-ganesha中也支持。但是GPFS中只支持LAYOUT_FLEX_FILES。在linux源码仓库中，<code>linux/fs/nfsd</code>是服务端，<code>linux/fs/nfs</code>是客户端。</p>
+</li>
 <li><p>路径</p>
 <ul>
 <li><p>nfs4_get_device_info-&gt;nfs4_proc_getdeviceinfo-&gt;nfs4_call_sync-&gt;nfs4_do_call_sync  alloc_deviceid_node</p>
@@ -544,7 +668,7 @@
 <li><p>解析(通过nfsd4_decode_layoutget解析)</p>
 <div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> __be32</span><br><span class="line"><span class="title function_">nfsd4_decode_compound</span><span class="params">(<span class="keyword">struct</span> nfsd4_compoundargs *argp)</span></span><br><span class="line">&#123;</span><br><span class="line">    argp-&gt;taglen = be32_to_cpup(p++);</span><br><span class="line">    argp-&gt;minorversion = be32_to_cpup(p++);</span><br><span class="line">    argp-&gt;opcnt = be32_to_cpup(p++);</span><br><span class="line">    op-&gt;opnum = be32_to_cpup(p++);</span><br><span class="line">    op-&gt;status = nfsd4_dec_ops[op-&gt;opnum](argp, &amp;op-&gt;u);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> __be32</span><br><span class="line"><span class="title function_">nfsd4_decode_layoutget</span><span class="params">(<span class="keyword">struct</span> nfsd4_compoundargs *argp,</span></span><br><span class="line"><span class="params">        <span class="keyword">struct</span> nfsd4_layoutget *lgp)</span></span><br><span class="line">&#123;</span><br><span class="line">    DECODE_HEAD;</span><br><span class="line"></span><br><span class="line">    READ_BUF(<span class="number">36</span>);</span><br><span class="line">    lgp-&gt;lg_signal = be32_to_cpup(p++);</span><br><span class="line">    lgp-&gt;lg_layout_type = be32_to_cpup(p++);</span><br><span class="line">    lgp-&gt;lg_seg.iomode = be32_to_cpup(p++);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_seg.offset);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_seg.length);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_minlength);</span><br><span class="line"></span><br><span class="line">    status = nfsd4_decode_stateid(argp, &amp;lgp-&gt;lg_sid);</span><br><span class="line">    <span class="keyword">if</span> (status)</span><br><span class="line">        <span class="keyword">return</span> status;</span><br><span class="line"></span><br><span class="line">    READ_BUF(<span class="number">4</span>);</span><br><span class="line">    lgp-&gt;lg_maxcount = be32_to_cpup(p++);</span><br><span class="line"></span><br><span class="line">    DECODE_TAIL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">listen</span>():</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_COMPOUND4res</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.COMPOUND4res()</span><br><span class="line">    data.status = self.unpack_nfsstat4()</span><br><span class="line">    data.tag = self.unpack_utf8str_cs()</span><br><span class="line">    data.resarray = self.unpack_array(self.unpack_nfs_resop4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_COMPOUND4res&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_COMPOUND4res&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_array</span>(<span class="params">self, unpack_item</span>):</span><br><span class="line">    n = self.unpack_uint()</span><br><span class="line">    <span class="keyword">return</span> self.unpack_farray(n, unpack_item)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_nfs_resop4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.nfs_resop4()</span><br><span class="line">    data.resop = self.unpack_nfs_opnum4()</span><br><span class="line">    <span class="keyword">if</span> data.resop == const.OP_ACCESS:</span><br><span class="line">        data.opaccess = self.unpack_ACCESS4res()</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_LAYOUTGET4res</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.LAYOUTGET4res()</span><br><span class="line">    data.logr_status = self.unpack_nfsstat4()</span><br><span class="line">    <span class="keyword">if</span> data.logr_status == const.NFS4_OK:</span><br><span class="line">        data.logr_resok4 = self.unpack_LAYOUTGET4resok()</span><br><span class="line">    <span class="keyword">elif</span> data.logr_status == const.NFS4ERR_LAYOUTTRYLATER:</span><br><span class="line">        data.logr_will_signal_layout_avail = self.unpack_bool()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4res&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4res&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_LAYOUTGET4resok</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.LAYOUTGET4resok()</span><br><span class="line">    data.logr_return_on_close = self.unpack_bool()</span><br><span class="line">    data.logr_stateid = self.unpack_stateid4()</span><br><span class="line">    data.logr_layout = self.unpack_array(self.unpack_layout4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4resok&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4resok&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_layout4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.layout4()</span><br><span class="line">    data.lo_offset = self.unpack_offset4()</span><br><span class="line">    data.lo_length = self.unpack_length4()</span><br><span class="line">    data.lo_iomode = self.unpack_layoutiomode4()</span><br><span class="line">    data.lo_content = self.unpack_layout_content4()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_layout4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_layout4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_layout_content4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.layout_content4()</span><br><span class="line">    data.loc_type = self.unpack_layouttype4()</span><br><span class="line">    data.loc_body = self.unpack_opaque()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_layout_content4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_layout_content4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> layout.loc_type == LAYOUT4_NFSV4_1_FILES:</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_pnfs_block_layout4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.pnfs_block_layout4()</span><br><span class="line">    data.blo_extents = self.unpack_array(self.unpack_pnfs_block_extent4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_pnfs_block_layout4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_pnfs_block_layout4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_pnfs_block_extent4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.pnfs_block_extent4()</span><br><span class="line">    data.bex_vol_id = self.unpack_deviceid4()</span><br><span class="line">    data.bex_file_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_length = self.unpack_length4()</span><br><span class="line">    data.bex_storage_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_state = self.unpack_pnfs_block_extent_state4()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">listen</span>():</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_COMPOUND4res</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.COMPOUND4res()</span><br><span class="line">    data.status = self.unpack_nfsstat4()</span><br><span class="line">    data.tag = self.unpack_utf8str_cs()</span><br><span class="line">    data.resarray = self.unpack_array(self.unpack_nfs_resop4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_COMPOUND4res&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_COMPOUND4res&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_array</span>(<span class="params">self, unpack_item</span>):</span><br><span class="line">    n = self.unpack_uint()</span><br><span class="line">    <span class="keyword">return</span> self.unpack_farray(n, unpack_item)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_nfs_resop4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.nfs_resop4()</span><br><span class="line">    data.resop = self.unpack_nfs_opnum4()</span><br><span class="line">    <span class="keyword">if</span> data.resop == const.OP_ACCESS:</span><br><span class="line">        data.opaccess = self.unpack_ACCESS4res()</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_LAYOUTGET4res</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.LAYOUTGET4res()</span><br><span class="line">    data.logr_status = self.unpack_nfsstat4()</span><br><span class="line">    <span class="keyword">if</span> data.logr_status == const.NFS4_OK:</span><br><span class="line">        data.logr_resok4 = self.unpack_LAYOUTGET4resok()</span><br><span class="line">    <span class="keyword">elif</span> data.logr_status == const.NFS4ERR_LAYOUTTRYLATER:</span><br><span class="line">        data.logr_will_signal_layout_avail = self.unpack_bool()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4res&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4res&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_LAYOUTGET4resok</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.LAYOUTGET4resok()</span><br><span class="line">    data.logr_return_on_close = self.unpack_bool()</span><br><span class="line">    data.logr_stateid = self.unpack_stateid4()</span><br><span class="line">    data.logr_layout = self.unpack_array(self.unpack_layout4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4resok&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4resok&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_layout4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.layout4()</span><br><span class="line">    data.lo_offset = self.unpack_offset4()</span><br><span class="line">    data.lo_length = self.unpack_length4()</span><br><span class="line">    data.lo_iomode = self.unpack_layoutiomode4()</span><br><span class="line">    data.lo_content = self.unpack_layout_content4()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_layout4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_layout4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_layout_content4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.layout_content4()</span><br><span class="line">    data.loc_type = self.unpack_layouttype4()</span><br><span class="line">    data.loc_body = self.unpack_opaque()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_layout_content4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_layout_content4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> layout.loc_type == LAYOUT4_NFSV4_1_FILES:</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_pnfs_block_layout4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.pnfs_block_layout4()</span><br><span class="line">    data.blo_extents = self.unpack_array(self.unpack_pnfs_block_extent4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_pnfs_block_layout4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_pnfs_block_layout4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_pnfs_block_extent4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.pnfs_block_extent4()</span><br><span class="line">    data.bex_vol_id = self.unpack_deviceid4()</span><br><span class="line">    data.bex_file_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_length = self.unpack_length4()</span><br><span class="line">    data.bex_storage_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_state = self.unpack_pnfs_block_extent_state4()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure></div>
 </li>
 <li><p>返回值</p>
 <div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">nfs4_layoutget_res</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">nfs4_sequence_res</span> <span class="title">seq_res</span>;</span></span><br><span class="line">  <span class="type">int</span> status;</span><br><span class="line">  __u32 return_on_close;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_range</span> <span class="title">range</span>;</span></span><br><span class="line">  __u32 type;</span><br><span class="line">  nfs4_stateid stateid;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">nfs4_layoutdriver_data</span> *<span class="title">layoutp</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
@@ -638,6 +762,14 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/72a5a1e947c4" >Sunrpc in Linux Kernel - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/yuyin86/article/details/7994415" >SunRPC分布式系统RPC程序编写教程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.51cto.com/article/768392.html" >NFS协议端到端实例解析之写数据流程-51CTO.COM <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/search?q=repo:nfs-ganesha/nfs-ganesha%20pnfs&type=code" >Code search results <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/tree/v6.18-rc2/fs/nfsd" >linux&#x2F;fs&#x2F;nfsd at v6.18-rc2 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/v6.18-rc2/fs/nfsd/nfs4layouts.c" >linux&#x2F;fs&#x2F;nfsd&#x2F;nfs4layouts.c at v6.18-rc2 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/tree/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs" >linux&#x2F;fs&#x2F;nfs at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs/pnfs.c#L353" >linux&#x2F;fs&#x2F;nfs&#x2F;pnfs.c at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs/pnfs_nfs.c#L178" >linux&#x2F;fs&#x2F;nfs&#x2F;pnfs_nfs.c at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs/blocklayout/blocklayout.c" >linux&#x2F;fs&#x2F;nfs&#x2F;blocklayout&#x2F;blocklayout.c at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40477248/article/details/142854643" >nfs-ganesha对比NFS最佳实践-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -650,7 +782,7 @@
         <li><strong>Created at:</strong> 2024-12-22 20:20:26</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-02-14 16:51:45
+                <strong>Updated at:</strong> 2025-10-21 20:08:50
             </li>
         
         <li>
