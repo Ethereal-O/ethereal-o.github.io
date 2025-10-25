@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/10/25/gpu-learning/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. GPU架构1.1 架构图123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; N">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gpu learning">
+<meta property="og:url" content="http://example.com/2025/10/25/gpu-learning/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. GPU架构1.1 架构图123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; N">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-dfcbbabe781298abe6b032d5ae801890_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-c8a7397139ece2247569de371530e8e3_1440w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/v2-14c354948222132dc90c27e6352416e4_1440w.jpg">
+<meta property="article:published_time" content="2025-10-25T08:00:21.000Z">
+<meta property="article:modified_time" content="2025-10-25T10:05:11.475Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.zhimg.com/v2-dfcbbabe781298abe6b032d5ae801890_1440w.jpg">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            gpu learning -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">gpu learning</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv5</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-25 16:21</span>
+        <span class="mobile">2025-10-25 16</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-25 18:05:11</span>
+            <span class="mobile">2025-10-25 18:05</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-GPU架构"><a href="#1-GPU架构" class="headerlink" title="1. GPU架构"></a>1. GPU架构</h2><h3 id="1-1-架构图"><a href="#1-1-架构图" class="headerlink" title="1.1 架构图"></a>1.1 架构图</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">============================================================</span><br><span class="line"> NVIDIA GPU 软件栈架构 (Tile IR / SIMT 路径)</span><br><span class="line">============================================================</span><br><span class="line"></span><br><span class="line">┌──────────────────────────────────────────────────────────┐</span><br><span class="line">│ I. 顶层：应用与框架 (Python/ML Frameworks)             │</span><br><span class="line">├──────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                          │</span><br><span class="line">│  TensorRT  ────►  cuDNN / cuBLAS （闭源）                         │</span><br><span class="line">│  PyTorch   ────►  nvmath-python / cuDNN-python           │</span><br><span class="line">│  JAX       ────►  ...                                    │</span><br><span class="line">└──────────────────────────────────────────────────────────┘</span><br><span class="line">      │</span><br><span class="line">      ▼ (调用高性能内核)</span><br><span class="line">┌──────────────────────────────────────────────────────────┐</span><br><span class="line">│ II. 中间层：核心库与编程模型 (Kernel Development)      │</span><br><span class="line">├──────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                          │</span><br><span class="line">│  ┌───────────────────────────┐ ┌────────────────────────┐</span><br><span class="line">│  │ A. 高级/自动化开发 (Triton) │ │ B. 低级/手动开发 (.cu) │</span><br><span class="line">│  ├───────────────────────────┤ ├────────────────────────┤</span><br><span class="line">│  │                           │ │                        │</span><br><span class="line">│  │  Triton (Python DSL)      │ │  CUDA C++ (.cu 文件)   │</span><br><span class="line">│  │       (JIT 编译器)        │ │  + CUTLASS (C++ 模板)  │</span><br><span class="line">│  └───────────┬───────────────┘ └───────────┬────────────┘</span><br><span class="line">│               │                             │</span><br><span class="line">│               ▼ (统一进入优化或直接代码生成) ▼</span><br><span class="line">└──────────────────────────────────────────────────────────┘</span><br><span class="line">      │</span><br><span class="line">      ▼ (编译器分发)</span><br><span class="line">┌──────────────────────────────────────────────────────────┐</span><br><span class="line">│ III. 底层：编译器目标与路径 (Compilation Targets)      │</span><br><span class="line">├───────────────────┬──────────────────────────────────────┤</span><br><span class="line">│ 1. SIMT 路径      │ 2. Tile 路径                         │</span><br><span class="line">├───────────────────┼──────────────────────────────────────┤</span><br><span class="line">│ 核心为线程级 (Thread-level) 内核的传统路径。           │ 核心为瓦片化 (Tile-based) 内核的现代路径。  │</span><br><span class="line">│                   │                                      │</span><br><span class="line">│  CUDA C++         │  CUTLASS / cuTile (Tile Abstraction) │</span><br><span class="line">│      │            │         │                            │</span><br><span class="line">│      ▼            │         ▼ (Tile IR 编译器前端)       │</span><br><span class="line">│  NVVM / LLVM      │       Tile IR                        │</span><br><span class="line">│      │            │         │                            │</span><br><span class="line">│      ▼            │         ▼                            │</span><br><span class="line">│    PTX (虚拟ISA)  │  (作为新一代的低级目标，与PTX共存)  │</span><br><span class="line">└───────────────────┴─────────────────────────────────────────────┐</span><br><span class="line">                                                                 │</span><br><span class="line">                                                                 ▼</span><br><span class="line">┌────────────────────────────────────────────────────────────────┐</span><br><span class="line">│ IV. 最终目标与执行 (GPU Hardware)                              │</span><br><span class="line">├────────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                                │</span><br><span class="line">│    二进制文件 (Executable Binary)                               │</span><br><span class="line">│  ┌──────────────────────┐ ┌────────────────────────────┐    │</span><br><span class="line">│  │  PTX (SIMT代码)      │ │  Tile IR (Tile代码)        │    │</span><br><span class="line">│  └──────────────────────┘ └────────────────────────────┘    │</span><br><span class="line">│            │                  │                               │</span><br><span class="line">│            ▼                  ▼                               │</span><br><span class="line">│       GPU 驱动程序 (Runtime Compilation)                      │</span><br><span class="line">│            │ (编译成目标硬件的 SASS 机器码)                    │</span><br><span class="line">│            ▼                                                 │</span><br><span class="line">│  ┌────────────────────────────────────────────────────┐    │</span><br><span class="line">│  │  GPU 硬件 (如 Blackwell/Hopper 架构)                  │    │</span><br><span class="line">│  └────────────────────────────────────────────────────┘    │</span><br><span class="line">│                                                                │</span><br><span class="line">│  * 关键特性: 包含 Tile IR 的二进制文件可自动兼容未来的 GPU 硬件。 │</span><br><span class="line">└────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic1.zhimg.com/v2-dfcbbabe781298abe6b032d5ae801890_1440w.jpg"
+                      alt="v2-dfcbbabe781298abe6b032d5ae801890_1440w"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic4.zhimg.com/v2-c8a7397139ece2247569de371530e8e3_1440w.jpg"
+                      alt="v2-c8a7397139ece2247569de371530e8e3_1440w"
+                ></p>
+<h3 id="1-2-介绍"><a href="#1-2-介绍" class="headerlink" title="1.2 介绍"></a>1.2 介绍</h3><p>这份架构图展示了 GPU 高性能计算的软件层次结构，突出显示了 NVIDIA 新引入的 <strong>Tile IR 路径</strong> 与传统 <strong>SIMT 路径</strong> 的共存，以及 Triton 在其中的角色定位。</p>
+<h4 id="I-顶层：应用与框架-Application-amp-Frameworks"><a href="#I-顶层：应用与框架-Application-amp-Frameworks" class="headerlink" title="I. 顶层：应用与框架 (Application &amp; Frameworks)"></a>I. 顶层：应用与框架 (Application &amp; Frameworks)</h4><p>这是用户直接交互的最高层，通常使用 Python 或其他高级语言。</p>
+<ul>
+<li><p><strong>代表组件：</strong> <code>TensorRT</code>, <code>PyTorch</code>, <code>JAX</code>。</p>
+</li>
+<li><p><strong>功能：</strong> 定义和执行深度学习模型、AI 推理和大规模科学计算任务。它们通过调用底层的库和编译器来获取性能。</p>
+</li>
+</ul>
+<h4 id="II-中间层：核心库与编程模型-Core-Libraries-amp-Programming-Models"><a href="#II-中间层：核心库与编程模型-Core-Libraries-amp-Programming-Models" class="headerlink" title="II. 中间层：核心库与编程模型 (Core Libraries &amp; Programming Models)"></a>II. 中间层：核心库与编程模型 (Core Libraries &amp; Programming Models)</h4><p>这一层是连接应用与底层硬件优化的关键。</p>
+<table>
+<thead>
+<tr>
+<th><strong>区域</strong></th>
+<th><strong>组件</strong></th>
+<th><strong>角色与描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>标准库</strong></td>
+<td><code>cuDNN / cuDNN-python</code></td>
+<td>深度学习的核心原语库（如卷积、激活函数）。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>cuBLAS / nvmath-python</code></td>
+<td>基础线性代数库（如矩阵乘法 GEMM）。</td>
+</tr>
+<tr>
+<td><strong>低级框架</strong></td>
+<td><strong>CUTLASS</strong></td>
+<td>CUDA C++ 模板库，用于<strong>手动构建</strong>高性能的 GEMM 等瓦片化内核。它为库开发者提供了极致的性能控制。</td>
+</tr>
+<tr>
+<td><strong>CUDA C++</strong></td>
+<td><strong><code>.cu</code> 文件</strong></td>
+<td>传统的 CUDA 编程文件，包含 <strong><code>__global__</code></strong> 内核。是 CUTLASS 和 SIMT 内核的<strong>宿主环境</strong>。需要通过nvcc编译。</td>
+</tr>
+<tr>
+<td><strong>Triton (补充)</strong></td>
+<td><strong>Triton</strong> (JIT 编译器)</td>
+<td>一个<strong>高级抽象和 JIT 编译器</strong>（Python DSL）。它绕过传统的 CUDA C++&#x2F;<code>.cu</code> 流程，直接通过编译器生成 PTX 或 SASS。<strong>它在抽象级别上与 CUTLASS 竞争，但在实现上与底层编译器交互。</strong></td>
+</tr>
+</tbody></table>
+<p>Triton 是一种 <strong>JIT (Just-In-Time) 编译器</strong>，因此它编译出的最终可执行文件通常不会以独立文件的形式存在于您的文件系统中，而是<strong>存储在缓存中或直接加载到 GPU 内存中执行</strong>。</p>
+<p>如果您在问 Triton 编译过程中的<strong>关键中间产物</strong>或<strong>最终目标代码</strong>是什么，那么答案涉及编译过程中的多个阶段：</p>
+<p>Triton 的编译过程是一个多阶段的流水线，涉及多种形式的中间表示 (IR)：</p>
+<table>
+<thead>
+<tr>
+<th><strong>阶段</strong></th>
+<th><strong>产物名称&#x2F;格式</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>I. 源代码</strong></td>
+<td>Python 函数 (带有 <code>@triton.jit</code> 装饰器)</td>
+<td>开发者编写的 Triton DSL 代码。</td>
+</tr>
+<tr>
+<td><strong>II. 初始 IR</strong></td>
+<td><strong>Triton-IR (<code>.ttir</code>)</strong></td>
+<td>Triton 编译器前端生成的未优化、机器无关的中间表示。</td>
+</tr>
+<tr>
+<td><strong>III. 优化 IR</strong></td>
+<td><strong>TTGIR (<code>.ttgir</code>)</strong></td>
+<td>经过 Triton 优化器（如循环平铺、内存优化）处理后的 Triton-IR。</td>
+</tr>
+<tr>
+<td><strong>IV. LLVM IR</strong></td>
+<td><strong>LLVM IR (<code>.llir</code>)</strong></td>
+<td>将 TTGIR 转换为低级别的 LLVM 中间表示，这是通用的编译器基础设施。</td>
+</tr>
+<tr>
+<td><strong>V. GPU 汇编</strong></td>
+<td><strong>PTX (<code>.ptx</code>)</strong></td>
+<td>NVIDIA GPU 的并行线程执行（Parallel Thread Execution）虚拟汇编代码。PTX 是一种抽象的 ISA（指令集架构），可以实现跨代 GPU 的兼容性。</td>
+</tr>
+<tr>
+<td><strong>VI. 最终目标</strong></td>
+<td><strong>Cubin &#x2F; SASS</strong></td>
+<td>GPU 的<strong>最终二进制可执行文件</strong>（Cubin 是一种包含 SASS 代码的容器）。SASS (Streaming Assembler) 是特定 GPU 架构的机器码，由 GPU 驱动程序在运行时从 PTX 进一步生成。</td>
+</tr>
+</tbody></table>
+<p>对于大多数用户而言，Triton 运行时的输出是：</p>
+<ol>
+<li><p><strong>缓存文件（Cache Files）：</strong></p>
+<ul>
+<li>当 Triton 编译一个内核后，它会将生成的 PTX 和&#x2F;或 Cubin 代码存储在本地的 Triton 缓存目录中（通常是 <code>~/.triton/cache/</code>）。这使得内核在下次运行时可以避免重复编译，直接加载缓存。</li>
+</ul>
+</li>
+<li><p><strong>直接执行的代码：</strong></p>
+<ul>
+<li>在 PyTorch 等框架中，Triton 内核是<strong>即时编译</strong>的。编译完成后，最终的 Cubin&#x2F;SASS 代码会被加载到 GPU 硬件上，并立即启动执行。这个过程对用户是透明的，不会在您的项目目录中留下可见的 <code>.ptx</code> 或 <code>.cubin</code> 文件。</li>
+</ul>
+</li>
+</ol>
+<p>因此，Triton 编译出的文件是 <strong>GPU 机器码</strong>（Cubin&#x2F;SASS），但它们主要存在于<strong>编译器缓存</strong>和 <strong>GPU 内存</strong>中，而不是作为标准的可分发文件存在。</p>
+<p><strong>NVIDIA的<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=259380445&content_type=Article&match_order=1&q=cuTile&zhida_source=entity" >cuTile <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>准备阻击 Triton 的DSL，对标Triton。Vendor比用户更容易拿到性能，估计不会开源。</strong></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic3.zhimg.com/v2-14c354948222132dc90c27e6352416e4_1440w.jpg"
+                      alt="v2-14c354948222132dc90c27e6352416e4_1440w"
+                ></p>
+<h4 id="III-底层：编译器目标与优化路径-Compiler-Targets-amp-Optimization-Paths"><a href="#III-底层：编译器目标与优化路径-Compiler-Targets-amp-Optimization-Paths" class="headerlink" title="III. 底层：编译器目标与优化路径 (Compiler Targets &amp; Optimization Paths)"></a>III. 底层：编译器目标与优化路径 (Compiler Targets &amp; Optimization Paths)</h4><p>从这里开始，程序员的代码被转化为 GPU 硬件可执行的指令。架构图在这里分岔为两条主要路径：SIMT 路径和 Tile 路径。</p>
+<h5 id="A-路径-1：SIMT-路径（传统线程级）"><a href="#A-路径-1：SIMT-路径（传统线程级）" class="headerlink" title="A. 路径 1：SIMT 路径（传统线程级）"></a>A. 路径 1：SIMT 路径（传统线程级）</h5><p>这条路径服务于传统的、<strong>线程级 (Thread-level)</strong> 的 CUDA 内核，以及那些没有采用复杂瓦片化优化的操作。</p>
+<ul>
+<li><p><strong>输入：</strong> <code>CUDA C++</code>（来自 <code>.cu</code> 文件）</p>
+</li>
+<li><p><strong>第一步：</strong> <code>NVVM / LLVM</code></p>
+<ul>
+<li><strong>NVVM</strong> (NVIDIA Virtual Machine) 是基于 LLVM 的设备代码编译器前端。它对代码进行优化。</li>
+</ul>
+</li>
+<li><p><strong>第二步：</strong> <strong>PTX</strong> (Parallel Thread Execution)</p>
+<ul>
+<li>输出 NVIDIA GPU 的<strong>虚拟汇编指令</strong>。PTX 保证了代码的兼容性，允许同一份二进制文件在不同代 GPU 上运行。</li>
+</ul>
+</li>
+<li><p><strong>功能：</strong> 兼容所有现有 CUDA 代码，是 CUDA 编程模型的基石。</p>
+</li>
+</ul>
+<h5 id="B-路径-2：Tile-路径（新增瓦片化）"><a href="#B-路径-2：Tile-路径（新增瓦片化）" class="headerlink" title="B. 路径 2：Tile 路径（新增瓦片化）"></a>B. 路径 2：Tile 路径（新增瓦片化）</h5><p>这条路径专门服务于高度优化的、利用现代硬件特性（如 Tensor Cores）的<strong>瓦片化 (Tile-based)</strong> 内核。</p>
+<ul>
+<li><p><strong>输入：</strong> <code>CUTLASS</code>（通过其新抽象）或专门的瓦片化抽象层 **<code>cuTile</code>**。</p>
+</li>
+<li><p><strong>目标：</strong> <strong>Tile IR</strong> (瓦片中间表示)</p>
+<ul>
+<li><p><strong>Tile IR</strong> 是 NVIDIA 新推出的<strong>低级编译器目标</strong>，它比 PTX 更高级，能更好地表达瓦片化、共享内存协作、异步数据移动等现代 GPU 优化。</p>
+</li>
+<li><p>其目的是为未来的 GPU 硬件提供更具前瞻性的优化和兼容性。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Tile IR 与 Triton：</strong> Triton JIT 编译器最终也会生成 PTX，但理论上，Triton 编译器<strong>可以</strong>被修改为输出 Tile IR，以利用 NVIDIA 最新的硬件优化，从而取代 Triton 当前的 LLVM IR -&gt; PTX 流程。</p>
+</li>
+</ul>
+<h4 id="IV-最底层：最终目标与执行-Final-Binary-amp-Execution"><a href="#IV-最底层：最终目标与执行-Final-Binary-amp-Execution" class="headerlink" title="IV. 最底层：最终目标与执行 (Final Binary &amp; Execution)"></a>IV. 最底层：最终目标与执行 (Final Binary &amp; Execution)</h4><p>这是 GPU 驱动程序在运行时处理和执行的阶段。</p>
+<ul>
+<li><p><strong>最终二进制：</strong> 最终的 GPU 应用程序二进制文件可以<strong>无缝包含</strong>来自两条路径的代码：</p>
+<ul>
+<li><p>来自 SIMT 路径的 <strong>PTX</strong> 代码。</p>
+</li>
+<li><p>来自 Tile 路径的 <strong>Tile IR</strong> 代码。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>驱动程序功能：</strong> GPU 驱动程序负责在运行时将 PTX 和 Tile IR 编译&#x2F;转换为目标硬件的 <strong>SASS 机器码</strong>（例如 Ampere、Hopper、Blackwell 架构的指令）。</p>
+</li>
+<li><p><strong>关键优势：</strong> 架构图明确指出，包含 Tile 内核的二进制文件将<strong>自动在未来的 GPU 硬件上工作</strong>，延续了 PTX 作为兼容层的功能。</p>
+</li>
+</ul>
+<h5 id="IV-补充："><a href="#IV-补充：" class="headerlink" title="IV 补充："></a>IV 补充：</h5><p><strong>SIMT</strong> 是 <strong>Single Instruction, Multiple Threads</strong>（单指令，多线程）的缩写，是 NVIDIA GPU（图形处理器）和 CUDA 编程模型的核心执行范式。</p>
+<p>SIMT 是一种并行计算模型，它将底层硬件的 SIMD（单指令，多数据）执行效率与高级的线程级（Thread-level）编程模型结合起来。</p>
+<h6 id="SIMT-的核心概念"><a href="#SIMT-的核心概念" class="headerlink" title="SIMT 的核心概念"></a>SIMT 的核心概念</h6><ol>
+<li>单指令 (Single Instruction)</li>
+</ol>
+<p>SIMT 的基础是，在同一时间步内，一组线程（在 NVIDIA GPU 中称为一个 <strong>Warp</strong>，通常是 32 个线程）将<strong>执行相同的指令</strong>。这样，只需要一个控制单元来获取、解码和调度指令，从而节省了大量的硬件资源。</p>
+<ol start="2">
+<li>多线程 (Multiple Threads)</li>
+</ol>
+<p>对于程序员来说，他们看到的模型是<strong>多线程</strong>。您可以像编写普通的多线程 CPU 程序一样，为每个数据元素编写一个独立的、标量（Scalar）的线程代码。</p>
+<ul>
+<li><strong>简化编程：</strong> 程序员无需手动将数据打包成向量（像 SIMD 那样），而是关注单个线程如何处理单个数据。硬件负责将这些线程分组并映射到 SIMD 硬件上。</li>
+</ul>
+<ol start="3">
+<li>Warp (线程束)</li>
+</ol>
+<p>SIMT 模型在 GPU 硬件上是通过 <strong>Warp</strong>（线程束）来实现的：</p>
+<ul>
+<li><p><strong>Warp：</strong> 一组（通常是 32 个）并排执行的线程。</p>
+</li>
+<li><p><strong>锁步执行 (Lock-step Execution)：</strong> 在一个 Warp 内，所有线程都以<strong>相同的步调</strong>执行相同的指令。</p>
+</li>
+</ul>
+<ol start="4">
+<li>分支发散 (Control Flow Divergence)</li>
+</ol>
+<p>这是 SIMT 与严格的 SIMD 的关键区别：</p>
+<ul>
+<li><p><strong>SIMT 的灵活性：</strong> 虽然 Warp 内的线程执行相同的指令，但由于每个线程有自己独立的程序计数器（Program Counter）和寄存器状态，它们可以执行<strong>不同的代码路径</strong>（即遇到 <code>if/else</code> 语句时）。</p>
+</li>
+<li><p><strong>性能代价：</strong> 当 Warp 内的线程采取不同的分支时，处理器会<strong>串行化</strong>执行这些分支。例如，如果一半线程走 <code>if</code> 分支，另一半走 <code>else</code> 分支，处理器会先执行 <code>if</code> 分支并屏蔽掉 <code>else</code> 线程，然后执行 <code>else</code> 分支并屏蔽掉 <code>if</code> 线程。这被称为<strong>分支发散 (Divergence)<strong>，它会</strong>降低并行效率</strong>。</p>
+</li>
+</ul>
+<h6 id="SIMT-与-SIMD-的主要区别"><a href="#SIMT-与-SIMD-的主要区别" class="headerlink" title="SIMT 与 SIMD 的主要区别"></a>SIMT 与 SIMD 的主要区别</h6><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>SIMT (Single Instruction, Multiple Threads)</strong></th>
+<th><strong>SIMD (Single Instruction, Multiple Data)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>编程模型</strong></td>
+<td><strong>多线程</strong>。程序员关注单个标量线程。</td>
+<td><strong>单线程&#x2F;向量化</strong>。程序员必须手动使用向量指令。</td>
+</tr>
+<tr>
+<td><strong>执行单位</strong></td>
+<td>Warp（线程束）。线程具有独立的状态和程序计数器。</td>
+<td>向量寄存器&#x2F;ALU 通道。指令直接作用于向量。</td>
+</tr>
+<tr>
+<td><strong>分支处理</strong></td>
+<td>允许分支发散，但性能会降低（串行化执行）。</td>
+<td>较难处理分支。通常需要使用掩码或条件选择指令。</td>
+</tr>
+<tr>
+<td><strong>应用</strong></td>
+<td>GPU 编程（CUDA、OpenCL），擅长高吞吐量计算。</td>
+<td>CPU 向量扩展（如 SSE, AVX, NEON），擅长数据并行。</td>
+</tr>
+</tbody></table>
+<p>总结来说，<strong>SIMT 是 GPU 硬件厂商（主要是 NVIDIA）提供给程序员的一种高级抽象</strong>，它让程序员可以像编写传统多线程代码一样，充分利用底层 SIMD 硬件的巨大并行能力。</p>
+<h3 id="1-3-例子"><a href="#1-3-例子" class="headerlink" title="1.3 例子"></a>1.3 例子</h3><h4 id="1-3-1-Triton"><a href="#1-3-1-Triton" class="headerlink" title="1.3.1 Triton"></a>1.3.1 Triton</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> triton</span><br><span class="line"><span class="keyword">import</span> triton.language <span class="keyword">as</span> tl</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 定义 Triton 内核（使用 @triton.jit 装饰器）</span></span><br><span class="line"><span class="meta">@triton.jit</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_kernel</span>(<span class="params"></span></span><br><span class="line"><span class="params">    x_ptr,       <span class="comment"># 指向输入向量 A 的指针</span></span></span><br><span class="line"><span class="params">    y_ptr,       <span class="comment"># 指向输入向量 B 的指针</span></span></span><br><span class="line"><span class="params">    output_ptr,  <span class="comment"># 指向输出向量 C 的指针</span></span></span><br><span class="line"><span class="params">    n_elements,  <span class="comment"># 向量的总元素数量</span></span></span><br><span class="line"><span class="params">    BLOCK_SIZE: tl.constexpr, <span class="comment"># 编译元参数：定义每个线程块处理的元素数</span></span></span><br><span class="line"><span class="params"></span>):</span><br><span class="line">    <span class="comment"># 获取当前线程块的 ID (program_id)</span></span><br><span class="line">    pid = tl.program_id(axis=<span class="number">0</span>) </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算当前线程块开始处理的元素索引</span></span><br><span class="line">    block_start = pid * BLOCK_SIZE</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 为当前块内的所有线程生成一组连续的偏移量</span></span><br><span class="line">    offsets = block_start + tl.arange(<span class="number">0</span>, BLOCK_SIZE)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建掩码，以防止越界读取/写入</span></span><br><span class="line">    mask = offsets &lt; n_elements</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 从全局内存加载数据 (tl.load)</span></span><br><span class="line">    <span class="comment"># Triton 编译器会优化这些内存访问</span></span><br><span class="line">    x = tl.load(x_ptr + offsets, mask=mask)</span><br><span class="line">    y = tl.load(y_ptr + offsets, mask=mask)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 执行计算（标量操作）</span></span><br><span class="line">    output = x + y</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 将结果存储回全局内存 (tl.store)</span></span><br><span class="line">    tl.store(output_ptr + offsets, output, mask=mask)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 主函数：分配内存和启动内核</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">x: torch.Tensor, y: torch.Tensor</span>):</span><br><span class="line">    output = torch.empty_like(x)</span><br><span class="line">    n_elements = output.numel()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义线程块的大小</span></span><br><span class="line">    BLOCK_SIZE = <span class="number">1024</span> </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义网格（Grid）大小：确定需要多少个线程块</span></span><br><span class="line">    grid = <span class="keyword">lambda</span> meta: (triton.cdiv(n_elements, meta[<span class="string">&#x27;BLOCK_SIZE&#x27;</span>]),)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 启动 Triton 内核</span></span><br><span class="line">    add_kernel[grid](</span><br><span class="line">        x, y, output, n_elements, </span><br><span class="line">        BLOCK_SIZE=BLOCK_SIZE,</span><br><span class="line">        num_warps=<span class="number">4</span> <span class="comment"># 额外的优化参数</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="1-3-2-cutlass"><a href="#1-3-2-cutlass" class="headerlink" title="1.3.2 cutlass"></a>1.3.2 cutlass</h4><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 定义 Tiling 策略和数据布局</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Layout</span> = cutlass::layout::ColumnMajor;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Element</span> = <span class="type">float</span>;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">ThreadblockShape</span> = cutlass::gemm::GemmShape&lt;<span class="number">128</span>, <span class="number">1</span>, <span class="number">1</span>&gt;; <span class="comment">// 线程块大小</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">WarpShape</span> = cutlass::gemm::GemmShape&lt;<span class="number">32</span>, <span class="number">1</span>, <span class="number">1</span>&gt;; <span class="comment">// Warp 大小</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 定义数据移动/迭代器</span></span><br><span class="line"><span class="comment">// CUTLASS 使用迭代器模板来描述如何从全局内存加载数据</span></span><br><span class="line"><span class="keyword">using</span> ThreadblockLoader = cutlass::epilogue::threadblock::PredicatedTileIterator&lt;</span><br><span class="line">    ThreadblockShape,</span><br><span class="line">    Element,</span><br><span class="line">    Layout</span><br><span class="line">&gt;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 定义内核结构 (Kernel Structure)</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ThreadblockLoader&gt;</span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">vector_add_kernel</span><span class="params">(Element *ptr_A, Element *ptr_B, Element *ptr_C, <span class="type">int</span> N)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取线程块和线程 ID</span></span><br><span class="line">    cutlass::MatrixCoord threadblock_coord = ...;</span><br><span class="line">    <span class="type">int</span> thread_id = threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实例化加载器/迭代器</span></span><br><span class="line">    <span class="function">ThreadblockLoader <span class="title">loader_A</span><span class="params">(ptr_A, N, threadblock_coord, thread_id)</span></span>;</span><br><span class="line">    <span class="function">ThreadblockLoader <span class="title">loader_B</span><span class="params">(ptr_B, N, threadblock_coord, thread_id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 循环和计算</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 加载数据 tile A 和 tile B 到线程的寄存器中（不是共享内存，因为是简单的加法）</span></span><br><span class="line">    <span class="keyword">typename</span> ThreadblockLoader::Fragment fragment_A;</span><br><span class="line">    <span class="keyword">typename</span> ThreadblockLoader::Fragment fragment_B;</span><br><span class="line"></span><br><span class="line">    loader_A.<span class="built_in">load</span>(fragment_A);</span><br><span class="line">    loader_B.<span class="built_in">load</span>(fragment_B);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 线程级的计算</span></span><br><span class="line">    <span class="keyword">typename</span> ThreadblockLoader::Fragment fragment_C;</span><br><span class="line"></span><br><span class="line">    <span class="meta">#<span class="keyword">pragma</span> unroll</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; fragment_A.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">        <span class="comment">// 在 C++ 模板中实现标量加法</span></span><br><span class="line">        fragment_C[i] = fragment_A[i] + fragment_B[i]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 存储结果（使用存储迭代器）</span></span><br><span class="line">    <span class="comment">// 实例化存储器并将结果写回全局内存</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="2-Simulator"><a href="#2-Simulator" class="headerlink" title="2. Simulator"></a>2. Simulator</h2><p>主要参考<a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/369673760" >(15 封私信 &#x2F; 80 条消息) Ubuntu 20.04 下安装运行 GPGPU-Sim - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="2-1-安装依赖"><a href="#2-1-安装依赖" class="headerlink" title="2.1 安装依赖"></a>2.1 安装依赖</h3><p>基础库</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署18.04虚拟机</span></span><br><span class="line">helm install ubuntu-vm-1804 ~/Softwares/k8s-help-tools/vm/myubuntu --set software.ubuntuVersion=bionic --set software.desktop.enabled=false --set software.sshConfig.enabled=true --set hardware.storage=40Gi --set hardware.memory=4096M</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装依赖，如果部分没有直接跳过</span></span><br><span class="line">sudo apt-get install build-essential xutils-dev bison zlib1g-dev flex libglu1-mesa-dev</span><br><span class="line">sudo apt-get install doxygen graphviz</span><br><span class="line">sudo apt-get install python-pmw python-ply python-numpy libpng12-dev python-matplotlib</span><br><span class="line">sudo apt-get install libxi-dev libxmu-dev libglut3-dev</span><br></pre></td></tr></table></figure></div>
+
+<p>下载cuda<a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-11.0-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal" >CUDA Toolkit 11.0 Download | NVIDIA Developer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://developer.download.nvidia.com/compute/cuda/11.0.2/local_installers/cuda_11.0.2_450.51.05_linux.run</span><br><span class="line">sudo sh cuda_11.0.2_450.51.05_linux.run</span><br><span class="line">sudo ln -s /usr/local/cuda-11.0 /usr/local/cuda</span><br></pre></td></tr></table></figure></div>
+
+<p>更改~&#x2F;.bashrc</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export CUDA_INSTALL_PATH=/usr/local/cuda</span><br><span class="line">export PATH=$CUDA_INSTALL_PATH/bin:$PATH</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_INSTALL_PATH/lib64</span><br></pre></td></tr></table></figure></div>
+
+<p>验证</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-2-安装模拟器"><a href="#2-2-安装模拟器" class="headerlink" title="2.2 安装模拟器"></a>2.2 安装模拟器</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/gpgpu-sim/gpgpu-sim_distribution/archive/refs/tags/v4.0.1.zip</span><br><span class="line">unzip v4.0.1.zip</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">source setup_environment</span><br><span class="line">make</span><br><span class="line">make docs</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-3-运行程序"><a href="#2-3-运行程序" class="headerlink" title="2.3 运行程序"></a>2.3 运行程序</h3><p>示例程序<code>hello.cu</code></p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> *c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    *c = a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> c;         <span class="comment">// Host 变量，用于存储结果</span></span><br><span class="line">    <span class="type">int</span> *dev_c;    <span class="comment">// Device 指针，指向 GPU 上的内存</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 分配 GPU 内存</span></span><br><span class="line">    <span class="built_in">cudaMalloc</span>((<span class="type">void</span> **)&amp;dev_c, <span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 启动 Kernel</span></span><br><span class="line">    add&lt;&lt;&lt;<span class="number">1</span>, <span class="number">1</span>&gt;&gt;&gt;(<span class="number">2</span>, <span class="number">7</span>, dev_c);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 将结果从 Device 复制回 Host</span></span><br><span class="line">    <span class="comment">//    源地址应该是 dev_c (GPU地址)，目标地址是 &amp;c (Host地址)</span></span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(&amp;c, dev_c, <span class="built_in">sizeof</span>(<span class="type">int</span>), cudaMemcpyDeviceToHost);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 打印结果</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;2 + 7 = %d\n&quot;</span>, c);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 释放 GPU 内存</span></span><br><span class="line">    <span class="built_in">cudaFree</span>(dev_c);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>编译</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc --cudart shared -o hello hello.cu</span><br></pre></td></tr></table></figure></div>
+
+<p>运行</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp ~/Programs/gpgpu-sim_distribution/4_0/gpgpu-sim_distribution-4.0.1/configs/tested-cfgs/SM2_GTX480/* ./</span><br><span class="line">./hello</span><br></pre></td></tr></table></figure></div>
+
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gpgpu-sim/cutlass-gpgpu-sim" >gpgpu-sim&#x2F;cutlass-gpgpu-sim <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1919816304271028292" >(15 封私信 &#x2F; 80 条消息) 新兴 Python 算子开发：Triton、CuTeDSL、MOJO 🔥等概览 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/684473453" >(15 封私信 &#x2F; 80 条消息) OpenAI Triton 入门教程 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/369673760" >(15 封私信 &#x2F; 80 条消息) Ubuntu 20.04 下安装运行 GPGPU-Sim - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="http://gpgpu-sim.org/" >gpgpu-sim.org <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/accel-sim/accel-sim-framework" >accel-sim&#x2F;accel-sim-framework: This is the top-level repository for the Accel-Sim framework. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/eloudy/article/details/132826486" >玩转 gpgpu-sim 01记 —— try it-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zxdfcv.github.io/2025/01/25/GPGPUSim-%E5%AD%A6%E4%B9%A0/" >GPGPUSim 学习 | Yixiang’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gpgpu-sim/gpgpu-sim_distribution" >gpgpu-sim&#x2F;gpgpu-sim_distribution: GPGPU-Sim provides a detailed simulation model of contemporary NVIDIA GPUs running CUDA and&#x2F;or OpenCL workloads. It includes support for features such as TensorCores and CUDA Dynamic Parallelism as well as a performance visualization tool, AerialVisoin, and an integrated energy model, GPUWattch. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gpgpu-sim" >gpgpu-sim <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gpgpu-sim/cutlass-gpgpu-sim" >gpgpu-sim&#x2F;cutlass-gpgpu-sim <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://hub.docker.com/r/a1245967/gpgpusim" >a1245967&#x2F;gpgpusim - Docker Image | Docker Hub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_29809823/article/details/124949474" >Accel-Sim模拟器 编译、安装与运行-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/accel-sim/accel-sim-framework?tab=readme-ov-file#accel-sim-sass-frontend-and-simulation-engine" >accel-sim&#x2F;accel-sim-framework: This is the top-level repository for the Accel-Sim framework. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/accel-sim/accel-sim-framework/tree/dev?tab=readme-ov-file" >accel-sim&#x2F;accel-sim-framework: This is the top-level repository for the Accel-Sim framework. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1918927108006188667" >(15 封私信 &#x2F; 80 条消息) CuTeDSL(CUTLASS Python)的初步实践 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/yfceshi/p/19072761" >实用指南：第0记 cutlass 介绍及入门编程使用 - yfceshi - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/671324125" >(15 封私信 &#x2F; 80 条消息) CUTLASS 基础介绍 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1929943281552330961" >(15 封私信 &#x2F; 80 条消息) 一文读懂CUDA常用库: CUBLAS、CUDNN、CUTLASS - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-11.0-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal" >CUDA Toolkit 11.0 Download | NVIDIA Developer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive" >CUDA Toolkit Archive | NVIDIA Developer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/archive/11.8.0/" >CUDA Toolkit Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.cn/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu" >CUDA Toolkit 12.4 Update 1 Downloads | NVIDIA 开发者 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gpgpu-sim/gpgpu-sim_distribution" >gpgpu-sim&#x2F;gpgpu-sim_distribution: GPGPU-Sim provides a detailed simulation model of contemporary NVIDIA GPUs running CUDA and&#x2F;or OpenCL workloads. It includes support for features such as TensorCores and CUDA Dynamic Parallelism as well as a performance visualization tool, AerialVisoin, and an integrated energy model, GPUWattch. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gpgpu-sim/cutlass-gpgpu-sim" >gpgpu-sim&#x2F;cutlass-gpgpu-sim <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.linmao.dev/series/gpgpu-sim/1240/" >GPGPU-Sim Get Started | LinMao’s Blog（林茂的博客） <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://huweim.github.io/post/%E5%AE%9E%E9%AA%8C_%E6%90%AD%E5%BB%BAsim%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8Cdocker/#1-ubuntu2004-in-docker" >搭建GPGPU-Sim实验环境 - Weiming Hu <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/zhutmost/gpgpusim-demo" >zhutmost&#x2F;gpgpusim-demo <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> gpu learning</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-10-25 16:00:21</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2025-10-25 18:05:11
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/10/25/gpu-learning/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/10/21/CS336%E4%BB%8E%E5%A4%B4%E6%9E%84%E5%BB%BA%E5%A4%A7%E6%A8%A1%E5%9E%8B/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">CS336从头构建大模型</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">gpu learning</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-GPU%E6%9E%B6%E6%9E%84"><span class="nav-text">1. GPU架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-text">1.1 架构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%BB%8B%E7%BB%8D"><span class="nav-text">1.2 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BE%8B%E5%AD%90"><span class="nav-text">1.3 例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Simulator"><span class="nav-text">2. Simulator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-text">2.1 安装依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%AE%89%E8%A3%85%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="nav-text">2.2 安装模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.3 运行程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
