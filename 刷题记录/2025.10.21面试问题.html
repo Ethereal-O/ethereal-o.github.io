@@ -18,15 +18,15 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="一、 实习经历 (Internship Experience)1. 大岩资本 (Jasper Capital)面试官提问：  你对大岩资本的这段量化开发实习有什么理解？ 你在简历中提到，将部分机器学习Python程序以及sklearn等库函数转变为高性能的C++程序 。你能否举一个具体的例子，说明你做了哪些维度的优化？是算法层面的，还是工程层面的（如内存管理、SIMD指令）？ 你参与了深度学习平台">
+        <meta name="description" content="一、 实习经历 (Internship Experience)1. 大岩资本 (Jasper Capital)面试官提问：  你对大岩资本的这段量化开发实习有什么理解？  你在简历中提到，将部分机器学习Python程序以及sklearn等库函数转变为高性能的C++程序 。你能否举一个具体的例子，说明你做了哪些维度的优化？是算法层面的，还是工程层面的（如内存管理、SIMD指令）？  你参与了深度学习">
 <meta property="og:type" content="website">
 <meta property="og:title" content="251021面试问题">
 <meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/2025.10.21%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="一、 实习经历 (Internship Experience)1. 大岩资本 (Jasper Capital)面试官提问：  你对大岩资本的这段量化开发实习有什么理解？ 你在简历中提到，将部分机器学习Python程序以及sklearn等库函数转变为高性能的C++程序 。你能否举一个具体的例子，说明你做了哪些维度的优化？是算法层面的，还是工程层面的（如内存管理、SIMD指令）？ 你参与了深度学习平台">
+<meta property="og:description" content="一、 实习经历 (Internship Experience)1. 大岩资本 (Jasper Capital)面试官提问：  你对大岩资本的这段量化开发实习有什么理解？  你在简历中提到，将部分机器学习Python程序以及sklearn等库函数转变为高性能的C++程序 。你能否举一个具体的例子，说明你做了哪些维度的优化？是算法层面的，还是工程层面的（如内存管理、SIMD指令）？  你参与了深度学习">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-10-21T13:33:00.000Z">
-<meta property="article:modified_time" content="2025-10-21T12:28:41.227Z">
+<meta property="article:modified_time" content="2025-10-30T14:02:43.234Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -366,273 +366,665 @@
             
                 <h3 id="一、-实习经历-Internship-Experience"><a href="#一、-实习经历-Internship-Experience" class="headerlink" title="一、 实习经历 (Internship Experience)"></a>一、 实习经历 (Internship Experience)</h3><h4 id="1-大岩资本-Jasper-Capital"><a href="#1-大岩资本-Jasper-Capital" class="headerlink" title="1. 大岩资本 (Jasper Capital)"></a>1. 大岩资本 (Jasper Capital)</h4><p><strong>面试官提问：</strong></p>
 <ol>
-<li>你对大岩资本的这段量化开发实习有什么理解？</li>
-<li>你在简历中提到，将部分机器学习Python程序以及sklearn等库函数转变为高性能的C++程序 。你能否举一个具体的例子，说明你做了哪些维度的优化？是算法层面的，还是工程层面的（如内存管理、SIMD指令）？</li>
-<li>你参与了深度学习平台的开发，部署了高可用的airflow、argo、ceph、k8s、kubeflow集群 。在确保这套复杂系统“高可用”时，你遇到的最大挑战是什么？你提到的“分层硬件提升写入速率40%”  是如何实现的？<br><strong>面试者回答：</strong></li>
-<li><strong>（对实习的理解）</strong><br>在我看来，大岩资本的这段实习  是我将<strong>底层系统知识</strong>与<strong>上层AI&#x2F;ML应用</strong>相结合的宝贵实践。我深刻理解到量化金融领域对<strong>性能</strong>和<strong>稳定性</strong>的极致追求。<ul>
-<li><strong>一方面是稳定性（高可用）</strong>：量化研究和交易依赖一个强大的深度学习平台 。我通过参与部署K8s、Kubeflow、Ceph等高可用集群 ，确保了研究员的工作流（如Airflow）和数据存储（Ceph）不会因为单点故障而中断。</li>
-<li><strong>另一方面是高性能</strong>：在量化领域，毫秒甚至微秒级的延迟都可能影响策略表现。我负责的“Python转C++”工作并非简单的代码翻译，而是对性能的极致压榨，这让我对高性能计算有了更深的理解。同时，通过K8s管理GPU集群和优化硬件，也让我学会了如何从基础设施层面为上层应用提效。</li>
-</ul>
+<li><p>你对大岩资本的这段量化开发实习有什么理解？</p>
 </li>
-<li><strong>（Python转C++优化）</strong><br>我处理过的一个典型例子是将<code>sklearn</code>的计算互信息的Python库转换为高性能C++ 。<ul>
-<li><strong>瓶颈分析</strong>：Python版本的瓶颈主要在于：(1) Sklearn虽然底层是C，但在数据流转和Python的胶水层有开销；(2) Python的GIL导致无法充分利用多核。</li>
-<li><strong>优化行动</strong>：<ol>
-<li><strong>算法实现</strong>：我没有直接复用<code>sklearn</code>的库，而是用C++重新实现了核心的数值计算逻辑。</li>
-<li><strong>并行化</strong>：对于可以并行的计算（例如对不同样本的同一个特征进行处理），我使用了<code>std::aync</code>进行多线程并行化。</li>
-<li><strong>nanoflann优化</strong>：在最核心的计算KDTree算法中，我使用perf分析了瓶颈，发现其在仅仅需要获取周围邻居数目的接口中，花费大量时间计算出了具体值，而这是没有必要的。因此我重写了算法，使得在大量数据的情况下提速超过50%。</li>
+<li><p>你在简历中提到，将部分机器学习Python程序以及sklearn等库函数转变为高性能的C++程序 。你能否举一个具体的例子，说明你做了哪些维度的优化？是算法层面的，还是工程层面的（如内存管理、SIMD指令）？</p>
+</li>
+<li><p>你参与了深度学习平台的开发，部署了高可用的airflow、argo、ceph、k8s、kubeflow集群 。在确保这套复杂系统“高可用”时，你遇到的最大挑战是什么？你提到的“分层硬件提升写入速率40%” 是如何实现的？</p>
+</li>
+</ol>
+<p><strong>面试者回答：</strong></p>
+<ol>
+<li><p><strong>（对实习的理解）</strong> 在我看来，大岩资本的这段实习 是我将<strong>底层系统知识</strong>与<strong>上层AI&#x2F;ML应用</strong>相结合的宝贵实践。我深刻理解到量化金融领域对<strong>性能</strong>和<strong>稳定性</strong>的极致追求。</p>
+<ol>
+<li><p><strong>一方面是稳定性（高可用）</strong>：量化研究和交易依赖一个强大的深度学习平台 。我通过参与部署K8s、Kubeflow、Ceph等高可用集群 ，确保了研究员的工作流（如Airflow）和数据存储（Ceph）不会因为单点故障而中断。</p>
+</li>
+<li><p><strong>另一方面是高性能</strong>：在量化领域，毫秒甚至微秒级的延迟都可能影响策略表现。我负责的“Python转C++”工作并非简单的代码翻译，而是对性能的极致压榨，这让我对高性能计算有了更深的理解。同时，通过K8s管理GPU集群和优化硬件，也让我学会了如何从基础设施层面为上层应用提效。</p>
+</li>
+<li><p>根据技术面还是HR面，改变答案是偏向技术还是偏向量化&#x2F;互联网区别</p>
+</li>
 </ol>
 </li>
-<li><strong>结果</strong>：通过这些优化，C++程序的性能相比原始Python版本提升了约50%，显著降低了策略执行的延迟。</li>
-</ul>
+<li><p><strong>（Python转C++优化）</strong> 我处理过的一个典型例子是将<code>sklearn</code>的计算互信息的Python库转换为高性能C++ 。</p>
+<ol>
+<li><p><strong>瓶颈分析</strong>：Python版本的瓶颈主要在于：(1) Sklearn虽然底层是C，但在数据流转和Python的胶水层有开销；(2) Python的GIL导致无法充分利用多核。</p>
 </li>
-<li><strong>（高可用挑战与分层硬件）</strong><ul>
-<li><strong>最大挑战</strong>：部署这套MALL（Machine Learning）平台时，最大的挑战在于<strong>有状态服务（Stateful Services）的高可用</strong>。例如，<code>PostgreSQL</code>（作为Airflow和Kubeflow的元数据库）和<code>Ceph</code>（作为存储后端）的数据一致性和故障自动转移（Failover）是关键。</li>
-<li><strong>解决方案</strong>：Kubernetes（K8s）集群通过部署多个Controller Node来确保自身的高可用性，因此其核心的etcd集群也采用了多副本部署。存储方面，Ceph 作为独立服务运行，利用多副本（Replica）策略和合理的CRUSH Map配置，保证了底层数据的高冗余和高可用性。PostgreSQL 作为关键服务部署在K8s集群上，通过主从复制集群实现自动故障切换以保证高可用，并使用PgBouncer管理连接池。上层应用如<strong>Airflow</strong> 和 Argo 均部署在K8s上，并利用部署在K8s上的<strong>RabbitMQ</strong> 处理消息队列，进一步确保了系统的健壮性。</li>
-<li><strong>分层硬件提速40%<strong>：这是针对<code>Ceph</code>  写入性能的优化。我们的<code>Ceph</code>集群  采用了</strong>分层硬件</strong>  架构：<ol>
-<li><strong>Journal&#x2F;WAL层</strong>：我们使用了高性能的NVMe SSD作为Ceph OSD的日志（Journal）或WAL（Write-Ahead Log）。所有的写入请求会先被极快地写入到SSD中并返回确认，这一步延迟极低。</li>
-<li><strong>数据层</strong>：后台进程（Flusher）再异步地将数据从SSD刷（Flush）到成本更低、容量更大的HDD（机械硬盘）上进行持久化。</li>
-</ol>
+<li><p><strong>优化行动</strong>：</p>
 <ul>
-<li>这种设计充分利用了SSD的低延迟和HDD的高容量，使得集群的整体写入速率获得了约40%的提升 ，这对深度学习训练时频繁写入Checkpoint和日志的场景至关重要。</li>
-</ul>
+<li><p><strong>算法实现</strong>：我没有直接复用<code>sklearn</code>的库，而是用C++重新实现了核心的数值计算逻辑。</p>
+</li>
+<li><p><strong>并行化</strong>：对于可以并行的计算（例如对不同样本的同一个特征进行处理），我使用了<code>std::aync</code>进行多线程并行化。</p>
+</li>
+<li><p><strong>nanoflann优化</strong>：在最核心的计算KDTree算法中，我使用perf分析了瓶颈，发现其在仅仅需要获取周围邻居数目的接口中，花费大量时间计算出了具体值，而这是没有必要的。因此我重写了算法，使得在大量数据的情况下提速超过50%。</p>
 </li>
 </ul>
+</li>
+<li><p><strong>结果</strong>：通过这些优化，C++程序的性能相比原始Python版本提升了约50%，显著降低了策略执行的延迟。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>（高可用挑战与分层硬件）</strong></p>
+<ol>
+<li><p><strong>最大挑战</strong>：部署这套MALL（Machine Learning）平台时，最大的挑战在于<strong>有状态服务（Stateful Services）的高可用和性能的权衡</strong>。例如，<code>PostgreSQL</code>（作为Airflow和Kubeflow的元数据库）和<code>Ceph</code>（作为存储后端）的数据一致性和故障自动转移（Failover）是关键。</p>
+</li>
+<li><p>为什么是挑战？</p>
+<ul>
+<li><p><strong>Kubernetes (K8s) 本身是面向无状态服务的：</strong> K8s 擅长管理 Airflow Worker、Argo Controller 等无状态应用（可以随时销毁和重建），但对需要持久化存储并维护状态的服务（如数据库、分布式存储系统）的支持和管理更为复杂。</p>
+</li>
+<li><p><strong>PostgreSQL 的数据一致性要求极高：</strong> PostgreSQL 作为 Airflow 和 Kubeflow 的<strong>元数据库</strong>，存储着关键的调度信息和实验追踪数据。一旦发生故障，必须确保<strong>主从切换 (Failover) 过程中数据不丢失、不损坏，且切换时间极短</strong>，否则整个调度和实验平台会瘫痪。</p>
+</li>
+<li><p><strong>Ceph 的高可用性和性能权衡：</strong> Ceph 作为<strong>核心存储后端</strong>，其高可用依赖于多副本策略和复杂的网络环境。在追求高可用性的同时，如何保证在深度学习<strong>高并发、大吞吐量的写入场景</strong>下，性能不成为瓶颈，是一个巨大的挑战。数据丢失或写入延迟高，会直接导致训练任务失败或效率低下。</p>
+</li>
+</ul>
+</li>
+<li><p>解决方案：分层高可用架构</p>
+<ul>
+<li><p><strong>核心集群层：</strong> Kubernetes (K8s) 集群自身通过部署多个 Controller Node 来确保高可用性，核心的 etcd 集群也采用了多副本部署。</p>
+</li>
+<li><p><strong>存储层 (Ceph)：</strong> Ceph 作为独立服务运行，利用多副本 (Replica) 策略和合理的 CRUSH Map 配置，保证了底层数据的<strong>高冗余和高可用性</strong>。</p>
+</li>
+<li><p><strong>关键状态服务层 (PostgreSQL)：</strong> PostgreSQL 通过部署<strong>主从复制集群</strong>实现自动故障切换以保证高可用，并使用 <strong>PgBouncer</strong> 管理连接池，以应对上层应用的大量并发连接。</p>
+</li>
+<li><p><strong>上层应用层：</strong> Airflow 和 Argo 均部署在 K8s 上，并利用部署在 K8s 上的 <strong>RabbitMQ</strong> 处理消息队列，进一步解耦和确保了系统的健壮性。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>分层硬件提速40%<strong>：这是针对<code>Ceph</code> 写入性能的优化。我们的<code>Ceph</code>集群 采用了</strong>分层硬件</strong> 架构：</p>
+<ul>
+<li><p><strong>Journal&#x2F;WAL层</strong>：我们使用了高性能的NVMe SSD作为Ceph OSD的日志（Journal）或WAL（Write-Ahead Log）。所有的写入请求会先被极快地写入到SSD中并返回确认，这一步延迟极低。</p>
+</li>
+<li><p><strong>数据层</strong>：后台进程（Flusher）再异步地将数据从SSD刷（Flush）到成本更低、容量更大的HDD（机械硬盘）上进行持久化。</p>
+</li>
+<li><p>这种设计充分利用了SSD的低延迟和HDD的高容量，使得集群的整体写入速率获得了约40%的提升 ，这对深度学习训练时频繁写入Checkpoint和日志的场景至关重要。</p>
+</li>
+</ul>
+</li>
+</ol>
 </li>
 </ol>
 <hr>
 <h4 id="2-百度-Baidu-开源之夏"><a href="#2-百度-Baidu-开源之夏" class="headerlink" title="2. 百度 (Baidu - 开源之夏)"></a>2. 百度 (Baidu - 开源之夏)</h4><p><strong>面试官提问：</strong></p>
 <ol>
-<li>你对百度开源之夏的这段开发实习有什么理解？</li>
-<li>你为HugeGraph的Vermeer框架增加了“优先级调度”和“依赖检测” 。请具体说明你是如何实现的？这在图计算场景下有什么具体的应用价值？</li>
-<li>作为开源之夏项目，你是如何与社区进行协作和讨论的 ？你的代码贡献（Pull Request）是如何被接受和合并的？<br><strong>面试者回答：</strong></li>
-<li><strong>（对实习的理解）</strong><br>这段在百度的开源之夏经历 ，是我第一次深度参与大型开源社区（HugeGraph）的宝贵经验。我的核心理解是，<strong>开源协作的本质是规范、沟通与信任</strong>。<ul>
-<li><strong>技术上</strong>，我深入了解了Vermeer这个高性能图计算框架的内部架构，特别是其调度器模块。</li>
-<li><strong>协作上</strong>，我学会了如何通过GitHub Issues、Pull Requests (PR) 和社区讨论 ，清晰地阐述我的设计思路（如优先级调度，以及小任务并行），理解并遵循社区的编码规范和CI&#x2F;CD流程，并根据社区导师和Reviewer的反馈迭代我的代码。这段经历锻炼了我的代码规范性和远程协作能力。</li>
+<li><p>你对百度开源之夏的这段开发实习有什么理解？</p>
+</li>
+<li><p>你为HugeGraph的Vermeer框架增加了“优先级调度”和“依赖检测” 。请具体说明你是如何实现的？这在图计算场景下有什么具体的应用价值？</p>
+</li>
+<li><p>作为开源之夏项目，你是如何与社区进行协作和讨论的 ？你的代码贡献（Pull Request）是如何被接受和合并的？</p>
+</li>
+</ol>
+<p><strong>面试者回答：</strong></p>
+<ol>
+<li><p><strong>（对实习的理解）</strong> 这段在百度的开源之夏经历 ，是我第一次深度参与大型开源社区（HugeGraph）的宝贵经验。我的核心理解是，<strong>开源协作的本质是规范、沟通与信任</strong>。</p>
+<ol>
+<li><p><strong>技术上</strong>，我深入了解了Vermeer这个高性能图计算框架的内部架构，特别是其调度器模块。</p>
+</li>
+<li><p><strong>协作上</strong>，我学会了如何通过GitHub Issues、Pull Requests (PR) 和社区讨论 ，清晰地阐述我的设计思路（如优先级调度，以及小任务并行），理解并遵循社区的编码规范和CI&#x2F;CD流程，并根据社区导师和Reviewer的反馈迭代我的代码。这段经历锻炼了我的代码规范性和远程协作能力。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>（依赖检测的实现与价值）</strong></p>
+<ol>
+<li><p>先写一个稿子，表述中心句</p>
+</li>
+<li><p>这是一个基于<strong>分布式图计算引擎 HugeGraph Vermeer</strong> 的<strong>任务调度子系统优化</strong>项目。</p>
+</li>
+<li><p>核心目标是解决现有调度系统的两大痛点：<strong>缺乏流程控制</strong>和<strong>资源分配僵化</strong>。</p>
+<ul>
+<li><p><strong>保证复杂流程的正确性：</strong> 在复杂的图分析流程中（如 加载-&gt;计算），缺乏<strong>依赖检测</strong>会导致后继任务在数据未就绪时提前执行，造成计算错误或系统崩溃。</p>
+</li>
+<li><p><strong>提升调度效率与健壮性：</strong> 在多租户或混合负载（实时查询 vs. 离线分析）环境中，缺乏<strong>优先级调度</strong>，无法确保关键业务优先获得资源，影响系统的稳定性和响应速度。</p>
+</li>
 </ul>
 </li>
-<li><strong>（依赖检测的实现与价值）</strong><ul>
-<li><strong>实现方式</strong>：我通过<strong>重构调度子系统</strong>实现了“优先级调度”和“依赖检测”：在任务结构体 <code>TaskInfo</code> 中，新增了 <code>Priority</code>（用于定义优先级）和 <code>Preorders</code>（用于定义前驱依赖）字段。使用多个调度管理器，其中调度核心 <code>SchedulerAlgorithmManager</code> 新增了 <code>Depends</code> 算法来严格确保任务按 <code>Preorders</code> 字段定义的顺序执行，防止前驱任务未完成时后继任务就开始执行，保证了复杂图计算流程的<strong>正确性</strong>。同时，调度器实现了 <code>Priority</code> 和 <code>PriorityElder</code> 等算法，确保高优先级的关键业务（如实时查询）能优先获得计算资源，极大提升了图计算场景下系统调度的<strong>健壮性、效率和资源分配的灵活性</strong>，特别是在复杂的分析流水线和多租户环境中价值巨大。</li>
-<li><strong>应用价值</strong>：在复杂的图计算中，依赖检测  是必须的。例如，一个典型的图分析流程可能是：<strong>Step 1: 图加载</strong> -&gt; <strong>Step 2: 子图裁剪</strong> -&gt; <strong>Step 3: 运行PageRank</strong>。<ul>
-<li>如果没有依赖检测 ，PageRank任务（Step 3）很可能在图数据尚未加载（Step 1）或裁剪（Step 2）完成时就开始执行，导致计算错误或系统崩溃。</li>
-<li>通过我增加的依赖检测功能 ，用户可以定义一个完整的、复杂的分析流水线，并确保它们<strong>按正确的顺序自动化执行</strong>，极大地提升了框架的健壮性和易用性。</li>
+<li><p>我通过<strong>重构调度子系统</strong>实现了“优先级调度”和“依赖检测”：</p>
+<ul>
+<li><strong>增强任务结构体 (<strong><strong><code>TaskInfo</code></strong></strong>)：</strong></li>
 </ul>
+<ol>
+<li><p>新增 <code>Priority</code> 字段：定义任务执行的优先级。</p>
+</li>
+<li><p>新增 <code>Preorders</code> 字段：定义任务必须等待完成的前驱依赖任务列表。</p>
+</li>
+</ol>
+<ul>
+<li><strong>重构调度核心 (<strong><strong><code>SchedulerAlgorithmManager</code></strong></strong>) 并新增算法：</strong></li>
+</ul>
+<ol>
+<li><p><strong>实现</strong> <strong><code>Depends</code></strong> <strong>算法（依赖检测）：</strong> 严格检查任务的 <code>Preorders</code> 字段。仅当前驱任务<strong>全部完成</strong>后，才允许任务进入执行队列，确保了复杂图计算流程的<strong>正确性</strong>。</p>
+</li>
+<li><p><strong>实现</strong> <strong><code>Priority</code></strong> <strong>和</strong> <strong><code>PriorityElder</code></strong> <strong>算法（优先级调度）：</strong> 确保高优先级的关键业务（如实时查询）能优先获得计算资源，极大地提升了系统的<strong>效率</strong>和<strong>资源分配灵活性</strong>。</p>
+</li>
+</ol>
+</li>
+<li><p>旧版</p>
+</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><p><strong>实现方式</strong>：我通过<strong>重构调度子系统</strong>实现了“优先级调度”和“依赖检测”：在任务结构体 <code>TaskInfo</code> 中，新增了 <code>Priority</code>（用于定义优先级）和 <code>Preorders</code>（用于定义前驱依赖）字段。使用多个调度管理器，其中调度核心 <code>SchedulerAlgorithmManager</code> 新增了 <code>Depends</code> 算法来严格确保任务按 <code>Preorders</code> 字段定义的顺序执行，防止前驱任务未完成时后继任务就开始执行，保证了复杂图计算流程的<strong>正确性</strong>。同时，调度器实现了 <code>Priority</code> 和 <code>PriorityElder</code> 等算法，确保高优先级的关键业务（如实时查询）能优先获得计算资源，极大提升了图计算场景下系统调度的<strong>健壮性、效率和资源分配的灵活性</strong>，特别是在复杂的分析流水线和多租户环境中价值巨大。</p>
+</li>
+<li><p><strong>应用价值</strong>：在复杂的图计算中，依赖检测 是必须的。例如，一个典型的图分析流程可能是：<strong>Step 1: 图加载</strong> -&gt; <strong>Step 2: 子图裁剪</strong> -&gt; <strong>Step 3: 运行PageRank</strong>。</p>
+<ul>
+<li><p>如果没有依赖检测 ，PageRank任务（Step 3）很可能在图数据尚未加载（Step 1）或裁剪（Step 2）完成时就开始执行，导致计算错误或系统崩溃。</p>
+</li>
+<li><p>通过我增加的依赖检测功能 ，用户可以定义一个完整的、复杂的分析流水线，并确保它们<strong>按正确的顺序自动化执行</strong>，极大地提升了框架的健壮性和易用性。</p>
 </li>
 </ul>
 </li>
-<li><strong>（开源社区协作）</strong><br>我参与社区  的流程非常规范：<ol>
-<li><strong>认领任务</strong>：我首先在社区的Issue列表里找到了关于“增强调度器功能”的任务（Task），并与社区导师沟通，确认了我的兴趣和可行性。</li>
-<li><strong>设计文档</strong>：在编码之前，我先编写了一个简短的设计文档（Design Doc），阐述了我实现优先级和依赖检测的思路，并发布到社区邮件组进行讨论 。</li>
-<li><strong>编码与PR</strong>：获得导师的初步认可后，我Fork了项目仓库，在本地创建了Feature分支进行开发。完成后，我提交了Pull Request (PR) 到主仓库。</li>
-<li><strong>CI与Review</strong>：PR触发了社区的CI（持续集成）流水线，包括代码风格检查、编译和单元测试。同时，社区导师和几位Commiter对我的代码进行了详细的Code Review，指出了几处潜在的并发问题和需要补充的单元测试。</li>
-<li><strong>迭代与合并</strong>：我根据Review意见进行了修改和补充，并再次提交。目前即将合入主分支。</li>
+</ul>
+<ol start="3">
+<li><p><strong>（开源社区协作）</strong> 我参与社区 的流程非常规范：</p>
+<ol>
+<li><p><strong>认领任务</strong>：我首先在社区的Issue列表里找到了关于“增强调度器功能”的任务（Task），并与社区导师沟通，确认了我的兴趣和可行性。</p>
+</li>
+<li><p><strong>设计文档</strong>：在编码之前，我先编写了一个简短的设计文档（Design Doc），阐述了我实现优先级和依赖检测的思路，并发布到社区邮件组进行讨论 。</p>
+</li>
+<li><p><strong>编码与PR</strong>：获得导师的初步认可后，我Fork了项目仓库，在本地创建了Feature分支进行开发。完成后，我提交了Pull Request (PR) 到主仓库。</p>
+</li>
+<li><p><strong>CI与Review</strong>：PR触发了社区的CI（持续集成）流水线，包括代码风格检查、编译和单元测试。同时，社区导师和几位Commiter对我的代码进行了详细的Code Review，指出了几处潜在的并发问题和需要补充的单元测试。</p>
+</li>
+<li><p><strong>迭代与合并</strong>：我根据Review意见进行了修改和补充，并再次提交。目前即将合入主分支。</p>
+</li>
 </ol>
 </li>
 </ol>
 <hr>
 <h4 id="3-九维数智-Jiuwei-Data"><a href="#3-九维数智-Jiuwei-Data" class="headerlink" title="3. 九维数智 (Jiuwei Data)"></a>3. 九维数智 (Jiuwei Data)</h4><p><strong>面试官提问：</strong></p>
 <ol>
-<li>你对九维数智的这段基础架构实习有什么理解？</li>
-<li>（深度追问）你实现了无锁数据结构（链表、队列、栈） ，并提到“万级并发时延小于1ms” 。你是如何测试和验证无锁代码的<strong>正确性</strong>（这非常困难）和<strong>性能</strong>的？你主要运用了哪些无锁编程技术？</li>
-<li>你开发了“面向nfs的csi插件”  并已在多家大规模超算集群稳定运行 。为什么选择NFS？相比于Ceph（你在大岩资本用过 ）或GlusterFS，NFS在超算集群场景下有什么特别的优势？</li>
-<li>你提到优化文件系统pnfs驱动模块，提升了5%的传输速度 。5%的提升在驱动层已经非常显著了，你是如何通过“块粒度通信方式” 实现这个优化的？</li>
-<li>你开发了gRPC-like的网络库 ，提到使用“多组件线程池和epoll方式减少处理时间多达50%” 。请详细解释一下什么是“多组件线程池”，它和单个大线程池相比优势在哪里？<br><strong>面试者回答：</strong></li>
-<li><strong>（对实习的理解）</strong><br>在九维数智的实习，是我在<strong>底层基础架构</strong>领域最全面、最深入的实践。我的理解是，所有上层的高性能应用（无论是超算还是大模型），都依赖于极致优化的基础组件。<ul>
-<li>我的工作横跨了<strong>系统编程</strong>（无锁数据结构 、网络库 ）、<strong>操作系统内核</strong>（pNFS驱动优化）、<strong>容器编排</strong>（K8s CSI插件 ）和<strong>AI系统</strong>（大模型分布式框架 ）四个层面。</li>
-<li>这段经历让我深刻体会到，基础架构的优化是“环环相扣”的。例如，我实现的低延迟无锁队列被用于我开发的高性能网络库中；而网络库和CSI插件又是支撑大模型分布式框架的基石。这让我构建了从底层并发到上层分布式AI系统的完整技术图景。</li>
-</ul>
+<li><p>你对九维数智的这段基础架构实习有什么理解？</p>
 </li>
-<li><strong>（无锁数据结构）</strong><ul>
-<li><strong>核心技术</strong>：实现无锁的核心技术是<strong>CAS（Compare-and-Swap）</strong>原子原语。在实现无锁栈时，则通过CAS循环来原子地更新栈顶指针。我们还必须处理<strong>ABA问题</strong>，通常是通过使用“标记指针”（Tagged Pointers）或双字CAS（Double-Word CAS）来将版本号和指针捆绑在一起原子更新。</li>
-<li><strong>正确性验证</strong>：这是最难的部分。我们采用了多重手段：<ol>
-<li><strong>代码审查</strong>：严格审查每一行原子操作的内存序（Memory Ordering），确保在多架构（如x86的TSO和ARM的Weak Memory Model）以及多平台（如 Linux 和 Windows）上都能正确执行 。</li>
-<li><strong>压力测试</strong>：我们编写了多线程压力测试程序，在万级并发下长时间（例如1小时）运行，对数据结构进行高强度的混合读写（Push&#x2F;Pop），并校验结果的一致性。</li>
+<li><p>（深度追问）你实现了无锁数据结构（链表、队列、栈） ，并提到“万级并发时延小于1ms” 。你是如何测试和验证无锁代码的<strong>正确性</strong>（这非常困难）和<strong>性能</strong>的？你主要运用了哪些无锁编程技术？</p>
+</li>
+<li><p>你开发了“面向nfs的csi插件” 并已在多家大规模超算集群稳定运行 。为什么选择NFS？相比于Ceph（你在大岩资本用过 ）或GlusterFS，NFS在超算集群场景下有什么特别的优势？</p>
+</li>
+<li><p>你提到优化文件系统pnfs驱动模块，提升了5%的传输速度 。5%的提升在驱动层已经非常显著了，你是如何通过“块粒度通信方式” 实现这个优化的？</p>
+</li>
+<li><p>你开发了gRPC-like的网络库 ，提到使用“多组件线程池和epoll方式减少处理时间多达50%” 。请详细解释一下什么是“多组件线程池”，它和单个大线程池相比优势在哪里？</p>
+</li>
+</ol>
+<p><strong>面试者回答：</strong></p>
+<ol>
+<li><p><strong>（对实习的理解）</strong> 在九维数智的实习，是我在<strong>底层基础架构</strong>领域最全面、最深入的实践。我的理解是，所有上层的高性能应用（无论是超算还是大模型），都依赖于极致优化的基础组件。</p>
+<ol>
+<li><p>我的工作横跨了<strong>系统编程</strong>（无锁数据结构 、网络库 ）、<strong>操作系统内核</strong>（pNFS驱动优化）、<strong>容器编排</strong>（K8s CSI插件 ）和<strong>AI系统</strong>（大模型分布式框架 ）四个层面。</p>
+</li>
+<li><p>这段经历让我深刻体会到，基础架构的优化是“环环相扣”的。例如，我实现的低延迟无锁队列被用于我开发的高性能网络库中；而网络库和CSI插件又是支撑大模型分布式框架的基石。这让我构建了从底层并发到上层分布式AI系统的完整技术图景。</p>
+</li>
 </ol>
 </li>
-<li><strong>性能测试</strong>：我们在一个多核（例如64核）服务器上进行基准测试，同时通过核调度将我们的程序独占CPU。我们模拟了万级并发的线程，并使用高精度时钟（如<code>rdtsc</code>或<code>std::chrono</code>）来测量每次操作的P99（99th percentile）时延，最终验证了其在饱和负载下时延仍小于1ms 。</li>
+<li><p><strong>（无锁数据结构）</strong></p>
+<ol>
+<li><p><strong>核心技术</strong>：实现无锁的核心技术是<strong>CAS（Compare-and-Swap）原子原语。在实现无锁栈时，则通过CAS循环来原子地更新栈顶指针。我们还必须处理ABA问题</strong>，通常是通过使用“标记指针”（Tagged Pointers）或双字CAS（Double-Word CAS）来将版本号和指针捆绑在一起原子更新。</p>
+</li>
+<li><p><strong>正确性验证</strong>：这是最难的部分。我们采用了多重手段：</p>
+<ul>
+<li><p><strong>代码审查</strong>：严格审查每一行原子操作的内存序（Memory Ordering），确保在多架构（如x86的TSO和ARM的Weak Memory Model）以及多平台（如 Linux 和 Windows）上都能正确执行 。</p>
+</li>
+<li><p><strong>压力测试</strong>：我们编写了多线程压力测试程序，在万级并发下长时间（例如1小时）运行，对数据结构进行高强度的混合读写（Push&#x2F;Pop），并校验结果的一致性。</p>
+</li>
 </ul>
 </li>
-<li><strong>（NFS CSI 插件）</strong><br>我们在超算集群场景下选择NFS，主要是出于<strong>兼容性、存量优势</strong>和<strong>性能</strong>的综合考量。<ul>
-<li><strong>存量优势与兼容性</strong>：许多大规模超算中心已经部署了极其庞大且高度优化的NFS（特别是pNFS ）存储集群。NFS客户端内嵌于所有Linux内核，运维简单，兼容性极好。我们的CSI插件能够无缝利旧这些现有的、价值高昂的存储设施。</li>
-<li><strong>性能优势</strong>：虽然Ceph提供了很好的扩展性和统一存储特性，但在超算场景下（常见大文件顺序读写），高性能的pNFS（并行NFS）表现非常出色。pNFS允许客户端绕过元数据服务器，直接与多个存储节点（Data Servers）并行通信，吞吐量极高。</li>
-<li><strong>我们的插件价值</strong>：原生的NFS在K8s中缺乏精细化管理。我们的CSI插件  提供了关键的企业级功能，如<strong>基于用户的授权认证</strong>（这在多租户超算上至关重要）、<strong>卷的扩容</strong>、<strong>配额管理</strong>和<strong>快照管理</strong> 。这使得K8s能以云原生的方式，安全、高效地使用超算中心已有的NFS存储。</li>
-</ul>
+<li><p><strong>性能测试</strong>：我们在一个多核（例如64核）服务器上进行基准测试，同时通过核调度将我们的程序独占CPU。我们模拟了万级并发的线程，并使用高精度时钟（如<code>rdtsc</code>或<code>std::chrono</code>）来测量每次操作的P99（99th percentile）时延，最终验证了其在饱和负载下时延仍小于1ms 。</p>
 </li>
-<li><strong>（pNFS 驱动优化）</strong><br>pNFS的核心思想是“元数据”和“数据”分离。我优化的点在于客户端（Driver）和数据服务器（Data Server）的通信协议上。<ul>
-<li><strong>原始方式</strong>：我们的存储服务是基于GPFS修改的，但是GPFS默认只支持以文件粒度的pNFS。</li>
-<li><strong>块粒度通信（我的优化）</strong>：我的优化是将GPFS以文件粒度的调用变为以块粒度的调用，这样能以对存储节点更友好的方式来发送数据。</li>
-<li><strong>结果</strong>：例如，原先使用文件粒度，获取的块可能很多，需要多次向主节点发送请求来获取下一个数据块，以及最后提交修改。而使用块的方式，只需要完全和存储节点通信即可。这种方式减少了降低了IO路径上的CPU开销，并更充分地利用了网络带宽。在特定的大文件读写负载下，最终测试显示传输速度提升了约5% 。</li>
-</ul>
-</li>
-<li><strong>（多组件线程池）</strong><br>“多组件线程池”  是对传统Reactor模型（如gRPC所用）的一种精细化实现，其核心思想是<strong>“职责分离”</strong>。<ul>
-<li><strong>传统线程池的问题</strong>：如果使用一个大的线程池（Worker Pool）来处理所有事情（接受连接、IO读写、业务逻辑），那么一个耗时的业务逻辑计算（CPU密集型）可能会长时间占据一个线程，导致该线程无法及时处理其他套接字（Socket）的IO事件（IO密集型），造成“队头阻塞”（Head-of-Line Blocking），延迟飙升。</li>
-<li><strong>我的“多组件”实现</strong>：<ol>
-<li><strong>IO组件（Reactor）</strong>：我们有1-2个专门的线程（或小线程池），它们只负责<code>epoll</code>  循环。当<code>epoll</code>  监测到IO就绪事件（如数据可读）时，这个线程只负责从Socket读取数据，然后将数据包（Task）封装好，<strong>抛入</strong>到“Worker组件”的队列中。IO线程本身<strong>不执行任何业务逻辑</strong>。</li>
-<li><strong>Worker组件（Proactor）</strong>：这是一个独立的、更大规模的线程池 ，它从队列中获取任务包，执行真正的业务逻辑（如RPC的解码、计算、编码）。</li>
 </ol>
 </li>
-<li><strong>优势</strong>：通过<code>epoll</code>  和这种“IO线程”与“Worker线程”的分离，保证了IO线程永远不会被阻塞，能够以极高的效率响应<code>epoll</code>  事件。Worker线程池则可以根据CPU核心数配置，专心处理计算。这种架构避免了IO与计算的相互干扰，使得网络库的整体处理时延在高并发下减少了多达50% 。</li>
+<li><p><strong>（NFS CSI 插件）</strong> 我们在超算集群场景下选择NFS，主要是出于<strong>兼容性、存量优势</strong>和<strong>性能</strong>的综合考量。</p>
+<ol>
+<li><p><strong>存量优势与兼容性</strong>：许多大规模超算中心已经部署了极其庞大且高度优化的NFS（特别是pNFS ）存储集群。NFS客户端内嵌于所有Linux内核，运维简单，兼容性极好。我们的CSI插件能够无缝利旧这些现有的、价值高昂的存储设施。</p>
+</li>
+<li><p><strong>性能优势</strong>：虽然Ceph提供了很好的扩展性和统一存储特性，但在超算场景下（常见大文件顺序读写），高性能的pNFS（并行NFS）表现非常出色。pNFS允许客户端绕过元数据服务器，直接与多个存储节点（Data Servers）并行通信，吞吐量极高。</p>
+</li>
+<li><p><strong>我们的插件价值</strong>：原生的NFS在K8s中缺乏精细化管理。我们的CSI插件 提供了关键的企业级功能，如<strong>基于用户的授权认证</strong>（这在多租户超算上至关重要）、<strong>卷的扩容</strong>、<strong>配额管理</strong>和<strong>快照管理</strong> 。这使得K8s能以云原生的方式，安全、高效地使用超算中心已有的NFS存储。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>（pNFS 驱动优化）</strong> pNFS的核心思想是“元数据”和“数据”分离。我优化的点在于客户端和数据服务器（Data Server）的通信协议上。</p>
+<ol>
+<li><p><strong>原始方式</strong>：我们的存储服务是基于GPFS修改的，但是GPFS默认只支持以文件粒度的pNFS。</p>
+</li>
+<li><p><strong>块粒度通信（我的优化）</strong>：我的优化是将GPFS以文件粒度的调用变为以块粒度的调用，这样能以对存储节点更友好的方式来发送数据。</p>
+</li>
+<li><p><strong>结果</strong>：例如，原先使用文件粒度，需要以文件形式与存储节点通信，由存储节点负责解析文件，将其变为向存储块写入。而使用块的方式，只需要完全和块设备通信即可。这种方式减少了降低了存储节点上的CPU开销，并更充分地利用了网络带宽。在特定的大文件读写负载下，最终测试显示传输速度提升了约5% 。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>（多组件线程池）</strong> “多组件线程池” 是对传统Reactor模型（如gRPC所用）的一种精细化实现，其核心思想是<strong>“职责分离”</strong>。</p>
+<ol>
+<li><p><strong>传统线程池的问题</strong>：如果使用一个大的线程池（Worker Pool）来处理所有事情（接受连接、IO读写、业务逻辑），那么一个耗时的业务逻辑计算（CPU密集型）可能会长时间占据一个线程，导致该线程无法及时处理其他套接字（Socket）的IO事件（IO密集型），造成“队头阻塞”（Head-of-Line Blocking），延迟飙升。</p>
+</li>
+<li><p><strong>我的“多组件”实现</strong>：</p>
+<ul>
+<li><p><strong>IO组件（Reactor）</strong>：我们有1-2个专门的线程（或小线程池），它们只负责<code>epoll</code> 循环。当<code>epoll</code> 监测到IO就绪事件（如数据可读）时，这个线程只负责从Socket读取数据，然后将数据包（Task）封装好，<strong>抛入</strong>到“Worker组件”的队列中。IO线程本身<strong>不执行任何业务逻辑</strong>。</p>
+</li>
+<li><p><strong>Worker组件（Proactor）</strong>：这是一个独立的、更大规模的线程池 ，它从队列中获取任务包，执行真正的业务逻辑（如RPC的解码、计算、编码）。</p>
+</li>
 </ul>
+</li>
+<li><p><strong>优势</strong>：通过<code>epoll</code> 和这种“IO线程”与“Worker线程”的分离，保证了IO线程永远不会被阻塞，能够以极高的效率响应<code>epoll</code> 事件。Worker线程池则可以根据CPU核心数配置，专心处理计算。这种架构避免了IO与计算的相互干扰，使得网络库的整体处理时延在高并发下减少了多达50% 。</p>
+</li>
+</ol>
+</li>
+<li><p>大模型框架<br>  本项目是基于现有 <strong>vLLM&#x2F;LM Cache</strong> 技术栈深度定制化的高性能 AI 推理基础设施核心组件。<br>  在 LLM 推理场景中，<strong>Prefix Caching (前缀缓存)</strong> 是提高效率的关键。然而，传统的 KV Cache 机制和通用文件系统面临挑战：</p>
+<ol start="3">
+<li><p>挑战一：小文件 I&#x2F;O 效率低下 (存储瓶颈)</p>
+<ul>
+<li><strong>瓶颈:</strong> KV Cache 单元本质上是大量分散的、尺寸较小的文件或数据块。通用文件系统对这种<strong>高并发、小尺寸</strong>的 I&#x2F;O 模式处理效率不高，导致缓存的存取延迟较高。</li>
+</ul>
+</li>
+<li><p>挑战二：高频缓存的查找延迟 (访问瓶颈)</p>
+<ul>
+<li><strong>瓶颈:</strong> 随着缓存数量的增加，查找并定位所需 KV Cache 文件需要经过多次索引或目录遍历，高频（热点）前缀缓存的访问延迟依然是瓶颈。</li>
+</ul>
+</li>
+<li><p>挑战三：数据完整性与可靠性</p>
+<ul>
+<li><strong>瓶颈:</strong> 高速 I&#x2F;O 操作中，KV Cache 数据的正确性、完整性校验至关重要，需要确保读取的数据是精确且完整的。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<p>    解决方案：</p>
+<ol start="7">
+<li><p>NVFS 专为快速处理小文件而设计，能显著降低单个 KV Cache 文件的读写延迟，提高存储系统的<strong>I&#x2F;O 吞吐量</strong>。</p>
+</li>
+<li><p>引入<strong>前缀树</strong>数据结构来组织和索引 KV Cache 文件。将高频、常用的 KV Cache（对应短前缀）放置在缓存树的顶部。显著<strong>减少查找路径</strong>，实现对热点缓存的<strong>极速定位和访问</strong>，有效降低高频请求的整体 IO Latency。</p>
+</li>
+<li><p>为每个 KV Cache 分块设计详细的元信息，包括<strong>哈希值（Checksum）和精确长度&#x2F;尺寸</strong>等。通过哈希值校验，确保数据读写过程中的<strong>完整性</strong>；通过长度校验，避免加载不匹配或损坏的缓存，极大地提升了推理服务的<strong>可靠性</strong>。</p>
 </li>
 </ol>
 <hr>
 <h4 id="4-湖杉科技-Hushan-Tech"><a href="#4-湖杉科技-Hushan-Tech" class="headerlink" title="4. 湖杉科技 (Hushan Tech)"></a>4. 湖杉科技 (Hushan Tech)</h4><p><strong>面试官提问：</strong></p>
 <ol>
-<li>你对湖杉科技的这段后端开发总负责和运维的实习有什么理解？</li>
-<li>你的职位是“后端开发总负责，运维” ，这是一个责任非常重大的角色。你能否具体描述一下你的职责？你如何协调开发任务和运维压力的？</li>
-<li>你提到“利用LoRa优化大模型，用户满意度提升20%” 。LoRa（Low-Rank Adaptation）是一种微调技术，它具体是如何帮助提升“用户满意度”的？是实现了个性化，还是降低了推理延迟？</li>
-<li>你“自编写的调度系统”  是如何维持AI模型和GPU服务器负载均衡的 ？它的调度策略（Policy）是怎样的？<br><strong>面试者回答：</strong></li>
-<li><strong>（对实习的理解）</strong><br>在湖杉科技的经历，对我而言是一次从<strong>纯技术执行者</strong>向<strong>技术负责人</strong>转变的锻炼。作为“总负责” ，我不仅要写代码，更要对系统的<strong>整体效率</strong>和<strong>稳定性</strong>负责。<ul>
-<li><strong>效率方面</strong>：我需要思考如何最大化利用昂贵的GPU资源。因此我基于K8s自研了调度系统 ，实现了GPU服务器的负载均衡 ，最终将资源利用率提升了10% 。</li>
-<li><strong>业务方面</strong>：技术最终要服务于用户。我通过调研和实践LoRa技术来优化大模型，实现了更贴近用户需求的模型服务，带来了20%的用户满意度提升 。</li>
-<li><strong>运维方面</strong>：我作为运维 ，需要确保多台16卡服务器的稳定。这段经历让我深刻理解了DevOps文化，即开发必须从第一天起就考虑系统的可观测性、可部署性和稳定性。</li>
-</ul>
+<li><p>你对湖杉科技的这段后端开发总负责和运维的实习有什么理解？</p>
 </li>
-<li><strong>（总负责的职责）</strong><br>作为“后端开发总负责” ，我的职责是端到端的：<ol>
-<li><strong>架构设计</strong>：我负责后端AI推理服务的整体技术选型和架构设计。例如，我决定采用K8s  作为资源管理的底座，并主导设计了上层的GPU负载均衡调度系统 。</li>
-<li><strong>开发执行</strong>：我主导并编写了后端的核心代码，包括调度系统、以及LoRa模型优化  相关的服务。</li>
-<li><strong>运维保障（Ops）</strong>：我同时承担运维角色，负责所有服务的部署、监控（Monitoring）、告警（Alerting）和故障排查。我需要确保多台16卡服务器上的AI模型 始终处于稳定平衡的负载 。</li>
-<li><strong>协调</strong>：当开发新功能（Dev）和处理线上故障（Ops）冲突时，我的优先级始终是<strong>保障线上稳定（Ops）</strong>。我会利用自动化脚本和K8s的自愈能力来减少运维压力，然后利用“空闲”时间窗口来推进开发任务。</li>
+<li><p>你的职位是“后端开发总负责，运维” ，这是一个责任非常重大的角色。你能否具体描述一下你的职责？你如何协调开发任务和运维压力的？</p>
+</li>
+<li><p>你提到“利用LoRa优化大模型，用户满意度提升20%” 。LoRa（Low-Rank Adaptation）是一种微调技术，它具体是如何帮助提升“用户满意度”的？是实现了个性化，还是降低了推理延迟？</p>
+</li>
+<li><p>你“自编写的调度系统” 是如何维持AI模型和GPU服务器负载均衡的 ？它的调度策略（Policy）是怎样的？</p>
+</li>
+</ol>
+<p><strong>面试者回答：</strong></p>
+<ol>
+<li><p><strong>（对实习的理解）</strong> 在湖杉科技的经历，对我而言是一次从<strong>纯技术执行者</strong>向<strong>技术负责人</strong>转变的锻炼。作为“总负责” ，我不仅要写代码，更要对系统的<strong>整体效率</strong>和<strong>稳定性</strong>负责。</p>
+<ol>
+<li><p><strong>效率方面</strong>：我需要思考如何最大化利用昂贵的GPU资源。因此我基于K8s自研了调度系统 ，实现了GPU服务器的负载均衡 ，最终将资源利用率提升了10% 。</p>
+</li>
+<li><p><strong>业务方面</strong>：技术最终要服务于用户。我通过调研和实践LoRa技术来优化大模型，实现了更贴近用户需求的模型服务，带来了20%的用户满意度提升 。</p>
+</li>
+<li><p><strong>运维方面</strong>：我作为运维 ，需要确保多台16卡服务器的稳定。这段经历让我深刻理解了DevOps文化，即开发必须从第一天起就考虑系统的可观测性、可部署性和稳定性。</p>
+</li>
 </ol>
 </li>
-<li><strong>（LoRa 提升用户满意度）</strong><br>LoRa是一种参数高效性微调（PEFT）技术。它提升用户满意度20%  的关键在于<strong>低成本地实现了“模型个性化”</strong>。<ul>
-<li><strong>问题</strong>：通用的基础大模型（Base Model）在特定领域或特定用户的口吻上表现不佳。而为每个用户微调一个完整的模型，成本（显存和存储）高到无法接受。</li>
-<li><strong>LoRa的解决方案</strong>：<ol>
-<li>我们只维护一个基础大模型。</li>
-<li>对于不同的用户或不同的业务场景（例如“模特修改” vs “珠宝美化”），我们训练<strong>不同</strong>的、但<strong>非常小</strong>（只有几MB到几十MB）的LoRa适配器（Adapter）。</li>
-<li>当用户的请求到来时，我们的后端服务会<strong>动态加载</strong>（Hot-Swap）基础模型和<strong>该用户专属的LoRa适配器</strong>。</li>
+<li><p><strong>（总负责的职责）</strong> 作为“后端开发总负责” ，我的职责是端到端的：</p>
+<ol>
+<li><p><strong>架构设计</strong>：我负责后端AI推理服务的整体技术选型和架构设计。例如，我决定采用K8s 作为资源管理的底座，并主导设计了上层的GPU负载均衡调度系统 。</p>
+</li>
+<li><p><strong>开发执行</strong>：我主导并编写了后端的核心代码，包括调度系统、以及LoRa模型优化 相关的服务。</p>
+</li>
+<li><p><strong>运维保障（Ops）</strong>：我同时承担运维角色，负责所有服务的部署、监控（Monitoring）、告警（Alerting）和故障排查。我需要确保多台16卡服务器上的AI模型 始终处于稳定平衡的负载 。</p>
+</li>
+<li><p><strong>协调</strong>：当开发新功能（Dev）和处理线上故障（Ops）冲突时，我的优先级始终是<strong>保障线上稳定（Ops）</strong>。我会利用自动化脚本和K8s的自愈能力来减少运维压力，然后利用“空闲”时间窗口来推进开发任务。</p>
+</li>
 </ol>
 </li>
-<li><strong>结果</strong>：用户感知到的是一个“懂他”的、经过定制的模型，回复质量更高，因此满意度显著提升 。而对我们后端来说，我们只需要极小的额外存储和显存开销（LoRa适配器的开销），就能提供大规模的个性化服务。</li>
+<li><p><strong>（LoRa 提升用户满意度）</strong> LoRa是一种参数高效性微调（PEFT）技术。它提升用户满意度20% 的关键在于<strong>低成本地实现了“模型个性化”</strong>。</p>
+<ol>
+<li><p><strong>问题</strong>：通用的基础大模型（Base Model）在特定领域或特定用户的口吻上表现不佳。而为每个用户微调一个完整的模型，成本（显存和存储）高到无法接受。</p>
+</li>
+<li><p><strong>LoRa的解决方案</strong>：</p>
+<ul>
+<li><p>我们只维护一个基础大模型。</p>
+</li>
+<li><p>对于不同的用户或不同的业务场景（例如“模特修改” vs “珠宝美化”），我们训练<strong>不同</strong>的、但<strong>非常小</strong>（只有几MB到几十MB）的LoRa适配器（Adapter）。</p>
+</li>
+<li><p>当用户的请求到来时，我们的后端服务会<strong>动态加载</strong>（Hot-Swap）基础模型和<strong>该用户专属的LoRa适配器</strong>。</p>
+</li>
 </ul>
 </li>
-<li><strong>（自研调度系统策略）</strong><br>K8s  原生的调度器（kube-scheduler）对GPU的感知很粗糙，它只知道“节点上有几张卡”，但不知道“每张卡的负载”。我们的<strong>自编写的调度系统</strong>是一个运行在K8s之上的<strong>自定义调度器（Custom Scheduler）</strong>。<ul>
-<li><strong>策略核心</strong>：我们的核心策略是<strong>“基于实时负载的精细化装箱（Bin Packing）”</strong>。</li>
-<li><strong>实现步骤</strong>：<ol>
-<li><strong>监控</strong>：我们通过Prometheus Exporter，实时收集集群中每台16卡服务器  上<strong>每一张GPU卡</strong>的<strong>显存使用率</strong>和<strong>SM（计算单元）利用率</strong>。</li>
-<li><strong>调度</strong>：当一个AI模型的推理请求（Pod）需要被调度时，K8s默认调度器会“挂起”这个Pod，交由我们的自定义调度器处理。</li>
-<li><strong>决策</strong>：我们的调度器会遍历所有节点的GPU实时负载数据，并根据一个<strong>综合评分函数</strong>（综合考虑了“剩余显存”和“SM空闲率”）来选择一个<strong>当前最空闲</strong>且<strong>资源足够</strong>的GPU卡，然后将Pod调度到该卡所在的节点上。</li>
+<li><p><strong>结果</strong>：用户感知到的是一个“懂他”的、经过定制的模型，回复质量更高，因此满意度显著提升 。而对我们后端来说，我们只需要极小的额外存储和显存开销（LoRa适配器的开销），就能提供大规模的个性化服务。</p>
+</li>
 </ol>
 </li>
-<li><strong>结果</strong>：这个策略避免了K8s默认调度可能导致的“某些卡被打满，另一些卡却空闲”的负载不均情况，确保了所有GPU服务器都能维持稳定平衡的负载，从而将整体资源利用率提升了10% 。</li>
+<li><p><strong>（自研调度系统策略）</strong> K8s 原生的调度器（kube-scheduler）对GPU的感知很粗糙，它只知道“节点上有几张卡”，但不知道“每张卡的负载”。我们的<strong>自编写的调度系统</strong>是一个运行在K8s之上的<strong>自定义调度器（Custom Scheduler）</strong>。</p>
+<ol>
+<li><p><strong>策略核心</strong>：我们的核心策略是<strong>“基于实时负载的精细化装箱（Bin Packing）”</strong>。</p>
+</li>
+<li><p><strong>实现步骤</strong>：</p>
+<ul>
+<li><p><strong>监控</strong>：我们通过Prometheus Exporter，实时收集集群中每台16卡服务器 上<strong>每一张GPU卡</strong>的<strong>显存使用率</strong>和<strong>SM（计算单元）利用率</strong>。</p>
+</li>
+<li><p><strong>调度</strong>：当一个AI模型的推理请求（Pod）需要被调度时，K8s默认调度器会“挂起”这个Pod，交由我们的自定义调度器处理。</p>
+</li>
+<li><p><strong>决策</strong>：我们的调度器会遍历所有节点的GPU实时负载数据，并根据一个<strong>综合评分函数</strong>（综合考虑了“剩余显存”和“SM空闲率”）来选择一个<strong>当前最空闲</strong>且<strong>资源足够</strong>的GPU卡，然后将Pod调度到该卡所在的节点上。</p>
+</li>
 </ul>
+</li>
+<li><p><strong>结果</strong>：这个策略避免了K8s默认调度可能导致的“某些卡被打满，另一些卡却空闲”的负载不均情况，确保了所有GPU服务器都能维持稳定平衡的负载，从而将整体资源利用率提升了10% 。</p>
+</li>
+</ol>
 </li>
 </ol>
 <hr>
 <h3 id="二、-项目经历-Project-Experience"><a href="#二、-项目经历-Project-Experience" class="headerlink" title="二、 项目经历 (Project Experience)"></a>二、 项目经历 (Project Experience)</h3><h4 id="1-P-D-动态拆分合并的推理引擎系统"><a href="#1-P-D-动态拆分合并的推理引擎系统" class="headerlink" title="1. P-D 动态拆分合并的推理引擎系统"></a>1. P-D 动态拆分合并的推理引擎系统</h4><p><strong>面试官提问：</strong></p>
 <ol>
-<li>你这个项目是基于vllm做的优化。vllm已经通过PagedAttention解决了KV Cache的显存瓶颈，你认为vllm在调度层面还有什么不足？</li>
-<li>你提到提出了“Prefill和Decode性能建模模块” ，并能预测任意batch的执行时间（准确度&gt;95%） 。请问你是如何建立这个模型的？它考虑了哪些关键参数？</li>
-<li>请解释一下你的“SLO感知和级联超时检测技术”  是如何工作的？它如何帮助goodput平均提升超过10% ？<br><strong>面试者回答：</strong></li>
-<li><strong>（vllm的不足）</strong><br>vllm的PagedAttention确实极大地提高了显存利用率和吞吐量。但它的调度策略（如默认的FIFO）相对简单，它主要解决了<strong>“空间”</strong>（显存）上的问题，但在<strong>“时间”</strong>（调度）上还有不足：<ul>
-<li><strong>Prefill与Decode阶段的冲突</strong>：vllm会把Prefill（处理提示词）和Decode（生成Token）的请求合并到同一个batch中。Prefill是一个<strong>计算密集型</strong>操作，而Decode是一个<strong>访存密集型</strong>操作。当一个batch中混入了长的Prefill任务时，会导致整个batch的执行时间变长，使得batch中其他的Decode任务（它们本该很快完成）被迫等待，导致<strong>Token间延迟（Inter-Token Latency）</strong>飙高。</li>
-<li><strong>缺乏SLO感知</strong>：vllm的调度器不区分“即将超时”的请求和“刚来”的请求，这在生产系统中是不够的。</li>
-</ul>
+<li><p>你这个项目是基于vllm做的优化。vllm已经通过PagedAttention解决了KV Cache的显存瓶颈，你认为vllm在调度层面还有什么不足？</p>
 </li>
-<li><strong>（性能建模）</strong><br>我们的“Prefill和Decode性能建模模块”  是我们实现SLO感知调度的基础。<ul>
-<li><strong>建模思路</strong>：我们没有使用复杂的机器学习模型，而是采用了<strong>基于分析的白盒建模</strong>。我们将一个batch的执行时间拆分为Prefill阶段耗时和Decode阶段耗时 。</li>
-<li><strong>关键参数</strong>：<ol>
-<li><strong>Prefill耗时</strong>：主要与该batch中所有Prefill请求的<strong>总提示词（Prompt）Token数</strong>和<strong>计算瓶颈</strong>（如GEMM操作）相关。我们通过离线Profiling（分析）得到了一个“单位Token的Prefill计算时间”系数。</li>
-<li><strong>Decode耗时</strong>：主要与该batch中<strong>总请求数（Batch Size）</strong>和<strong>访存瓶颈</strong>（KV Cache的读写）相关。我们也通过Profiling得到了一个“单位Token的Decode访存时间”系数。</li>
+<li><p>你提到提出了“Prefill和Decode性能建模模块” ，并能预测任意batch的执行时间（准确度&gt;95%） 。请问你是如何建立这个模型的？它考虑了哪些关键参数？</p>
+</li>
+<li><p>请解释一下你的“SLO感知和级联超时检测技术” 是如何工作的？它如何帮助goodput平均提升超过10% ？</p>
+</li>
+</ol>
+<p><strong>面试者回答：</strong></p>
+<ol>
+<li><p><strong>（vllm的不足）</strong> vllm的PagedAttention确实极大地提高了显存利用率和吞吐量。但它的调度策略（如默认的FIFO）相对简单，它主要解决了<strong>“空间”</strong>（显存）上的问题，但在<strong>“时间”</strong>（调度）上还有不足：</p>
+<ol>
+<li><p><strong>Prefill与Decode阶段的冲突</strong>：vllm会把Prefill（处理提示词）和Decode（生成Token）的请求合并到同一个batch中。Prefill是一个<strong>计算密集型</strong>操作，而Decode是一个<strong>访存密集型</strong>操作。当一个batch中混入了长的Prefill任务时，会导致整个batch的执行时间变长，使得batch中其他的Decode任务（它们本该很快完成）被迫等待，导致<strong>Token间延迟（Inter-Token Latency）</strong>飙高。</p>
+</li>
+<li><p><strong>缺乏SLO感知</strong>：vllm的调度器不区分“即将超时”的请求和“刚来”的请求，这在生产系统中是不够的。</p>
+</li>
 </ol>
 </li>
-<li><strong>模型</strong>：最终的模型是一个<strong>分段线性函数</strong>，输入是“任意batch”的Prefill Token总数和Decode请求总数，输出就是预测的执行时间 。通过在真实负载上校准参数，我们实现了高于95%的预测准确度 。</li>
+<li><p><strong>（性能建模）</strong> 我们的“Prefill和Decode性能建模模块” 是我们实现SLO感知调度的基础。</p>
+<ol>
+<li><p><strong>建模思路</strong>：我们没有使用复杂的机器学习模型，而是采用了<strong>基于分析的白盒建模</strong>。我们将一个batch的执行时间拆分为Prefill阶段耗时和Decode阶段耗时 。</p>
+</li>
+<li><p><strong>关键参数</strong>：</p>
+<ul>
+<li><p><strong>Prefill耗时</strong>：主要与该batch中所有Prefill请求的<strong>总提示词（Prompt）Token数</strong>和<strong>计算瓶颈</strong>（如GEMM操作）相关。我们通过离线Profiling（分析）得到了一个“单位Token的Prefill计算时间”系数。</p>
+</li>
+<li><p><strong>Decode耗时</strong>：主要与该batch中<strong>总请求数（Batch Size）和访存瓶颈</strong>（KV Cache的读写）相关。我们也通过Profiling得到了一个“单位Token的Decode访存时间”系数。</p>
+</li>
 </ul>
 </li>
-<li><strong>（SLO与级联超时检测）</strong><br>“Goodput”  指的是<strong>在SLO（服务等级目标，如2秒内必须返回）之内</strong>成功完成的请求。<ul>
-<li><strong>SLO感知</strong> ：我们的调度器在选择下一个batch时，会优先选择那些“剩余SLO时间”最短、即将超时的请求，确保它们被尽快处理。</li>
-<li><strong>级联超时检测</strong> ：这是更关键的优化。<ol>
-<li><strong>问题</strong>：如果调度器为了凑一个大batch，把一个“即将超时”的请求A和一个“超长”的Prefill请求B（它自己不超时）放进同一个batch，会发生什么？</li>
-<li><strong>预测</strong>：我们的调度器会调用A2中提到的<strong>性能模型</strong> ，<strong>预测</strong>这个（A+B）batch的执行时间。</li>
-<li><strong>检测</strong>：调度器发现，预测的执行时间 &gt; 请求A的剩余SLO。</li>
-<li><strong>决策</strong>：调度器会判定这是一个“坏”batch，它会导致请求A超时（即产生badput）。因此，调度器会<strong>拒绝</strong>将A和B合并，而是优先执行A。</li>
+<li><p><strong>模型</strong>：最终的模型是一个<strong>分段线性函数</strong>，输入是“任意batch”的Prefill Token总数和Decode请求总数，输出就是预测的执行时间 。通过在真实负载上校准参数，我们实现了高于95%的预测准确度 。</p>
+</li>
 </ol>
 </li>
-<li><strong>结果</strong>：通过这种“预测性”的<strong>级联超时检测</strong> ，我们避免了调度器为了提高吞吐量（Throughput）而“牺牲”即将超时的请求。这使得系统更智能地在“吞吐量”和“延迟”之间做权衡，确保了绝大多数请求都能在SLO内完成，因此“goodput”平均提升了超过10% 。</li>
+<li><p><strong>（SLO与级联超时检测）</strong> “Goodput” 指的是<strong>在SLO（服务等级目标，如2秒内必须返回）之内</strong>成功完成的请求。</p>
+<ol>
+<li><p><strong>SLO感知</strong> ：我们的调度器在选择下一个batch时，会优先选择那些“剩余SLO时间”最短、即将超时的请求，确保它们被尽快处理。</p>
+</li>
+<li><p><strong>级联超时检测</strong> ：这是更关键的优化。</p>
+<ul>
+<li><p><strong>问题</strong>：如果调度器为了凑一个大batch，把一个“即将超时”的请求A和一个“超长”的Prefill请求B（它自己不超时）放进同一个batch，会发生什么？</p>
+</li>
+<li><p><strong>预测</strong>：我们的调度器会调用A2中提到的<strong>性能模型</strong> ，<strong>预测</strong>这个（A+B）batch的执行时间。</p>
+</li>
+<li><p><strong>检测</strong>：调度器发现，预测的执行时间 &gt; 请求A的剩余SLO。</p>
+</li>
+<li><p><strong>决策</strong>：调度器会判定这是一个“坏”batch，它会导致请求A超时（即产生badput）。因此，调度器会<strong>拒绝</strong>将A和B合并，而是优先执行A。</p>
+</li>
 </ul>
+</li>
+<li><p><strong>结果</strong>：通过这种“预测性”的<strong>级联超时检测</strong> ，我们避免了调度器为了提高吞吐量（Throughput）而“牺牲”即将超时的请求。这使得系统更智能地在“吞吐量”和“延迟”之间做权衡，确保了绝大多数请求都能在SLO内完成，因此“goodput”平均提升了超过10% 。</p>
+</li>
+</ol>
 </li>
 </ol>
 <hr>
 <h4 id="2-适用于生产系统的动态软件更新框架"><a href="#2-适用于生产系统的动态软件更新框架" class="headerlink" title="2. 适用于生产系统的动态软件更新框架"></a>2. 适用于生产系统的动态软件更新框架</h4><p><strong>面试官提问：</strong></p>
 <ol>
-<li>你提到“使用了批量复制的方式达到较低的CPU开销，并提高了21.74倍的更新性能” 。请问你复制的是什么？相比于传统的更新方式，这个“批量复制”  的核心优势在哪？</li>
-<li>这个框架是如何做到“基本无感”更新的？“只在空闲时间以增量方式进行更新”  的技术细节是怎样的？</li>
-<li>这个框架减少了生产损失约75%。这是如何衡量的？它解决了生产中的什么痛点？<br><strong>面试者回答：</strong></li>
-<li><strong>（批量复制）</strong><ul>
-<li><strong>复制内容</strong>：在动态软件更新时，最耗时的步骤是迁移<strong>旧版本程序的状态（State）</strong>到新版本，这主要包括<strong>全局变量</strong>和<strong>堆内存（Heap）</strong>上的数据。</li>
-<li><strong>传统方式</strong>：传统的动态更新（如基于<code>dlopen</code>或某些语言的热更）可能需要逐个对象（Object-by-Object）地序列化、传输和反序列化，这个过程涉及大量的CPU开销  和类型检查。</li>
-<li><strong>我的优化（批量复制）</strong>：我的优化在于，框架能够识别出大块的、连续的、且在新旧版本间布局兼容的内存区域。然后，我们<strong>不关心</strong>这些内存里具体是什么对象，而是直接调用<code>memcpy</code>，以<strong>批量（Batch）</strong>的方式将整个内存页（Page）或内存块（Chunk）从旧进程空间复制到新进程空间。这种方式极大减少了CPU的计算和遍历开销 ，使得状态迁移的纯粹性能（不考虑暂停时间）提升了21.74倍 。</li>
-</ul>
+<li><p>你提到“使用了批量复制的方式达到较低的CPU开销，并提高了21.74倍的更新性能” 。请问你复制的是什么？相比于传统的更新方式，这个“批量复制” 的核心优势在哪？</p>
 </li>
-<li><strong>（无感更新与增量更新）</strong><br>“基本无感”  指的是更新过程中的<strong>“停服时间”（Stop-the-World Pause）极短</strong>。这是通过“增量更新”  实现的：<ol>
-<li><strong>空闲识别</strong>：这得益于PLC独特的执行特点。PLC周期性执行，每个周期均会有空闲时间。当检测到系统处于低负载（即“空闲时间”）  时，更新流程启动。</li>
-<li><strong>后台增量复制</strong>：系统<strong>不会暂停</strong>，而是在后台开始复制（使用A1中提到的批量复制 ）程序状态。</li>
-<li><strong>写时复制（Copy-on-Write）</strong>：在后台复制期间，生产系统  仍在运行。如果系统修改了某块<strong>尚未被复制</strong>的内存，一切正常。如果它试图修改某块<strong>已经被复制</strong>的内存，我们会触发一个（类似于Copy-on-Write的）机制，标记这块内存为“脏”（Dirty），并暂存这个修改。</li>
-<li><strong>最终切换（Cutover）</strong>：当绝大多数（例如99%）的状态都在后台增量  复制完毕后，框架会发起一个极短的“停服”：(a) 暂停系统；(b) 复制剩余的“脏”数据；(c) 将流量和控制权切换到新版本。</li>
+<li><p>这个框架是如何做到“基本无感”更新的？“只在空闲时间以增量方式进行更新” 的技术细节是怎样的？</p>
+</li>
+<li><p>这个框架减少了生产损失约75%。这是如何衡量的？它解决了生产中的什么痛点？</p>
+</li>
 </ol>
-<ul>
-<li><strong>结果</strong>：由于绝大部分工作都在后台的“空闲时间”  完成了，最终“停服”的窗口期非常短（毫秒级），从而实现了“基本无感”  更新。</li>
-</ul>
+<p><strong>面试者回答：</strong></p>
+<ol>
+<li><p><strong>（批量复制）</strong></p>
+<ol>
+<li><p><strong>复制内容</strong>：在动态软件更新时，最耗时的步骤是迁移<strong>旧版本程序的状态（State）到新版本，这主要包括全局变量</strong>和<strong>堆内存（Heap）</strong>上的数据。</p>
 </li>
-<li><strong>（减少生产损失）</strong><ul>
-<li><strong>痛点</strong>：在传统的生产系统中（例如7x24小时运行的制造执行系统 MES），如果发现一个Bug或需要上线一个优化，必须停机维护。停机1小时，意味着生产线（例如芯片制造或装配线）也必须停工1小时，这会带来巨大的生产损失 。</li>
-<li><strong>解决方案</strong>：我们的动态软件更新框架  允许在<strong>不停止生产</strong>的情况下，“热修复”（Hotfix）Bug或“热更新”（Hot-Update）优化 。</li>
-<li><strong>衡量方式</strong>：损失减少75%是这样估算的：假设以前某个关键系统平均每月需要停机维护4小时才能完成更新。使用了我们的框架后，90%的更新（如小的Bug修复）都可以在“无感”  状态下完成，完全不停机；剩下10%的大版本更新，停机时间也因为我们的优化  而大幅缩短。综合计算，原先的停机时间被减少了约75%，这直接等同于减少了75%的生产损失 。</li>
-</ul>
+<li><p><strong>传统方式</strong>：传统的动态更新（如基于<code>dlopen</code>或某些语言的热更）可能需要逐个对象（Object-by-Object）地序列化、传输和反序列化，这个过程涉及大量的CPU开销 和类型检查。</p>
+</li>
+<li><p><strong>我的优化（批量复制）</strong>：我的优化在于，框架能够识别出大块的、连续的、且在新旧版本间布局兼容的内存区域。然后，我们<strong>不关心</strong>这些内存里具体是什么对象，而是直接调用<code>memcpy</code>，以<strong>批量（Batch）</strong>的方式将整个内存页（Page）或内存块（Chunk）从旧进程空间复制到新进程空间。这种方式极大减少了CPU的计算和遍历开销 ，使得状态迁移的纯粹性能（不考虑暂停时间）提升了21.74倍 。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>（无感更新与增量更新）</strong> “基本无感” 指的是更新过程中的<strong>“停服时间”（Stop-the-World Pause）极短</strong>。这是通过“增量更新” 实现的：</p>
+<ol>
+<li><p><strong>空闲识别</strong>：这得益于PLC独特的执行特点。PLC周期性执行，每个周期均会有空闲时间。当检测到系统处于低负载（即“空闲时间”） 时，更新流程启动。</p>
+</li>
+<li><p><strong>后台增量复制</strong>：系统<strong>不会暂停</strong>，而是在后台开始复制（使用A1中提到的批量复制 ）程序状态。</p>
+</li>
+<li><p><strong>写时复制（Copy-on-Write）</strong>：在后台复制期间，生产系统 仍在运行。如果系统修改了某块<strong>尚未被复制</strong>的内存，一切正常。如果它试图修改某块<strong>已经被复制</strong>的内存，我们会触发一个（类似于Copy-on-Write的）机制，标记这块内存为“脏”（Dirty），并暂存这个修改。</p>
+</li>
+<li><p><strong>最终切换（Cutover）</strong>：当绝大多数（例如99%）的状态都在后台增量 复制完毕后，框架会发起一个极短的“停服”：(a) 暂停系统；(b) 复制剩余的“脏”数据；(c) 将流量和控制权切换到新版本。</p>
+</li>
+<li><p><strong>结果</strong>：由于绝大部分工作都在后台的“空闲时间” 完成了，最终“停服”的窗口期非常短（毫秒级），从而实现了“基本无感” 更新。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>（减少生产损失）</strong></p>
+<ol>
+<li><p><strong>痛点</strong>：在传统的生产系统中（例如7x24小时运行的制造执行系统 MES），如果发现一个Bug或需要上线一个优化，必须停机维护。停机1小时，意味着生产线（例如芯片制造或装配线）也必须停工1小时，这会带来巨大的生产损失 。</p>
+</li>
+<li><p><strong>解决方案</strong>：我们的动态软件更新框架 允许在<strong>不停止生产</strong>的情况下，“热修复”（Hotfix）Bug或“热更新”（Hot-Update）优化 。</p>
+</li>
+<li><p><strong>衡量方式</strong>：损失减少75%是这样估算的：假设以前某个关键系统平均每月需要停机维护4小时才能完成更新。使用了我们的框架后，90%的更新（如小的Bug修复）都可以在“无感” 状态下完成，完全不停机；剩下10%的大版本更新，停机时间也因为我们的优化 而大幅缩短。综合计算，原先的停机时间被减少了约75%，这直接等同于减少了75%的生产损失 。</p>
+</li>
+</ol>
 </li>
 </ol>
 <hr>
 <h4 id="3-多-Agent-调度框架"><a href="#3-多-Agent-调度框架" class="headerlink" title="3. 多 Agent 调度框架"></a>3. 多 Agent 调度框架</h4><p><strong>面试官提问：</strong></p>
 <ol>
-<li><p>这个项目是基于Langchain的多Agent协作框架 。你提到的“调度器”  在这个框架中扮演什么角色？是Agent之间的任务分派，还是“模型生成的代码”  的执行调度？</p>
+<li><p>这个项目是基于Langchain的多Agent协作框架 。你提到的“调度器” 在这个框架中扮演什么角色？是Agent之间的任务分派，还是“模型生成的代码” 的执行调度？</p>
 </li>
-<li><p>你提到这个框架适用于“生物等领域” 。为什么生物领域特别需要这种多Agent协作？能否举一个具体的协作流程例子？<br><strong>面试者回答：</strong></p>
+<li><p>你提到这个框架适用于“生物等领域” 。为什么生物领域特别需要这种多Agent协作？能否举一个具体的协作流程例子？</p>
 </li>
-<li><p><strong>（调度器角色）</strong><br>在这个框架中，调度器（特指 AutoDNA 的 <strong>C++ Scheduler</strong>）扮演的是<strong>“硬件协调中心”</strong>和<strong>“执行管理”</strong>的角色，它与上层的多 Agent 系统（AutoDNA-python）协作。</p>
-<ul>
+</ol>
+<p><strong>面试者回答：</strong></p>
+<ol>
+<li><p><strong>（调度器角色）</strong></p>
+</li>
+<li><p>在这个框架中，调度器（特指 AutoDNA 的 <strong>C++ Scheduler</strong>）扮演的是<strong>“硬件协调中心”</strong>和<strong>“执行管理”</strong>的角色，它与上层的多 Agent 系统（AutoDNA-python）协作。</p>
+<ol>
 <li><p><strong>任务分派（Agent间&#x2F;协议生成）</strong>：</p>
 <ul>
-<li><strong>AutoDNA-python</strong>（多 Agent 系统）负责高级任务分派。例如，“规划 Agent”将任务分配给“协议生成 Agent”。</li>
-<li><strong>协议生成 Agent</strong> 基于用户的需求，生成<strong>可执行的实验协议代码</strong>。</li>
+<li><p><strong>AutoDNA-python</strong>（多 Agent 系统）负责高级任务分派。例如，“规划 Agent”将任务分配给“协议生成 Agent”。</p>
+</li>
+<li><p><strong>协议生成 Agent</strong> 基于用户的需求，生成<strong>可执行的实验协议代码</strong>。</p>
+</li>
 </ul>
 </li>
 <li><p><strong>代码执行调度（Agent与硬件间）</strong>：这是 <strong>C++ Scheduler</strong> 的核心功能。它负责将模型生成的代码（实验协议&#x2F;步骤）转化为实际的物理操作。</p>
 <ul>
-<li><strong>调度器</strong> 接收到<strong>“协议生成 Agent”</strong>输出的实验协议（即硬件操作指令）。</li>
-<li>它会<strong>高效地将协议部署执行</strong>，具体步骤包括：<ol>
-<li><strong>硬件协调</strong>：管理实验室自动化硬件（如移液站、热循环仪）的资源和工作流。</li>
-<li><strong>指令翻译</strong>：将高层协议转化为对底层 <strong>Firmware</strong> (C# 和 PLC 程序) 的低级控制信号。</li>
-<li><strong>安全执行与监控</strong>：驱动硬件执行操作，并实时捕获硬件状态和实验结果。</li>
-<li>最后，调度器将实验结果反馈给 <strong>AutoDNA-python</strong> 中的后续 Agent（如“分析 Agent”）。</li>
+<li><p><strong>调度器</strong> 接收到<strong>“协议生成 Agent”</strong>输出的实验协议（即硬件操作指令）。</p>
+</li>
+<li><p>它会<strong>高效地将协议部署执行</strong>，具体步骤包括：</p>
+</li>
+<li><p><strong>硬件协调</strong>：管理实验室自动化硬件（如移液站、热循环仪）的资源和工作流。</p>
+</li>
+<li><p><strong>指令翻译</strong>：将高层协议转化为对底层 <strong>Firmware</strong> (C# 和 PLC 程序) 的低级控制信号。</p>
+</li>
+<li><p><strong>安全执行与监控</strong>：驱动硬件执行操作，并实时捕获硬件状态和实验结果。</p>
+</li>
+<li><p>最后，调度器将实验结果反馈给 <strong>AutoDNA-python</strong> 中的后续 Agent（如“分析 Agent”）。</p>
+</li>
+</ul>
+</li>
 </ol>
 </li>
-</ul>
-</li>
-</ul>
-</li>
 <li><p><strong>（生物领域应用实例）</strong></p>
-<ul>
+<ol>
 <li><p><strong>为什么是生物领域</strong>：生物领域（如分子生物学、药物筛选）的研究流程具有<strong>高精度要求、高重复性需求和对“工具&#x2F;计算”的强依赖性</strong>。</p>
 <ul>
-<li>研究员需要 <strong>LLM (AutoDNA-python)</strong> 来阅读文献、设计实验（知识与推理），但也<strong>必须</strong>运行精确的物理实验（需要<strong>自动化硬件</strong>）。</li>
-<li>多Agent框架结合硬件调度，完美契合了<strong>“AI生成实验协议”</strong>与<strong>“自动化硬件执行”</strong>的端到端需求。</li>
+<li><p>研究员需要 <strong>LLM (AutoDNA-python)</strong> 来阅读文献、设计实验（知识与推理），但也<strong>必须</strong>运行精确的物理实验（需要<strong>自动化硬件</strong>）。</p>
+</li>
+<li><p>多Agent框架结合硬件调度，完美契合了<strong>“AI生成实验协议”</strong>与<strong>“自动化硬件执行”</strong>的端到端需求。</p>
+</li>
 </ul>
 </li>
 <li><p><strong>协作流程例子</strong>：</p>
 <ul>
-<li><strong>用户</strong> 提出需求：“帮我自动化执行一个 CRISPR 基因编辑的sgRNA筛选实验。”</li>
-<li><strong>调度器 (Agent)</strong> 激活 <strong>“规划 Agent”</strong>。</li>
-<li><strong>规划 Agent</strong>（基于 LLM）输出计划：(1) sgRNA序列设计；(2) 寡核苷酸合成与退火；(3) 慢病毒包装；(4) 细胞转染与筛选。</li>
-<li><strong>调度器 (Agent)</strong> 批准计划，并激活 <strong>“协议生成 Agent”</strong>。</li>
-<li><strong>协议生成 Agent</strong> 针对步骤(2)和(3)生成了<strong>自动化移液和温控的操作协议（代码）</strong>。</li>
-<li><strong>C++ Scheduler</strong> 接收协议，并将其交给 <strong>Firmware</strong> <strong>在自动化工作站中执行</strong>。</li>
-<li><strong>C++ Scheduler</strong> 协调机械臂进行精确的试剂分配、孵育和洗涤操作，并返回执行结果。</li>
-<li><strong>调度器 (Agent)</strong> 激活 <strong>“数据分析 Agent”</strong>，处理筛选得到的原始数据（如高通量测序数据）。</li>
-<li>最后，<strong>调度器 (Agent)</strong> 将所有结果汇总，交给 <strong>“总结 Agent”</strong>，生成一份完整的筛选报告给用户。</li>
-</ul>
+<li><p><strong>用户</strong> 提出需求：“帮我自动化执行一个 CRISPR 基因编辑的sgRNA筛选实验。”</p>
+</li>
+<li><p><strong>调度器 (Agent)</strong> 激活 <strong>“规划 Agent”</strong>。</p>
+</li>
+<li><p><strong>规划 Agent</strong>（基于 LLM）输出计划：(1) sgRNA序列设计；(2) 寡核苷酸合成与退火；(3) 慢病毒包装；(4) 细胞转染与筛选。</p>
+</li>
+<li><p><strong>调度器 (Agent)</strong> 批准计划，并激活 <strong>“协议生成 Agent”</strong>。</p>
+</li>
+<li><p><strong>协议生成 Agent</strong> 针对步骤(2)和(3)生成了<strong>自动化移液和温控的操作协议（代码）</strong>。</p>
+</li>
+<li><p><strong>C++ Scheduler</strong> 接收协议，并将其交给 <strong>Firmware</strong> <strong>在自动化工作站中执行</strong>。</p>
+</li>
+<li><p><strong>C++ Scheduler</strong> 协调机械臂进行精确的试剂分配、孵育和洗涤操作，并返回执行结果。</p>
+</li>
+<li><p><strong>调度器 (Agent)</strong> 激活 <strong>“数据分析 Agent”</strong>，处理筛选得到的原始数据（如高通量测序数据）。</p>
+</li>
+<li><p>最后，<strong>调度器 (Agent)</strong> 将所有结果汇总，交给 <strong>“总结 Agent”</strong>，生成一份完整的筛选报告给用户。</p>
 </li>
 </ul>
 </li>
 </ol>
+</li>
+</ol>
+<h3 id="三、顽岩面试"><a href="#三、顽岩面试" class="headerlink" title="三、顽岩面试"></a>三、顽岩面试</h3><ol>
+<li><h4 id="K8S-里面我们去创建一个-Deployment-的这样的一个资源对象…-这个过程中会涉及到哪些-K8S-的组件？"><a href="#K8S-里面我们去创建一个-Deployment-的这样的一个资源对象…-这个过程中会涉及到哪些-K8S-的组件？" class="headerlink" title="K8S 里面我们去创建一个 Deployment 的这样的一个资源对象… 这个过程中会涉及到哪些 K8S 的组件？"></a>K8S 里面我们去创建一个 <code>Deployment</code> 的这样的一个资源对象… 这个过程中会涉及到哪些 K8S 的组件？</h4></li>
+</ol>
+<p>表格 还在加载中，请等待加载完成后再尝试复制</p>
+<ol start="2">
+<li><h4 id="你能给我讲一下这个-FUSE-的基本的一个原理，或者说它实现了一种怎么样的功能？"><a href="#你能给我讲一下这个-FUSE-的基本的一个原理，或者说它实现了一种怎么样的功能？" class="headerlink" title="你能给我讲一下这个 FUSE 的基本的一个原理，或者说它实现了一种怎么样的功能？"></a>你能给我讲一下这个 FUSE 的基本的一个原理，或者说它实现了一种怎么样的功能？</h4></li>
+</ol>
+<p><strong>FUSE 的通用机制和优势：</strong></p>
+<blockquote>
+<p>FUSE (Filesystem in Userspace) 的核心功能是<strong>允许非特权用户在用户态（Userspace）创建和运行新的文件系统</strong>，而无需修改 Linux 内核代码。</p>
+</blockquote>
+<p><strong>原理阐述：</strong></p>
+<ol>
+<li><p><strong>分层架构：</strong> FUSE 机制由两部分组成：</p>
+<ol>
+<li><p><strong>内核模块（Kernel Module）：</strong> 负责拦截所有针对 FUSE 挂载点（Mount Point）的文件系统调用（如 <code>open()</code>, <code>read()</code>, <code>write()</code>）。</p>
+</li>
+<li><p><strong>用户态守护进程（FUSE Server）：</strong> 这是一个运行在用户态的程序，实现了真正的文件系统逻辑（例如，如何处理 <code>read</code> 请求，是去读本地磁盘、网络存储还是内存）。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>工作流程：</strong></p>
+<ol>
+<li><p>当用户程序发起一个系统调用（如 <code>read(fd)</code>）到 FUSE 挂载的文件时，这个请求首先被 <strong>FUSE 内核模块</strong>捕获。</p>
+</li>
+<li><p>内核模块不会自己处理这个请求，而是将请求数据和参数<strong>转发</strong>（通过一个特殊设备文件）给运行在用户态的 <strong>FUSE Server</strong> 进程。</p>
+</li>
+<li><p>FUSE Server 执行其定制的逻辑（例如，通过网络获取数据）。</p>
+</li>
+<li><p>处理完成后，FUSE Server 将结果返回给 FUSE 内核模块，内核模块再返回给最初发起请求的用户程序。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>优势：</strong></p>
+<ol>
+<li><p><strong>开发便捷性：</strong> 文件系统逻辑在用户态，崩溃不会影响内核，开发和调试更简单。</p>
+</li>
+<li><p><strong>灵活性：</strong> 可以在不修改内核的情况下，实现任何定制化的文件系统（例如，云存储文件系统、SSH 文件系统等）。</p>
+</li>
+</ol>
+</li>
+<li><h4 id="你用-C-重写互信息计算，提升-50-的具体优化点是什么？你是如何定位到-Python-版本的性能瓶颈的？"><a href="#你用-C-重写互信息计算，提升-50-的具体优化点是什么？你是如何定位到-Python-版本的性能瓶颈的？" class="headerlink" title="你用 C++ 重写互信息计算，提升 50% 的具体优化点是什么？你是如何定位到 Python 版本的性能瓶颈的？"></a>你用 C++ 重写互信息计算，提升 50% 的具体优化点是什么？你是如何定位到 Python 版本的性能瓶颈的？</h4></li>
+</ol>
+<p><strong>正确回答应体现出技术分析能力和量化手段：</strong></p>
+<blockquote>
+<p><strong>回答结构：</strong> 瓶颈分析 $\to$ 优化手段 $\to$ 结果。</p>
+</blockquote>
+<ol>
+<li><p><strong>瓶颈分析与定位：</strong></p>
+<ol>
+<li><p><strong>定位：</strong> 我首先使用 <strong>Profiler 工具</strong>（例如 Linux 的 <code>perf</code> 或 Valgrind 的 <code>callgrind</code>）对原始 Python&#x2F;C 实现进行分析。</p>
+</li>
+<li><p><strong>瓶颈确认：</strong> 发现性能瓶颈主要集中在两个方面：<strong>一是频繁的内存操作和复制</strong>（尤其是处理大规模稀疏矩阵时），<strong>二是计算密集型循环缺乏向量化指令</strong>。原始 C 代码可能只是朴素实现，没有针对现代 CPU 架构进行优化。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>C++ 优化手段：</strong></p>
+<ol>
+<li><p><strong>A. SIMD 向量化：</strong> 互信息计算涉及到大量的点积和累加运算。我使用 <strong>Intel Intrinsics</strong> 或 <strong>OpenMP SIMD</strong> 来手动或自动引导编译器使用 CPU 的 <strong>AVX&#x2F;SSE 指令集</strong>，实现数据的并行计算，这是主要的性能来源之一。</p>
+</li>
+<li><p><strong>B. 内存局部性优化：</strong> 确保稀疏矩阵或计算数组在内存中的<strong>连续性</strong>（Cache Line Friendly），减少 CPU 缓存不命中（Cache Miss）的概率，提高数据读取效率。</p>
+</li>
+<li><p><strong>C. 减少数据拷贝：</strong> 在 Python 扩展模块与 C++ 交互时，尽量使用零拷贝技术（Zero-Copy）或高效的缓冲区管理，避免 Python 对象和 C++ 结构体之间不必要的频繁数据复制。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>总结：</strong> 通过这些底层优化，我的 C++ 实现能够更有效地利用 CPU 资源，尤其是 SIMD 带来的指令级并行，从而获得了额外的 50% 性能提升。</p>
+</li>
+<li><h4 id="你在开源项目里实现的依赖检测和优先级调度，具体的算法和设计思路是什么？"><a href="#你在开源项目里实现的依赖检测和优先级调度，具体的算法和设计思路是什么？" class="headerlink" title="你在开源项目里实现的依赖检测和优先级调度，具体的算法和设计思路是什么？"></a>你在开源项目里实现的依赖检测和优先级调度，具体的算法和设计思路是什么？</h4></li>
+</ol>
+<p><strong>正确回答应体现出对复杂调度问题的解决思路：</strong></p>
+<blockquote>
+<p><strong>回答结构：</strong> 依赖检测 $\to$ 优先级调度 $\to$ 队列管理。</p>
+</blockquote>
+<ol>
+<li><p><strong>依赖检测（拓扑排序）：</strong></p>
+<ol>
+<li><p><strong>实现思路：</strong> 依赖检测本质上是构建任务之间的<strong>有向无环图 (DAG)<strong>。当用户提交任务时，我首先构建任务图，并计算每个任务的</strong>入度</strong>（即有多少前置依赖任务尚未完成）。</p>
+</li>
+<li><p><strong>执行逻辑：</strong> 只有当一个任务的入度降为零时（即所有前置任务都已完成），它才会被放入待调度队列。我使用一个<strong>任务依赖管理器</strong>来追踪所有任务的状态和入度，确保只有满足依赖关系的任务才会被释放给调度器。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>优先级调度（多级反馈队列）：</strong></p>
+</li>
+<li><h4 id="🤖你能跟我讲一下你对这个-AI-Infra-的理解吗？"><a href="#🤖你能跟我讲一下你对这个-AI-Infra-的理解吗？" class="headerlink" title="🤖你能跟我讲一下你对这个 AI Infra 的理解吗？"></a>🤖你能跟我讲一下你对这个 AI Infra 的理解吗？</h4></li>
+</ol>
+<p><strong>正确回答应从核心目标、挑战和技术手段三个层面展开：</strong></p>
+<blockquote>
+<p>我认为 AI Infrastructure（AI Infra）的核心目标是为大规模 AI 模型（尤其是大语言模型 LLMs）的训练和推理提供<strong>高效、稳定、可扩展</strong>的底层算力、存储和网络支持。</p>
+</blockquote>
+<ul>
+<li>核心目标</li>
+</ul>
+<ol>
+<li><p><strong>提升模型运行速度（速度）：</strong> 优化模型推理和训练的延迟（Latency）和吞吐量（Throughput）。例如，降低 Time-to-First-Token 的时间。</p>
+</li>
+<li><p><strong>提升模型运行规模（规模）：</strong> 支持更大参数量、更多 GPU 卡的分布式训练和推理，提高算力集群的整体利用率。</p>
+</li>
+</ol>
+<ul>
+<li>当前挑战</li>
+</ul>
+<p>AI Infra 面临的主要挑战在于解决<strong>通信</strong>和<strong>内存</strong>两大瓶颈：</p>
+<ol>
+<li><p><strong>通信瓶颈：</strong> 在大规模分布式训练中，GPU 间需要频繁进行 All-Reduce 等集体通信操作。解决网络带宽不足和通信延迟是关键。</p>
+</li>
+<li><p><strong>内存瓶颈：</strong> 大模型的参数、梯度、优化器状态和激活值占据大量显存（HBM）。需要通过各种技术（如异构内存管理、Offloading）来突破单卡显存限制。</p>
+</li>
+</ol>
+<ul>
+<li>核心技术手段</li>
+</ul>
+<p>实现这些目标，主要通过以下几个维度的技术：</p>
+<p>表格 还在加载中，请等待加载完成后再尝试复制</p>
+<ol start="6">
+<li><h4 id="💾-3FS-具体是什么？它相比传统的分布式文件系统有哪些优化，比如-RDMA-之类的。"><a href="#💾-3FS-具体是什么？它相比传统的分布式文件系统有哪些优化，比如-RDMA-之类的。" class="headerlink" title="💾 3FS 具体是什么？它相比传统的分布式文件系统有哪些优化，比如 RDMA 之类的。"></a>💾 3FS 具体是什么？它相比传统的分布式文件系统有哪些优化，比如 RDMA 之类的。</h4></li>
+</ol>
+<p><strong>正确回答应清晰区分其客户端和服务端，并重点突出针对大模型的定制优化：</strong></p>
+<blockquote>
+<p><strong>3FS</strong> (Three Forks File System) 是 DeepSeek 团队为解决大规模 AI&#x2F;LLM 训练和推理中的存储 I&#x2F;O 瓶颈而设计的高性能分布式文件系统。其核心特点是针对大模型工作负载进行了定制化优化。</p>
+</blockquote>
+<ul>
+<li>优化手段对比（相比传统 DFS）</li>
+</ul>
+<p>表格 还在加载中，请等待加载完成后再尝试复制</p>
+<ul>
+<li><p>结构和 RDMA 细节</p>
+<ul>
+<li><p><strong>架构分离：</strong> 3FS 采用传统的元数据（Metadata）和数据存储分离架构，元数据通常存储在一致性更好的存储中。</p>
+</li>
+<li><p><strong>RDMA 的具体作用：</strong> 3FS 利用 RDMA 实现数据传输，它使用的是 <strong>One-Sided RDMA 操作（如</strong> <strong><code>RDMA Write</code></strong> <strong>或</strong> **<code>RDMA Read</code>**<strong>）</strong>，这与传统的 Two-Sided (Send&#x2F;Recv) 不同。</p>
+<ol>
+<li><strong>优势：</strong> One-Sided 操作不需要目标机器 CPU 的介入（Zero-Copy），也不需要目标进程的显式接收指令，进一步提高了网络传输效率，是实现高吞吐 AI 存储的关键手段。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
 
             
         </div>
