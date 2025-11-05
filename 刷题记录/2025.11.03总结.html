@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 笔试题3321. 计算子数组的 x-sum II - 力扣（LeetCode）  codeforces-go&#x2F;leetcode&#x2F;SOLUTIONS.md at master · EndlessCheng&#x2F;codeforces-go  1.1 分类1.1.1 数组矩阵题 双指针  滑动窗口  省一次遍历技巧  差分数组  前缀和    单调栈&#x2F;队列  考">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-11-03T12:33:00.000Z">
-<meta property="article:modified_time" content="2025-11-04T02:54:03.864Z">
+<meta property="article:modified_time" content="2025-11-05T06:44:27.044Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -417,7 +417,123 @@
 <li><p>dfs</p>
 </li>
 </ul>
-<h2 id="2-面试概率题"><a href="#2-面试概率题" class="headerlink" title="2. 面试概率题"></a>2. 面试概率题</h2><h3 id="2-1-分类"><a href="#2-1-分类" class="headerlink" title="2.1 分类"></a>2.1 分类</h3><h4 id="2-1-2"><a href="#2-1-2" class="headerlink" title="2.1.2"></a>2.1.2</h4>
+<h2 id="2-面试概率题"><a href="#2-面试概率题" class="headerlink" title="2. 面试概率题"></a>2. 面试概率题</h2><h3 id="2-1-分类"><a href="#2-1-分类" class="headerlink" title="2.1 分类"></a>2.1 分类</h3><h2 id="3-面试架构"><a href="#3-面试架构" class="headerlink" title="3. 面试架构"></a>3. 面试架构</h2><h3 id="3-1-ACID"><a href="#3-1-ACID" class="headerlink" title="3.1 ACID"></a>3.1 ACID</h3><h4 id="3-1-1-A-原子性"><a href="#3-1-1-A-原子性" class="headerlink" title="3.1.1 A 原子性"></a>3.1.1 A 原子性</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li><p>原子指令，cas</p>
+</li>
+<li><p>内存序</p>
+</li>
+<li><p>缓存一致性，MESI F</p>
+</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>日志，回滚</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li><p>不同架构的CAS</p>
+</li>
+<li><p>不同架构的缓存一致性</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-1-2-C-一致性"><a href="#3-1-2-C-一致性" class="headerlink" title="3.1.2 C 一致性"></a>3.1.2 C 一致性</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li>最终一致性，顺序一致性，线性一致性</li>
+<li>缓存一致性</li>
+<li>编译时指令重排、运行时指令重排、流水线指令重排</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>2PC，TCC，paxos，raft</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li>缓存一致性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-1-3-I-隔离"><a href="#3-1-3-I-隔离" class="headerlink" title="3.1.3 I 隔离"></a>3.1.3 I 隔离</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li><p>prefetch, expect, unreachable, assume_aligned</p>
+</li>
+<li><p>alignas</p>
+</li>
+<li><p>各种大小，optional&lt;bool&gt;，shared_ptr，unique_ptr</p>
+</li>
+<li><p>向量化优化、ICC编译器优化（SIMD指令，AVX。作为对比，GPU使用SIMT与tensor core）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件</p>
+<ul>
+<li>绑定核心、运行时隔离，锁频率</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-1-4-D-持久化"><a href="#3-1-4-D-持久化" class="headerlink" title="3.1.4 D 持久化"></a>3.1.4 D 持久化</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li>ceph，pv，pnfs</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-性能"><a href="#3-2-性能" class="headerlink" title="3.2 性能"></a>3.2 性能</h3><h4 id="3-2-1-用户层"><a href="#3-2-1-用户层" class="headerlink" title="3.2.1 用户层"></a>3.2.1 用户层</h4><p>参考ACID部分</p>
+<h4 id="3-2-2-内核层"><a href="#3-2-2-内核层" class="headerlink" title="3.2.2 内核层"></a>3.2.2 内核层</h4><ol>
+<li><p>基于完全绕过内核的优化</p>
+<ol>
+<li>dpdk，spdk</li>
+</ol>
+</li>
+<li><p>基于部分绕过内核的优化</p>
+<ol>
+<li>3fs中的fuse，TCP滑动窗口</li>
+</ol>
+</li>
+<li><p>基于脱离传统内核栈的优化</p>
+<ol>
+<li>RDMA</li>
+</ol>
+</li>
+</ol>
+<h4 id="3-2-3-硬件层"><a href="#3-2-3-硬件层" class="headerlink" title="3.2.3 硬件层"></a>3.2.3 硬件层</h4><ol>
+<li>GPU系列</li>
+</ol>
+<h3 id="3-3-C"><a href="#3-3-C" class="headerlink" title="3.3 C++"></a>3.3 C++</h3><h4 id="3-3-1-四种语言"><a href="#3-3-1-四种语言" class="headerlink" title="3.3.1 四种语言"></a>3.3.1 四种语言</h4><p>C with class+STL+模板+RAII所有权</p>
+
             
         </div>
         <div class="page-template-comments">
