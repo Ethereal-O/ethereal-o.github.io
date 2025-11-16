@@ -18,12 +18,12 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 设计1.1 架构1.1.1 客户端 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个 Iov 文件和一个">
+        <meta name="description" content="1. 设计1.1 架构1.1.1 客户端1.1.1.1 简介 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="3fs learning">
 <meta property="og:url" content="http://example.com/2025/04/12/3fs-learning/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 设计1.1 架构1.1.1 客户端 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个 Iov 文件和一个">
+<meta property="og:description" content="1. 设计1.1 架构1.1.1 客户端1.1.1.1 简介 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
 <meta property="og:image" content="https://pic1.zhimg.com/v2-fe5d3f294916ce8b6d95f630208702c6_1440w.jpg">
@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://pica.zhimg.com/v2-524abb99eba02c545caf5b093bfc9b3e_1440w.jpg">
 <meta property="og:image" content="https://pic4.zhimg.com/v2-8c4145ee4528ae85fe7a887af2068bc5_1440w.jpg">
 <meta property="article:published_time" content="2025-04-12T07:16:42.000Z">
-<meta property="article:modified_time" content="2025-05-15T04:38:38.538Z">
+<meta property="article:modified_time" content="2025-11-16T12:28:30.555Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
@@ -404,8 +404,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-05-15 12:38:38</span>
-            <span class="mobile">2025-05-15 12:38</span>
+            <span class="desktop">2025-11-16 20:28:30</span>
+            <span class="mobile">2025-11-16 20:28</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -429,7 +429,7 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="1-设计"><a href="#1-设计" class="headerlink" title="1. 设计"></a>1. 设计</h2><h3 id="1-1-架构"><a href="#1-1-架构" class="headerlink" title="1.1 架构"></a>1.1 架构</h3><h4 id="1-1-1-客户端"><a href="#1-1-1-客户端" class="headerlink" title="1.1.1 客户端"></a>1.1.1 客户端</h4><ul>
+                <h2 id="1-设计"><a href="#1-设计" class="headerlink" title="1. 设计"></a>1. 设计</h2><h3 id="1-1-架构"><a href="#1-1-架构" class="headerlink" title="1.1 架构"></a>1.1 架构</h3><h4 id="1-1-1-客户端"><a href="#1-1-1-客户端" class="headerlink" title="1.1.1 客户端"></a>1.1.1 客户端</h4><h5 id="1-1-1-1-简介"><a href="#1-1-1-1-简介" class="headerlink" title="1.1.1.1 简介"></a>1.1.1.1 简介</h5><ul>
 <li><p>fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）</p>
 </li>
 <li><p>Native client（USRBIO）</p>
@@ -442,7 +442,7 @@
 <ul>
 <li>Iov 文件用来作为读写数据的 buffer<ul>
 <li>用户提前规划好需要使用的总容量</li>
-<li>文件创建之后 FUSE Daemon 将该其注册成 RDMA memory buffer，进而实现整个链路的零拷贝</li>
+<li>文件创建之后 FUSE Daemon 将该其注册成 RDMA memory buffer，进而实现整个链路的零拷贝（进而加上与服务端的零拷贝）</li>
 </ul>
 </li>
 <li>Ior 文件用来实现 IoRing<ul>
@@ -462,6 +462,9 @@
 </ul>
 </li>
 <li><p>所有的共享内存文件在挂载点 3fs-virt&#x2F;iovs&#x2F; 目录下均建有 symlink，指向 &#x2F;dev&#x2F;shm 下的对应文件。</p>
+<ul>
+<li>shm通过mmap创建，但是没有DMA技术，因此依旧与文件类型相似，需要经过page cache</li>
+</ul>
 </li>
 </ul>
 <p><img  
@@ -472,6 +475,76 @@
                 ></p>
 </li>
 </ul>
+<h5 id="1-1-1-2-扩展"><a href="#1-1-1-2-扩展" class="headerlink" title="1.1.1.2 扩展"></a>1.1.1.2 扩展</h5><p><strong>DMA</strong></p>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>普通文件mmap</th>
+<th>DMA设备mmap</th>
+<th>匿名页mmap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>共享媒介</strong></td>
+<td>磁盘文件</td>
+<td>物理DMA缓冲区</td>
+<td>物理内存页</td>
+</tr>
+<tr>
+<td><strong>持久性</strong></td>
+<td>持久化到磁盘</td>
+<td>进程运行期间</td>
+<td>进程运行期间</td>
+</tr>
+<tr>
+<td><strong>亲缘关系</strong></td>
+<td>任意进程</td>
+<td>任意进程</td>
+<td>主要是父子进程</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>磁盘I&#x2F;O速度</td>
+<td>内存总线速度</td>
+<td>内存总线速度</td>
+</tr>
+<tr>
+<td><strong>同步机制</strong></td>
+<td>文件锁、信号量</td>
+<td>自定义驱动同步</td>
+<td>进程间同步原语</td>
+</tr>
+</tbody></table>
+<p>以下是一个使用DMA（直接内存访问）技术的C++代码示例，展示了如何在内存和I&#x2F;O设备之间进行DMA传输：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// DMA缓冲区结构</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DMABuffer</span> &#123;</span><br><span class="line">    <span class="type">void</span>* virtAddr;    <span class="comment">// 虚拟地址（CPU可访问）</span></span><br><span class="line">    <span class="type">dma_addr_t</span> physAddr; <span class="comment">// 物理地址（设备可访问）</span></span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟DMA控制器类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DMAController</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> dmaFd;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">DMAController</span>() : <span class="built_in">dmaFd</span>(<span class="number">-1</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化DMA控制器</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">initialize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 在实际系统中，这里会打开DMA设备文件</span></span><br><span class="line">        dmaFd = <span class="built_in">open</span>(<span class="string">&quot;/dev/dma_device&quot;</span>, O_RDWR);</span><br><span class="line">        <span class="keyword">return</span> dmaFd &gt;= <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 分配DMA缓冲区</span></span><br><span class="line">    <span class="function">DMABuffer <span class="title">allocateBuffer</span><span class="params">(<span class="type">size_t</span> size)</span> </span>&#123;</span><br><span class="line">        DMABuffer buffer;</span><br><span class="line">        buffer.size = size;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分配物理连续的内存（在实际系统中可能需要特殊分配器）</span></span><br><span class="line">        buffer.virtAddr = <span class="built_in">mmap</span>(<span class="literal">NULL</span>, size, PROT_READ | PROT_WRITE,</span><br><span class="line">                              MAP_SHARED | MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (buffer.virtAddr == MAP_FAILED) &#123;</span><br><span class="line">            buffer.virtAddr = <span class="literal">nullptr</span>;</span><br><span class="line">            buffer.physAddr = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> buffer;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在实际系统中，这里需要获取物理地址</span></span><br><span class="line">        <span class="comment">// 这通常通过ioctl调用或其他内核接口实现</span></span><br><span class="line">        buffer.physAddr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">dma_addr_t</span>&gt;(buffer.virtAddr);</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;分配DMA缓冲区: 虚拟地址=&quot;</span> &lt;&lt; buffer.virtAddr </span><br><span class="line">                  &lt;&lt; <span class="string">&quot;, 物理地址=&quot;</span> &lt;&lt; std::hex &lt;&lt; buffer.physAddr &lt;&lt; std::dec</span><br><span class="line">                  &lt;&lt; <span class="string">&quot;, 大小=&quot;</span> &lt;&lt; size &lt;&lt; <span class="string">&quot;字节&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> buffer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 启动DMA传输</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">startTransfer</span><span class="params">(<span class="type">dma_addr_t</span> src, <span class="type">dma_addr_t</span> dst, <span class="type">size_t</span> size, <span class="type">bool</span> toDevice)</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;启动DMA传输: &quot;</span> </span><br><span class="line">                  &lt;&lt; (toDevice ? <span class="string">&quot;内存→设备&quot;</span> : <span class="string">&quot;设备→内存&quot;</span>)</span><br><span class="line">                  &lt;&lt; <span class="string">&quot;, 大小=&quot;</span> &lt;&lt; size &lt;&lt; <span class="string">&quot;字节&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在实际系统中，这里会配置DMA控制器寄存器</span></span><br><span class="line">        <span class="comment">// 设置源地址、目标地址、传输大小等</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟DMA传输延迟</span></span><br><span class="line">        <span class="built_in">usleep</span>(<span class="number">1000</span>); <span class="comment">// 1ms延迟</span></span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;DMA传输完成&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 释放DMA缓冲区</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">freeBuffer</span><span class="params">(DMABuffer&amp; buffer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (buffer.virtAddr) &#123;</span><br><span class="line">            <span class="built_in">munmap</span>(buffer.virtAddr, buffer.size);</span><br><span class="line">            buffer.virtAddr = <span class="literal">nullptr</span>;</span><br><span class="line">            buffer.physAddr = <span class="number">0</span>;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;释放DMA缓冲区&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">DMAController</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (dmaFd &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">close</span>(dmaFd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例使用类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DMAExample</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    DMAController dma;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">runExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 初始化DMA控制器</span></span><br><span class="line">        <span class="keyword">if</span> (!dma.<span class="built_in">initialize</span>()) &#123;</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;DMA控制器初始化失败&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">const</span> <span class="type">size_t</span> BUFFER_SIZE = <span class="number">4096</span>; <span class="comment">// 4KB缓冲区</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分配源缓冲区和目标缓冲区</span></span><br><span class="line">        DMABuffer srcBuffer = dma.<span class="built_in">allocateBuffer</span>(BUFFER_SIZE);</span><br><span class="line">        DMABuffer dstBuffer = dma.<span class="built_in">allocateBuffer</span>(BUFFER_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!srcBuffer.virtAddr || !dstBuffer.virtAddr) &#123;</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;缓冲区分配失败&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在源缓冲区中准备数据</span></span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* testData = <span class="string">&quot;Hello, DMA Transfer!&quot;</span>;</span><br><span class="line">        <span class="built_in">strncpy</span>(<span class="built_in">static_cast</span>&lt;<span class="type">char</span>*&gt;(srcBuffer.virtAddr), testData, BUFFER_SIZE);</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;源数据: &quot;</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">char</span>*&gt;(srcBuffer.virtAddr) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行内存到内存的DMA传输</span></span><br><span class="line">        <span class="keyword">if</span> (dma.<span class="built_in">startTransfer</span>(srcBuffer.physAddr, dstBuffer.physAddr, </span><br><span class="line">                             <span class="built_in">strlen</span>(testData) + <span class="number">1</span>, <span class="literal">false</span>)) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在实际系统中，这里需要等待DMA完成中断或轮询状态</span></span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;目标数据: &quot;</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">char</span>*&gt;(dstBuffer.virtAddr) &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行内存到设备的DMA传输（模拟）</span></span><br><span class="line">        dma.<span class="built_in">startTransfer</span>(srcBuffer.physAddr, <span class="number">0x1000</span>, BUFFER_SIZE, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行设备到内存的DMA传输（模拟）</span></span><br><span class="line">        dma.<span class="built_in">startTransfer</span>(<span class="number">0x2000</span>, dstBuffer.physAddr, BUFFER_SIZE, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 清理资源</span></span><br><span class="line">        dma.<span class="built_in">freeBuffer</span>(srcBuffer);</span><br><span class="line">        dma.<span class="built_in">freeBuffer</span>(dstBuffer);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类型定义（在实际系统中通常由内核头文件提供）</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">unsigned</span> <span class="type">long</span> <span class="type">dma_addr_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;=== DMA技术演示 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    DMAExample example;</span><br><span class="line">    example.<span class="built_in">runExample</span>();</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;=== 演示结束 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>这个代码示例演示了DMA技术的几个关键方面：</p>
+<ol>
+<li><strong>DMA缓冲区管理</strong>：分配和释放用于DMA传输的物理连续内存</li>
+<li><strong>传输控制</strong>：启动内存到设备、设备到内存的DMA传输</li>
+<li><strong>地址管理</strong>：处理虚拟地址和物理地址的转换</li>
+</ol>
+<p><strong>实际系统中的注意事项</strong>：</p>
+<ol>
+<li><p>在真实系统中，DMA操作通常需要：</p>
+<ul>
+<li>内核驱动支持</li>
+<li>物理地址的正确获取（通过DMA API）</li>
+<li>缓存一致性处理（<code>dma_sync_*</code>函数）</li>
+<li>中断处理完成通知</li>
+</ul>
+</li>
+<li><p>Linux内核中的实际DMA API包括：</p>
+<ul>
+<li><code>dma_alloc_coherent()</code> - 分配DMA一致性内存</li>
+<li><code>dma_map_single()</code> - 映射单个缓冲区用于DMA</li>
+<li><code>dma_unmap_single()</code> - 取消映射</li>
+</ul>
+</li>
+<li><p>编译时需要链接相关库，在实际嵌入式系统中可能需要交叉编译。</p>
+</li>
+</ol>
 <h4 id="1-1-2-服务端"><a href="#1-1-2-服务端" class="headerlink" title="1.1.2 服务端"></a>1.1.2 服务端</h4><ul>
 <li><p>cluster manager：集群状态管理，使用例如etcd等保证，实际使用<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=254486149&content_type=Article&match_order=1&q=FoundationDB&zhida_source=entity" >FoundationDB <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
 </li>
@@ -935,7 +1008,7 @@
         <li><strong>Created at:</strong> 2025-04-12 15:16:42</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-05-15 12:38:38
+                <strong>Updated at:</strong> 2025-11-16 20:28:30
             </li>
         
         <li>
