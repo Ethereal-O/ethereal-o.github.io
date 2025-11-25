@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. std::execution&#x2F;coroutine结合核心概念在深入代码之前，我们先了解几个关键概念：  执行上下文 (Execution Context): 代表了可以执行工作的“地方”，例如一个线程池、一个 I&#x2F;O 事件循环或一个 GPU 流。 调度器 (Scheduler): 一个轻量级的句柄，代表了一个执行上下文。它的主要职责是创建一个“调度发送者”（Schedul">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-08-14T17:35:50.000Z">
-<meta property="article:modified_time" content="2025-08-14T17:56:28.775Z">
+<meta property="article:modified_time" content="2025-11-25T16:14:23.525Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-08-15 01:56:28</span>
-            <span class="mobile">2025-08-15 01:56</span>
+            <span class="desktop">2025-11-26 00:14:23</span>
+            <span class="mobile">2025-11-26 00:14</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -460,6 +460,331 @@
 </li>
 </ul>
 <h2 id="2-合约"><a href="#2-合约" class="headerlink" title="2. 合约"></a>2. 合约</h2><h2 id="3-静态反射"><a href="#3-静态反射" class="headerlink" title="3. 静态反射"></a>3. 静态反射</h2><p>rust如何打印枚举类型的名称？通过debug萃取，编译器插桩</p>
+<h2 id="4-multimap-x2F-unordered-multimap"><a href="#4-multimap-x2F-unordered-multimap" class="headerlink" title="4. multimap&#x2F;unordered_multimap"></a>4. multimap&#x2F;unordered_multimap</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/259855411" >(12 封私信 &#x2F; 81 条消息) GCC中unordered_(multi)set&#x2F;map的实现原理 （Part 1 继承体系) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/259857549" >GCC中unordered_(multi)set&#x2F;map的实现原理 （Part 2 图解哈希表结构) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="4-1-unordered-multimap"><a href="#4-1-unordered-multimap" class="headerlink" title="4.1 unordered_multimap"></a>4.1 unordered_multimap</h3><p>好的，这是一个非常核心的C++ STL问题。<code>std::unordered_multimap</code> 的底层实现是基于一个改良的<strong>哈希表</strong>。</p>
+<p>下面我们来详细分解它的实现机制和关键组成部分。</p>
+<h4 id="核心思想：哈希表"><a href="#核心思想：哈希表" class="headerlink" title="核心思想：哈希表"></a>核心思想：哈希表</h4><p>哈希表的核心思想是通过一个<strong>哈希函数</strong>，将键（Key）映射到数组的某个索引位置。理想情况下，这个操作是常数时间O(1)的。</p>
+<h4 id="具体实现细节"><a href="#具体实现细节" class="headerlink" title="具体实现细节"></a>具体实现细节</h4><h5 id="1-数据结构：数组-链表（或其它桶结构）"><a href="#1-数据结构：数组-链表（或其它桶结构）" class="headerlink" title="1. 数据结构：数组 + 链表（或其它桶结构）"></a>1. 数据结构：数组 + 链表（或其它桶结构）</h5><p><code>std::unordered_multimap</code> 的内部维护了一个动态数组，这个数组的每个元素通常被称为一个 <strong>“桶”（Bucket）</strong>。</p>
+<ul>
+<li><strong>桶数组</strong>：一个 <code>std::vector</code> 或其他类似的动态数组，存储着桶的头部指针。</li>
+<li><strong>桶内的链表</strong>：每个桶本身不是一个直接存储元素的位置，而是一个链表的头节点。这个链表用于存储所有哈希到同一个桶中的元素。</li>
+</ul>
+<p>由于 <code>unordered_multimap</code> 允许重复的键，所以当不同的键值对经过哈希函数计算后，可能会得到同一个桶索引（这称为<strong>哈希冲突</strong>）。同时，即使键相同（这是允许的），它们也会被放入同一个桶中。</p>
+<h5 id="2-节点存储的内容"><a href="#2-节点存储的内容" class="headerlink" title="2. 节点存储的内容"></a>2. 节点存储的内容</h5><p>哈希表中的每个节点（即链表的一个节点）至少存储以下内容：</p>
+<ul>
+<li><strong>Key</strong>： 元素的键。</li>
+<li><strong>Value</strong>： 元素的值。</li>
+<li><strong>哈希值缓存</strong>： 大多数实现（如GCC的libstdc++和LLVM的libc++）会存储键的哈希值。这避免了在重新哈希（Resize）或查找时需要重复计算哈希值，提高了效率。</li>
+<li><strong>下一个节点的指针</strong>： 指向链表中下一个节点的指针。</li>
+</ul>
+<h5 id="3-工作流程"><a href="#3-工作流程" class="headerlink" title="3. 工作流程"></a>3. 工作流程</h5><p><strong>a. 插入操作 <code>insert(&#123;key, value&#125;)</code></strong></p>
+<ol>
+<li><strong>计算哈希值</strong>： 对键 <code>key</code> 使用哈希函数 <code>std::hash&lt;Key&gt;</code> 计算其哈希值 <code>hash_code</code>。</li>
+<li><strong>确定桶索引</strong>： 通过 <code>hash_code % bucket_count</code> 计算这个键值对应该放在哪个桶中。</li>
+<li><strong>在桶中插入</strong>：<ul>
+<li>找到对应的桶（即数组索引）。</li>
+<li>创建一个新的节点，存储键、值和哈希值。</li>
+<li>将这个新节点<strong>插入到链表的头部</strong>（这是一个O(1)操作）。注意，标准不规定插入到链表的哪个位置，但头插法是最高效的。</li>
+</ul>
+</li>
+</ol>
+<p><strong>b. 查找操作 <code>find(key)</code> &#x2F; <code>equal_range(key)</code></strong></p>
+<ol>
+<li><strong>计算哈希值</strong>： 对键 <code>key</code> 计算哈希值。</li>
+<li><strong>确定桶索引</strong>： <code>hash_code % bucket_count</code>。</li>
+<li><strong>遍历桶内链表</strong>：<ul>
+<li>找到对应的桶。</li>
+<li>遍历该桶内的链表，使用 <code>key</code> 的 <code>==</code> 运算符与链表中的每个节点的键进行比较。</li>
+<li>对于 <code>find</code>，返回第一个匹配的迭代器。</li>
+<li>对于 <code>equal_range</code>，返回一个迭代器对 <code>[begin, end)</code>，包含所有匹配的键值对。这正是它支持重复键的关键。</li>
+</ul>
+</li>
+</ol>
+<p><strong>c. 删除操作 <code>erase(key)</code></strong></p>
+<ol>
+<li>同样先定位到正确的桶。</li>
+<li>遍历链表，删除所有键等于 <code>key</code> 的节点。</li>
+</ol>
+<h5 id="4-负载因子与重新哈希"><a href="#4-负载因子与重新哈希" class="headerlink" title="4. 负载因子与重新哈希"></a>4. 负载因子与重新哈希</h5><p>为了保持哈希表的高效性，必须控制桶中链表的平均长度。</p>
+<ul>
+<li><strong>负载因子</strong>： <code>load_factor = size / bucket_count</code>。即元素总数除以桶的数量。它衡量了哈希表的“拥挤程度”。</li>
+<li><strong>最大负载因子</strong>： 有一个默认值（通常是1.0），你可以通过 <code>max_load_factor()</code> 成员函数获取和设置。</li>
+<li><strong>重新哈希</strong>： 当 <code>load_factor &gt; max_load_factor</code> 时，容器会自动进行重新哈希：<ol>
+<li>创建一个新的、更大的桶数组（通常是原来的两倍左右的一个质数大小）。</li>
+<li>遍历旧哈希表中的每一个节点。</li>
+<li>对于每个节点，根据其<strong>缓存的哈希值</strong>和<strong>新的桶数量</strong>，重新计算其在新数组中的桶索引：<code>new_bucket_index = cached_hash_code % new_bucket_count</code>。</li>
+<li>将节点移动到新的桶数组中。<br>这个过程是昂贵的，平均时间复杂度为O(n)，但能保证后续操作的效率。</li>
+</ol>
+</li>
+</ul>
+<h4 id="现代实现的优化：桶内单链表-桶间指针数组"><a href="#现代实现的优化：桶内单链表-桶间指针数组" class="headerlink" title="现代实现的优化：桶内单链表 + 桶间指针数组"></a>现代实现的优化：桶内单链表 + 桶间指针数组</h4><p>上面描述的是最经典的“拉链法”实现。在现代的STL实现（如libc++, libstdc++）中，为了优化缓存性能，通常采用一种更为紧凑的结构：</p>
+<ul>
+<li>所有节点被存储在一个连续的数组中（一个 <code>std::vector</code>），每个节点包含键、值、哈希值和指向下一个节点的<strong>索引</strong>（而不是指针）。</li>
+<li>桶数组本身也是一个数组，但它存储的是指向第一个节点的索引（或指针）。</li>
+</ul>
+<p>这种设计减少了动态内存分配的次数，并提高了数据的内存局部性，对CPU缓存更友好。</p>
+<h4 id="总结：std-unordered-multimap-的特点"><a href="#总结：std-unordered-multimap-的特点" class="headerlink" title="总结：std::unordered_multimap 的特点"></a>总结：<code>std::unordered_multimap</code> 的特点</h4><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">底层实现原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>无序性</strong></td>
+<td align="left">元素在哈希表中的存储位置由哈希值决定，与插入顺序无关。</td>
+</tr>
+<tr>
+<td align="left"><strong>平均O(1)的查找、插入、删除</strong></td>
+<td align="left">基于哈希表，在负载因子可控的情况下，平均复杂度为常数。</td>
+</tr>
+<tr>
+<td align="left"><strong>最差O(n)的复杂度</strong></td>
+<td align="left">所有元素都哈希到同一个桶中，退化为一个链表。</td>
+</tr>
+<tr>
+<td align="left"><strong>允许重复键</strong></td>
+<td align="left">哈希冲突的链表天然支持存储多个具有相同键的元素。</td>
+</tr>
+<tr>
+<td align="left"><strong>迭代器失效</strong></td>
+<td align="left">插入操作可能导致重新哈希，使所有迭代器失效；在特定桶中插入或删除，只会使该桶的迭代器失效。</td>
+</tr>
+</tbody></table>
+<p><strong>简单来说，你可以把 <code>std::unordered_multimap</code> 想象成一个有很多“抽屉”（桶）的柜子。当你需要存一个东西时，你用钥匙（键）算出一个号码（哈希值），根据号码找到对应的抽屉，然后把东西扔进去。允许重复键意味着同一个抽屉里可以放多个标签相同的东西。当抽屉太满时，管理员（重新哈希）会换一个更大的柜子，并把所有东西重新整理一遍。</strong></p>
+<h3 id="4-2-unordered-map-x2F-unordered-multimap"><a href="#4-2-unordered-map-x2F-unordered-multimap" class="headerlink" title="4.2 unordered_map&#x2F;unordered_multimap"></a>4.2 unordered_map&#x2F;unordered_multimap</h3><h4 id="共同的基础实现"><a href="#共同的基础实现" class="headerlink" title="共同的基础实现"></a>共同的基础实现</h4><p><strong><code>unordered_map</code> 和 <code>unordered_multimap</code> 都采用：</strong></p>
+<ul>
+<li><strong>桶数组</strong>：一个动态数组，每个元素是一个”桶”</li>
+<li><strong>桶内结构</strong>：每个桶包含一个链表（或类似结构），存储哈希到该桶的所有元素</li>
+</ul>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 两者都类似这样的结构</span></span><br><span class="line">vector&lt;forward_list&lt;pair&lt;Key, Value&gt;&gt;&gt; buckets;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="性能差异的真正原因"><a href="#性能差异的真正原因" class="headerlink" title="性能差异的真正原因"></a>性能差异的真正原因</h4><p>性能差异主要来自<strong>处理重复键的方式</strong>，而不是底层数据结构：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th><code>unordered_map</code></th>
+<th><code>unordered_multimap</code></th>
+<th>性能影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>查找</strong></td>
+<td>找到第一个匹配项就返回</td>
+<td>可能需要遍历所有重复键</td>
+<td>multimap 可能更慢</td>
+</tr>
+<tr>
+<td><strong>插入</strong></td>
+<td>需要检查键是否已存在</td>
+<td>直接插入，无需检查重复</td>
+<td>multimap 可能更快</td>
+</tr>
+<tr>
+<td><strong>删除</strong></td>
+<td>删除第一个匹配项就返回</td>
+<td>需要删除所有匹配的重复键</td>
+<td>multimap 可能更慢</td>
+</tr>
+</tbody></table>
+<h4 id="为什么没有用纯数组实现？"><a href="#为什么没有用纯数组实现？" class="headerlink" title="为什么没有用纯数组实现？"></a>为什么没有用纯数组实现？</h4><p>如果 <code>multimap</code> 在桶内使用纯数组，确实会有一些问题：</p>
+<ol>
+<li><strong>插入性能问题</strong>：数组插入需要移动元素，O(n)复杂度</li>
+<li><strong>内存浪费</strong>：需要预分配空间或频繁重新分配</li>
+<li><strong>删除性能差</strong>：从数组中删除元素需要移动后续元素</li>
+</ol>
+<h4 id="现代实现的优化趋势"><a href="#现代实现的优化趋势" class="headerlink" title="现代实现的优化趋势"></a>现代实现的优化趋势</h4><p>实际上，现代STL实现（如libc++、libstdc++）对两者都采用<strong>类似的优化策略</strong>：</p>
+<h5 id="1-单链表（最常用）"><a href="#1-单链表（最常用）" class="headerlink" title="1. 单链表（最常用）"></a>1. 单链表（最常用）</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 两者都使用类似的结构</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    Key key;</span><br><span class="line">    Value value;</span><br><span class="line">    <span class="type">size_t</span> cached_hash;</span><br><span class="line">    Node* next;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="2-小桶优化"><a href="#2-小桶优化" class="headerlink" title="2. 小桶优化"></a>2. 小桶优化</h5><p>对于元素数量很少的桶，有些实现会使用小数组内联存储，避免动态分配：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 某些实现的优化：小桶使用内联数组，大桶使用链表</span></span><br><span class="line"><span class="keyword">union</span> <span class="title class_">BucketStorage</span> &#123;</span><br><span class="line">    Node* list_head;           <span class="comment">// 用于大桶</span></span><br><span class="line">    InlineArray inline_data;   <span class="comment">// 用于小桶（如前2-4个元素）</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="3-开放寻址的变种"><a href="#3-开放寻址的变种" class="headerlink" title="3. 开放寻址的变种"></a>3. 开放寻址的变种</h5><p>一些非标准但高性能的哈希表实现可能对两者都使用开放寻址：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 伪代码：开放寻址方案</span></span><br><span class="line">vector&lt;optional&lt;pair&lt;Key, Value&gt;&gt;&gt; table;</span><br><span class="line"><span class="comment">// multimap 需要额外的逻辑来处理重复键</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="性能对比总结"><a href="#性能对比总结" class="headerlink" title="性能对比总结"></a>性能对比总结</h4><p><strong><code>unordered_multimap</code> 的性能特点：</strong></p>
+<ul>
+<li>✅ <strong>插入可能更快</strong>：不需要检查键是否重复</li>
+<li>❌ <strong>查找通常更慢</strong>：需要处理多个相同键的元素</li>
+<li>❌ <strong>删除可能更慢</strong>：需要删除所有匹配项</li>
+<li>❌ <strong>内存使用可能更多</strong>：存储重复键的开销</li>
+</ul>
+<p><strong><code>unordered_map</code> 的性能特点：</strong></p>
+<ul>
+<li>❌ <strong>插入可能稍慢</strong>：需要检查键是否已存在</li>
+<li>✅ <strong>查找通常更快</strong>：找到第一个匹配项即可返回</li>
+<li>✅ <strong>删除通常更快</strong>：只需删除一个元素</li>
+<li>✅ <strong>内存使用更少</strong>：每个键只存储一次</li>
+</ul>
+<h4 id="实际建议"><a href="#实际建议" class="headerlink" title="实际建议"></a>实际建议</h4><ol>
+<li><strong>如果不允许重复键</strong>：使用 <code>unordered_map</code>，性能更好</li>
+<li><strong>如果需要重复键</strong>：使用 <code>unordered_multimap</code>，这是语义需求</li>
+<li><strong>考虑替代方案</strong>：有时 <code>unordered_map&lt;Key, vector&lt;Value&gt;&gt;</code> 在某些场景性能更好</li>
+</ol>
+<p><strong>结论</strong>：两者的底层实现是相似的，性能差异主要来自处理重复键的逻辑不同，而不是数据结构本身的差异。选择哪个应该基于是否需要重复键的语义，而不是性能考虑。</p>
+<h3 id="4-3-unordered-multimap-equal-range"><a href="#4-3-unordered-multimap-equal-range" class="headerlink" title="4.3 unordered_multimap: equal_range"></a>4.3 unordered_multimap: equal_range</h3><h4 id="方案1：维护相同键的连续性（主流实现）"><a href="#方案1：维护相同键的连续性（主流实现）" class="headerlink" title="方案1：维护相同键的连续性（主流实现）"></a>方案1：维护相同键的连续性（主流实现）</h4><p>大多数标准库实现选择在插入时维护相同键的连续性：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">insert</span><span class="params">(<span class="type">const</span> value_type&amp; value)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> hash = <span class="built_in">hasher_</span>(value.first);</span><br><span class="line">    <span class="type">size_t</span> bucket_idx = hash % buckets_.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">    Node* current = buckets_[bucket_idx];</span><br><span class="line">    Node* prev = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查找插入位置：找到第一个相同键的元素，或者找到插入点</span></span><br><span class="line">    <span class="keyword">while</span> (current != <span class="literal">nullptr</span> &amp;&amp; current-&gt;key != value.first) &#123;</span><br><span class="line">        prev = current;</span><br><span class="line">        current = current-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建新节点</span></span><br><span class="line">    Node* new_node = <span class="built_in">create_node</span>(value, hash);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (current != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="comment">// 找到相同键的元素，插入到该序列的末尾</span></span><br><span class="line">        Node* last_same_key = current;</span><br><span class="line">        <span class="keyword">while</span> (last_same_key-&gt;next != <span class="literal">nullptr</span> &amp;&amp; </span><br><span class="line">               last_same_key-&gt;next-&gt;key == value.first) &#123;</span><br><span class="line">            last_same_key = last_same_key-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        new_node-&gt;next = last_same_key-&gt;next;</span><br><span class="line">        last_same_key-&gt;next = new_node;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 没有相同键的元素，插入到链表末尾或头部</span></span><br><span class="line">        <span class="keyword">if</span> (prev == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            <span class="comment">// 空桶，插入头部</span></span><br><span class="line">            new_node-&gt;next = buckets_[bucket_idx];</span><br><span class="line">            buckets_[bucket_idx] = new_node;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 非空桶，插入到末尾</span></span><br><span class="line">            new_node-&gt;next = prev-&gt;next;</span><br><span class="line">            prev-&gt;next = new_node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">iterator</span>(new_node, <span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="方案2：不保证连续性，equal-range-遍历整个桶"><a href="#方案2：不保证连续性，equal-range-遍历整个桶" class="headerlink" title="方案2：不保证连续性，equal_range 遍历整个桶"></a>方案2：不保证连续性，equal_range 遍历整个桶</h4><p>有些实现选择牺牲 <code>equal_range</code> 的性能来保证插入性能：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::pair&lt;iterator, iterator&gt; <span class="title">equal_range</span><span class="params">(<span class="type">const</span> Key&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> hash = <span class="built_in">hasher_</span>(key);</span><br><span class="line">    <span class="type">size_t</span> bucket_idx = hash % buckets_.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 必须遍历整个桶来收集所有匹配的元素</span></span><br><span class="line">    std::vector&lt;Node*&gt; matches;</span><br><span class="line">    Node* current = buckets_[bucket_idx];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (current != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (current-&gt;key == key) &#123;</span><br><span class="line">            matches.<span class="built_in">push_back</span>(current);</span><br><span class="line">        &#125;</span><br><span class="line">        current = current-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (matches.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">make_pair</span>(<span class="built_in">end</span>(), <span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回第一个和最后一个匹配元素的迭代器</span></span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">make_pair</span>(<span class="built_in">iterator</span>(matches.<span class="built_in">front</span>(), <span class="keyword">this</span>), </span><br><span class="line">                         <span class="built_in">iterator</span>(matches.<span class="built_in">back</span>()-&gt;next, <span class="keyword">this</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>但这种方案的 <code>equal_range</code> 复杂度是 O(桶大小) 而不是 O(重复键数量)。</p>
+<h4 id="主流标准库的实现策略"><a href="#主流标准库的实现策略" class="headerlink" title="主流标准库的实现策略"></a>主流标准库的实现策略</h4><h5 id="GCC-libstdc-的实现"><a href="#GCC-libstdc-的实现" class="headerlink" title="GCC (libstdc++) 的实现"></a>GCC (libstdc++) 的实现</h5><p>GCC 的实现实际上<strong>维护相同键的连续性</strong>：</p>
+<ul>
+<li>插入时找到相同键的序列，插入到该序列的适当位置</li>
+<li>保证相同键的元素在链表中连续存储</li>
+<li>这样可以实现高效的 <code>equal_range</code></li>
+</ul>
+<h5 id="LLVM-libc-的实现"><a href="#LLVM-libc-的实现" class="headerlink" title="LLVM (libc++) 的实现"></a>LLVM (libc++) 的实现</h5><p>libc++ 也采用类似策略，但可能有不同的优化：</p>
+<ul>
+<li>通常维护相同键的连续性</li>
+<li>可能对小桶使用不同策略</li>
+</ul>
+<h4 id="性能权衡"><a href="#性能权衡" class="headerlink" title="性能权衡"></a>性能权衡</h4><h5 id="维护连续性的代价"><a href="#维护连续性的代价" class="headerlink" title="维护连续性的代价"></a>维护连续性的代价</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 插入性能分析</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">insert_performance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 情况1：插入新键 - O(桶大小)，需要遍历找到插入位置</span></span><br><span class="line">    <span class="comment">// 情况2：插入重复键 - O(重复键数量)，需要找到相同键序列的末尾</span></span><br><span class="line">    <span class="comment">// 最坏情况：O(n)</span></span><br><span class="line">    <span class="comment">// 平均情况：良好哈希函数下 O(1)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="不维护连续性的代价"><a href="#不维护连续性的代价" class="headerlink" title="不维护连续性的代价"></a>不维护连续性的代价</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// equal_range 性能分析  </span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">equal_range_performance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 情况1：维护连续性 - O(重复键数量)</span></span><br><span class="line">    <span class="comment">// 情况2：不维护连续性 - O(桶大小)</span></span><br><span class="line">    <span class="comment">// 对于查找密集型应用，这可能是不可接受的</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="实际的-equal-range-实现（维护连续性时）"><a href="#实际的-equal-range-实现（维护连续性时）" class="headerlink" title="实际的 equal_range 实现（维护连续性时）"></a>实际的 equal_range 实现（维护连续性时）</h4><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::pair&lt;iterator, iterator&gt; <span class="title">equal_range</span><span class="params">(<span class="type">const</span> Key&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> hash = <span class="built_in">hasher_</span>(key);</span><br><span class="line">    <span class="type">size_t</span> bucket_idx = hash % buckets_.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">    Node* current = buckets_[bucket_idx];</span><br><span class="line">    Node* first_match = <span class="literal">nullptr</span>;</span><br><span class="line">    Node* last_match = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历找到第一个匹配的键</span></span><br><span class="line">    <span class="keyword">while</span> (current != <span class="literal">nullptr</span> &amp;&amp; current-&gt;key != key) &#123;</span><br><span class="line">        current = current-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (current == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">make_pair</span>(<span class="built_in">end</span>(), <span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 找到了第一个匹配项</span></span><br><span class="line">    first_match = current;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 继续遍历直到键不匹配（由于维护了连续性，这很快）</span></span><br><span class="line">    <span class="keyword">while</span> (current != <span class="literal">nullptr</span> &amp;&amp; current-&gt;key == key) &#123;</span><br><span class="line">        last_match = current;</span><br><span class="line">        current = current-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">make_pair</span>(<span class="built_in">iterator</span>(first_match, <span class="keyword">this</span>),</span><br><span class="line">                         <span class="built_in">iterator</span>(last_match-&gt;next, <span class="keyword">this</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><strong>关键结论：</strong></p>
+<ul>
+<li>✅ <strong>主流实现确实维护相同键的连续性</strong>，即使这意味着插入时可能需要更多工作</li>
+<li>✅ 这样保证了 <code>equal_range</code> 的高效性（O(重复键数量)）</li>
+<li>✅ 插入性能的轻微下降被认为是可接受的权衡</li>
+<li>❌ 如果不在插入时维护连续性，<code>equal_range</code> 将需要遍历整个桶</li>
+</ul>
+<p>所以您的质疑是完全正确的——如果简单地总是在头部插入，确实无法保证 <code>equal_range</code> 的连续性和高效性。实际的实现通过更智能的插入策略来解决这个问题。</p>
+<h3 id="4-4-multimap"><a href="#4-4-multimap" class="headerlink" title="4.4 multimap"></a>4.4 multimap</h3><p>您指出了一个非常重要的C++标准要求！确实，C++标准明确规定了multimap中相同键元素的插入顺序必须被保持。让我详细解释这是如何实现的。</p>
+<h4 id="C-标准的要求"><a href="#C-标准的要求" class="headerlink" title="C++标准的要求"></a>C++标准的要求</h4><p>根据C++标准（§26.4.6.2）：</p>
+<ul>
+<li><code>emplace</code> 和无提示的 <code>insert</code> 总是插入到<strong>上限</strong>(upper bound)</li>
+<li>在等效范围内，等效元素的顺序是<strong>插入顺序</strong></li>
+<li>只有使用提示的 <code>insert</code> 或 <code>emplace_hint</code> 才可能改变这个顺序</li>
+</ul>
+<h4 id="实现方案：基于时间戳的比较"><a href="#实现方案：基于时间戳的比较" class="headerlink" title="实现方案：基于时间戳的比较"></a>实现方案：基于时间戳的比较</h4><p>为了满足这个要求，主流实现通常采用<strong>方法1的变种：时间戳比较法</strong></p>
+<h5 id="核心实现"><a href="#核心实现" class="headerlink" title="核心实现"></a>核心实现</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> Value&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">multimap</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// 每个节点存储插入顺序信息</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        Key key;</span><br><span class="line">        Value value;</span><br><span class="line">        <span class="type">uint64_t</span> insertion_order;  <span class="comment">// 插入时间戳</span></span><br><span class="line">        <span class="comment">// ... 红黑树节点其他字段</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">static</span> std::atomic&lt;<span class="type">uint64_t</span>&gt; global_counter_;  <span class="comment">// 全局插入计数器</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 比较函数考虑插入顺序</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Compare</span> &#123;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> Node* a, <span class="type">const</span> Node* b)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">            <span class="comment">// 首先比较键</span></span><br><span class="line">            <span class="keyword">if</span> (a-&gt;key &lt; b-&gt;key) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (b-&gt;key &lt; a-&gt;key) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 键相等时，比较插入顺序（后插入的&quot;更大&quot;）</span></span><br><span class="line">            <span class="keyword">return</span> a-&gt;insertion_order &lt; b-&gt;insertion_order;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    RBTree&lt;Node, Compare&gt; tree_;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">iterator <span class="title">insert</span><span class="params">(<span class="type">const</span> value_type&amp; value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">emplace</span>(value.first, value.second);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function">    iterator <span class="title">emplace</span><span class="params">(Args&amp;&amp;... args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 分配新节点</span></span><br><span class="line">        Node* new_node = <span class="built_in">allocate_node</span>(std::forward&lt;Args&gt;(args)...);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分配插入顺序标识（总是递增）</span></span><br><span class="line">        new_node-&gt;insertion_order = global_counter_++;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 插入到红黑树中</span></span><br><span class="line">        <span class="comment">// 由于比较函数考虑插入顺序，新节点会自动插入到相同键区域的末尾</span></span><br><span class="line">        <span class="keyword">return</span> tree_.<span class="built_in">insert_equal</span>(new_node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 带提示的插入</span></span><br><span class="line">    <span class="function">iterator <span class="title">insert</span><span class="params">(const_iterator hint, <span class="type">const</span> value_type&amp; value)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 实现提示插入逻辑...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="为什么这样满足”插入到上限”"><a href="#为什么这样满足”插入到上限”" class="headerlink" title="为什么这样满足”插入到上限”"></a>为什么这样满足”插入到上限”</h5><p>在比较函数中：</p>
+<ul>
+<li>当键相等时，插入顺序更大的节点被认为”更大”</li>
+<li>因此新插入的节点在相同键的范围内总是被认为是”最大”的</li>
+<li>在红黑树的有序遍历中，新节点会出现在相同键区域的<strong>末尾</strong></li>
+</ul>
+<p>这正好符合”插入到上限”的要求。</p>
+<h5 id="具体插入过程示例"><a href="#具体插入过程示例" class="headerlink" title="具体插入过程示例"></a>具体插入过程示例</h5><p>假设我们按顺序插入：</p>
+<ol>
+<li><code>insert(1, &quot;a&quot;)</code> - insertion_order &#x3D; 0</li>
+<li><code>insert(2, &quot;b&quot;)</code> - insertion_order &#x3D; 1  </li>
+<li><code>insert(1, &quot;c&quot;)</code> - insertion_order &#x3D; 2</li>
+<li><code>insert(1, &quot;d&quot;)</code> - insertion_order &#x3D; 3</li>
+</ol>
+<p>红黑树中的顺序：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1,&quot;a&quot;] (order=0) -&gt; [1,&quot;c&quot;] (order=2) -&gt; [1,&quot;d&quot;] (order=3) -&gt; [2,&quot;b&quot;] (order=1)</span><br></pre></td></tr></table></figure></div>
+
+<p>调用 <code>equal_range(1)</code> 返回的范围是：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1,&quot;a&quot;] -&gt; [1,&quot;c&quot;] -&gt; [1,&quot;d&quot;]</span><br></pre></td></tr></table></figure></div>
+
+<p>保持了插入顺序！</p>
+<h4 id="带提示插入的实现"><a href="#带提示插入的实现" class="headerlink" title="带提示插入的实现"></a>带提示插入的实现</h4><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">insert</span><span class="params">(const_iterator hint, <span class="type">const</span> value_type&amp; value)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建新节点</span></span><br><span class="line">    Node* new_node = <span class="built_in">allocate_node</span>(value);</span><br><span class="line">    new_node-&gt;insertion_order = global_counter_++;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果提示有效且可以优化插入</span></span><br><span class="line">    <span class="keyword">if</span> (hint != <span class="built_in">end</span>() &amp;&amp; <span class="built_in">can_use_hint</span>(hint, new_node)) &#123;</span><br><span class="line">        <span class="comment">// 使用提示进行优化插入</span></span><br><span class="line">        <span class="keyword">return</span> tree_.<span class="built_in">insert_with_hint</span>(hint, new_node);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 回退到普通插入</span></span><br><span class="line">        <span class="keyword">return</span> tree_.<span class="built_in">insert_equal</span>(new_node);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">can_use_hint</span><span class="params">(const_iterator hint, Node* new_node)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 检查提示是否真的能优化插入</span></span><br><span class="line">    <span class="comment">// 比如提示位置确实是要插入的位置</span></span><br><span class="line">    <span class="comment">// 这需要复杂的边界条件检查</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="内存优化策略"><a href="#内存优化策略" class="headerlink" title="内存优化策略"></a>内存优化策略</h4><p>虽然存储<code>insertion_order</code>需要额外内存，但实现会进行优化：</p>
+<h5 id="方案1：紧凑的时间戳"><a href="#方案1：紧凑的时间戳" class="headerlink" title="方案1：紧凑的时间戳"></a>方案1：紧凑的时间戳</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用32位而不是64位来节省空间</span></span><br><span class="line"><span class="type">uint32_t</span> insertion_order;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者使用相对时间戳</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    Key key;</span><br><span class="line">    Value value;</span><br><span class="line">    <span class="type">uint16_t</span> relative_order;  <span class="comment">// 在相同键范围内的相对顺序</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="方案2：延迟分配"><a href="#方案2：延迟分配" class="headerlink" title="方案2：延迟分配"></a>方案2：延迟分配</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 只有需要时才分配顺序标识</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    Key key;</span><br><span class="line">    Value value;</span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="type">uint64_t</span> insertion_order;</span><br><span class="line">        Node* next_in_order;  <span class="comment">// 用于维护顺序的链表</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="type">bool</span> use_linked_list;  <span class="comment">// 标记使用哪种方式</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="主流实现的实际情况：GCC-libstdc-的实现"><a href="#主流实现的实际情况：GCC-libstdc-的实现" class="headerlink" title="主流实现的实际情况：GCC (libstdc++) 的实现"></a>主流实现的实际情况：GCC (libstdc++) 的实现</h4><p>GCCs使用插入到upper_bound的方式：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 伪代码，展示GCC的实现思路</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">_Rb_tree_node</span> &#123;</span><br><span class="line">    <span class="comment">// ... 标准节点字段</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实际上GCC可能不直接存储时间戳，而是通过其他方式</span></span><br><span class="line">    <span class="comment">// 维护插入顺序，比如在比较函数中考虑节点创建顺序</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 比较函数确保插入顺序</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> node_type&amp; __x, <span class="type">const</span> node_type&amp; __y)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (_M_impl._M_key_compare(_S_key(__x), _S_key(__y)))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (_M_impl._M_key_compare(_S_key(__y), _S_key(__x)))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 键相等时，确保新节点在旧节点之后</span></span><br><span class="line">    <span class="comment">// 这通过某种方式保证插入顺序</span></span><br><span class="line">    <span class="keyword">return</span> __x &lt; __y;  <span class="comment">// 或者类似的机制</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h4><p>这种实现的代价：</p>
+<ul>
+<li>✅ 保证插入顺序符合标准要求</li>
+<li>✅ <code>equal_range</code> 保持插入顺序</li>
+<li>❌ 每个节点需要额外存储空间（通常8字节）</li>
+<li>❌ 比较操作稍慢（需要比较额外字段）</li>
+</ul>
+<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p>C++标准要求的插入顺序是通过以下方式实现的：</p>
+<ol>
+<li><strong>每个节点存储插入顺序信息</strong>（如时间戳）</li>
+<li><strong>比较函数在键相等时考虑插入顺序</strong></li>
+<li>**新插入的节点被认为”更大”**，因此插入到相同键区域的末尾</li>
+<li><strong>这保证了<code>equal_range</code>返回的元素按插入顺序排列</strong></li>
+</ol>
+<p>这种实现虽然需要额外存储空间，但确保了标准规定的语义，使得multimap的行为对于使用者来说是确定和可预测的。</p>
+<h3 id="4-5-multimap-equal-range"><a href="#4-5-multimap-equal-range" class="headerlink" title="4.5 multimap: equal_range"></a>4.5 multimap: equal_range</h3><p>对于基于红黑树的 <code>std::multimap</code>，<code>equal_range</code> 的实现要比哈希表版本简单和高效得多，这得益于红黑树的有序性。</p>
+<h4 id="equal-range-的实现原理"><a href="#equal-range-的实现原理" class="headerlink" title="equal_range 的实现原理"></a><code>equal_range</code> 的实现原理</h4><h5 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h5><ol>
+<li><strong>找到第一个匹配的键</strong>（下界）</li>
+<li><strong>找到第一个不匹配的键</strong>（上界）</li>
+<li><strong>返回这个范围</strong></li>
+</ol>
+<h5 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> Value&gt;</span><br><span class="line">std::pair&lt;iterator, iterator&gt; </span><br><span class="line">multimap&lt;Key, Value&gt;::<span class="built_in">equal_range</span>(<span class="type">const</span> Key&amp; key) &#123;</span><br><span class="line">    <span class="comment">// 方法1：使用 lower_bound 和 upper_bound</span></span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">make_pair</span>(<span class="built_in">lower_bound</span>(key), <span class="built_in">upper_bound</span>(key));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 或者方法2：直接实现（更高效）</span></span><br><span class="line">    <span class="comment">// return equal_range_impl(key);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="lower-bound-和-upper-bound-的实现"><a href="#lower-bound-和-upper-bound-的实现" class="headerlink" title="lower_bound 和 upper_bound 的实现"></a><code>lower_bound</code> 和 <code>upper_bound</code> 的实现</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">lower_bound</span><span class="params">(<span class="type">const</span> Key&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 找到第一个 &gt;= key 的元素</span></span><br><span class="line">    Node* current = root_;</span><br><span class="line">    Node* result = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (current != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">comp_</span>(current-&gt;key, key)) &#123;</span><br><span class="line">            <span class="comment">// current-&gt;key &gt;= key，可能是我们要找的</span></span><br><span class="line">            result = current;</span><br><span class="line">            current = current-&gt;left; <span class="comment">// 尝试找更小的但仍然 &gt;= key 的</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            current = current-&gt;right; <span class="comment">// 当前节点太小，向右找</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">iterator</span>(result, <span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">iterator <span class="title">upper_bound</span><span class="params">(<span class="type">const</span> Key&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 找到第一个 &gt; key 的元素</span></span><br><span class="line">    Node* current = root_;</span><br><span class="line">    Node* result = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (current != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">comp_</span>(key, current-&gt;key)) &#123;</span><br><span class="line">            <span class="comment">// current-&gt;key &gt; key，可能是我们要找的</span></span><br><span class="line">            result = current;</span><br><span class="line">            current = current-&gt;left; <span class="comment">// 尝试找更小的但仍然 &gt; key 的</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            current = current-&gt;right; <span class="comment">// 当前节点 &lt;= key，向右找</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">iterator</span>(result, <span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="更高效的直接实现"><a href="#更高效的直接实现" class="headerlink" title="更高效的直接实现"></a>更高效的直接实现</h5><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::pair&lt;iterator, iterator&gt; <span class="title">equal_range_impl</span><span class="params">(<span class="type">const</span> Key&amp; key)</span> </span>&#123;</span><br><span class="line">    Node* current = root_;</span><br><span class="line">    Node* first = <span class="literal">nullptr</span>;  <span class="comment">// 第一个匹配的元素</span></span><br><span class="line">    Node* last = <span class="literal">nullptr</span>;   <span class="comment">// 最后一个匹配的元素的下一位置</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 一次性同时找到上下界</span></span><br><span class="line">    <span class="keyword">while</span> (current != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">comp_</span>(current-&gt;key, key)) &#123;</span><br><span class="line">            <span class="comment">// 当前节点 &lt; key，向右子树找</span></span><br><span class="line">            current = current-&gt;right;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">comp_</span>(key, current-&gt;key)) &#123;</span><br><span class="line">            <span class="comment">// 当前节点 &gt; key，向左子树找</span></span><br><span class="line">            last = current; <span class="comment">// 记录可能的上界</span></span><br><span class="line">            current = current-&gt;left;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 找到匹配的键！</span></span><br><span class="line">            <span class="comment">// first 应该在左子树中相同键的最左节点</span></span><br><span class="line">            <span class="comment">// last 应该在右子树中相同键结束后的第一个节点</span></span><br><span class="line"></span><br><span class="line">            first = current;</span><br><span class="line">            last = current;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在左子树中找第一个匹配的键</span></span><br><span class="line">            Node* left_temp = current-&gt;left;</span><br><span class="line">            <span class="keyword">while</span> (left_temp != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!<span class="built_in">comp_</span>(left_temp-&gt;key, key)) &#123; <span class="comment">// left_temp-&gt;key &gt;= key</span></span><br><span class="line">                    <span class="keyword">if</span> (!<span class="built_in">comp_</span>(key, left_temp-&gt;key)) &#123; <span class="comment">// left_temp-&gt;key == key</span></span><br><span class="line">                        first = left_temp;</span><br><span class="line">                    &#125;</span><br><span class="line">                    left_temp = left_temp-&gt;left;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    left_temp = left_temp-&gt;right;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在右子树中找最后一个匹配的键的下一个位置</span></span><br><span class="line">            Node* right_temp = current-&gt;right;</span><br><span class="line">            <span class="keyword">while</span> (right_temp != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">comp_</span>(key, right_temp-&gt;key)) &#123; <span class="comment">// right_temp-&gt;key &gt; key</span></span><br><span class="line">                    last = right_temp;</span><br><span class="line">                    right_temp = right_temp-&gt;left;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    right_temp = right_temp-&gt;right;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (first == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="comment">// 没有找到匹配的键</span></span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">make_pair</span>(<span class="built_in">iterator</span>(<span class="literal">nullptr</span>, <span class="keyword">this</span>), <span class="built_in">iterator</span>(<span class="literal">nullptr</span>, <span class="keyword">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">make_pair</span>(<span class="built_in">iterator</span>(first, <span class="keyword">this</span>), <span class="built_in">iterator</span>(last, <span class="keyword">this</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="实际示例"><a href="#实际示例" class="headerlink" title="实际示例"></a>实际示例</h4><p>假设我们有一个包含以下元素的 <code>multimap</code>：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1, &quot;a&quot;] -&gt; [2, &quot;b&quot;] -&gt; [2, &quot;c&quot;] -&gt; [2, &quot;d&quot;] -&gt; [3, &quot;e&quot;]</span><br></pre></td></tr></table></figure></div>
+
+<p>调用 <code>equal_range(2)</code>：</p>
+<ul>
+<li><code>lower_bound(2)</code> 返回指向 <code>[2, &quot;b&quot;]</code> 的迭代器</li>
+<li><code>upper_bound(2)</code> 返回指向 <code>[3, &quot;e&quot;]</code> 的迭代器</li>
+<li>范围就是 <code>[[2, &quot;b&quot;], [3, &quot;e&quot;])</code>，包含所有键为2的元素</li>
+</ul>
+<h4 id="性能优势"><a href="#性能优势" class="headerlink" title="性能优势"></a>性能优势</h4><h5 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h5><ul>
+<li><strong>查找范围</strong>：O(log n)</li>
+<li><strong>遍历范围</strong>：O(k)，其中 k 是重复键的数量</li>
+<li><strong>总体</strong>：O(log n + k)</li>
+</ul>
+<h5 id="与-unordered-multimap-对比"><a href="#与-unordered-multimap-对比" class="headerlink" title="与 unordered_multimap 对比"></a>与 <code>unordered_multimap</code> 对比</h5><table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>std::multimap</code> (红黑树)</th>
+<th><code>std::unordered_multimap</code> (哈希表)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>equal_range 复杂度</strong></td>
+<td>O(log n)</td>
+<td>O(重复键数量)</td>
+</tr>
+<tr>
+<td><strong>元素顺序</strong></td>
+<td>有序</td>
+<td>无序</td>
+</tr>
+<tr>
+<td><strong>范围查询</strong></td>
+<td>支持高效的范围查询</td>
+<td>仅支持相等查询</td>
+</tr>
+<tr>
+<td><strong>内存局部性</strong></td>
+<td>较差（指针跳转）</td>
+<td>较好（链表连续）</td>
+</tr>
+</tbody></table>
+<h4 id="迭代器的连续性"><a href="#迭代器的连续性" class="headerlink" title="迭代器的连续性"></a>迭代器的连续性</h4><p>由于红黑树的有序性，<code>equal_range</code> 返回的迭代器范围具有完美的连续性：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">std::multimap&lt;<span class="type">int</span>, std::string&gt; mmap = &#123;</span><br><span class="line">    &#123;<span class="number">1</span>, <span class="string">&quot;a&quot;</span>&#125;, &#123;<span class="number">2</span>, <span class="string">&quot;b&quot;</span>&#125;, &#123;<span class="number">2</span>, <span class="string">&quot;c&quot;</span>&#125;, &#123;<span class="number">2</span>, <span class="string">&quot;d&quot;</span>&#125;, &#123;<span class="number">3</span>, <span class="string">&quot;e&quot;</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> range = mmap.<span class="built_in">equal_range</span>(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以安全地假设这些迭代器是连续的</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = range.first; it != range.second; ++it) &#123;</span><br><span class="line">    std::cout &lt;&lt; it-&gt;second &lt;&lt; <span class="string">&quot; &quot;</span>; <span class="comment">// 输出: b c d</span></span><br><span class="line">    <span class="comment">// 迭代器会按顺序遍历 [2,&quot;b&quot;] -&gt; [2,&quot;c&quot;] -&gt; [2,&quot;d&quot;]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h4><p><code>std::multimap</code>（基于红黑树）的 <code>equal_range</code> 实现：</p>
+<ol>
+<li><strong>利用有序性</strong>：相同键的元素自然连续存储</li>
+<li><strong>高效查找</strong>：O(log n) 时间找到范围边界</li>
+<li><strong>完美连续性</strong>：返回的范围迭代器保证遍历所有相同键的元素</li>
+<li><strong>简单可靠</strong>：不需要像哈希表那样维护特殊结构来保证连续性</li>
+</ol>
+<p>这使得基于红黑树的 <code>multimap</code> 在需要范围查询或有序遍历的场景下比基于哈希表的版本更有优势。</p>
+<h2 id="5-其他"><a href="#5-其他" class="headerlink" title="5. 其他"></a>5. 其他</h2><h3 id="5-1-flat-map"><a href="#5-1-flat-map" class="headerlink" title="5.1 flat_map"></a>5.1 flat_map</h3><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/6089157284" >(12 封私信 &#x2F; 81 条消息) C++23 flat_map详解 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="5-2-inplace-vector"><a href="#5-2-inplace-vector" class="headerlink" title="5.2 inplace_vector"></a>5.2 inplace_vector</h3><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/13496724681" >(12 封私信 &#x2F; 81 条消息) C++26 inplace_vector详解 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>bslma::Allocator</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/bloomberg/bde/wiki/BDE-Allocator-model" >BDE Allocator Model · bloomberg&#x2F;bde Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="5-3-hive"><a href="#5-3-hive" class="headerlink" title="5.3 hive"></a>5.3 hive</h3><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/11456846151" >(12 封私信 &#x2F; 81 条消息) std::hive 介绍 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="6-高性能订单簿"><a href="#6-高性能订单簿" class="headerlink" title="6. 高性能订单簿"></a>6. 高性能订单簿</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/695600953" >(12 封私信 &#x2F; 81 条消息) 如何设计一个高性能订单簿 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>直接用unordered_multimap</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/execution/scheduler" >std::execution::scheduler - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/execution" >执行控制库 (自 C++26 起) - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/XIao_MinK/article/details/119823355" >C++23：std::execution&#x2F;unifex导读-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -473,6 +798,13 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://chengxumiaodaren.com/docs/concurrent/cpp-future/" >C++异步编程详解：future、promise与async | 现代C++并发编程 | C++ 编程指南 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25096571040" >(25 封私信 &#x2F; 80 条消息) C++26启航：Safe C++的破晓时刻 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/661692275" >C++26 静态反射提案解析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/261735714" >(12 封私信 &#x2F; 81 条消息) 笔记目录 (对象模型、STL容器、C++技巧） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/259857549" >GCC中unordered_(multi)set&#x2F;map的实现原理 （Part 2 图解哈希表结构) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/259855411" >(12 封私信 &#x2F; 81 条消息) GCC中unordered_(multi)set&#x2F;map的实现原理 （Part 1 继承体系) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1973526858197913747" >(12 封私信 &#x2F; 81 条消息) 【047-STL篇】C++ STL map和multimap容器全面解析：深入学习，轻松掌握 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/695600953" >(12 封私信 &#x2F; 81 条消息) 如何设计一个高性能订单簿 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/container/multimap/equal_range" >std::multimap&lt;Key,T,Compare,Allocator&gt;::equal_range - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/bloomberg/bde/wiki/BDE-Allocator-model" >BDE Allocator Model · bloomberg&#x2F;bde Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -485,7 +817,7 @@
         <li><strong>Created at:</strong> 2025-08-15 01:35:50</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-08-15 01:56:28
+                <strong>Updated at:</strong> 2025-11-26 00:14:23
             </li>
         
         <li>
@@ -595,7 +927,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">C++特性</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-std-execution-x2F-coroutine%E7%BB%93%E5%90%88"><span class="nav-text">1. std::execution&#x2F;coroutine结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-text">使用协程实现的调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-text">完整示例与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%88%E7%BA%A6"><span class="nav-text">2. 合约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9D%99%E6%80%81%E5%8F%8D%E5%B0%84"><span class="nav-text">3. 静态反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-std-execution-x2F-coroutine%E7%BB%93%E5%90%88"><span class="nav-text">1. std::execution&#x2F;coroutine结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-text">使用协程实现的调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-text">完整示例与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%88%E7%BA%A6"><span class="nav-text">2. 合约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9D%99%E6%80%81%E5%8F%8D%E5%B0%84"><span class="nav-text">3. 静态反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-multimap-x2F-unordered-multimap"><span class="nav-text">4. multimap&#x2F;unordered_multimap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-unordered-multimap"><span class="nav-text">4.1 unordered_multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-unordered-map-x2F-unordered-multimap"><span class="nav-text">4.2 unordered_map&#x2F;unordered_multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-unordered-multimap-equal-range"><span class="nav-text">4.3 unordered_multimap: equal_range</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-multimap"><span class="nav-text">4.4 multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-multimap-equal-range"><span class="nav-text">4.5 multimap: equal_range</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%85%B6%E4%BB%96"><span class="nav-text">5. 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-flat-map"><span class="nav-text">5.1 flat_map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-inplace-vector"><span class="nav-text">5.2 inplace_vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-hive"><span class="nav-text">5.3 hive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A2%E5%8D%95%E7%B0%BF"><span class="nav-text">6. 高性能订单簿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
