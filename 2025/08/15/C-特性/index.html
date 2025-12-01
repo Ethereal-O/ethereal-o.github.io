@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. std::execution&#x2F;coroutine结合核心概念在深入代码之前，我们先了解几个关键概念：  执行上下文 (Execution Context): 代表了可以执行工作的“地方”，例如一个线程池、一个 I&#x2F;O 事件循环或一个 GPU 流。 调度器 (Scheduler): 一个轻量级的句柄，代表了一个执行上下文。它的主要职责是创建一个“调度发送者”（Schedul">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-08-14T17:35:50.000Z">
-<meta property="article:modified_time" content="2025-11-25T16:14:23.525Z">
+<meta property="article:modified_time" content="2025-12-01T09:59:52.355Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-26 00:14:23</span>
-            <span class="mobile">2025-11-26 00:14</span>
+            <span class="desktop">2025-12-01 17:59:52</span>
+            <span class="mobile">2025-12-01 17:59</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -785,6 +785,91 @@
 <h3 id="5-3-hive"><a href="#5-3-hive" class="headerlink" title="5.3 hive"></a>5.3 hive</h3><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/11456846151" >(12 封私信 &#x2F; 81 条消息) std::hive 介绍 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <h2 id="6-高性能订单簿"><a href="#6-高性能订单簿" class="headerlink" title="6. 高性能订单簿"></a>6. 高性能订单簿</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/695600953" >(12 封私信 &#x2F; 81 条消息) 如何设计一个高性能订单簿 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p>直接用unordered_multimap</p>
+<h2 id="7-三五法则"><a href="#7-三五法则" class="headerlink" title="7. 三五法则"></a>7. 三五法则</h2><p>在C++开发中，<strong>三五法则（Rule of Three &#x2F; Rule of Five）</strong> 是关于<strong>资源管理</strong>（内存、文件句柄、网络连接等）的核心指导原则。它们规定了当你需要自定义类的某些特殊成员函数时，通常也需要自定义其他的相关函数。</p>
+<p>简单来说，这是为了防止<strong>内存泄漏</strong>（Memory Leaks）和<strong>双重释放</strong>（Double Free）等严重错误。</p>
+<hr>
+<h3 id="7-1-三法则-The-Rule-of-Three"><a href="#7-1-三法则-The-Rule-of-Three" class="headerlink" title="7.1 三法则 (The Rule of Three)"></a>7.1 三法则 (The Rule of Three)</h3><p>这个法则源于 C++98 标准。它指出，如果你的类<strong>需要</strong>显式定义以下三个特殊成员函数中的<strong>任意一个</strong>，那么你通常也需要显式定义<strong>全部三个</strong>：</p>
+<ol>
+<li><p><strong>析构函数</strong> (<code>Destructor</code>)：<code>~Class()</code></p>
+</li>
+<li><p><strong>拷贝构造函数</strong> (<code>Copy Constructor</code>)：<code>Class(const Class&amp;)</code></p>
+</li>
+<li><p><strong>拷贝赋值运算符</strong> (<code>Copy Assignment Operator</code>)：<code>Class&amp; operator=(const Class&amp;)</code></p>
+</li>
+</ol>
+<h4 id="为什么需要三法则？"><a href="#为什么需要三法则？" class="headerlink" title="为什么需要三法则？"></a>为什么需要三法则？</h4><p>默认情况下，C++ 编译器会为你生成这些函数，但它们只做<strong>浅拷贝</strong>（Shallow Copy）。如果你的类管理了动态内存（例如包含一个原始指针 <code>int* ptr</code>）：</p>
+<ul>
+<li><p><strong>浅拷贝的问题：</strong> 两个对象会指向同一块内存。当其中一个对象析构时，内存被释放；当第二个对象析构时，它会尝试释放已经被释放的内存，导致程序崩溃（Double Free）。</p>
+</li>
+<li><p><strong>解决方案：</strong> 你必须手动实现<strong>深拷贝</strong>（Deep Copy），即重新分配内存并复制数据。</p>
+</li>
+</ul>
+<h4 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h4><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RuleOfThree</span> &#123;</span><br><span class="line">    <span class="type">int</span>* data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">RuleOfThree</span>(<span class="type">int</span> value) : <span class="built_in">data</span>(<span class="keyword">new</span> <span class="built_in">int</span>(value)) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 析构函数 (释放资源)</span></span><br><span class="line">    ~<span class="built_in">RuleOfThree</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span> data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 拷贝构造函数 (深拷贝)</span></span><br><span class="line">    <span class="built_in">RuleOfThree</span>(<span class="type">const</span> RuleOfThree&amp; other) : <span class="built_in">data</span>(<span class="keyword">new</span> <span class="built_in">int</span>(*other.data)) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 拷贝赋值运算符 (深拷贝 + 自赋值检测)</span></span><br><span class="line">    RuleOfThree&amp; <span class="keyword">operator</span>=(<span class="type">const</span> RuleOfThree&amp; other) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;other) &#123; <span class="comment">// 防止自我赋值</span></span><br><span class="line">            <span class="keyword">delete</span> data;      <span class="comment">// 释放旧资源</span></span><br><span class="line">            data = <span class="keyword">new</span> <span class="built_in">int</span>(*other.data); <span class="comment">// 分配新资源并复制</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h3 id="7-2-五法则-The-Rule-of-Five"><a href="#7-2-五法则-The-Rule-of-Five" class="headerlink" title="7.2 五法则 (The Rule of Five)"></a>7.2 五法则 (The Rule of Five)</h3><p>随着 <strong>C++11</strong> 的引入，为了优化性能，增加了<strong>移动语义</strong>（Move Semantics）。三法则扩展成了五法则。</p>
+<p>五法则指出，如果你的类定义了三法则中的任何一个，或者是定义了移动操作，为了获得最佳性能和正确的资源管理，你应该处理好以下<strong>五个</strong>函数：</p>
+<ol>
+<li><p>析构函数</p>
+</li>
+<li><p>拷贝构造函数</p>
+</li>
+<li><p>拷贝赋值运算符</p>
+</li>
+<li><p><strong>移动构造函数</strong> (<code>Move Constructor</code>)：<code>Class(Class&amp;&amp;)</code></p>
+</li>
+<li><p><strong>移动赋值运算符</strong> (<code>Move Assignment Operator</code>)：<code>Class&amp; operator=(Class&amp;&amp;)</code></p>
+</li>
+</ol>
+<h4 id="为什么需要五法则？"><a href="#为什么需要五法则？" class="headerlink" title="为什么需要五法则？"></a>为什么需要五法则？</h4><p>如果你只实现了三法则（深拷贝），当涉及临时对象（例如函数返回的对象）时，程序会进行昂贵的深拷贝操作。</p>
+<p>移动操作允许我们直接“窃取”临时对象的资源（将指针指向转交，并将原指针置空），从而避免不必要的内存分配，大幅提升性能。</p>
+<h4 id="代码示例（在三法则基础上增加）"><a href="#代码示例（在三法则基础上增加）" class="headerlink" title="代码示例（在三法则基础上增加）"></a>代码示例（在三法则基础上增加）</h4><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 4. 移动构造函数 (窃取资源)</span></span><br><span class="line">    <span class="comment">// noexcept 告诉编译器此操作不会抛出异常，有助于进一步优化</span></span><br><span class="line">    <span class="built_in">RuleOfThree</span>(RuleOfThree&amp;&amp; other) <span class="keyword">noexcept</span> : <span class="built_in">data</span>(other.data) &#123;</span><br><span class="line">        other.data = <span class="literal">nullptr</span>; <span class="comment">// 将源对象置空，防止析构时释放资源</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 移动赋值运算符 (窃取资源 + 清理自身)</span></span><br><span class="line">    RuleOfThree&amp; <span class="keyword">operator</span>=(RuleOfThree&amp;&amp; other) <span class="keyword">noexcept</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;other) &#123;</span><br><span class="line">            <span class="keyword">delete</span> data;         <span class="comment">// 释放当前资源</span></span><br><span class="line">            data = other.data;   <span class="comment">// 窃取资源</span></span><br><span class="line">            other.data = <span class="literal">nullptr</span>; <span class="comment">// 将源对象置空</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h3 id="7-3-零法则-The-Rule-of-Zero"><a href="#7-3-零法则-The-Rule-of-Zero" class="headerlink" title="7.3 零法则 (The Rule of Zero)"></a>7.3 零法则 (The Rule of Zero)</h3><p>这是现代 C++（Modern C++）最推崇的做法。</p>
+<p><strong>零法则</strong>指出：<strong>如果不涉及手动资源管理，就不要定义任何析构函数、拷贝&#x2F;移动构造函数或赋值运算符。</strong></p>
+<h4 id="核心理念"><a href="#核心理念" class="headerlink" title="核心理念"></a>核心理念</h4><p>尽量使用 C++ 标准库提供的、已经管理好资源的类型，例如：</p>
+<ul>
+<li><p>使用 <code>std::string</code> 代替 <code>char*</code></p>
+</li>
+<li><p>使用 <code>std::vector</code> 代替动态数组</p>
+</li>
+<li><p>使用智能指针 <code>std::unique_ptr</code> 或 <code>std::shared_ptr</code> 代替原始指针</p>
+</li>
+</ul>
+<p>如果你使用了这些类型，编译器自动生成的默认函数（浅拷贝行为）通常就能正确工作（或者是智能指针会自动处理所有权转移），你完全不需要自己写那五个复杂的函数。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 零法则示例：完全不需要手写构造/析构/赋值</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RuleOfZero</span> &#123;</span><br><span class="line">    std::string name;        <span class="comment">// 自动管理内存</span></span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; scores; <span class="comment">// 自动管理内存</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h3 id="总结对比"><a href="#总结对比" class="headerlink" title="总结对比"></a>总结对比</h3><table>
+<thead>
+<tr>
+<th><strong>法则</strong></th>
+<th><strong>涉及函数数量</strong></th>
+<th><strong>适用场景</strong></th>
+<th><strong>关键点</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>三法则</strong></td>
+<td>3</td>
+<td>C++98 &#x2F; 管理原始资源</td>
+<td>必须实现<strong>深拷贝</strong>以避免双重释放。</td>
+</tr>
+<tr>
+<td><strong>五法则</strong></td>
+<td>5</td>
+<td>C++11及以后 &#x2F; 优化性能</td>
+<td>增加<strong>移动语义</strong>，将资源所有权“转移”而非“复制”。</td>
+</tr>
+<tr>
+<td><strong>零法则</strong></td>
+<td>0</td>
+<td><strong>现代 C++ 首选</strong></td>
+<td>利用 <code>std::vector</code> 或智能指针，<strong>让编译器代劳</strong>。</td>
+</tr>
+</tbody></table>
+<h3 id="这里的关键点是："><a href="#这里的关键点是：" class="headerlink" title="这里的关键点是："></a>这里的关键点是：</h3><p>如果你发现自己正在写析构函数来 <code>delete</code> 某些东西，请立刻警觉：<strong>我是否应该实现拷贝和移动操作？</strong> 或者更好的做法是：<strong>我能不能改用 <code>std::unique_ptr</code> 来避免手写这些代码？</strong></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/execution/scheduler" >std::execution::scheduler - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/execution" >执行控制库 (自 C++26 起) - cppreference.cn - C++参考手册 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/XIao_MinK/article/details/119823355" >C++23：std::execution&#x2F;unifex导读-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -817,7 +902,7 @@
         <li><strong>Created at:</strong> 2025-08-15 01:35:50</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-11-26 00:14:23
+                <strong>Updated at:</strong> 2025-12-01 17:59:52
             </li>
         
         <li>
@@ -927,7 +1012,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">C++特性</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-std-execution-x2F-coroutine%E7%BB%93%E5%90%88"><span class="nav-text">1. std::execution&#x2F;coroutine结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-text">使用协程实现的调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-text">完整示例与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%88%E7%BA%A6"><span class="nav-text">2. 合约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9D%99%E6%80%81%E5%8F%8D%E5%B0%84"><span class="nav-text">3. 静态反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-multimap-x2F-unordered-multimap"><span class="nav-text">4. multimap&#x2F;unordered_multimap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-unordered-multimap"><span class="nav-text">4.1 unordered_multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-unordered-map-x2F-unordered-multimap"><span class="nav-text">4.2 unordered_map&#x2F;unordered_multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-unordered-multimap-equal-range"><span class="nav-text">4.3 unordered_multimap: equal_range</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-multimap"><span class="nav-text">4.4 multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-multimap-equal-range"><span class="nav-text">4.5 multimap: equal_range</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%85%B6%E4%BB%96"><span class="nav-text">5. 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-flat-map"><span class="nav-text">5.1 flat_map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-inplace-vector"><span class="nav-text">5.2 inplace_vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-hive"><span class="nav-text">5.3 hive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A2%E5%8D%95%E7%B0%BF"><span class="nav-text">6. 高性能订单簿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-std-execution-x2F-coroutine%E7%BB%93%E5%90%88"><span class="nav-text">1. std::execution&#x2F;coroutine结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-text">使用协程实现的调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-text">完整示例与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-text">注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%88%E7%BA%A6"><span class="nav-text">2. 合约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9D%99%E6%80%81%E5%8F%8D%E5%B0%84"><span class="nav-text">3. 静态反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-multimap-x2F-unordered-multimap"><span class="nav-text">4. multimap&#x2F;unordered_multimap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-unordered-multimap"><span class="nav-text">4.1 unordered_multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-unordered-map-x2F-unordered-multimap"><span class="nav-text">4.2 unordered_map&#x2F;unordered_multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-unordered-multimap-equal-range"><span class="nav-text">4.3 unordered_multimap: equal_range</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-multimap"><span class="nav-text">4.4 multimap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-multimap-equal-range"><span class="nav-text">4.5 multimap: equal_range</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%85%B6%E4%BB%96"><span class="nav-text">5. 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-flat-map"><span class="nav-text">5.1 flat_map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-inplace-vector"><span class="nav-text">5.2 inplace_vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-hive"><span class="nav-text">5.3 hive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A2%E5%8D%95%E7%B0%BF"><span class="nav-text">6. 高性能订单簿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E4%B8%89%E4%BA%94%E6%B3%95%E5%88%99"><span class="nav-text">7. 三五法则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E4%B8%89%E6%B3%95%E5%88%99-The-Rule-of-Three"><span class="nav-text">7.1 三法则 (The Rule of Three)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E4%BA%94%E6%B3%95%E5%88%99-The-Rule-of-Five"><span class="nav-text">7.2 五法则 (The Rule of Five)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%E9%9B%B6%E6%B3%95%E5%88%99-The-Rule-of-Zero"><span class="nav-text">7.3 零法则 (The Rule of Zero)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94"><span class="nav-text">总结对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E7%9A%84%E5%85%B3%E9%94%AE%E7%82%B9%E6%98%AF%EF%BC%9A"><span class="nav-text">这里的关键点是：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
