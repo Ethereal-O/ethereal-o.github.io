@@ -26,7 +26,7 @@
 <meta property="og:description" content="一、 实习经历 (Internship Experience)1. 大岩资本 (Jasper Capital)面试官提问：  你对大岩资本的这段量化开发实习有什么理解？  你在简历中提到，将部分机器学习Python程序以及sklearn等库函数转变为高性能的C++程序 。你能否举一个具体的例子，说明你做了哪些维度的优化？是算法层面的，还是工程层面的（如内存管理、SIMD指令）？  你参与了深度学习">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-10-21T13:33:00.000Z">
-<meta property="article:modified_time" content="2025-11-04T06:23:22.520Z">
+<meta property="article:modified_time" content="2025-12-17T13:02:00.772Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2944,7 +2944,1027 @@
 </tr>
 </tbody></table>
 <p>通过这种组合方案，既利用了联邦学习的<strong>数据本地化</strong>优势，又利用了<strong>安全聚合</strong>技术防止了在模型聚合过程中可能出现的隐私泄露，是跨公司安全联合建模的标准实践。</p>
-<p>您是否希望我详细阐述一下<strong>加性同态加密</strong>如何具体用于<strong>联邦学习的安全聚合</strong>，包括其数学原理和实现约束？</p>
+<h3 id="五、调度面试"><a href="#五、调度面试" class="headerlink" title="五、调度面试"></a>五、调度面试</h3><ol>
+<li><h4 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h4></li>
+<li><p>调度对象</p>
+<ol>
+<li><p>计算任务</p>
+<ol>
+<li><p>k8s</p>
+</li>
+<li><p>原本的scheduler逻辑</p>
+</li>
+<li><p>Operator</p>
+</li>
+<li><p>RAY</p>
+</li>
+<li><p>自己编写的调度框架</p>
+</li>
+<li><p>湖杉科技</p>
+<ol>
+<li>冷启动时延要求</li>
+</ol>
+</li>
+<li><p>Vermeer</p>
+<ol>
+<li>灵活的调度管理</li>
+</ol>
+</li>
+<li><p>VLLM</p>
+</li>
+<li><p>SLO感知</p>
+</li>
+</ol>
+</li>
+<li><p>资源</p>
+<ol>
+<li><p>LMCache</p>
+</li>
+<li><p>树状驱逐策略</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>难点</p>
+<ol>
+<li><p>故障恢复</p>
+<ol>
+<li>备份</li>
+</ol>
+</li>
+<li><p>死锁</p>
+<ol>
+<li>帮派调度</li>
+</ol>
+</li>
+<li><p>OOP</p>
+<ol>
+<li>分离资源感知器（如何定义资源？网络等动态因素也要考虑）、资源通知器（类似k8s Informer）、算法管理器（支持用户自定义规则，抢占）、应用器、故障恢复模块、核心的一致性保证模块</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><h4 id="简历提问"><a href="#简历提问" class="headerlink" title="简历提问"></a>简历提问</h4></li>
+<li><p>解释 CSI 的 <code>Identity</code>, <code>Controller</code>, <code>Node</code> 三个服务的具体职责。你是如何处理卷的扩容和快照管理的？在超算集群上，NFS 的性能瓶颈在哪里？</p>
+<ol>
+<li><p>职责：<a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2024/07/02/csi/" >https://ethereal-o.github.io/2024/07/02/csi/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>通过底层存储系统来做</p>
+</li>
+<li><p>瓶颈是：</p>
+<ol>
+<li><p>元数据的读取：nfs元数据服务器只有一台，一定是瓶颈，即使gpfs也需要把server抽象成一台</p>
+</li>
+<li><p>多个client同时读取：因此引入pnfs（进而提到对pnfs优化）</p>
+</li>
+<li><p>锁？pnfs其实没有锁</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>湖杉科技：编写的调度系统是基于 K8s 原生 Scheduler 扩展（如 Scheduler Framework）还是独立的 Operator？你是如何度量“负载”的（显存占用？GPU 利用率？请求队列长度？）？“资源利用率提升 10%”的具体对比基准是什么？</p>
+<ol>
+<li><p>首先我们的场景是一个Stable Diffusion的处理，我们初期有几个方案：</p>
+<ol>
+<li><p>基于Operator：设置CRD等，然后每次启动POD</p>
+</li>
+<li><p>缺点：冷启动时延太长</p>
+</li>
+<li><p>每个节点设置POD，然后统一调度器将任务分给pod</p>
+</li>
+<li><p>使用ray等框架</p>
+</li>
+<li><p>缺点：难以精细化控制调度，因为我们需要根据不同用户等级定制调度方案</p>
+</li>
+</ol>
+</li>
+<li><p>我们定义的是资源，资源是一个包括显存占用、GPU利用、网络时延、任务类型在内的拟合函数。</p>
+</li>
+<li><p>基准是k8s的默认调度方案，也就是一旦GPU可用就调度</p>
+</li>
+</ol>
+</li>
+<li><p>百度：优先级调度和依赖检测是如何实现的？有没有遇到死锁或饥饿问题？如果有 DAG（有向无环图）依赖，你是怎么做拓扑排序和并发控制的？</p>
+<ol>
+<li><p>我们只检测有没有任务，由用户定义上传优先级</p>
+<ol>
+<li>原因是用户一定知道优先级，同时我们也不需要运行长时间的图搜索方案</li>
+</ol>
+</li>
+<li><p>因此不会有死锁问题。饥饿问题由调度算法保证。我将调度算法分成两部分，一部分是过滤器，一部分是排序器。过滤器解决依赖问题，而饥饿由排序器解决。</p>
+</li>
+<li><p>对等待队列进行判断，如果这个任务依赖的任务没有完成，那么就移除掉（不可调度）</p>
+</li>
+<li><p>小任务由用户指定的规则可以并发执行。如果资源也允许，那么就可以并发</p>
+</li>
+</ol>
+</li>
+<li><h4 id="其他知识"><a href="#其他知识" class="headerlink" title="其他知识"></a>其他知识</h4></li>
+<li><p><strong>PagedAttention</strong> 的原理。解释清楚为什么 Prefill 和 Decode 阶段的性能特征不同（Compute-bound vs Memory-bound）。你的“性能建模模块”具体用了什么数学模型？SLO 感知是如何反压（Backpressure）或调整调度的？</p>
+</li>
+</ol>
+<ul>
+<li>PagedAttention 的核心原理</li>
+</ul>
+<p><strong>一句话总结</strong>：PagedAttention 是将操作系统中<strong>虚拟内存（Virtual Memory）</strong>和<strong>分页（Paging）</strong>的思想，应用到了大模型的 <strong>KV Cache</strong> 管理上。</p>
+<ul>
+<li><p>传统 KV Cache 的痛点：在 PagedAttention 出现之前，推理引擎通常需要为每个请求预分配一块<strong>连续</strong>的显存。由于不知道用户会生成多长的回复，系统必须按 <code>max_seq_len</code>（比如 2048 或 4096）预留内存。</p>
+<ul>
+<li><p><strong>内部碎片</strong>：用户只生成了 100 个 token，预留的 2000 个 token 位置浪费了。</p>
+</li>
+<li><p><strong>外部碎片</strong>：显存中有很多小的空闲块，但因为不连续，无法分配给新的请求。</p>
+</li>
+</ul>
+</li>
+<li><p>PagedAttention 的机制：PagedAttention 允许 KV Cache 存储在<strong>非连续</strong>的物理显存块（Block）中。</p>
+<ul>
+<li><p><strong>Block（页&#x2F;块）</strong>：将 KV Cache 切分成固定大小的块（例如 <code>block_size=16</code>，即每块存 16 个 token 的 KV 向量）。</p>
+</li>
+<li><p><strong>Block Table（页表）</strong>：维护一个逻辑块到物理块的映射表。</p>
+<ul>
+<li><p>逻辑空间：请求认为自己的 KV Cache 是连续的 <code>[0, 1, 2, ...]</code>。</p>
+</li>
+<li><p>物理空间：实际数据散落在显存的任意位置 <code>[Addr_A, Addr_B, ...]</code>.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>动态分配</strong>：当一个 Block 写满了，系统才会向显存分配器申请一个新的物理 Block。</p>
+</li>
+</ul>
+</li>
+<li><p>为什么 Prefill 是 Compute-bound，Decode 是 Memory-bound？</p>
+</li>
+</ul>
+<p>这是理解 LLM 推理性能特征的物理基础。我们用 <strong>算术强度 (Arithmetic Intensity)</strong> 来解释。</p>
+<ul>
+<li><p><strong>算术强度</strong> &#x3D; $$\frac{\text{计算量 (FLOPs)}}{\text{访存量 (Bytes)}}$$</p>
+</li>
+<li><p>阶段一：Prefill (Prompt 处理阶段) -&gt; Compute-bound (算力受限)：在这个阶段，我们一次性把整个 Prompt（假设长度为 $L$）输入网络。</p>
+<ul>
+<li><p><strong>运算形态</strong>：矩阵乘矩阵 (<strong>GEMM</strong>)。</p>
+<ul>
+<li><p>输入 $X$ 是 $(B, L, H)$ 的矩阵。</p>
+</li>
+<li><p>权重 $W$ 是 $(H, H)$ 的矩阵。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>特征</strong>：</p>
+<ul>
+<li><p>我们加载一次权重 $W$，可以对 $L$ 个 Token 并行计算。</p>
+</li>
+<li><p>随着 $L$ 的增加，计算量呈 $O(L^2)$ 或 $O(L)$ 增长，但权重的读取次数不变。</p>
+</li>
+<li><p><strong>算术强度高</strong>：GPU 的 Tensor Core 全速运转，HBM（显存带宽）通常不是瓶颈，计算单元的吞吐量决定了速度。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>阶段二：Decode (Token 生成阶段) -&gt; Memory-bound (带宽受限)：在这个阶段，我们每次只生成 <strong>1个</strong> Token，并将其加入 KV Cache，预测下一个 Token。</p>
+<ul>
+<li><p><strong>运算形态</strong>：矩阵乘向量 (<strong>GEMV</strong>)。</p>
+<ul>
+<li><p>输入 $X$ 是 $(B, 1, H)$ 的向量。</p>
+</li>
+<li><p>权重 $W$ 是 $(H, H)$ 的矩阵。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>特征</strong>：</p>
+<ul>
+<li><p>为了计算这 <strong>1个</strong> Token，我们需要把庞大的模型权重 $W$（几十 GB）全部从显存加载到芯片上走一遍。</p>
+</li>
+<li><p>同时，还需要读取该请求历史所有的 KV Cache 来做 Attention。</p>
+</li>
+<li><p><strong>算术强度极低</strong>：GPU 计算单元大部分时间在<strong>空转</strong>，等待数据从 HBM 搬运过来。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>结论</strong>：Decode 阶段的速度完全取决于 **显存带宽 (Memory Bandwidth)**，而不是计算能力。</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>PagedAttention 的作用</strong>：它不直接解决带宽问题，但它通过节省显存，允许我们增大 <strong>Batch Size</strong>。在 Decode 阶段，如果 $B$ 足够大，GEMV 就会逐渐变成 GEMM，提高算术强度，让 GPU 没那么“饿”，从而提升整体吞吐（Throughput），尽管单请求延迟（Latency）没有减少。</p>
+</blockquote>
+<hr>
+<ul>
+<li><p>我的“性能建模模块”：数学模型细节：<a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2025/04/01/vllm-reading/" >https://ethereal-o.github.io/2025/04/01/vllm-reading/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>SLO 感知与反压&#x2F;调度机制：有了上面的数学模型，调度器就不再是盲猜，而是基于<strong>预测</strong>进行决策。</p>
+<ul>
+<li><p>A. 调度目标：满足两个核心 SLO 指标：</p>
+<ul>
+<li><p><strong>TTFT (Time To First Token)</strong>: 首字延迟，受 Prefill 影响。</p>
+</li>
+<li><p><strong>TPOT (Time Per Output Token)</strong>: 生成速度，受 Decode Batch Size 影响。</p>
+</li>
+</ul>
+</li>
+<li><p>B. 反压机制 (Backpressure) - 也就是 Admission Control，当新请求 $$Req_{new$$ 到达时，系统计算：</p>
+<ul>
+<li><p><strong>预估排队时间</strong>：$T_{wait} &#x3D; \sum T_{prefill}(\text{Queue})$。</p>
+</li>
+<li><p><strong>预估自身 Prefill 时间</strong>：$T_{self} &#x3D; \text{Model}(L_{in}^{new})$。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>判定逻辑：</p>
+<p>$$\text{If } (T_{wait} + T_{self} &gt; \text{SLO}_{TTFT}) \implies \text{Reject (HTTP 503) or Queue separately}$$</p>
+<p>这避免了系统过载导致所有请求都超时，这叫 Load Shedding (甩负荷)。</p>
+<ul>
+<li><p>C. 动态调度调整 (Dynamic Scheduling)</p>
+<ul>
+<li><p><strong>Chunked Prefill (分块 Prefill)</strong></p>
+<ol>
+<li><p><strong>问题</strong>：如果来了一个超长 Prompt ($L&#x3D;8000$)，Prefill 需要 500ms。这会导致正在进行 Decode 的其他短请求卡顿 500ms，破坏它们的 TPOT SLO。</p>
+</li>
+<li><p><strong>策略</strong>：调度器强制将这个长 Prefill 拆分成多个小块（比如每块 512 tokens）。</p>
+<ul>
+<li><p>时间片 1: Decode Batch A + Prefill Chunk 1</p>
+</li>
+<li><p>时间片 2: Decode Batch A + Prefill Chunk 2</p>
+</li>
+</ul>
+</li>
+<li><p>数学约束：拆分的大小 $$ChunkSiz$$ 需满足：$$T_{compute}(ChunkSize) + T_{decode}(CurrentBatch) \le \text{SLO}_{TPOT}$$</p>
+</li>
+</ol>
+</li>
+<li><p><strong>动态 Batching 上限</strong></p>
+<ol>
+<li><p><strong>问题</strong>：PagedAttention 允许超大 Batch，但 Batch 太大，单次 Decode 耗时会增加，导致 TPOT 变慢。</p>
+</li>
+<li><p>策略：根据当前 KV Cache 总量和用户 SLO，动态计算最大允许的 Batch Size $B_{max}$。$$B_{max} &#x3D; \text{argmin}<em>B \left( \frac{\text{TotalMemLoads}}{BW} \approx \text{SLO}</em>{TPOT} \right)$$</p>
+</li>
+<li><p>调度器严格控制并发量不超过 $B_{max}$，多余的请求在队列中等待。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><p>解释分层架构的数据置换策略（LRU, LFU?）。在分布式环境下，如何保证 Cache 的一致性或有效性？</p>
+<ol>
+<li><p>我们使用了前缀树形式的组织，在这种情况下，我们会优先将更深的叶子调度出去</p>
+</li>
+<li><p>核心策略：Cache-Aside Pattern (旁路缓存模式)</p>
+<ol>
+<li><p><strong>读路径</strong>：先读 Cache -&gt; 命中则返回 -&gt; 未命中则读 DB -&gt; 写入 Cache -&gt; 返回。</p>
+</li>
+<li><p><strong>写路径</strong>：<strong>先更新 DB，然后直接删除（Delete）Cache</strong>。</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>  <strong>❓ 关键面试题 1：为什么是“删除 Cache”而不是“更新 Cache”？</strong></p>
+</li>
+</ol>
+<ul>
+<li><p><strong>竞态条件（Race Condition）</strong>：</p>
+<ul>
+<li><p>线程 A 更新 DB 为 1，准备更新缓存。</p>
+</li>
+<li><p>线程 B 更新 DB 为 2，抢先更新了缓存为 2。</p>
+</li>
+<li><p>线程 A 姗姗来迟，把缓存覆盖为了 1。</p>
+</li>
+<li><p><strong>结果</strong>：DB 是 2，Cache 是 1。脏数据产生。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>懒加载优势</strong>：如果你频繁修改 DB（100次），但期间只有 1 次读取，那么更新 100 次缓存是浪费资源的。删除缓存，等下次有人读时再计算并加载，效率更高。<br>  <strong>❓ 关键面试题 2：先删 Cache 还是先更 DB？</strong></p>
+</li>
+<li><p><strong>一般推荐：先更 DB，后删 Cache</strong>。</p>
+<ul>
+<li><p>如果先删 Cache，再更 DB：在删完和更新之间，如果有读请求进来，会把旧数据从 DB 读出来重新塞回 Cache，导致缓存里一直是旧数据。</p>
+</li>
+<li><p>如果先更 DB，后删 Cache：虽然也有极其微小的概率出现不一致（读请求在写请求更新 DB 前读了旧值，且在写请求删缓存后才回填缓存），但通常 DB 写操作慢，读操作快，这种情况极难发生。</p>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="5">
+<li><p>进阶场景处理</p>
+<ul>
+<li><p><strong>延时双删 (Delayed Double Delete)</strong> 为了解决主从数据库同步延迟导致的脏数据（主库更了，从库还没更，读请求读了从库旧值回填缓存）：</p>
+<ol>
+<li><p><strong>流程</strong>：<code>Del Cache</code> -&gt; <code>Update DB</code> -&gt; <code>Sleep(T)</code> -&gt; <code>Del Cache Again</code>。</p>
+</li>
+<li><p><code>T</code> 的时间通常是“主从同步延迟 + 几百毫秒”。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>订阅 Binlog (异步更新)</strong> 为了解耦业务代码和缓存清理逻辑（防止业务代码里写漏了 <code>del cache</code>），可以使用 <strong>Canal</strong> 或 <strong>Debezium</strong> 监听 MySQL 的 Binlog。</p>
+<ol>
+<li><p><strong>流程</strong>：业务只管改 DB -&gt; Canal 收到 Binlog 变更 -&gt; 发送消息到 Kafka -&gt; 消费者处理消息并删除对应的 Redis Key。</p>
+</li>
+<li><p><strong>优点</strong>：具备重试机制，可靠性更高。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>多级缓存的一致性 (Local Cache + Remote Cache)</strong> 如果你的服务里还有一层 **本地缓存 (Local Cache, 如 Go map)**，那么当你删除了 Redis，其他节点的本地缓存里依然是旧数据。</p>
+<ol>
+<li><p><strong>解决方案</strong>：引入 <strong>Pub&#x2F;Sub (发布订阅)</strong> 机制。</p>
+</li>
+<li><p><strong>流程</strong>：节点 A 更新数据 -&gt; 更新 DB -&gt; 删除 Redis -&gt; <strong>发布一条消息到 Redis Pub&#x2F;Sub 或 Kafka</strong> -&gt; 所有订阅该 Topic 的节点（B, C, D）收到消息 -&gt; 清除各自的本地缓存。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>无锁队列&#x2F;栈是用 CAS (Compare-And-Swap) 实现的吗？有没有遇到 ABA 问题？epoll 的 ET&#x2F;LT 模式区别？你的网络库架构（Reactor&#x2F;Proactor）与 gRPC&#x2F;brpc 的异同？</p>
+<ol>
+<li><p>是的。ABA通过使用“标记指针”（Tagged Pointers）或双字CAS（Double-Word CAS）来将版本号和指针捆绑在一起原子更新。</p>
+</li>
+<li><p>epoll 的 ET 与 LT 模式区别：epoll 是 Linux 下最高效的 IO 多路复用机制。</p>
+<ol>
+<li>LT (Level Triggered - 水平触发) —— 默认模式</li>
+</ol>
+<ul>
+<li><p><strong>机制</strong>：只要文件描述符（FD）里<strong>还有数据可读</strong>，epoll 就会<strong>一直通知</strong>你。</p>
+</li>
+<li><p><strong>类比</strong>：负责任的邮递员。只要你邮箱里有信，他每天都会来敲门告诉你“有信”，直到你把信拿光。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li><p>编程不容易出错（没读完下次还会通知）。</p>
+</li>
+<li><p>支持阻塞和非阻塞 Socket。</p>
+</li>
+<li><p>如果数据量大但处理慢，会产生大量的 epoll 系统调用（惊群），效率略低。</p>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>ET (Edge Triggered - 边缘触发) —— 高速模式</li>
+</ol>
+<ul>
+<li><p><strong>机制</strong>：只有 FD 的状态<strong>发生变化</strong>（从无数据到有数据）时，epoll 才会通知<strong>一次</strong>。</p>
+</li>
+<li><p><strong>类比</strong>：高冷的邮递员。信来了他只敲一次门。如果你只拿了一半信就关门了，剩下的一半信他再也不会提醒你，直到下一封新信到来。</p>
+</li>
+<li><p><strong>特点</strong>：</p>
+<ul>
+<li><p>**必须使用非阻塞 Socket (Non-blocking IO)**。</p>
+</li>
+<li><p><strong>必须一次性读完</strong>：收到通知后，必须在一个循环里调用 <code>read/recv</code>，直到返回 <code>EAGAIN</code> 或 <code>EWOULDBLOCK</code> 错误，否则剩下的数据就“死”在缓冲区里了（导致连接假死）。</p>
+</li>
+<li><p>系统调用少，并发性能极高（Nginx, Redis 等高性能组件通常使用 ET）。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>网络库架构对比：Reactor&#x2F;Proactor vs gRPC&#x2F;brpc</p>
+<ol>
+<li>通用网络库架构 (Reactor vs Proactor)</li>
+</ol>
+<ul>
+<li><p>**Reactor (反应堆)**：</p>
+<ul>
+<li><p><strong>核心</strong>：基于 **IO 复用 (epoll)**。</p>
+</li>
+<li><p><strong>流程</strong>：epoll 监听事件 -&gt; 事件触发（数据来了） -&gt; 通知用户线程 -&gt; <strong>用户线程负责调用</strong> <strong><code>read/write</code></strong> <strong>把数据拷到用户态</strong> -&gt; 处理业务。</p>
+</li>
+<li><p><strong>代表</strong>：muduo, Netty, Redis, Nginx。</p>
+</li>
+<li><p><em>特点：同步非阻塞 IO。</em></p>
+</li>
+</ul>
+</li>
+<li><p>**Proactor (前摄器)**：</p>
+<ul>
+<li><p><strong>核心</strong>：基于 **AIO (异步 IO)**。</p>
+</li>
+<li><p><strong>流程</strong>：用户线程发起读请求，传入缓冲区地址 -&gt; <strong>操作系统内核负责把数据读好并拷到缓冲区</strong> -&gt; OS 通知用户线程“读完了” -&gt; 处理业务。</p>
+</li>
+<li><p><strong>代表</strong>：Windows IOCP, Boost.Asio (在 Linux 上通常是用 Reactor 模拟的 Proactor，直到 <code>io_uring</code> 出现)。</p>
+</li>
+<li><p><em>特点：真正的异步 IO。</em></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>深度学习训练模式</p>
+</li>
+</ol>
+<ul>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://ethereal-o.github.io/2025/10/21/CS336%E4%BB%8E%E5%A4%B4%E6%9E%84%E5%BB%BA%E5%A4%A7%E6%A8%A1%E5%9E%8B/" >https://ethereal-o.github.io/2025/10/21/CS336%E4%BB%8E%E5%A4%B4%E6%9E%84%E5%BB%BA%E5%A4%A7%E6%A8%A1%E5%9E%8B/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p><strong>并行策略：</strong> 必须清晰理解 <strong>数据并行 (Data Parallel)<strong>、</strong>模型并行 (Tensor Parallel)<strong>、</strong>流水线并行 (Pipeline Parallel)</strong> 和 **ZeRO (Zero Redundancy Optimizer)**。</p>
+</li>
+<li><p><strong>通信开销：</strong> 了解 <code>AllReduce</code>, <code>AllGather</code> 等集合通信原语，以及 Ring-AllReduce 算法。了解 NVLink 和 IB (InfiniBand) 网络的作用。</p>
+</li>
+</ul>
+<ol start="5">
+<li>调度核心难题 (针对训练任务)</li>
+</ol>
+<ul>
+<li><p><strong>Gang Scheduling (帮派调度)：</strong> 训练任务通常需要 N 张卡同时启动，如果资源不足，要么全等待，要么全启动。K8s 原生调度不支持这个，你需要了解 <strong>Volcano</strong> 或 <strong>Coscheduler</strong> 是如何解决的。</p>
+</li>
+<li><p><strong>拓扑感知 (Topology Awareness)：</strong> 在多机多卡训练中，如何调度任务以最小化跨 Switch 的通信延迟？</p>
+</li>
+<li><p><strong>故障恢复 (Fault Tolerance)：</strong> 训练任务跑了几天挂了一个节点怎么办？(Checkpointing, Elastic Training)。</p>
+</li>
+<li><p>Gang Scheduling (帮派调度 &#x2F; 全量调度)</p>
+</li>
+</ul>
+<p><strong>核心痛点：资源死锁 (Resource Deadlock)</strong></p>
+<p>Kubernetes 原生调度器是逐个 (Pod-by-Pod) 调度的。</p>
+<p>假设你只有 4 张空闲 GPU 卡。</p>
+<ul>
+<li><p><strong>Job A</strong> 需要 4 张卡。</p>
+</li>
+<li><p><strong>Job B</strong> 需要 4 张卡。</p>
+</li>
+<li><p>K8s 可能会先给 Job A 调度 2 个 Pod，又给 Job B 调度 2 个 Pod。</p>
+</li>
+<li><p><strong>结果</strong>：Job A 等待剩下的 2 张，Job B 也在等。谁也跑不起来，资源被占死，集群陷入死锁。</p>
+</li>
+</ul>
+<p><strong>解决方案：All-or-Nothing</strong></p>
+<p>Gang Scheduling 的原则很简单：<strong>如果资源不够所有“兄弟”一起上，那就一个都别上，把资源让给能跑的小任务，或者排队死等直到资源凑齐。</strong></p>
+<p><strong>主流实现方案：</strong></p>
+<ol>
+<li><p>**Volcano (CNCF 项目，事实标准)**：</p>
+<ol>
+<li><p><strong>CRD</strong> **<code>PodGroup</code>**：引入了 PodGroup 概念。Job 提交时声明 <code>minMember: 4</code>。</p>
+</li>
+<li><p><strong>Action</strong>: <code>Enqueue</code> -&gt; <code>Allocate</code> -&gt; <code>Backfill</code>。</p>
+</li>
+<li><p>Volcano 调度器在 <code>Allocate</code> 阶段会检查整个 Group 的资源需求。如果集群空闲资源 &lt; <code>minMember</code>，整个 Group 都在队列里 Pending，不占用任何物理资源。</p>
+</li>
+</ol>
+</li>
+<li><p>**Coscheduler (K8s Scheduling Plugins)**：</p>
+<ol>
+<li><p>这是基于 K8s Scheduling Framework 实现的轻量级插件。</p>
+</li>
+<li><p>利用 <code>Permit</code> 插件点：当一个 Pod 被调度通过后，不会立刻绑定，而是进入 “Waiting” 状态。只有当同组的 N 个 Pod 都通过了调度，才一起 “Approve” 并绑定</p>
+</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>拓扑感知 (Topology Awareness)</li>
+</ul>
+<p><strong>核心痛点：跨 Switch 通信慢</strong></p>
+<p>在分布式训练中，通信是短板。</p>
+<ul>
+<li><p><strong>场景</strong>：你需要调度 4 个 Pod（每个 Pod 1 张卡）。</p>
+<ul>
+<li><p><strong>最差情况</strong>：4 个 Pod 分布在 4 个不同的机架（Rack）上。通信要经过两层交换机（ToR -&gt; Spine -&gt; ToR），延迟极高，带宽减半。</p>
+</li>
+<li><p><strong>最好情况</strong>：4 个 Pod 在同一台机器（走 NVLink&#x2F;PCIe），或者在同一个机架下的机器（只走 ToR Switch）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>解决方案：亲和性与紧凑调度</strong></p>
+<p>调度器需要感知物理网络的拓扑结构（这通常通过 Node Labels 来实现，如 <code>topology.kubernetes.io/zone</code>, <code>rack-id</code>, <code>switch-id</code>）。</p>
+<p><strong>调度算法逻辑：</strong></p>
+<ol>
+<li><p>**节点内优先 (Intra-Node)**：</p>
+<ol>
+<li><p>如果任务需要 4 卡，优先找有一台空闲 4 卡的机器。</p>
+</li>
+<li><p>利用 CPU-GPU 亲和性（NUMA Awareness），确保 Pod 使用的 CPU 核与 GPU 在同一个 PCIe Root Complex 下。</p>
+</li>
+</ol>
+</li>
+<li><p>**机架&#x2F;交换机优先 (Compact Placement)**：</p>
+<ol>
+<li><p>如果单机塞不下，必须跨机，优先找 <strong>连接在同一个 ToR 交换机</strong> 下的机器。</p>
+</li>
+<li><p>算法通常涉及给节点打分：同一个 <code>switch-id</code> 的节点分值更高。</p>
+</li>
+</ol>
+</li>
+<li><p>**最差策略 (Spread)**：</p>
+<ol>
+<li>只有在资源极度紧缺时，才允许跨交换机调度。</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p><strong>注意</strong>：这通常需要配合 <strong>Device Plugin</strong>（上报 NUMA 拓扑）和 <strong>Volcano&#x2F;Kube-scheduler</strong> 的 Topology 插件共同完成。</p>
+</blockquote>
+<ul>
+<li>故障恢复 (Fault Tolerance)</li>
+</ul>
+<p><strong>核心痛点：训练太久，故障是常态</strong></p>
+<p>训练一个 GPT-3 级别的模型可能需要几千张卡跑几个月。根据统计，在大规模集群中，硬件故障（GPU ECC 错误、网络中断、机器死机）几乎每天都会发生。</p>
+<p>如果跑了 29 天，第 30 天挂了一个节点，导致所有训练从头开始，这是不可接受的。</p>
+<p><strong>策略 A：Checkpointing (检查点机制) —— 兜底方案</strong></p>
+<p>这是最基础的手段。</p>
+<ol>
+<li><p><strong>定期保存</strong>：训练脚本每隔 $N$ 个 Step（例如每 1 小时），将模型权重（Model Weights）和优化器状态（Optimizer State）写入持久化存储（如 HDFS, S3, 高性能 NAS）。</p>
+</li>
+<li><p><strong>自动重启</strong>：</p>
+<ol>
+<li><p>K8s Operator（如 PyTorchOperator）监测到 Pod 失败 (<code>CrashLoopBackOff</code>)。</p>
+</li>
+<li><p>Operator 销毁所有 Pod，重新申请资源，重启训练任务。</p>
+</li>
+<li><p>训练脚本启动时，检查是否有 Checkpoint，如果有，加载并从上次断点继续 (<code>load_state_dict</code>)。</p>
+</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><strong>缺点</strong>：会有回滚损失（比如损失最近 30 分钟的算力），且重启过程慢（重新调度、重新加载数据）。</li>
+</ul>
+<p><strong>策略 B：Elastic Training (弹性训练) —— 高级方案</strong></p>
+<p>为了避免“一人挂掉，全员重启”的巨大开销，我们需要训练框架支持<strong>动态扩缩容</strong>。</p>
+<ol>
+<li><p><strong>架构支持</strong>：使用 <strong>TorchElastic (c10d)</strong> 或 <strong>Horovod Elastic</strong>。</p>
+<ol>
+<li>引入一个 **Rendezvous Server (RDZV)**（集合点）。</li>
+</ol>
+</li>
+<li><p><strong>故障处理流程</strong>：</p>
+<ol>
+<li><p>假设有 10 个节点在训练。节点 A 挂了。</p>
+</li>
+<li><p>剩下的 9 个节点捕获到通信超时异常，进入“重组”状态。</p>
+</li>
+<li><p>它们向 RDZV 汇报：“我们还活着”。</p>
+</li>
+<li><p><strong>无需重启 Pod</strong>，剩下的 9 个节点重新建立通信环（Ring），重新分配数据分片（Re-partitioning）。</p>
+</li>
+<li><p>训练继续（此时 Batch Size 可能会变小，或者梯度累积步数变大）。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>自动补位</strong>：</p>
+<ol>
+<li><p>K8s Operator 发现节点 A 挂了，尝试启动一个新的节点 A’。</p>
+</li>
+<li><p>A’ 启动后加入 RDZV，集群恢复为 10 节点，重新 Re-balance 继续全速训练。</p>
+</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>总结：AI 基础设施的三大支柱</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>领域</td>
+<td>关键技术 (Keywords)</td>
+<td>解决什么问题？</td>
+</tr>
+<tr>
+<td>Gang Scheduling</td>
+<td>Volcano, PodGroup, Coscheduler, All-or-Nothing</td>
+<td>防止资源碎片化导致的死锁，确保“要死一起死，要活一起活”。</td>
+</tr>
+<tr>
+<td>Topology Awareness</td>
+<td>NUMA, NVLink, Affinity, Rack-aware</td>
+<td>减少光速限制带来的网络延迟，把 Pod 物理上靠得越近越好。</td>
+</tr>
+<tr>
+<td>Fault Tolerance</td>
+<td>Checkpoint, TorchElastic, Rendezvous</td>
+<td>应对硬件必然的故障，把数月的训练任务分解为可恢复的子段。</td>
+</tr>
+</tbody></table>
+<ol start="5">
+<li>Kubernetes 进阶</li>
+</ol>
+<ul>
+<li><p><strong>Informer 机制：</strong> 也就是 List-Watch 机制，这是 K8s 控制器的核心。</p>
+</li>
+<li><p><strong>Scheduler Framework：</strong> 了解 Filter, Score, Bind 等扩展点。</p>
+</li>
+<li><p><strong>Operator 模式：</strong> 既然你做过 CSI 和 CRD ，面试官可能会让你设计一个 TrainingJob Operator。</p>
+</li>
+<li><p>Informer 机制：K8s 控制器的“神经系统”</p>
+</li>
+</ul>
+<p>如果每个控制器都轮询（Polling）API Server，集群早就崩了。Informer 是 <code>client-go</code> 库的核心组件，它实现了一个<strong>本地缓存</strong>和<strong>事件通知</strong>机制。</p>
+<p><strong>核心流程拆解：</strong></p>
+<ol>
+<li><p>**Reflector (反射器)**：</p>
+<ol>
+<li><p>这是源头。它负责执行 <strong>List</strong>（全量列出资源）和 <strong>Watch</strong>（监听变化流）。</p>
+</li>
+<li><p>它将从 API Server 拿到的对象放入 <strong>DeltaFIFO</strong> 队列中。</p>
+</li>
+</ol>
+</li>
+<li><p>**DeltaFIFO (增量队列)**：</p>
+<ol>
+<li><p>这是一个“生产者-消费者”队列。它存储的是<strong>事件</strong>（Deltas），比如 <code>Added</code>, <code>Updated</code>, <code>Deleted</code>。</p>
+</li>
+<li><p><strong>关键点</strong>：它解决了由于处理速度慢导致的事件堆积问题，并保证事件顺序。</p>
+</li>
+</ol>
+</li>
+<li><p>**Indexer (本地缓存&#x2F;Store)**：</p>
+<ol>
+<li><p><strong>这是性能的关键</strong>。Informer 会把最新的对象状态同步到本地内存（Thread Safe Store）。</p>
+</li>
+<li><p>当你调用 <code>lister.Get(&quot;my-pod&quot;)</code> 时，你读取的是这个本地缓存，<strong>完全不产生网络请求</strong>。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>Processor &amp; EventHandlers</strong>：</p>
+<ol>
+<li>Informer 从 DeltaFIFO 拿出对象，更新 Indexer，然后分发给注册的 Callbacks (<code>OnAdd</code>, <code>OnUpdate</code>, <code>OnDelete</code>)。这就是你在 Operator 代码里写业务逻辑的入口。</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>面试必考点：SharedInformerFactory</p>
+<p>为什么要有 Shared？如果你的代码里有 10 个控制器都关心 Pod，你不能创建 10 个 Informer，否则内存会存 10 份 Pod 缓存。SharedInformer 让所有控制器共享同一个 TCP 连接（Watch）和同一份本地缓存（Store），极大降低开销。</p>
+</blockquote>
+<ul>
+<li>Scheduler Framework：K8s 调度的“插件插槽”</li>
+</ul>
+<p>早期 K8s 调度器是硬编码的。现在，调度器被重构为一个<strong>框架</strong>，允许你在不同的<strong>扩展点 (Extension Points)</strong> 插入自定义逻辑。</p>
+<p>一次调度过程分为两个周期：</p>
+<ul>
+<li><p>Scheduling Cycle (调度周期) - <em>纯内存操作，快</em></p>
+<ul>
+<li><p>**QueueSort (排序)**：</p>
+<ol>
+<li><p>决定优先调度哪个 Pending Pod。</p>
+</li>
+<li><p>_应用_：你可以实现一个插件，让标记为“高优先级租户”的 Pod 插队。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>PreFilter &#x2F; Filter (过滤)<strong>：</strong>硬约束</strong>。</p>
+<ol>
+<li><p>这台机器能不能跑这个 Pod？（类似 SQL 的 <code>WHERE</code>）。</p>
+</li>
+<li><p>_原生_：检查 CPU&#x2F;内存是否够用，Taints&#x2F;Tolerations。</p>
+</li>
+<li><p>_AI 场景_：<strong>GPU 拓扑感知</strong>就在这里做。检查这台机器的 GPU 是否满足 NVLink 连接要求。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>PreScore &#x2F; Score (打分)<strong>：</strong>软约束</strong>。</p>
+<ol>
+<li><p>这台机器运行这个 Pod 好不好？（类似 SQL 的 <code>ORDER BY</code>）。</p>
+</li>
+<li><p>_原生_：ImageLocality（镜像是否已存在），LeastRequested（负载均衡）。</p>
+</li>
+<li><p>_AI 场景_：**Bin Packing (装箱)**。尽量把 Pod 塞满一个节点，空出完整的节点给大模型训练。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>Binding Cycle (绑定周期) - <em>涉及网络，慢</em></p>
+<ul>
+<li><p>**Permit (准入)**：</p>
+<ol>
+<li><p><strong>关键点</strong>：这里可以“阻止”或“延迟”绑定。</p>
+</li>
+<li><p>_AI 场景_：<strong>Gang Scheduling (Coscheduler)</strong> 就是在这里实现的。如果“帮派”里凑齐了 4 个 Pod，就全部 Approve；如果只来了 3 个，就全部 Wait。</p>
+</li>
+</ol>
+</li>
+<li><p>**Bind (绑定)**：</p>
+<ol>
+<li>执行真正的绑定操作（写入 API Server）。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>实战面试题：设计一个 TrainingJob Operator<br>  题目：请设计一个 Operator 来管理分布式的 PyTorch 训练任务。<br>  核心难点：多 Pod 协同、网络发现、故障处理。</p>
+<ul>
+<li>Step 1: 定义 CRD (API 设计)</li>
+</ul>
+</li>
+</ul>
+<p>你需要定义用户怎么描述任务。<br>    kind: TrainingJobspec:  image: “pytorch:1.9”  workers: 4         # Worker 数量  gpusPerWorker: 1   # 每个 Worker 的卡数  masterPort: 23456  # 集合通信端口</p>
+<ul>
+<li>Step 2: 控制器逻辑 (Reconcile Loop)</li>
+</ul>
+<p>你的 Operator 需要在 Reconcile 中做三件事：</p>
+<ol>
+<li><p><strong>创建 Headless Service (服务发现)</strong></p>
+<ol>
+<li><p>分布式训练需要 Worker 之间互相通信。你需要为这次任务创建一个 Headless Service（比如 <code>job-svc</code>）。</p>
+</li>
+<li><p>这样，Worker-0 的 DNS 就是 <code>worker-0.job-svc</code>，Worker-1 就是 <code>worker-1.job-svc</code>。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>创建 Worker Pods (计算资源)</strong></p>
+<ol>
+<li><p>根据 <code>spec.workers</code> 数量，创建 N 个 Pod（或者直接创建一个 StatefulSet）。</p>
+</li>
+<li><p><strong>关键点：环境变量注入</strong>。这是 Operator 最核心的价值。你需要在创建 Pod 时，把以下环境变量注入进去，否则 PyTorch 根本跑不起来：</p>
+<ul>
+<li><p><code>MASTER_ADDR</code>: <code>worker-0.job-svc</code> (告诉所有人老大在哪里)</p>
+</li>
+<li><p><code>MASTER_PORT</code>: <code>23456</code></p>
+</li>
+<li><p><code>WORLD_SIZE</code>: <code>4</code> (总人数)</p>
+</li>
+<li><p><code>RANK</code>: <code>0, 1, 2...</code> (当前是谁，StatefulSet 会自动带序号，若是独立 Pod 需手动注入)</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>状态聚合 (Status Aggregation)</strong></p>
+<ol>
+<li><p>Watch 这些 Pod 的状态。</p>
+</li>
+<li><p><strong>成功判定</strong>：通常只要 Worker-0 (Master) 成功退出 (Exit Code 0)，整个 TrainingJob 就算成功。</p>
+</li>
+<li><p><strong>失败判定</strong>：任何一个 Worker 失败，整个 Job 标记为 Failed，并清理所有其他 Pod（Fail Fast 机制）。</p>
+</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>Step 3: 高级加分项</li>
+</ul>
+<p>如果面试官追问，你可以补充：</p>
+<ul>
+<li><p><strong>Gang Scheduling 集成</strong>：在创建 Pod 时，添加 <code>pod-group-id</code> 注解，让 Volcano 调度器接管，防止资源死锁。</p>
+</li>
+<li><p><strong>SSH 互信</strong>：如果是 MPI 类型的任务，Operator 需要在挂载同一个 Secret&#x2F;ConfigMap，里面包含 SSH Keys，让 Pod 之间可以免密 SSH。</p>
+</li>
+<li><p><strong>Sidecar 监控</strong>：注入一个 Sidecar 容器，实时采集 GPU 温度和利用率，推送到 Prometheus。</p>
+</li>
+</ul>
+<ol start="6">
+<li><p>架构设计</p>
+<ol>
+<li><p><strong>设计一个分布式任务调度系统</strong>（类似 K8s Scheduler 或 YARN）。需要考虑：高可用（HA）、状态一致性（Raft）、任务优先级、抢占（Preemption）。</p>
+</li>
+<li><p><strong>设计一个支持断点续训的 AI 训练平台</strong>。需要考虑：Checkpoint 存储、故障检测、自动重启。</p>
+</li>
+<li><p><strong>设计一个高性能的 KV 存储</strong>（结合你 LMCache 的经历 ）。</p>
+</li>
+<li><p>设计类似RAY的架构</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>这是一个非常宏大且极具挑战性的架构设计组合。这四个系统（调度器、AI 平台、高性能 KV、分布式计算框架）分别代表了分布式系统中的<strong>控制面</strong>、<strong>容错机制</strong>、<strong>数据面</strong>和<strong>计算模式</strong>的巅峰设计。</p>
+<p>我将为你拆解每个系统的核心架构图和关键设计决策。</p>
+<ul>
+<li>分布式任务调度系统 (类 K8s&#x2F;YARN)</li>
+</ul>
+<p><strong>核心目标</strong>：在大规模集群中高效分配资源，保证高可用和调度准确性。</p>
+<p>核心组件架构</p>
+<ol>
+<li><p>**API Server (Gateway)**：系统的入口，处理用户请求，鉴权，并持久化到存储。</p>
+</li>
+<li><p><strong>State Store (Etcd&#x2F;ZooKeeper)<strong>：</strong>基于 Raft 协议</strong>的强一致性 KV 存储。这是“真相的唯一来源”。</p>
+</li>
+<li><p>**Scheduler (The Brain)**：负责决策。</p>
+<ol>
+<li>_无状态设计_：它可以横向扩展，但为了避免并发冲突，通常使用 Leader Election（抢锁）保证同一时间只有一个主调度器工作，或者使用乐观锁（Optimistic Concurrency Control）进行多调度器并行。</li>
+</ol>
+</li>
+<li><p>**Worker Agent (Node Manager)**：运行在每个节点上，汇报心跳、资源水位，并负责拉起&#x2F;销毁任务。</p>
+</li>
+</ol>
+<p>关键设计决策</p>
+<ul>
+<li><p>**高可用 (HA)**：</p>
+<ul>
+<li>**主备模式 (Active-Standby)**：运行 3 个调度器实例。它们启动时都去 Etcd 抢一把分布式锁（Lease）。抢到的成为 Leader，负责调度；没抢到的做 Follower，监听锁的变化。如果 Leader 挂了，锁过期，Follower 立刻上位。</li>
+</ul>
+</li>
+<li><p>**任务优先级与抢占 (Preemption)**：</p>
+<ul>
+<li><p>维护两个队列：<code>PendingQueue</code>（待调度）和 <code>RunningQueue</code>。</p>
+</li>
+<li><p><strong>抢占逻辑</strong>：当一个高优先级任务 A 进来，且集群满了：</p>
+<ul>
+<li><p>调度器遍历节点，寻找运行着低优先级任务的节点。</p>
+</li>
+<li><p>计算“杀掉哪些低优先级任务能腾出足够资源给 A”。</p>
+</li>
+<li><p>发送 <code>Kill</code> 信号给 Agent。</p>
+</li>
+<li><p><strong>关键点</strong>：此时 A 不会立刻运行，而是回到高优先级队列头等待（Wait for Resources），防止反复抢占造成的抖动。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>状态一致性</strong>：</p>
+<ul>
+<li>所有状态变更（Bind Node）必须走 Raft 存储。调度器在内存中维护一份 Snapshot，Watch Etcd 的变化来更新 Snapshot，而不是每次都读 Etcd。</li>
+</ul>
+</li>
+<li><p>支持断点续训的 AI 训练平台</p>
+</li>
+</ul>
+<p><strong>核心目标</strong>：容忍硬件故障，最小化训练时间的损失。</p>
+<p>核心组件架构</p>
+<ol>
+<li><p>**Job Operator (Controller)**：K8s Operator 模式。管理训练任务的生命周期（Pending -&gt; Running -&gt; Failed -&gt; Restarting）。</p>
+</li>
+<li><p>**Training Cluster (Worker Group)**：一组 Pod，通过 PyTorch DDP 或 Horovod 组成。</p>
+</li>
+<li><p>**Shared Storage (Checkpointer)**：高性能并行文件系统（Lustre&#x2F;Ceph）或 S3。</p>
+</li>
+</ol>
+<p>  关键设计决策</p>
+<ul>
+<li><p><strong>Checkpoint 存储策略</strong>：</p>
+<ul>
+<li><p><strong>内存快照</strong>：为了速度，先将 Checkpoint 写入节点的 <code>/dev/shm</code>（内存盘）。</p>
+</li>
+<li><p><strong>异步持久化</strong>：后台线程将内存快照异步上传到 S3。</p>
+</li>
+<li><p><strong>多级存储</strong>：最近的 Checkpoint 存在 SSD，历史的存 S3。</p>
+</li>
+</ul>
+</li>
+<li><p>**故障检测 (Failure Detection)**：</p>
+<ul>
+<li><p><strong>不要只靠 K8s 心跳</strong>：K8s Node NotReady 的判定通常需要 40s+，太慢。</p>
+</li>
+<li><p><strong>应用层检测</strong>：训练进程之间建立 TCP&#x2F;RDMA 环。如果 Rank 0 发现 Rank 1 的 Socket 断开了，立刻抛出异常，触发 Operator 介入。</p>
+</li>
+</ul>
+</li>
+<li><p>**自动重启 (Auto-Restart &amp; Elasticity)**：</p>
+<ul>
+<li><p><strong>固定大小重启</strong>：挂了一个节点，Controller 销毁所有 Pod，重新申请新节点，从 Checkpoint 加载（最稳，但慢）。</p>
+</li>
+<li><p><strong>弹性重启 (Elastic)<strong>：挂了一个节点，剩下的节点</strong>不重启</strong>，而是通过 <strong>Rendezvous Server</strong> 重新组网（Re-group），调整 Batch Size，继续训练。这需要框架（如 TorchElastic）支持。</p>
+</li>
+</ul>
+</li>
+<li><p>高性能 KV 存储 (结合 LMCache 经验)</p>
+</li>
+</ul>
+<p><strong>核心目标</strong>：为 LLM 推理提供极低延迟的 KV Cache 或 Embedding 检索。目标是高吞吐、低延迟。</p>
+<p>核心组件架构</p>
+<ol>
+<li><p><strong>Client SDK</strong>：负责一致性 Hash 路由、连接池管理。</p>
+</li>
+<li><p>**Sharding Router (Optional)**：如果做服务端路由，需要一层 Proxy。</p>
+</li>
+<li><p><strong>Storage Engine Nodes</strong>：</p>
+<ol>
+<li><p><strong>Network Layer</strong>：使用 <strong>DPDK</strong> 或 <strong>RDMA</strong> 绕过内核协议栈（Kernel Bypass），减少上下文切换开销。</p>
+</li>
+<li><p><strong>Memory Manager</strong>：<strong>Slab Allocation</strong>（类似 Memcached）。KV Cache 的 Block 大小通常是固定的（例如 PageSize），使用 Slab 可以完全消除内存碎片，且无需复杂的 GC。</p>
+</li>
+<li><p><strong>Tiered Storage</strong>：DRAM -&gt; NVMe SSD (SPDK) -&gt; Remote Memory。</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>关键设计决策</p>
+<ul>
+<li><p>**零拷贝 (Zero-Copy)**：</p>
+<ul>
+<li><p>数据从网卡通过 DMA 直接写入用户态内存（RDMA Write），CPU 不参与搬运。</p>
+</li>
+<li><p>发送数据时，直接 <code>sendfile</code> 或指针传递。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>锁竞争优化</strong>：</p>
+<ul>
+<li><p><strong>Thread-Local Storage</strong>：每个 CPU Core 维护自己的数据分片，完全无锁（Share-nothing architecture）。</p>
+</li>
+<li><p>或者使用 <strong>RCU (Read-Copy-Update)</strong> 机制，读操作完全无锁。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>LMCache 特有的置换策略</strong>：</p>
+<ul>
+<li><p>普通的 LRU 不够好。</p>
+</li>
+<li><p><strong>Cost-Aware Eviction</strong>：对于 KV Cache，计算代价越大的 Token（比如 Prompt 很长生成的 KV），越应该保留。</p>
+</li>
+<li><p><strong>Semantic-Aware</strong>：保留 System Prompt 的 KV，因为它们会被所有请求共享。</p>
+</li>
+</ul>
+</li>
+<li><p>类似 Ray 的分布式架构</p>
+</li>
+</ul>
+<p><strong>核心目标</strong>：细粒度任务调度、有状态 Actor 模型、分布式对象存储。</p>
+<p>核心组件架构</p>
+<ol>
+<li><p>**GCS (Global Control Store)**：全局状态数据库（Redis based）。存储所有对象的位置、任务表、心跳。</p>
+</li>
+<li><p><strong>Driver</strong>：提交任务的客户端。</p>
+</li>
+<li><p>**Raylet (Worker Daemon)**：每个节点运行一个。包含两个核心：</p>
+<ol>
+<li><p><strong>Local Scheduler</strong>：负责调度本地任务。</p>
+</li>
+<li><p>**Object Store (Plasma)**：共享内存对象存储。</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>关键设计决策（Ray 的精髓）</p>
+<ul>
+<li><p>**自底向上的调度 (Bottom-Up Scheduling)**：</p>
+<ul>
+<li><p>任务提交给本地 Raylet。</p>
+</li>
+<li><p>如果本地资源够，<strong>直接本地运行</strong>（极低延迟，ms 级）。</p>
+</li>
+<li><p>只有本地资源不够，才把任务“溢出”到 Global Scheduler，转发给其他节点。</p>
+</li>
+<li><p>_对比 K8s_：K8s 是自顶向下（API Server -&gt; Scheduler -&gt; Node），延迟高，吞吐低；Ray 是为了高频短任务设计的。</p>
+</li>
+</ul>
+</li>
+<li><p>**分布式对象存储 (Plasma Store)**：</p>
+<ul>
+<li><p><strong>共享内存</strong>：同一节点上的 Task A 产出的数据，Task B 读取时，<strong>不需要拷贝</strong>，直接通过 <code>mmap</code> 读取共享内存的引用。</p>
+</li>
+<li><p><strong>所有权机制 (Ownership)<strong>：谁创建了对象，谁就负责管理对象的生命周期（引用计数）。这是一种</strong>去中心化</strong>的元数据管理，避免了 GCS 成为瓶颈。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Actor 模型</strong>：</p>
+<ul>
+<li>支持有状态的服务（Stateful Worker）。Actor 被调度到一个节点后会常驻，后续发给该 Actor 的消息直接路由过去，不需要重新调度。</li>
+</ul>
+</li>
+<li><p>总结对比</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>维度</td>
+<td>K8s 调度器</td>
+<td>AI 训练平台</td>
+<td>高性能 KV (LMCache)</td>
+<td>Ray 架构</td>
+</tr>
+<tr>
+<td>调度核心</td>
+<td>中心化 (Scheduler)</td>
+<td>Operator (生命周期管理)</td>
+<td>一致性 Hash (客户端路由)</td>
+<td>去中心化 (Local First)</td>
+</tr>
+<tr>
+<td>状态存储</td>
+<td>Etcd (强一致)</td>
+<td>Checkpoint (S3&#x2F;SSD)</td>
+<td>Slab&#x2F;RingBuffer (内存)</td>
+<td>GCS + Lineage (最终一致)</td>
+</tr>
+<tr>
+<td>关键优化点</td>
+<td>吞吐量 (Bin-packing)</td>
+<td>容错 (Elasticity)</td>
+<td>延迟 (Kernel Bypass)</td>
+<td>任务开销 (Zero-copy)</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>长期运行服务&#x2F;批处理</td>
+<td>大规模模型训练</td>
+<td>推理缓存&#x2F;Embedding</td>
+<td>强化学习&#x2F;数据处理</td>
+</tr>
+</tbody></table>
 
             
         </div>
