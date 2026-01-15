@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 笔试题3321. 计算子数组的 x-sum II - 力扣（LeetCode）  codeforces-go&#x2F;leetcode&#x2F;SOLUTIONS.md at master · EndlessCheng&#x2F;codeforces-go  1.1 分类1.1.1 数组矩阵题A方向 双指针  滑动窗口  单调栈&#x2F;队列  考虑递减单调    B方向 动规  C优">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-11-03T12:33:00.000Z">
-<meta property="article:modified_time" content="2025-12-06T10:04:37.842Z">
+<meta property="article:modified_time" content="2026-01-15T10:28:07.787Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -591,7 +591,169 @@
 </li>
 </ul>
 <h3 id="3-3-C"><a href="#3-3-C" class="headerlink" title="3.3 C++"></a>3.3 C++</h3><h4 id="3-3-1-四种语言"><a href="#3-3-1-四种语言" class="headerlink" title="3.3.1 四种语言"></a>3.3.1 四种语言</h4><p>C with class+STL+模板+RAII所有权</p>
-<h3 id="3-4-其他"><a href="#3-4-其他" class="headerlink" title="3.4 其他"></a>3.4 其他</h3><h4 id="3-4-1-为什么使用epoll而不是iouring"><a href="#3-4-1-为什么使用epoll而不是iouring" class="headerlink" title="3.4.1 为什么使用epoll而不是iouring"></a>3.4.1 为什么使用epoll而不是iouring</h4><ol>
+<h3 id="3-4-调度"><a href="#3-4-调度" class="headerlink" title="3.4 调度"></a>3.4 调度</h3><h4 id="3-4-1-简历调度分类"><a href="#3-4-1-简历调度分类" class="headerlink" title="3.4.1 简历调度分类"></a>3.4.1 简历调度分类</h4><h5 id="3-4-1-1-系统方面"><a href="#3-4-1-1-系统方面" class="headerlink" title="3.4.1.1 系统方面"></a>3.4.1.1 系统方面</h5><ol>
+<li><p>VLLM</p>
+<ul>
+<li>不同队列（waiting&#x2F;swapped&#x2F;running）-&gt;统一合并，通过函数决定调度哪个</li>
+</ul>
+</li>
+<li><p>Vermeer</p>
+</li>
+</ol>
+<ul>
+<li>OOP 设计</li>
+</ul>
+<ol start="3">
+<li>Volcano</li>
+</ol>
+<ul>
+<li>帮派调度</li>
+</ul>
+<h5 id="3-4-1-2-应用方面"><a href="#3-4-1-2-应用方面" class="headerlink" title="3.4.1.2 应用方面"></a>3.4.1.2 应用方面</h5><ol>
+<li><p>ProductionLineScheduler</p>
+</li>
+<li><p>湖杉调度器</p>
+</li>
+<li><p>Ray</p>
+</li>
+</ol>
+<ul>
+<li>TP&#x2F;PP&#x2F;DP&#x2F;ZeRo并行（参考CS336）</li>
+</ul>
+<h5 id="3-4-1-3-资源调度"><a href="#3-4-1-3-资源调度" class="headerlink" title="3.4.1.3 资源调度"></a>3.4.1.3 资源调度</h5><ol>
+<li>LMCache<ul>
+<li>dist_connector</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-4-2-调度分类"><a href="#3-4-2-调度分类" class="headerlink" title="3.4.2 调度分类"></a>3.4.2 调度分类</h4><h5 id="3-4-2-1-主次调度器"><a href="#3-4-2-1-主次调度器" class="headerlink" title="3.4.2.1 主次调度器"></a>3.4.2.1 主次调度器</h5><ol>
+<li><p>主调度器</p>
+<ul>
+<li>负责全局资源分配</li>
+</ul>
+</li>
+<li><p>次调度器</p>
+<ul>
+<li>负责节点内资源分配</li>
+<li>工作窃取</li>
+<li>小任务并行</li>
+<li>重调度</li>
+<li>任务融合</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-2-2-调度对象"><a href="#3-4-2-2-调度对象" class="headerlink" title="3.4.2.2 调度对象"></a>3.4.2.2 调度对象</h5><ol>
+<li><p>调度资源</p>
+<ul>
+<li>CPU&#x2F;GPU&#x2F;内存&#x2F;带宽</li>
+<li>LMCache</li>
+</ul>
+</li>
+<li><p>调度任务</p>
+<ul>
+<li>任务优先级</li>
+<li>任务依赖关系</li>
+<li>任务类型</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-2-3-调度目标函数"><a href="#3-4-2-3-调度目标函数" class="headerlink" title="3.4.2.3 调度目标函数"></a>3.4.2.3 调度目标函数</h5><ol>
+<li><p>应用层指标</p>
+</li>
+<li><p>系统层指标</p>
+</li>
+</ol>
+<h4 id="3-4-3-AI相关"><a href="#3-4-3-AI相关" class="headerlink" title="3.4.3 AI相关"></a>3.4.3 AI相关</h4><h5 id="3-4-3-1-调度特性"><a href="#3-4-3-1-调度特性" class="headerlink" title="3.4.3.1 调度特性"></a>3.4.3.1 调度特性</h5><ol>
+<li>资源<ul>
+<li>GPU&#x2F;TPU&#x2F;NPU</li>
+<li>大内存</li>
+<li>高带宽（NVLink&#x2F;PCIe）</li>
+</ul>
+</li>
+<li>算法<ul>
+<li>公平性<ul>
+<li>3D 装箱</li>
+<li>防止饿死或损失，采用预先看，满足SLO</li>
+</ul>
+</li>
+<li>原子性<ul>
+<li>帮派调度</li>
+</ul>
+</li>
+<li>弹性<ul>
+<li>任务重调度</li>
+<li>任务融合</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他<ul>
+<li>资源补足<ul>
+<li>动态扩缩容</li>
+<li>资源预留</li>
+<li>重调度</li>
+<li>Checkpoint 恢复</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-3-2-vLLM"><a href="#3-4-3-2-vLLM" class="headerlink" title="3.4.3.2 vLLM"></a>3.4.3.2 vLLM</h5><ol>
+<li>PagedAttention<ul>
+<li>目的：减少显存占用<ul>
+<li>共享显存</li>
+<li>非连续显存</li>
+<li>抢占</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Continuous Batching<ul>
+<li>目的：提高吞吐量<ul>
+<li>动态批处理</li>
+<li>请求合并</li>
+<li>异步执行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Memory Management<ul>
+<li>目的：优化内存使用<ul>
+<li>dist_connector</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-3-3-并行"><a href="#3-4-3-3-并行" class="headerlink" title="3.4.3.3 并行"></a>3.4.3.3 并行</h5><p>参考CS336</p>
+<ol>
+<li><p>计算</p>
+<ul>
+<li>内存<ul>
+<li>$$M_1 &#x3D; activ + grad + optimizer + param<br> \ &#x3D; (data \times layer \times dim)<br> \ + param + param + param $$</li>
+<li>$M &#x3D; M_1 \times Size_{FP}$</li>
+<li>$param &#x3D; dim \times dim \times layer + dim$</li>
+</ul>
+</li>
+<li>算力<ul>
+<li>$$FLOPS &#x3D; F + B \<br> &#x3D; 2 \times data \times param + 4 \times data \times param$$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>分配</p>
+</li>
+</ol>
+<p>先计算总显存消耗（大约是总模型参数数目乘以8GB），然后根据同一个rack中GPU数量决定TP数量，根据显存消耗除以同一个rack中显存总数决定PP数量，最后根据总rack数目决定DP数量</p>
+<ol start="3">
+<li>ZeRo<ol>
+<li>优化器状态切片</li>
+<li>优化器状态+梯度切片</li>
+<li>优化器状态+梯度+参数切片（TP）</li>
+</ol>
+</li>
+</ol>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="1-为什么使用epoll而不是iouring"><a href="#1-为什么使用epoll而不是iouring" class="headerlink" title="1. 为什么使用epoll而不是iouring"></a>1. 为什么使用epoll而不是iouring</h4><ol>
 <li><p>iouring必须提前指定大小</p>
 </li>
 <li><p>batch比较小时，epoll性能更好</p>
@@ -626,7 +788,7 @@
               <span>2023</span>
               -
             
-            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
         </div>
         
             <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
