@@ -13,20 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2026/02/22/infra-paper-reading/"/>
+    <link rel="canonical" href="http://example.com/2026/02/22/infra-paper-framework-reading/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis这是一份关于论文《Understanding Stragglers in Large Model Training Using What-if Analysis》（使用假设分析理解大模型训练中的落后节点）的详细中文总结 ： 1.1 核心背景">
+        <meta name="description" content="一. 论文阅读1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis1.1 核心背景与研究方法论文主要探讨了在大语言模型（LLM）分布式训练中常见的“落后节点（Straggler）”问题 。在需要成千上万张 GPU 频繁同步的训练任务中，少数运行缓慢的计算节点（即落后节点）会拖慢整个集群的训练">
 <meta property="og:type" content="article">
-<meta property="og:title" content="infra paper reading">
-<meta property="og:url" content="http://example.com/2026/02/22/infra-paper-reading/index.html">
+<meta property="og:title" content="infra paper framework reading">
+<meta property="og:url" content="http://example.com/2026/02/22/infra-paper-framework-reading/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis这是一份关于论文《Understanding Stragglers in Large Model Training Using What-if Analysis》（使用假设分析理解大模型训练中的落后节点）的详细中文总结 ： 1.1 核心背景">
+<meta property="og:description" content="一. 论文阅读1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis1.1 核心背景与研究方法论文主要探讨了在大语言模型（LLM）分布式训练中常见的“落后节点（Straggler）”问题 。在需要成千上万张 GPU 频繁同步的训练任务中，少数运行缓慢的计算节点（即落后节点）会拖慢整个集群的训练">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-02-21T16:46:38.000Z">
-<meta property="article:modified_time" content="2026-02-21T17:17:21.598Z">
+<meta property="article:modified_time" content="2026-02-22T09:33:03.843Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -40,7 +40,7 @@
     
     <title>
         
-            infra paper reading -
+            infra paper framework reading -
         
         Ethereal&#39;s Blog
     </title>
@@ -364,7 +364,7 @@
             
             
                 <div class="article-title">
-                    <h1 class="article-title-regular">infra paper reading</h1>
+                    <h1 class="article-title-regular">infra paper framework reading</h1>
                 </div>
             
                 
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-02-22 01:17:21</span>
-            <span class="mobile">2026-02-22 01:17</span>
+            <span class="desktop">2026-02-22 17:33:03</span>
+            <span class="mobile">2026-02-22 17:33</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -418,10 +418,8 @@
             
 
             <div class="article-content markdown-body">
-                <h2 id="1-（Seed）Understanding-Stragglers-in-Large-Model-Training-Using-What-if-Analysis"><a href="#1-（Seed）Understanding-Stragglers-in-Large-Model-Training-Using-What-if-Analysis" class="headerlink" title="1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis"></a>1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis</h2><p>这是一份关于论文《Understanding Stragglers in Large Model Training Using What-if Analysis》（使用假设分析理解大模型训练中的落后节点）的详细中文总结 ：</p>
-<h3 id="1-1-核心背景与研究方法"><a href="#1-1-核心背景与研究方法" class="headerlink" title="1.1 核心背景与研究方法"></a>1.1 核心背景与研究方法</h3><p>这篇由字节跳动、纽约大学和浙江大学等机构联合发表的论文，主要探讨了在大语言模型（LLM）分布式训练中常见的“落后节点（Straggler）”问题 。在需要成千上万张 GPU 频繁同步的训练任务中，少数运行缓慢的计算节点（即落后节点）会拖慢整个集群的训练速度 。</p>
-<p>研究团队收集了字节跳动 LLM 训练集群长达五个月的真实运行轨迹数据 。他们采用了一种称为<strong>“假设分析（What-if Analysis）”</strong>的基于轨迹模拟的核心方法 。该方法通过构建任务的操作依赖模型，模拟出如果没有落后节点干扰时的理想执行时间，并将其与实际的完成时间进行对比，从而精准量化落后节点造成的影响 。</p>
-<hr>
+                <h1 id="一-论文阅读"><a href="#一-论文阅读" class="headerlink" title="一. 论文阅读"></a>一. 论文阅读</h1><h2 id="1-（Seed）Understanding-Stragglers-in-Large-Model-Training-Using-What-if-Analysis"><a href="#1-（Seed）Understanding-Stragglers-in-Large-Model-Training-Using-What-if-Analysis" class="headerlink" title="1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis"></a>1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis</h2><h3 id="1-1-核心背景与研究方法"><a href="#1-1-核心背景与研究方法" class="headerlink" title="1.1 核心背景与研究方法"></a>1.1 核心背景与研究方法</h3><p>论文主要探讨了在大语言模型（LLM）分布式训练中常见的“落后节点（Straggler）”问题 。在需要成千上万张 GPU 频繁同步的训练任务中，少数运行缓慢的计算节点（即落后节点）会拖慢整个集群的训练速度 。</p>
+<p>研究团队收集了字节跳动 LLM 训练集群长达五个月的真实运行轨迹数据 。他们采用了一种称为“假设分析（What-if Analysis）”的基于轨迹模拟的核心方法 。该方法通过构建任务的操作依赖模型，模拟出如果没有落后节点干扰时的理想执行时间，并将其与实际的完成时间进行对比，从而精准量化落后节点造成的影响 。 </p>
 <h3 id="1-2-落后节点的影响分析"><a href="#1-2-落后节点的影响分析" class="headerlink" title="1.2 落后节点的影响分析"></a>1.2 落后节点的影响分析</h3><p>通过对集群数据的全面分析，论文揭示了落后节点带来的重大负面影响：</p>
 <ul>
 <li><p><strong>极具普遍性且浪费严重</strong>：落后节点问题非常普遍，导致 42.5% 的训练任务耗时增加了至少 10% 。在所有被分析的任务中，高达 10.4% 的 GPU 算力资源由于等待落后节点而被白白浪费 。</p>
@@ -434,7 +432,7 @@
 </li>
 </ul>
 <hr>
-<h3 id="1-3-根本原因-Root-Causes-诊断"><a href="#1-3-根本原因-Root-Causes-诊断" class="headerlink" title="1.3 根本原因 (Root Causes) 诊断"></a>1.3 根本原因 (Root Causes) 诊断</h3><p>令人意外的是，研究发现单台机器的硬件或软件故障仅仅导致了极少部分（约 1.7%）的任务严重减速，它们并不是导致集群拖尾的主因 。真正普遍存在的根本原因包括：</p>
+<h3 id="1-3-根本原因诊断"><a href="#1-3-根本原因诊断" class="headerlink" title="1.3 根本原因诊断"></a>1.3 根本原因诊断</h3><p>研究发现单台机器的硬件或软件故障仅仅导致了极少部分（约 1.7%）的任务严重减速，它们并不是导致集群拖尾的主因 。真正普遍存在的根本原因包括：</p>
 <ol>
 <li><p>**流水线阶段划分不平衡 (Stage Partitioning Imbalance)**：在流水线并行中，最后一个阶段通常需要计算损失函数，这比常规的 Transformer 层消耗更多算力 。如果层数划分不当，最后一个阶段就会耗费更多时间，从而成为拖慢其他流水线阶段的瓶颈 。</p>
 </li>
@@ -445,37 +443,33 @@
 <li><p><strong>其他原因</strong>：少数情况下，也会由 PyTorch 的 CUDA 内存碎片化或底层内核虚假依赖（False kernel dependency）导致 。</p>
 </li>
 </ol>
-<hr>
 <h3 id="1-4-实际落地与应用"><a href="#1-4-实际落地与应用" class="headerlink" title="1.4 实际落地与应用"></a>1.4 实际落地与应用</h3><p>基于这套分析流程，团队开发并部署了一个名为 <strong>SMon</strong> 的在线监控系统 。该系统会在后台自动运行，计算各个节点的性能数据，并通过热力图的方式直观呈现 。不同的根本原因通常会呈现出特定的热力图模式，这极大地帮助了运维团队在实时任务中快速定位和修复落后节点 。</p>
-<h3 id="1-5-这篇文章是否对问题对应的解决方案做验证？"><a href="#1-5-这篇文章是否对问题对应的解决方案做验证？" class="headerlink" title="1.5 这篇文章是否对问题对应的解决方案做验证？"></a>1.5 这篇文章是否对问题对应的解决方案做验证？</h3><p>是的，这篇论文确实针对其诊断出的几个主要根本原因（Root Causes）提出了相应的解决方案，并进行了初步的验证或原型测试。不过作者也坦诚，这些方案在实际大规模自动化部署时仍面临一些现实挑战。</p>
-<p>以下是论文中对各项解决方案的验证情况：</p>
-<h4 id="1-5-1-流水线阶段划分不平衡-Stage-Partitioning-Imbalance"><a href="#1-5-1-流水线阶段划分不平衡-Stage-Partitioning-Imbalance" class="headerlink" title="1.5.1 流水线阶段划分不平衡 (Stage Partitioning Imbalance)"></a>1.5.1 流水线阶段划分不平衡 (Stage Partitioning Imbalance)</h4><ul>
+<h3 id="1-5-思考"><a href="#1-5-思考" class="headerlink" title="1.5 思考"></a>1.5 思考</h3><h4 id="1-5-1-问题对应的解决方案做验证"><a href="#1-5-1-问题对应的解决方案做验证" class="headerlink" title="1.5.1 问题对应的解决方案做验证"></a>1.5.1 问题对应的解决方案做验证</h4><p>这篇论文针对其诊断出的几个主要根本原因（Root Causes）提出了相应的解决方案，并进行了初步的验证或原型测试。不过这些方案在实际大规模自动化部署时仍面临一些现实挑战。</p>
+<h5 id="1-5-1-1-流水线阶段划分不平衡-Stage-Partitioning-Imbalance"><a href="#1-5-1-1-流水线阶段划分不平衡-Stage-Partitioning-Imbalance" class="headerlink" title="1.5.1.1 流水线阶段划分不平衡 (Stage Partitioning Imbalance)"></a>1.5.1.1 流水线阶段划分不平衡 (Stage Partitioning Imbalance)</h5><ul>
 <li><p><strong>解决方案与验证</strong>：团队采用了一种策略，即手动让负责计算损失函数（Loss）的最后一个流水线阶段少分配几个 Transformer 层，以此来平衡计算时间 。通过在一个任务上进行手动调优，他们获得了 <strong>9.9% 的速度提升</strong> 。</p>
 </li>
 <li><p><strong>现实局限</strong>：手动调优非常困难，且因为必须以完整的 Transformer 层为单位进行划分，所以即使经过调优，各个阶段的计算负载依然无法做到完美平衡 。</p>
 </li>
 </ul>
-<h4 id="1-5-2-序列长度不平衡-Sequence-Length-Imbalance"><a href="#1-5-2-序列长度不平衡-Sequence-Length-Imbalance" class="headerlink" title="1.5.2 序列长度不平衡 (Sequence Length Imbalance)"></a>1.5.2 序列长度不平衡 (Sequence Length Imbalance)</h4><ul>
+<h5 id="1-5-1-2-序列长度不平衡-Sequence-Length-Imbalance"><a href="#1-5-1-2-序列长度不平衡-Sequence-Length-Imbalance" class="headerlink" title="1.5.1.2 序列长度不平衡 (Sequence Length Imbalance)"></a>1.5.1.2 序列长度不平衡 (Sequence Length Imbalance)</h5><ul>
 <li><p><strong>解决方案与验证</strong>：针对长文本训练导致的各个微批次（Microbatch）耗时不同的问题，团队开发了一个原型系统：使用贪心算法在数据并行（DP）的不同节点间重新分配文本序列，尽量让每个微批次的文本长度平方和保持一致 。他们在一个最大序列长度为 32K 的代表性任务上测试了该方案，观察到了高达 <strong>23.9% 的吞吐量提升</strong> 。</p>
 </li>
 <li><p><strong>现实局限</strong>：将此修复方案部署到实际生产中还需要进一步评估其在大规模环境下的影响（留作未来工作），并且这种为了平衡时间而进行的重新分配可能会增加某些特定节点的内存需求 。</p>
 </li>
 </ul>
-<h4 id="1-5-3-Python-自动垃圾回收-GC"><a href="#1-5-3-Python-自动垃圾回收-GC" class="headerlink" title="1.5.3 Python 自动垃圾回收 (GC)"></a>1.5.3 Python 自动垃圾回收 (GC)</h4><ul>
+<h5 id="1-5-1-3-Python-自动垃圾回收-GC"><a href="#1-5-1-3-Python-自动垃圾回收-GC" class="headerlink" title="1.5.1.3 Python 自动垃圾回收 (GC)"></a>1.5.1.3 Python 自动垃圾回收 (GC)</h5><ul>
 <li><p><strong>解决方案与验证</strong>：工程团队在 2023 年实现了一个“计划 GC (Planned GC)”的优化方案，该方案会关闭 Python 默认的自动 GC，改为由用户指定一个训练步数间隔，让所有节点在同一时刻同步执行 GC 。在一个包含 128 个 DP 节点的任务中，设定每 500 步集中执行一次 GC 带来了 <strong>12.6% 的性能改善</strong> 。</p>
 </li>
 <li><p><strong>现实局限</strong>：选择合适的 GC 间隔非常棘手；设置过大容易导致内存溢出崩溃，设置过小则会拖慢性能 。因此，为了保守起见，该功能在集群中默认并未开启，需由用户自行分析后启用 。</p>
 </li>
 </ul>
-<h4 id="1-5-4-虚假内核依赖-False-Kernel-Dependency"><a href="#1-5-4-虚假内核依赖-False-Kernel-Dependency" class="headerlink" title="1.5.4 虚假内核依赖 (False Kernel Dependency)"></a>1.5.4 虚假内核依赖 (False Kernel Dependency)</h4><ul>
+<h5 id="1-5-1-4-虚假内核依赖-False-Kernel-Dependency"><a href="#1-5-1-4-虚假内核依赖-False-Kernel-Dependency" class="headerlink" title="1.5.1.4 虚假内核依赖 (False Kernel Dependency)"></a>1.5.1.4 虚假内核依赖 (False Kernel Dependency)</h5><ul>
 <li><strong>解决方案与验证</strong>：针对混合专家（MoE）模型中可能出现的无关联操作互相阻塞的问题，团队发现通过增加系统参数 <code>CUDA_DEVICE_MAX_CONNECTIONS</code> 的值可以有效缓解这一现象 。</li>
 </ul>
-<hr>
-<p>总体来看，论文不仅通过“假设分析”量化了落后节点造成的浪费，还用实际的测试数据（如 9.9%、23.9%、12.6% 的提升）证明了：只要能针对性地解决这些隐性瓶颈，集群的训练效率就能得到大幅度提升。</p>
-<h3 id="1-6-对于python的gc问题，是否可以通过框架设计，类似c-的raii，自动销毁，而不是stop-the-world？"><a href="#1-6-对于python的gc问题，是否可以通过框架设计，类似c-的raii，自动销毁，而不是stop-the-world？" class="headerlink" title="1.6 对于python的gc问题，是否可以通过框架设计，类似c++的raii，自动销毁，而不是stop the world？"></a>1.6 对于python的gc问题，是否可以通过框架设计，类似c++的raii，自动销毁，而不是stop the world？</h3><p>作者团队<strong>并没有</strong>采用从框架底层重构来实现类似 C++ RAII（资源获取即初始化）的机制，而是采用了一种工程妥协上的手段：<strong>同步计划 GC (Planned GC)</strong> 。</p>
-<h4 id="1-6-1-论文中的实际做法"><a href="#1-6-1-论文中的实际做法" class="headerlink" title="1.6.1 论文中的实际做法"></a>1.6.1 论文中的实际做法</h4><p>为了解决各个 Python 进程在不同步的时间点触发 GC 导致的“Stop-the-world”阻塞问题 ，字节跳动的团队采取的策略是：<strong>直接关闭 Python 的自动 GC 机制，改为由用户指定一个训练步数间隔，手动且同步地触发 GC</strong> 。</p>
+<h4 id="1-5-2-对于python的gc问题，是否可以通过框架设计，类似c-的raii，自动销毁，而不是stop-the-world？"><a href="#1-5-2-对于python的gc问题，是否可以通过框架设计，类似c-的raii，自动销毁，而不是stop-the-world？" class="headerlink" title="1.5.2 对于python的gc问题，是否可以通过框架设计，类似c++的raii，自动销毁，而不是stop the world？"></a>1.5.2 对于python的gc问题，是否可以通过框架设计，类似c++的raii，自动销毁，而不是stop the world？</h4><p>作者团队<strong>并没有</strong>采用从框架底层重构来实现类似 C++ RAII（资源获取即初始化）的机制，而是采用了一种工程妥协上的手段：<strong>同步计划 GC (Planned GC)</strong> 。</p>
+<h5 id="1-5-2-1-论文中的实际做法"><a href="#1-5-2-1-论文中的实际做法" class="headerlink" title="1.5.2.1 论文中的实际做法"></a>1.5.2.1 论文中的实际做法</h5><p>为了解决各个 Python 进程在不同步的时间点触发 GC 导致的“Stop-the-world”阻塞问题 ，字节跳动的团队采取的策略是：<strong>直接关闭 Python 的自动 GC 机制，改为由用户指定一个训练步数间隔，手动且同步地触发 GC</strong> 。</p>
 <p>通过让所有计算节点在同一时刻一起暂停进行垃圾回收，就可以避免个别节点掉队而拖慢全局的情况 。</p>
-<h4 id="1-6-2-为什么不通过框架设计实现类似-RAII-的自动销毁？"><a href="#1-6-2-为什么不通过框架设计实现类似-RAII-的自动销毁？" class="headerlink" title="1.6.2 为什么不通过框架设计实现类似 RAII 的自动销毁？"></a>1.6.2 为什么不通过框架设计实现类似 RAII 的自动销毁？</h4><p>从纯技术的角度来看，你的思路是理想的。但在深度学习框架（如文中基于的 PyTorch &#x2F; Megatron-LM ）的实际落地中，想要用 RAII 完全替代 Stop-the-world GC 会面临几个现实壁垒：</p>
+<h5 id="1-5-2-2-为什么不通过框架设计实现类似-RAII-的自动销毁？"><a href="#1-5-2-2-为什么不通过框架设计实现类似-RAII-的自动销毁？" class="headerlink" title="1.5.2.2 为什么不通过框架设计实现类似 RAII 的自动销毁？"></a>1.5.2.2 为什么不通过框架设计实现类似 RAII 的自动销毁？</h5><p>在深度学习框架（如文中基于的 PyTorch &#x2F; Megatron-LM ）的实际落地中，想要用 RAII 完全替代 Stop-the-world GC 会面临几个现实壁垒：</p>
 <ol>
 <li><p><strong>Python 本身的循环引用问题</strong>：Python 的底层内存管理其实很大程度上依赖于“引用计数”，这本身有点类似 C++ 的 <code>std::shared_ptr</code>，当引用计数归零时对象会立即销毁。然而，深度学习框架在构建复杂的计算图（尤其是在保留前向传播状态以供反向传播使用时）极易产生<strong>循环引用（Circular References）</strong>。纯粹的引用计数无法解决循环引用，因此 Python 必须保留一个带有“Stop-the-world”特性的循环垃圾回收器（Cyclic GC）来定期兜底清理。</p>
 </li>
@@ -484,25 +478,25 @@
 <li><p><strong>彻底重构的成本极高</strong>：如果想要完全避免 Python 的 GC，可能需要将深度学习框架的 Python 前端写得非常“不 Pythonic”（比如手动打破所有的循环引用，或者用上下文管理器接管所有张量的生命周期），或者干脆彻底拥抱纯 C++&#x2F;Rust 的部署方案。这对庞大的算法研发团队来说，迁移成本和学习曲线是不可接受的。</p>
 </li>
 </ol>
-<p>总结来说，你的思路在系统架构上是更优的（框架的 C++ 底层确实也是这么做的 ），但在面对庞大且对 Python 极度依赖的 AI 生态时，论文团队选择了一种性价比更高的工程解法：既然无法消灭停顿，那就让大家“步调一致地停顿” 。</p>
-<h3 id="1-7-当一个模型确定时，目前工业界是否有推理框架可以避免gc？"><a href="#1-7-当一个模型确定时，目前工业界是否有推理框架可以避免gc？" class="headerlink" title="1.7 当一个模型确定时，目前工业界是否有推理框架可以避免gc？"></a>1.7 当一个模型确定时，目前工业界是否有推理框架可以避免gc？</h3><p><strong>在目前的工业界，一旦模型结构确定并进入“推理（Inference）”阶段，主流的推理框架已经完全可以避免 Python 级别的垃圾回收（GC）停顿。</strong> 你的直觉非常准确，工业界的解法正是通过<strong>抛弃 Python 动态分配、转向底层语言（C++&#x2F;CUDA&#x2F;Rust）的 RAII 机制，并结合激进的“内存预分配”策略</strong>来实现的。</p>
+<p>在面对庞大且对 Python 极度依赖的 AI 生态时，论文团队选择了一种性价比更高的工程解法：既然无法消灭停顿，那就让大家“步调一致地停顿” 。</p>
+<h4 id="1-5-3-当一个模型确定时，目前工业界是否有推理框架可以避免gc？"><a href="#1-5-3-当一个模型确定时，目前工业界是否有推理框架可以避免gc？" class="headerlink" title="1.5.3 当一个模型确定时，目前工业界是否有推理框架可以避免gc？"></a>1.5.3 当一个模型确定时，目前工业界是否有推理框架可以避免gc？</h4><p><strong>在目前的工业界，一旦模型结构确定并进入“推理（Inference）”阶段，主流的推理框架已经完全可以避免 Python 级别的垃圾回收（GC）停顿。</strong> 你的直觉非常准确，工业界的解法正是通过<strong>抛弃 Python 动态分配、转向底层语言（C++&#x2F;CUDA&#x2F;Rust）的 RAII 机制，并结合激进的“内存预分配”策略</strong>来实现的。</p>
 <p>推理环境与训练环境有本质区别。训练需要保存海量的前向激活值（Activations）用于反向传播，且张量大小经常动态变化；而推理（尤其是 LLM 的生成过程）是高度确定性的前向计算。</p>
 <p>以下是目前工业界主流推理框架（如 <strong>vLLM、TensorRT-LLM、LMDeploy、Llama.cpp</strong> 等）彻底绕开 GC 甚至绕开 Python 运行时的几个核心设计：</p>
-<h4 id="1-7-1-核心计算层全面-C-x2F-CUDA-化-绕过-Python"><a href="#1-7-1-核心计算层全面-C-x2F-CUDA-化-绕过-Python" class="headerlink" title="1.7.1 核心计算层全面 C++&#x2F;CUDA 化 (绕过 Python)"></a>1.7.1 核心计算层全面 C++&#x2F;CUDA 化 (绕过 Python)</h4><p>在现代推理框架中，Python 仅仅作为一个最外层的 API 接口（例如使用 FastAPI 接收 HTTP 请求）。真正的调度（Scheduling）、批处理（Batching）和模型前向计算，全部下沉到了 C++ 或 Rust 编写的引擎层。</p>
+<h5 id="1-5-3-1-核心计算层全面-C-x2F-CUDA-化-绕过-Python"><a href="#1-5-3-1-核心计算层全面-C-x2F-CUDA-化-绕过-Python" class="headerlink" title="1.5.3.1 核心计算层全面 C++&#x2F;CUDA 化 (绕过 Python)"></a>1.5.3.1 核心计算层全面 C++&#x2F;CUDA 化 (绕过 Python)</h5><p>在现代推理框架中，Python 仅仅作为一个最外层的 API 接口（例如使用 FastAPI 接收 HTTP 请求）。真正的调度（Scheduling）、批处理（Batching）和模型前向计算，全部下沉到了 C++ 或 Rust 编写的引擎层。</p>
 <ul>
 <li><p><strong>无动态对象创建</strong>：在生成每个 Token 的热路径（Hot Path）上，没有任何 Python 对象被创建或销毁。这就意味着 Python 的 GC 根本没有机会被触发。</p>
 </li>
 <li><p><strong>RAII 的应用</strong>：框架底层完全依赖 C++ 的 RAII（资源获取即初始化）或 Rust 的所有权机制来管理请求上下文和生命周期，做到内存的确定性释放，彻底消除了“Stop-the-world”现象。</p>
 </li>
 </ul>
-<h4 id="1-7-2-内存池与显存预分配-拒绝动态内存分配"><a href="#1-7-2-内存池与显存预分配-拒绝动态内存分配" class="headerlink" title="1.7.2 内存池与显存预分配 (拒绝动态内存分配)"></a>1.7.2 内存池与显存预分配 (拒绝动态内存分配)</h4><p>LLM 推理中最大的内存消耗来自于 KV Cache（键值缓存）。如果像传统的 Python 深度学习代码那样，每次生成新 Token 都去动态申请显存（<code>cudaMalloc</code>）拼接张量，不仅极度缓慢，还会引发严重的显存碎片和语言层面的 GC 压力。</p>
+<h5 id="1-5-3-2-内存池与显存预分配-拒绝动态内存分配"><a href="#1-5-3-2-内存池与显存预分配-拒绝动态内存分配" class="headerlink" title="1.5.3.2 内存池与显存预分配 (拒绝动态内存分配)"></a>1.5.3.2 内存池与显存预分配 (拒绝动态内存分配)</h5><p>LLM 推理中最大的内存消耗来自于 KV Cache（键值缓存）。如果像传统的 Python 深度学习代码那样，每次生成新 Token 都去动态申请显存（<code>cudaMalloc</code>）拼接张量，不仅极度缓慢，还会引发严重的显存碎片和语言层面的 GC 压力。</p>
 <ul>
 <li><p><strong>PagedAttention 机制</strong>：以 vLLM 为代表的框架引入了操作系统级别的“虚拟内存分页”思想。在服务启动时，框架会直接向 GPU <strong>一次性申请一整块庞大的显存（预分配池）</strong>，划分为固定大小的 Block（物理块）。</p>
 </li>
 <li><p>当新的请求到来或生成新 Token 时，底层系统只是在维护一个“页表（Block Table）”的指针映射，而<strong>不会发生任何实际的内存动态分配和释放动作</strong>。没有动态分配，自然就没有垃圾回收。</p>
 </li>
 </ul>
-<h4 id="1-7-3-CUDA-Graphs-与计算图静态编译-模型静态化"><a href="#1-7-3-CUDA-Graphs-与计算图静态编译-模型静态化" class="headerlink" title="1.7.3 CUDA Graphs 与计算图静态编译 (模型静态化)"></a>1.7.3 CUDA Graphs 与计算图静态编译 (模型静态化)</h4><p>一旦模型结构和权重确定，像 <strong>TensorRT-LLM</strong> 这样的工业级引擎会进行一步“编译（Compilation）”过程：</p>
+<h5 id="1-5-3-3-CUDA-Graphs-与计算图静态编译-模型静态化"><a href="#1-5-3-3-CUDA-Graphs-与计算图静态编译-模型静态化" class="headerlink" title="1.5.3.3 CUDA Graphs 与计算图静态编译 (模型静态化)"></a>1.5.3.3 CUDA Graphs 与计算图静态编译 (模型静态化)</h5><p>一旦模型结构和权重确定，像 <strong>TensorRT-LLM</strong> 这样的工业级引擎会进行一步“编译（Compilation）”过程：</p>
 <ul>
 <li><p>它们会将模型的计算逻辑提前追踪（Trace）并静态固化成一张图。</p>
 </li>
@@ -511,7 +505,7 @@
 <li><p>这种方式完全脱离了 Python 解释器的逐行解释执行，不仅避免了 GC，还极大地降低了 CPU 侧下发 Kernel 的调度延迟（CPU Overhead）。</p>
 </li>
 </ul>
-<h4 id="1-7-4-甚至连-API-层也抛弃-Python"><a href="#1-7-4-甚至连-API-层也抛弃-Python" class="headerlink" title="1.7.4 甚至连 API 层也抛弃 Python"></a>1.7.4 甚至连 API 层也抛弃 Python</h4><p>为了追求极致的延迟和并发，很多现代架构甚至把最外层的服务接收端也从 Python 剥离了。例如：</p>
+<h5 id="1-5-3-4-API-层抛弃-Python"><a href="#1-5-3-4-API-层抛弃-Python" class="headerlink" title="1.5.3.4  API 层抛弃 Python"></a>1.5.3.4  API 层抛弃 Python</h5><p>为了追求极致的延迟和并发，很多现代架构甚至把最外层的服务接收端也从 Python 剥离了。例如：</p>
 <ul>
 <li><p><strong>TGI (Text Generation Inference)</strong> 和部分高并发中间件使用 Rust 编写整个网关和调度队列。</p>
 </li>
@@ -519,9 +513,8 @@
 </li>
 </ul>
 <p><strong>总结来说：</strong> 在训练阶段（如论文所述），由于极其复杂的混合并行策略、动态计算图和大量的调试验证需求，业界依然不得不忍受 Python 带来的开发便利及其附赠的 GC 停顿之痛。</p>
-<p>但在<strong>推理阶段</strong>，由于模型已经“确定”，工业界早已将其视为一个“高性能系统工程”问题，通过<strong>预分配池化内存、静态图编译和底层系统语言彻底重写热路径</strong>，完美实现了你构想的那种确定性资源管理。</p>
+<p>但在<strong>推理阶段</strong>，由于模型已经“确定”，工业界早已将其视为一个“高性能系统工程”问题，通过<strong>预分配池化内存、静态图编译和底层系统语言彻底重写热路径</strong>，完美实现了确定性资源管理。</p>
 <h2 id="2-（Seed）Comet-Fine-grained-Computation-communication"><a href="#2-（Seed）Comet-Fine-grained-Computation-communication" class="headerlink" title="2. （Seed）Comet: Fine-grained Computation-communication"></a>2. （Seed）Comet: Fine-grained Computation-communication</h2><p>这篇文章介绍了一个名为 <strong>COMET</strong> 的优化系统，旨在通过细粒度的计算与通信重叠（overlapping）技术，大幅提升混合专家（Mixture-of-Experts, MoE）模型在分布式环境下的执行效率 。</p>
-<p>以下是该文章的核心内容总结：</p>
 <h3 id="2-1-核心问题：MoE-模型的通信瓶颈"><a href="#2-1-核心问题：MoE-模型的通信瓶颈" class="headerlink" title="2.1 核心问题：MoE 模型的通信瓶颈"></a>2.1 核心问题：MoE 模型的通信瓶颈</h3><p>在分布式场景下扩展大型 MoE 模型时，设备间的通信开销极其庞大 。在主流模型和框架中，MoE 层的跨设备通信时间甚至能占到整个模型执行时间的 47% 。现有的解决方案通常采用粗粒度的流水线技术来重叠计算与通信，但由于以下两个原因，这种方法的效率并不理想：</p>
 <ul>
 <li><p><strong>粒度不匹配与复杂的数据依赖</strong>：通信通常是以 Token 为粒度进行的，而为了保证 GPU 效率，计算（GEMM）是以块（tile）为粒度进行的，这导致计算在所有相关 Token 准备好之前无法开始，产生了难以避免的 GPU 闲置时间 。</p>
@@ -554,7 +547,7 @@
 <li><p><strong>实际落地</strong>：COMET 系统目前已在包含上万张 GPU 规模的生产环境中部署，成功节省了数百万个 GPU 小时的算力成本 。</p>
 </li>
 </ul>
-<h3 id="2-4-这个工作是偏向训练侧还是推理侧？"><a href="#2-4-这个工作是偏向训练侧还是推理侧？" class="headerlink" title="2.4 这个工作是偏向训练侧还是推理侧？"></a>2.4 这个工作是偏向训练侧还是推理侧？</h3><p>根据论文内容，这项工作<strong>同时适用于训练侧和推理侧</strong>，但在具体的系统实现和实验评估中，具有非常明显的<strong>训练侧</strong>倾向和应用背景。</p>
+<h3 id="2-4-思考"><a href="#2-4-思考" class="headerlink" title="2.4 思考"></a>2.4 思考</h3><h4 id="2-4-1-工作偏向"><a href="#2-4-1-工作偏向" class="headerlink" title="2.4.1 工作偏向"></a>2.4.1 工作偏向</h4><p>根据论文内容，这项工作<strong>同时适用于训练侧和推理侧</strong>，但在具体的系统实现和实验评估中，具有非常明显的<strong>训练侧</strong>倾向和应用背景。</p>
 <p>以下是具体的文献依据：</p>
 <ul>
 <li><p><strong>明确指出双端适用</strong>：论文明确提到，COMET 系统已经被部署在拥有上万张 GPU 的生产集群中，用于加速大型 MoE 模型的“训练和推理”（training and inference） 。</p>
@@ -566,7 +559,6 @@
 </ul>
 <p>总体而言，COMET 提出的底层通信与计算重叠机制（如基于共享张量的依赖解析和算子内的自适应线程块分配）在原理上是通用的。但它在 Megatron-LM 上的工程落地，以及实验中测试的混合并行策略，很大程度上是为了解决大规模分布式训练场景下的高昂通信痛点。</p>
 <h2 id="3-HELM-Characterizing-Unified-Memory-Accesses-to-Improve-GPU-Performance-under-Memory-Oversubscription"><a href="#3-HELM-Characterizing-Unified-Memory-Accesses-to-Improve-GPU-Performance-under-Memory-Oversubscription" class="headerlink" title="3. HELM: Characterizing Unified Memory Accesses to Improve GPU Performance under Memory Oversubscription"></a>3. HELM: Characterizing Unified Memory Accesses to Improve GPU Performance under Memory Oversubscription</h2><p>这篇发表在 SC ‘25 上的学术论文题为《HELM: Characterizing Unified Memory Accesses to Improve GPU Performance under Memory Oversubscription》 。作者是来自克莱姆森大学（Clemson University）和北卡罗来纳大学夏洛特分校的 Nathan Jones、Tyler Allen 和 Rong Ge 。</p>
-<p>以下是该论文的详细分析与总结：</p>
 <h3 id="3-1-核心研究背景与痛点"><a href="#3-1-核心研究背景与痛点" class="headerlink" title="3.1 核心研究背景与痛点"></a>3.1 核心研究背景与痛点</h3><ul>
 <li><p><strong>统一内存技术的普及与挑战</strong>：统一内存（Unified Memory, UM）技术（如 NVIDIA 的 UVM）将 GPU 内存集成到主机的虚拟内存系统中，通过透明的数据迁移，极大地简化了 CPU 和 GPU 之间的异构编程复杂性 。</p>
 </li>
@@ -608,17 +600,17 @@
 </li>
 </ul>
 <p>HELM 通过挖掘原本晦涩难懂的页面错误数据，首次为高度并行的统一内存系统提供了可解释的局部性指标 。它不仅可以指导静态策略的制定，更展示了在未来被集成到实时、自治的动态内存管理运行时系统中的巨大潜力 。</p>
-<h3 id="3-5-如何根据核心指标进行决策的"><a href="#3-5-如何根据核心指标进行决策的" class="headerlink" title="3.5 如何根据核心指标进行决策的"></a>3.5 如何根据核心指标进行决策的</h3><p>论文中基于 HELM 指标的决策机制是通过一个名为 <strong>指标驱动管理 (MIM, Metric Informed Management)</strong> 的验证工具来实现的 。</p>
+<h3 id="3-5-思考"><a href="#3-5-思考" class="headerlink" title="3.5 思考"></a>3.5 思考</h3><h4 id="3-5-1-如何根据核心指标进行决策的"><a href="#3-5-1-如何根据核心指标进行决策的" class="headerlink" title="3.5.1 如何根据核心指标进行决策的"></a>3.5.1 如何根据核心指标进行决策的</h4><p>论文中基于 HELM 指标的决策机制是通过一个名为 <strong>指标驱动管理 (MIM, Metric Informed Management)</strong> 的验证工具来实现的 。</p>
 <p>MIM 的核心逻辑是一棵决策树 ，它将应用程序中的每一个内存分配（Allocation，即程序中每次申请的独立内存块）作为评估对象，最终为其分配三种底层策略之一：<strong>固定在设备端 (Pin to Device)<strong>、</strong>按需迁移 (Migrate on Demand)</strong> 或 <strong>固定在主机端 (Pin to Host)</strong> 。</p>
 <p>具体的决策过程分为以下三个详细步骤：</p>
-<h4 id="3-5-1-流式测试-Streaming-Test"><a href="#3-5-1-流式测试-Streaming-Test" class="headerlink" title="3.5.1 流式测试 (Streaming Test)"></a>3.5.1 流式测试 (Streaming Test)</h4><p>这一步用于将缺乏数据重用、呈现严格线性访问的“流式应用”（如 <code>stream</code> 或 <code>fdtd-2d</code>）与其他应用区分开来 。因为流式应用的底层性能特征完全不同，后续的评估标准也必须相应改变 。</p>
+<h5 id="3-5-1-1-流式测试-Streaming-Test"><a href="#3-5-1-1-流式测试-Streaming-Test" class="headerlink" title="3.5.1.1 流式测试 (Streaming Test)"></a>3.5.1.1 流式测试 (Streaming Test)</h5><p>这一步用于将缺乏数据重用、呈现严格线性访问的“流式应用”（如 <code>stream</code> 或 <code>fdtd-2d</code>）与其他应用区分开来 。因为流式应用的底层性能特征完全不同，后续的评估标准也必须相应改变 。</p>
 <ul>
 <li><p><strong>判定逻辑</strong>：如果一个内存分配的 <strong>细粒度错误跨度分配比 ($\hat{S}_{[1]}^{a}$)</strong> 大于 0.005，或者其 <strong>分配重复率 ($fdup^{a}$)</strong> 小于 1，则判定为“非流式 (Not Streaming)” 。反之，则为“流式 (Streaming)” 。</p>
 </li>
 <li><p><strong>后续影响</strong>：只有当应用的所有内存分配都被判定为流式时，系统在接下来的步骤中才会采取“忽略重用 (Ignore Reuse)”的评估逻辑；否则，采用“考虑重用 (Consider Reuse)”逻辑 。</p>
 </li>
 </ul>
-<h4 id="3-5-2-设备分配装箱-Device-Allocation-Packing"><a href="#3-5-2-设备分配装箱-Device-Allocation-Packing" class="headerlink" title="3.5.2 设备分配装箱 (Device Allocation Packing)"></a>3.5.2 设备分配装箱 (Device Allocation Packing)</h4><p>GPU 的设备内存（Device Memory）具有极低的访问延迟，是最宝贵的性能资源 。由于设备容量存在硬性限制，MIM 将“决定哪些分配留在 GPU 内”的问题转化为了一个经典的背包问题（Bin Packing Problem） 。</p>
+<h5 id="3-5-1-2-设备分配装箱-Device-Allocation-Packing"><a href="#3-5-1-2-设备分配装箱-Device-Allocation-Packing" class="headerlink" title="3.5.1.2 设备分配装箱 (Device Allocation Packing)"></a>3.5.1.2 设备分配装箱 (Device Allocation Packing)</h5><p>GPU 的设备内存（Device Memory）具有极低的访问延迟，是最宝贵的性能资源 。由于设备容量存在硬性限制，MIM 将“决定哪些分配留在 GPU 内”的问题转化为了一个经典的背包问题（Bin Packing Problem） 。</p>
 <ul>
 <li><p>**非流式应用 (考虑重用)**：倾向于将 <strong>内存占用 (Memory Footprint)</strong> 最大的分配固定在设备上 。因为这些分配在被频繁迁移时会导致极高的空间代价和系统抖动 。其“装箱价值”函数为：$value(a) &#x3D; \max(\hat{S}_{[1000]}^{a}, \overline{S}^{a})$，即优先选择相对于自身大小或相对于其他分配而言，拥有巨大错误跨度的分配 。</p>
 </li>
@@ -627,19 +619,19 @@
 <li><p><strong>执行</strong>：系统遍历所有可能的内存分配组合 $S \subset A$，在总容量不超过 GPU 显存上限的前提下，找出总价值 ($BEST_VALUE$) 最高的组合，将它们直接 <strong>固定在设备端 (Pin to Device)</strong> 。</p>
 </li>
 </ul>
-<h4 id="3-5-3-迁移阈值-Migration-Threshold"><a href="#3-5-3-迁移阈值-Migration-Threshold" class="headerlink" title="3.5.3 迁移阈值 (Migration Threshold)"></a>3.5.3 迁移阈值 (Migration Threshold)</h4><p>对于在装箱阶段未能挤进 GPU 设备的剩余内存分配，MIM 必须在“按需迁移 (Migrate on Demand)”和“固定在主机端 (Pin to Host，依靠 RDMA 远程访问)”之间做出最后的抉择 。</p>
+<h5 id="3-5-1-3-迁移阈值-Migration-Threshold"><a href="#3-5-1-3-迁移阈值-Migration-Threshold" class="headerlink" title="3.5.1.3 迁移阈值 (Migration Threshold)"></a>3.5.1.3 迁移阈值 (Migration Threshold)</h5><p>对于在装箱阶段未能挤进 GPU 设备的剩余内存分配，MIM 必须在“按需迁移 (Migrate on Demand)”和“固定在主机端 (Pin to Host，依靠 RDMA 远程访问)”之间做出最后的抉择 。</p>
 <ul>
 <li><p>**非流式应用 (考虑重用)**：决策需要综合评估数据重用和空间局部性 。如果 <strong>错误密度 ($D^a$)</strong> 大于 0.02 且 <strong>分配重复率 ($fdup^a$)</strong> 大于 1（意味着短期内数据被重用的可能性较高），则选择“按需迁移” ；否则，选择“固定在主机端”以避免低效的搬运开销 。</p>
 </li>
 <li><p>**流式应用 (忽略重用)**：由于流式访问几乎没有短期重用，决策完全依赖于错误密度 。系统提高了阈值：只有当 <strong>错误密度 ($D^a$)</strong> 大于 0.13 时，才选择“按需迁移” ；否则，直接“固定在主机端” 。</p>
 </li>
 </ul>
-<h3 id="3-6-考虑slo再进行装箱"><a href="#3-6-考虑slo再进行装箱" class="headerlink" title="3.6 考虑slo再进行装箱"></a>3.6 考虑slo再进行装箱</h3><p><strong>这篇论文现有的 MIM 决策树并没有考虑 SLO（服务等级目标，Service Level Objective）</strong>。</p>
+<h4 id="3-5-2-考虑slo再进行装箱"><a href="#3-5-2-考虑slo再进行装箱" class="headerlink" title="3.5.2 考虑slo再进行装箱"></a>3.5.2 考虑slo再进行装箱</h4><p><strong>这篇论文现有的 MIM 决策树并没有考虑 SLO（服务等级目标，Service Level Objective）</strong>。</p>
 <p>论文的评估标准非常直接，就是以最短的<strong>整体内核执行时间（Kernel Execution Time）</strong>作为唯一的性能优化目标 。这是一种典型的高性能计算（HPC）和离线吞吐量优先的思路，它假设所有的内存分配对于时间的敏感度是平权的。</p>
 <p>如果将 SLO 约束引入到装箱阶段（Device Allocation Packing），<strong>绝对会在实际生产环境中带来显著的提升</strong>。以下是具体的原因和可能的演进方向：</p>
-<h4 id="3-6-1-从“追求吞吐量”到“保证尾延迟”"><a href="#3-6-1-从“追求吞吐量”到“保证尾延迟”" class="headerlink" title="3.6.1 从“追求吞吐量”到“保证尾延迟”"></a>3.6.1 从“追求吞吐量”到“保证尾延迟”</h4><p>目前的装箱策略本质上是一个追求整体利益最大化的 0-1 背包问题，它基于贪心启发式：优先把能带来最大整体时间收益的内存块（比如占用大或重用率高的分配）固定到 GPU 显存中 。</p>
+<h5 id="3-5-2-1-从“追求吞吐量”到“保证尾延迟”"><a href="#3-5-2-1-从“追求吞吐量”到“保证尾延迟”" class="headerlink" title="3.5.2.1 从“追求吞吐量”到“保证尾延迟”"></a>3.5.2.1 从“追求吞吐量”到“保证尾延迟”</h5><p>目前的装箱策略本质上是一个追求整体利益最大化的 0-1 背包问题，它基于贪心启发式：优先把能带来最大整体时间收益的内存块（比如占用大或重用率高的分配）固定到 GPU 显存中 。</p>
 <p>但在对尾延迟（Tail Latency）极度敏感的场景中（例如<strong>大语言模型 (LLM) 推理优化</strong>中的首字生成时间，或者<strong>高频交易 (HFT)</strong> 系统中的微秒级响应），如果关键路径上的数据被触发了按需迁移（Demand Migration），即使整体吞吐量很高，那次毫秒级的 Page Fault 延迟也足以导致直接违背 SLO。</p>
-<h4 id="3-6-2-引入-SLO-后的装箱算法演进"><a href="#3-6-2-引入-SLO-后的装箱算法演进" class="headerlink" title="3.6.2 引入 SLO 后的装箱算法演进"></a>3.6.2 引入 SLO 后的装箱算法演进</h4><p>如果考虑 SLO，装箱问题就会从简单的背包问题变成一个<strong>带严格约束的优化问题（Constrained Optimization Problem）</strong>。装箱的价值计算逻辑需要做出以下改变：</p>
+<h5 id="3-5-2-2-引入-SLO-后的装箱算法演进"><a href="#3-5-2-2-引入-SLO-后的装箱算法演进" class="headerlink" title="3.5.2.2 引入 SLO 后的装箱算法演进"></a>3.5.2.2 引入 SLO 后的装箱算法演进</h5><p>如果考虑 SLO，装箱问题就会从简单的背包问题变成一个<strong>带严格约束的优化问题（Constrained Optimization Problem）</strong>。装箱的价值计算逻辑需要做出以下改变：</p>
 <ul>
 <li><p><strong>引入 SLA&#x2F;SLO 权重</strong>：在计算某个内存分配的价值 $value(a)$ 时，增加一个与 SLO 紧迫度相关的权重因子。对于具有严格延迟要求的推理任务或实时计算任务的内存块，赋予极高的“紧急权重”。</p>
 </li>
@@ -648,24 +640,23 @@
 <li><p><strong>抢占式驱逐</strong>：甚至可以突破静态装箱的限制，当带有高优 SLO 的请求到达时，动态计算并立刻驱逐那些正在设备端但 SLO 要求较低的分配。</p>
 </li>
 </ul>
-<h4 id="3-6-3-总结"><a href="#3-6-3-总结" class="headerlink" title="3.6.3 总结"></a>3.6.3 总结</h4><p>这篇论文提出的 HELM 指标体系最大的贡献在于它迈出了将“统一内存访问黑盒”转化为“可解释特征”的第一步 。它的设计是为了快速评估和验证 ，而不是作为一个完备的工业级调度器。如果在此基础上，将调度器的 SLO 约束作为先决条件整合进价值函数中，将是一个非常成熟且极具落地价值的系统级优化。</p>
-<h3 id="3-7-提取装箱函数"><a href="#3-7-提取装箱函数" class="headerlink" title="3.7 提取装箱函数"></a>3.7 提取装箱函数</h3><h4 id="3-7-1-原问题"><a href="#3-7-1-原问题" class="headerlink" title="3.7.1 原问题"></a>3.7.1 原问题</h4><p>对于目前的调度问题，都可以将装箱函数提取出来。在外界，使用一个特定的框架完成动态选取装箱函数（根据不同的SLO需求、装箱时间与调度时间约束等）。而对于装箱函数，可以类似因子挖掘的思路，使用RL等方式获得大量的装箱函数，这方法是否可行？</p>
-<h4 id="3-7-2-前述总结"><a href="#3-7-2-前述总结" class="headerlink" title="3.7.2 前述总结"></a>3.7.2 前述总结</h4><p>本质上是将<strong>“策略生成（Policy Generation）”</strong>与<strong>“策略执行（Policy Execution）”</strong>进行了完美的解耦。</p>
+<h4 id="3-5-3-提取装箱函数"><a href="#3-5-3-提取装箱函数" class="headerlink" title="3.5.3 提取装箱函数"></a>3.5.3 提取装箱函数</h4><h5 id="3-5-3-1-问题"><a href="#3-5-3-1-问题" class="headerlink" title="3.5.3.1 问题"></a>3.5.3.1 问题</h5><p>当前针对不同场景，有不同的需求，需要不同的装箱函数。此外，装箱函数可能是NP-Hard的，需要通过别的方式拟合。</p>
+<p>对于目前的调度问题，都可以将装箱函数提取出来。在外界，使用一个特定的框架完成动态选取装箱函数（根据不同的SLO需求、装箱时间与调度时间约束等）。而对于装箱函数，可以类似因子挖掘的思路，使用RL等方式获得大量的装箱函数，这方法是否可行？</p>
+<h5 id="3-5-3-2-前述总结"><a href="#3-5-3-2-前述总结" class="headerlink" title="3.5.3.2 前述总结"></a>3.5.3.2 前述总结</h5><p>本质上是将<strong>“策略生成（Policy Generation）”</strong>与<strong>“策略执行（Policy Execution）”</strong>进行了完美的解耦。</p>
 <p>这种将金融领域的“因子挖掘（Factor Mining）”思维引入底层系统调度的跨界设计，不仅在理论上站得住脚，而且正是目前学术界和工业界（如 AI 基础设施和超低延迟系统）正在积极探索的前沿方向。</p>
-<p>以下是针对你这个方案的深度可行性分析与架构拆解：</p>
-<h4 id="3-7-3-架构拆解：动态调度框架-启发式函数池"><a href="#3-7-3-架构拆解：动态调度框架-启发式函数池" class="headerlink" title="3.7.3 架构拆解：动态调度框架 + 启发式函数池"></a>3.7.3 架构拆解：动态调度框架 + 启发式函数池</h4><p>你的构想可以抽象为一个<strong>元学习（Meta-Learning）驱动的调度系统</strong>：</p>
+<h5 id="3-5-3-3-架构拆解：动态调度框架-启发式函数池"><a href="#3-5-3-3-架构拆解：动态调度框架-启发式函数池" class="headerlink" title="3.5.3.3 架构拆解：动态调度框架 + 启发式函数池"></a>3.5.3.3 架构拆解：动态调度框架 + 启发式函数池</h5><p>你的构想可以抽象为一个<strong>元学习（Meta-Learning）驱动的调度系统</strong>：</p>
 <ul>
 <li><p><strong>离线挖掘层（类似于 Quant 的因子挖掘平台）：</strong> 使用强化学习（RL）、遗传编程（Genetic Programming）或符号回归（Symbolic Regression）在海量的特征空间（如 HELM 指标、SLO 截止时间、内存碎片率等）中搜索，挖掘出成百上千个极其轻量级的数学表达式（装箱启发式函数）。</p>
 </li>
-<li><p><strong>在线决策层（动态调度框架）：</strong><br>在系统运行的关键路径（Critical Path）上，框架充当“元调度器”。它监控当前的系统“状态（Regime）”——例如，当前是吞吐量优先（类似模型离线训练），还是尾延迟敏感（类似 LLM 推理中的 Token 生成或高频交易信号处理）。根据状态，框架以极低的延迟（$O(1)$ 时间复杂度）从函数池中热切换最合适的装箱函数。</p>
+<li><p><strong>在线决策层（动态调度框架）：</strong>在系统运行的关键路径（Critical Path）上，框架充当“元调度器”。它监控当前的系统“状态（Regime）”——例如，当前是吞吐量优先（类似模型离线训练），还是尾延迟敏感（类似 LLM 推理中的 Token 生成或高频交易信号处理）。根据状态，框架以极低的延迟（$O(1)$ 时间复杂度）从函数池中热切换最合适的装箱函数。</p>
 </li>
 </ul>
-<h4 id="3-7-4-为什么“因子挖掘”思路在装箱问题中绝佳？"><a href="#3-7-4-为什么“因子挖掘”思路在装箱问题中绝佳？" class="headerlink" title="3.7.4 为什么“因子挖掘”思路在装箱问题中绝佳？"></a>3.7.4 为什么“因子挖掘”思路在装箱问题中绝佳？</h4><p>标准的装箱问题（Bin Packing）是 NP-Hard 的。如果在核心调度器里运行复杂的求解器（Solver）或庞大的深度神经网络，调度本身的延迟（Scheduling Overhead）就会打破 SLO 约束。</p>
+<h5 id="3-5-3-4-为什么“因子挖掘”思路在装箱问题中绝佳？"><a href="#3-5-3-4-为什么“因子挖掘”思路在装箱问题中绝佳？" class="headerlink" title="3.5.3.4 为什么“因子挖掘”思路在装箱问题中绝佳？"></a>3.5.3.4 为什么“因子挖掘”思路在装箱问题中绝佳？</h5><p>标准的装箱问题（Bin Packing）是 NP-Hard 的。如果在核心调度器里运行复杂的求解器（Solver）或庞大的深度神经网络，调度本身的延迟（Scheduling Overhead）就会打破 SLO 约束。</p>
 <p>借鉴挖掘 Alpha 因子的思路，我们不需要在关键路径上做复杂的推理，而是运行一个<strong>预先挖掘好的、极其简单的数学公式</strong>。</p>
 <p>例如，离线 RL 可能挖掘出这样一个针对“高并发 + 严苛 SLO”场景的装箱价值函数：</p>
 <p>$Value(a) &#x3D; w_1 \cdot \frac{\text{MemoryFootprint}}{\text{Fragmentation}} + w_2 \cdot \exp\left(-\frac{\text{Time_to_SLO_Deadline}}{\text{Estimated_Migration_Time}}\right)$</p>
 <p>在 C++ 的底层调度器中，计算这个表达式的时间开销只有几纳秒，完全可以无缝嵌入到高频触发的调度逻辑中。</p>
-<h4 id="3-7-5-工程落地的挑战与解决思路"><a href="#3-7-5-工程落地的挑战与解决思路" class="headerlink" title="3.7.5 工程落地的挑战与解决思路"></a>3.7.5 工程落地的挑战与解决思路</h4><p>尽管思路绝佳，但在实际工程落地时，你需要解决以下几个硬核的系统级挑战：</p>
+<h5 id="3-5-3-5-工程落地的挑战与解决思路"><a href="#3-5-3-5-工程落地的挑战与解决思路" class="headerlink" title="3.5.3.5 工程落地的挑战与解决思路"></a>3.5.3.5 工程落地的挑战与解决思路</h5><p>尽管思路绝佳，但在实际工程落地时，你需要解决以下几个硬核的系统级挑战：</p>
 <ul>
 <li><p><strong>特征空间的设计（Feature Engineering）：</strong> RL 能否挖出好“因子”，取决于底层给的特征。除了论文中提到的 HELM 指标（容错率、跨度、密度），你还需要将调度层面的特征（如等待队列长度、KV-Cache 命中率、GPU 互联带宽利用率）暴露给挖掘引擎。</p>
 </li>
@@ -674,11 +665,11 @@
 <li><p><strong>热切换的零开销实现（Zero-Cost Abstraction）：</strong> 动态选取装箱函数时，不能使用开销巨大的虚函数调用或复杂的反射机制。在现代 C++ 中，可以考虑使用 eBPF 动态注入调度逻辑，或者利用函数指针&#x2F;内联汇编等技术，确保调度的极致性能。</p>
 </li>
 </ul>
-<h4 id="3-7-6-总结"><a href="#3-7-6-总结" class="headerlink" title="3.7.6 总结"></a>3.7.6 总结</h4><p>你提出的框架是一种<strong>数据驱动的自适应系统（Data-Driven Adaptive System）</strong>。它巧妙地避开了在线运行重型 AI 模型的性能惩罚，而是将 AI 的算力后置到离线阶段去“挖掘”廉价且高效的启发式规则（Heuristics）。DeepMind 之前的 AlphaDev 发现更优的排序算法，其实底层逻辑与你的构想如出一辙。</p>
-<h3 id="3-8-微集群？"><a href="#3-8-微集群？" class="headerlink" title="3.8 微集群？"></a>3.8 微集群？</h3><h4 id="3-8-1-原问题"><a href="#3-8-1-原问题" class="headerlink" title="3.8.1 原问题"></a>3.8.1 原问题</h4><p>我认为不同的装箱规则应该是有不同的微集群负责，不能混用装箱规则。其次，当选择装箱规则时，也就是选择合适的微集群进行调度。集群的规模应该与业务需求相当，不同集群的slo应该基本一致。是否合理？</p>
-<h3 id="3-8-2-前述总结"><a href="#3-8-2-前述总结" class="headerlink" title="3.8.2 前述总结"></a>3.8.2 前述总结</h3><p>将不同的装箱规则与特定的<strong>微集群（Micro-cluster &#x2F; Node Pool）</strong>绑定，并保证微集群内 SLO 的高度一致性，在工程实践中被称为<strong>两级调度架构（Two-Level Scheduling Architecture）</strong>。这种设计不仅是合理的，而且是解决极端性能瓶颈的必由之路。</p>
+<h5 id="3-5-3-6-总结"><a href="#3-5-3-6-总结" class="headerlink" title="3.5.3.6 总结"></a>3.5.3.6 总结</h5><p>你提出的框架是一种<strong>数据驱动的自适应系统（Data-Driven Adaptive System）</strong>。它巧妙地避开了在线运行重型 AI 模型的性能惩罚，而是将 AI 的算力后置到离线阶段去“挖掘”廉价且高效的启发式规则（Heuristics）。DeepMind 之前的 AlphaDev 发现更优的排序算法，其实底层逻辑与你的构想如出一辙。</p>
+<h4 id="3-5-4-微集群"><a href="#3-5-4-微集群" class="headerlink" title="3.5.4 微集群"></a>3.5.4 微集群</h4><h5 id="3-5-4-1-问题"><a href="#3-5-4-1-问题" class="headerlink" title="3.5.4.1 问题"></a>3.5.4.1 问题</h5><p>我认为不同的装箱规则应该是有不同的微集群负责，不能混用装箱规则。其次，当选择装箱规则时，也就是选择合适的微集群进行调度。集群的规模应该与业务需求相当，不同集群的slo应该基本一致。是否合理？</p>
+<h5 id="3-5-4-2-前述总结"><a href="#3-5-4-2-前述总结" class="headerlink" title="3.5.4.2 前述总结"></a>3.5.4.2 前述总结</h5><p>将不同的装箱规则与特定的<strong>微集群（Micro-cluster &#x2F; Node Pool）</strong>绑定，并保证微集群内 SLO 的高度一致性，在工程实践中被称为<strong>两级调度架构（Two-Level Scheduling Architecture）</strong>。这种设计不仅是合理的，而且是解决极端性能瓶颈的必由之路。</p>
 <p>以下是为什么你的这个设计非常巧妙，以及它在实际落地时带来的巨大优势和需要注意的妥协：</p>
-<h4 id="3-8-3-为什么“微集群隔离-同质-SLO”是绝佳设计？"><a href="#3-8-3-为什么“微集群隔离-同质-SLO”是绝佳设计？" class="headerlink" title="3.8.3 为什么“微集群隔离 + 同质 SLO”是绝佳设计？"></a>3.8.3 为什么“微集群隔离 + 同质 SLO”是绝佳设计？</h4><ul>
+<h5 id="3-5-4-3-为什么“微集群隔离-同质-SLO”是绝佳设计？"><a href="#3-5-4-3-为什么“微集群隔离-同质-SLO”是绝佳设计？" class="headerlink" title="3.5.4.3 为什么“微集群隔离 + 同质 SLO”是绝佳设计？"></a>3.5.4.3 为什么“微集群隔离 + 同质 SLO”是绝佳设计？</h5><ul>
 <li><p><strong>消除硬件级的“吵闹邻居”（Noisy Neighbor）效应：</strong> 即使在软件层面做到了完美的逻辑隔离，不同 SLO 的任务在同一台物理机上依然会疯狂争抢底层硬件资源（如 PCIe 带宽、L2&#x2F;L3 缓存、内存总线）。把高吞吐任务和低延迟任务混跑在同一个节点上，必然会导致低延迟任务的 SLO 破产。通过微集群进行物理或强逻辑隔离，从根本上斩断了这种干扰。</p>
 </li>
 <li><p><strong>极大地降低了“装箱函数”的搜索空间与计算复杂度：</strong> 如果一个集群里既有要求 10 毫秒响应的任务，又有跑 24 小时的批处理任务，你的 RL（强化学习）挖掘引擎很难找出一个兼顾两者的轻量级数学公式。但如果微集群内的 SLO 是基本一致的（都是同质化需求），底层特征的分布就会非常稳定，挖掘出来的装箱函数不仅极其简单（计算开销趋近于 0），而且准确率极高。</p>
@@ -692,31 +683,30 @@
 </ol>
 </li>
 </ul>
-<h4 id="3-8-4-在典型业务场景中的完美映射"><a href="#3-8-4-在典型业务场景中的完美映射" class="headerlink" title="3.8.4 在典型业务场景中的完美映射"></a>3.8.4 在典型业务场景中的完美映射</h4><p>你的这种架构在处理极致性能要求的场景时尤为强大：</p>
+<h5 id="3-5-4-4-在典型业务场景中的完美映射"><a href="#3-5-4-4-在典型业务场景中的完美映射" class="headerlink" title="3.5.4.4 在典型业务场景中的完美映射"></a>3.5.4.4 在典型业务场景中的完美映射</h5><p>你的这种架构在处理极致性能要求的场景时尤为强大：</p>
 <ul>
 <li><p><strong>在 AI 基础设施中：</strong> 我们可以明确划分出“推理微集群”和“训练微集群”。推理集群（例如运行 vLLM 等引擎）的 SLO 极其严格，首字延迟（TTFT）是核心，其专属的装箱规则可能会极度关注 KV Cache 的碎片率和 PagedAttention 的连续性；而训练微集群（如运行大规模张量并行&#x2F;数据并行模型）的 SLO 侧重的是整体吞吐量，其装箱规则会更看重 GPU 间的 NVLink 拓扑结构和通信开销。混用这两套规则是灾难性的。</p>
 </li>
 <li><p><strong>在量化与高频交易系统中：</strong> 处理微秒级 Tick 数据或实盘订单执行的节点（极低延迟 SLO），与进行海量历史数据盘后回测的节点（高吞吐 SLO），也必须在微集群层面隔离开来，并应用完全不同的 CPU 亲和性与内存分配装箱规则。</p>
 </li>
 </ul>
-<h4 id="3-8-5-架构的妥协与潜在挑战"><a href="#3-8-5-架构的妥协与潜在挑战" class="headerlink" title="3.8.5 架构的妥协与潜在挑战"></a>3.8.5 架构的妥协与潜在挑战</h4><p>虽然这种设计在性能上是最优的，但在工程实现时，你需要防范一个经典的分布式系统问题：<strong>资源碎片化与利用率不均（Resource Fragmentation）</strong>。</p>
+<h5 id="3-5-4-5-架构的妥协与潜在挑战"><a href="#3-5-4-5-架构的妥协与潜在挑战" class="headerlink" title="3.5.4.5 架构的妥协与潜在挑战"></a>3.5.4.5 架构的妥协与潜在挑战</h5><p>虽然这种设计在性能上是最优的，但在工程实现时，你需要防范一个经典的分布式系统问题：<strong>资源碎片化与利用率不均（Resource Fragmentation）</strong>。</p>
 <p>如果集群规模严格按业务需求划分，很容易出现“微集群 A 爆满触发排队，而微集群 B 闲置率高达 80%”的情况。为了解决这个问题，现代架构通常会在你的设计基础上增加一层<strong>弹性边界（Elastic Boundaries）</strong>或<strong>抢占式调度（Preemption）</strong>：</p>
 <ul>
 <li>当高优微集群算力不足时，允许其“借用”低优微集群的物理节点。此时，全局调度器会动态向这台被借用的机器下发新的装箱函数，并杀掉或挂起原有的低优任务，使其在物理上临时转变为高优微集群的一部分。</li>
 </ul>
-<h3 id="3-9-碎片化？"><a href="#3-9-碎片化？" class="headerlink" title="3.9 碎片化？"></a>3.9 碎片化？</h3><h4 id="3-9-1-原问题"><a href="#3-9-1-原问题" class="headerlink" title="3.9.1 原问题"></a>3.9.1 原问题</h4><p>两级调度器如何解决新的大量的装箱规则？如果微集群非常多，微集群的调度，包括抢占等如何做？</p>
-<h4 id="3-9-2-前述总结"><a href="#3-9-2-前述总结" class="headerlink" title="3.9.2 前述总结"></a>3.9.2 前述总结</h4><p>静态两级调度架构在规模化后的“死穴”：<strong>状态爆炸（State Explosion）</strong>和<strong>资源碎片化（Resource Fragmentation）</strong>。</p>
+<h4 id="3-5-5-碎片化"><a href="#3-5-5-碎片化" class="headerlink" title="3.5.5 碎片化"></a>3.5.5 碎片化</h4><h5 id="3-5-5-1-原问题"><a href="#3-5-5-1-原问题" class="headerlink" title="3.5.5.1 原问题"></a>3.5.5.1 原问题</h5><p>两级调度器如何解决新的大量的装箱规则？如果微集群非常多，微集群的调度，包括抢占等如何做？</p>
+<h5 id="3-5-5-2-前述总结"><a href="#3-5-5-2-前述总结" class="headerlink" title="3.5.5.2 前述总结"></a>3.5.5.2 前述总结</h5><p>静态两级调度架构在规模化后的“死穴”：<strong>状态爆炸（State Explosion）</strong>和<strong>资源碎片化（Resource Fragmentation）</strong>。</p>
 <p>如果微集群数量失控，比如你既有负责 vLLM 在线推理的低延迟集群，又有跑 ZeRO 分布式训练的高吞吐集群，甚至还有跑海量历史金融数据回测的离线集群，静态绑定规则和物理机器绝对是一场灾难。</p>
 <p>为了解决大量装箱规则的管理以及微集群间的调度与抢占，现代大规模集群（类似于 Google Borg 或 HashiCorp Nomad 的高级形态）通常会采用<strong>“逻辑微集群 + 动态资源代理（Resource Broker）”</strong>的架构 。</p>
-<p>以下是解决这两个核心痛点的具体方案：</p>
-<h4 id="3-9-3-解决“规则爆炸”：动态注入与逻辑微集群"><a href="#3-9-3-解决“规则爆炸”：动态注入与逻辑微集群" class="headerlink" title="3.9.3 解决“规则爆炸”：动态注入与逻辑微集群"></a>3.9.3 解决“规则爆炸”：动态注入与逻辑微集群</h4><p>不能让物理机器和装箱规则静态绑定。物理机器必须是“无状态”的计算池，微集群应该是<strong>逻辑层面</strong>的概念。</p>
+<h5 id="3-5-5-3-解决“规则爆炸”：动态注入与逻辑微集群"><a href="#3-5-5-3-解决“规则爆炸”：动态注入与逻辑微集群" class="headerlink" title="3.5.5.3 解决“规则爆炸”：动态注入与逻辑微集群"></a>3.5.5.3 解决“规则爆炸”：动态注入与逻辑微集群</h5><p>不能让物理机器和装箱规则静态绑定。物理机器必须是“无状态”的计算池，微集群应该是<strong>逻辑层面</strong>的概念。</p>
 <ul>
 <li><p><strong>规则注册中心（Rule Registry）：</strong> 离线 RL 挖掘出的海量装箱规则不下发给物理机，而是统一存储在全局的规则注册中心（例如 etcd 或 Zookeeper），并打上标签（如 <code>rule_inference_paged_attention</code>, <code>rule_batch_backtesting</code>）。</p>
 </li>
 <li><p><strong>JIT 动态注入（Just-In-Time Injection）：</strong> 当全局调度器决定将某个物理节点划分给特定的逻辑微集群时，该节点上的本地代理（Local Agent&#x2F;Kubelet）会动态拉取对应的装箱规则。在 C++ 底层，这可以通过加载动态链接库（.so 文件）、或者更现代的 <strong>eBPF（扩展的伯克利数据包过滤器）</strong> 字节码注入来实现。这样，节点在毫秒级就能完成从“离线训练装箱逻辑”到“在线推理装箱逻辑”的身份切换。</p>
 </li>
 </ul>
-<h4 id="3-9-4-微集群间的调度与抢占：全局资源代理-Resource-Broker"><a href="#3-9-4-微集群间的调度与抢占：全局资源代理-Resource-Broker" class="headerlink" title="3.9.4 微集群间的调度与抢占：全局资源代理 (Resource Broker)"></a>3.9.4 微集群间的调度与抢占：全局资源代理 (Resource Broker)</h4><p>当微集群非常多时，全局调度器（Global Scheduler）<strong>不再负责具体任务的分配</strong>，它蜕变成一个“中央央行”，它的唯一职责是<strong>给各个微集群（商业银行）分配底层的计算节点</strong>。</p>
+<h5 id="3-5-5-4-微集群间的调度与抢占：全局资源代理-Resource-Broker"><a href="#3-5-5-4-微集群间的调度与抢占：全局资源代理-Resource-Broker" class="headerlink" title="3.5.5.4 微集群间的调度与抢占：全局资源代理 (Resource Broker)"></a>3.5.5.4 微集群间的调度与抢占：全局资源代理 (Resource Broker)</h5><p>当微集群非常多时，全局调度器（Global Scheduler）<strong>不再负责具体任务的分配</strong>，它蜕变成一个“中央央行”，它的唯一职责是<strong>给各个微集群（商业银行）分配底层的计算节点</strong>。</p>
 <p>这里涉及一套严格的抢占和动态配额机制：</p>
 <ul>
 <li><p><strong>绝对优先级分类（Priority Classes）：</strong> 必须对 SLO 进行严格分级。</p>
@@ -744,26 +734,23 @@
 </ol>
 </li>
 </ul>
-<h4 id="3-9-5-总结与工程考量"><a href="#3-9-5-总结与工程考量" class="headerlink" title="3.9.5 总结与工程考量"></a>3.9.5 总结与工程考量</h4><p>通过将物理节点从装箱规则中解耦，用<strong>动态注入</strong>应对规则爆炸，用<strong>优先级抢占机制</strong>打破微集群之间的资源壁垒，就能在保证不同 SLO 严苛要求的同时，把集群的整体利用率推向极致。</p>
-<h3 id="3-10-反向两级调度"><a href="#3-10-反向两级调度" class="headerlink" title="3.10 反向两级调度"></a>3.10 反向两级调度</h3><h4 id="3-10-1-原问题"><a href="#3-10-1-原问题" class="headerlink" title="3.10.1 原问题"></a>3.10.1 原问题</h4><p>那么是否可以这样做，首先针对不同装箱规则，选择一个最合适的，然后从这一堆最合适的里面，再选择一个最合适的，作为下一个调度的对象？</p>
-<h4 id="3-10-2-前述总结"><a href="#3-10-2-前述总结" class="headerlink" title="3.10.2 前述总结"></a>3.10.2 前述总结</h4><p>这种将两级调度反转过来的设计，在现代高级分布式系统（以及超低延迟的交易撮合系统中）被称为<strong>拍卖&#x2F;竞价调度模型（Auction-Based &#x2F; Bid-Based Scheduling）</strong>。</p>
+<h5 id="3-5-5-5-总结与工程考量"><a href="#3-5-5-5-总结与工程考量" class="headerlink" title="3.5.5.5 总结与工程考量"></a>3.5.5.5 总结与工程考量</h5><p>通过将物理节点从装箱规则中解耦，用<strong>动态注入</strong>应对规则爆炸，用<strong>优先级抢占机制</strong>打破微集群之间的资源壁垒，就能在保证不同 SLO 严苛要求的同时，把集群的整体利用率推向极致。</p>
+<h4 id="3-5-6-反向两级调度"><a href="#3-5-6-反向两级调度" class="headerlink" title="3.5.6 反向两级调度"></a>3.5.6 反向两级调度</h4><h5 id="3-5-6-1-原问题"><a href="#3-5-6-1-原问题" class="headerlink" title="3.5.6.1 原问题"></a>3.5.6.1 原问题</h5><p>那么是否可以这样做，首先针对不同装箱规则，选择一个最合适的，然后从这一堆最合适的里面，再选择一个最合适的，作为下一个调度的对象？</p>
+<h5 id="3-5-6-2-前述总结"><a href="#3-5-6-2-前述总结" class="headerlink" title="3.5.6.2 前述总结"></a>3.5.6.2 前述总结</h5><p>这种将两级调度反转过来的设计，在现代高级分布式系统（以及超低延迟的交易撮合系统中）被称为<strong>拍卖&#x2F;竞价调度模型（Auction-Based &#x2F; Bid-Based Scheduling）</strong>。</p>
 <p>传统的两级调度是“自上而下”的（全局调度器把任务<strong>推</strong>给微集群），而你提出的这种“锦标赛”式的两步走策略，本质上是一种“自下而上”的<strong>拉取（Pull）</strong>模型。</p>
-<p>这种设计非常精妙，但在落地时必须解决几个核心的工程与算法挑战。以下是这种架构的深度剖析：</p>
-<h4 id="3-10-3-架构拆解：竞价与撮合机制"><a href="#3-10-3-架构拆解：竞价与撮合机制" class="headerlink" title="3.10.3 架构拆解：竞价与撮合机制"></a>3.10.3 架构拆解：竞价与撮合机制</h4><p>你的两步走策略，完美对应了交易系统中的“订单簿”撮合逻辑：</p>
+<h5 id="3-5-6-3-架构拆解：竞价与撮合机制"><a href="#3-5-6-3-架构拆解：竞价与撮合机制" class="headerlink" title="3.5.6.3 架构拆解：竞价与撮合机制"></a>3.5.6.3 架构拆解：竞价与撮合机制</h5><p>你的两步走策略，完美对应了交易系统中的“订单簿”撮合逻辑：</p>
 <ul>
 <li><p><strong>第一阶段（Local Maxima &#x2F; 局部最优竞价）：</strong> 每一个装箱规则（代表一个特定的微集群，比如专门处理 PagedAttention 显存优化的推理集群，或者专门处理大规模矩阵乘法的离线集群）就像是一个“买家”。它们各自使用 RL 挖掘出的专属装箱函数，去扫描当前全局等待队列中的任务。每个微集群挑出那个<strong>最符合自己胃口、能被自己执行得最高效的任务</strong>，并给出一个“出价（Bid Score）”。</p>
 </li>
 <li><p><strong>第二阶段（Global Maxima &#x2F; 全局最优撮合）：</strong> 全局调度器作为“清算中心”，拿到所有微集群提交的“最高出价”。从这一堆最合适的候选者中，挑出那个绝对得分最高的任务，完成调度。</p>
 </li>
 </ul>
-<p><strong>优势</strong>：这种机制天然具备极强的<strong>自适应负载均衡</strong>能力。如果某个微集群很闲，它的装箱规则为了“抢”任务，其边际效用得分自然会飙升；如果某个微集群已经爆满，它的出价就会变低。这比静态的轮询（Round-Robin）或哈希路由要聪明得多。</p>
-<hr>
-<h4 id="3-10-4-核心挑战一：“苹果与橘子”的汇率换算问题"><a href="#3-10-4-核心挑战一：“苹果与橘子”的汇率换算问题" class="headerlink" title="3.10.4 核心挑战一：“苹果与橘子”的汇率换算问题"></a>3.10.4 核心挑战一：“苹果与橘子”的汇率换算问题</h4><p>这个架构最大的难点在于<strong>第二阶段的比较</strong>。</p>
+<p><strong>优势</strong>：这种机制天然具备极强的<strong>自适应负载均衡</strong>能力。如果某个微集群很闲，它的装箱规则为了“抢”任务，其边际效用得分自然会飙升；如果某个微集群已经爆满，它的出价就会变低。这比静态的轮询（Round-Robin）或哈希路由要聪明得多。 </p>
+<h5 id="3-5-6-4-核心挑战一：“苹果与橘子”的汇率换算问题"><a href="#3-5-6-4-核心挑战一：“苹果与橘子”的汇率换算问题" class="headerlink" title="3.5.6.4 核心挑战一：“苹果与橘子”的汇率换算问题"></a>3.5.6.4 核心挑战一：“苹果与橘子”的汇率换算问题</h5><p>这个架构最大的难点在于<strong>第二阶段的比较</strong>。</p>
 <p>由于每个微集群的装箱规则是不同的（比如一个是计算显存连续性，另一个是计算 L2 Cache 命中率），它们输出的“最高得分”在绝对物理意义上是不同的。这就好比一个出价是 100 日元，另一个出价是 80 美元，全局调度器不能直接比大小。</p>
 <p><strong>解法：引入全局统一效用函数（Unified Utility Function）</strong></p>
-<p>在进入第二阶段前，必须存在一个“汇率转换”层。这就是 <strong>SLO（服务等级目标）</strong> 发挥决定性作用的地方。必须将所有的装箱得分，乘以一个该任务的 <strong>SLO 紧迫度权重（Urgency Weight）</strong> 和微集群的 <strong>资源空闲系数（Availability Factor）</strong>，将其归一化为一个无量纲的“纯效用值（Utility Score）”。只有在这个统一的坐标系下，全局最优的选择才有意义。</p>
-<hr>
-<h4 id="3-10-5-核心挑战二：关键路径上的-O-R-times-N-时间开销"><a href="#3-10-5-核心挑战二：关键路径上的-O-R-times-N-时间开销" class="headerlink" title="3.10.5 核心挑战二：关键路径上的 $O(R \times N)$ 时间开销"></a>3.10.5 核心挑战二：关键路径上的 $O(R \times N)$ 时间开销</h4><p>在极致追求性能的场景（如微秒级高频调度或大模型连续批处理 Continuous Batching）中，如果每次调度都要让 $R$ 个装箱规则去扫描 $N$ 个等待任务，产生巨大的 $O(R \times N)$ 计算开销，这本身就会导致严重的延迟，破坏 SLO。</p>
+<p>在进入第二阶段前，必须存在一个“汇率转换”层。这就是 <strong>SLO（服务等级目标）</strong> 发挥决定性作用的地方。必须将所有的装箱得分，乘以一个该任务的 <strong>SLO 紧迫度权重（Urgency Weight）</strong> 和微集群的 <strong>资源空闲系数（Availability Factor）</strong>，将其归一化为一个无量纲的“纯效用值（Utility Score）”。只有在这个统一的坐标系下，全局最优的选择才有意义。 </p>
+<h5 id="3-5-6-5-核心挑战二：关键路径上的-O-R-times-N-时间开销"><a href="#3-5-6-5-核心挑战二：关键路径上的-O-R-times-N-时间开销" class="headerlink" title="3.5.6.5 核心挑战二：关键路径上的 $O(R \times N)$ 时间开销"></a>3.5.6.5 核心挑战二：关键路径上的 $O(R \times N)$ 时间开销</h5><p>在极致追求性能的场景（如微秒级高频调度或大模型连续批处理 Continuous Batching）中，如果每次调度都要让 $R$ 个装箱规则去扫描 $N$ 个等待任务，产生巨大的 $O(R \times N)$ 计算开销，这本身就会导致严重的延迟，破坏 SLO。</p>
 <p><strong>解法：异步多优先队列（Asynchronous Priority Queues）</strong></p>
 <p>不能在每次调度时同步计算。底层的 C++ 数据结构必须做到极致优化：</p>
 <ul>
@@ -774,9 +761,7 @@
 <li><p>当全局调度器需要找“下一个调度的对象”时，它只需要以 $O(1)$ 的时间复杂度，偷窥（Peek）所有堆的堆顶元素，再做一次简单的对比即可。一旦某个任务被选中调度，系统再异步地将该任务从其他所有的堆中 <code>Tombstone</code>（标记删除）掉。</p>
 </li>
 </ul>
-<h4 id="3-10-6-总结"><a href="#3-10-6-总结" class="headerlink" title="3.10.6 总结"></a>3.10.6 总结</h4><p>你的这个构想完全具备打破常规调度器瓶颈的潜力。通过“各取所需（局部最优）”再到“价高者得（全局最优）”，能够将系统的整体吞吐量和资源利用率压榨到极限，尤其适合任务异构性极强的现代算力集群。</p>
 <h2 id="4-RL-Pretrain"><a href="#4-RL-Pretrain" class="headerlink" title="4. RL-Pretrain"></a>4. RL-Pretrain</h2><p><strong>RL Pretrain（强化学习预训练）</strong> 这个概念的含义取决于具体的上下文。在传统的强化学习（Reinforcement Learning）领域和当前最前沿的大语言模型（LLM）训练中，它代表着两种不同但又有内在联系的范式。</p>
-<p>结合当前业界对大模型推理能力的探索，这里为您梳理这两种核心理解。</p>
 <h3 id="4-1-LLM-领域的-RL-Pretrain（当前主流语境）"><a href="#4-1-LLM-领域的-RL-Pretrain（当前主流语境）" class="headerlink" title="4.1 LLM 领域的 RL Pretrain（当前主流语境）"></a>4.1 LLM 领域的 RL Pretrain（当前主流语境）</h3><p>在传统的 LLM 训练流水线中，强化学习通常被放在最后一步（Pretrain -&gt; SFT -&gt; RLHF），主要用于<strong>对齐（Alignment）</strong>，即让模型学会礼貌、安全地回答问题，符合人类偏好。</p>
 <p>但在最新的复杂推理模型（例如 OpenAI o1 或 DeepSeek-R1 系列的早期探索中），<strong>RL Pretrain 指的是绕过传统的大规模指令微调（SFT），直接在基础模型（Base Model）上应用强化学习。</strong> * <strong>它的核心目的：</strong> 不是为了对齐人类偏好，而是为了<strong>能力发现（Capability Discovery）</strong>。</p>
 <ul>
@@ -807,7 +792,6 @@
 </ul>
 <h3 id="4-4-SFT和RLHF概念"><a href="#4-4-SFT和RLHF概念" class="headerlink" title="4.4 SFT和RLHF概念"></a>4.4 SFT和RLHF概念</h3><p>在现代大语言模型（LLM）的经典训练流水线中，如果说预训练（Pretraining）是让模型“读书破万卷”积累世界知识，那么 <strong>SFT</strong> 和 <strong>RLHF</strong> 就是教它如何“像一个合格的AI助手一样与人交流”。</p>
 <p>这构成了经典大模型的对齐三部曲：<strong>Pretrain -&gt; SFT -&gt; RLHF</strong>。</p>
-<p>以下为您拆解这两个核心阶段，以及它们在底层系统层面带来的不同挑战。</p>
 <h4 id="4-4-1-SFT-Supervised-Fine-Tuning-监督微调"><a href="#4-4-1-SFT-Supervised-Fine-Tuning-监督微调" class="headerlink" title="4.4.1 SFT (Supervised Fine-Tuning - 监督微调)"></a>4.4.1 SFT (Supervised Fine-Tuning - 监督微调)</h4><p>SFT 的本质是<strong>行为克隆（Behavior Cloning）或指令微调（Instruction Tuning）</strong>。</p>
 <ul>
 <li><p><strong>核心目的：</strong> 基础大模型（Base Model）只会做“下一个词预测”（Next-token prediction），你问它“如何做红烧肉”，它可能会接着续写“如何做清蒸鱼”。SFT 的目的是让模型学会<strong>遵循指令的格式</strong>，完成一问一答的对话转换。</p>
@@ -826,13 +810,12 @@
 <li><p>常用的分布式策略（如 ZeRO-2 或 ZeRO-3、Tensor Parallelism）可以非常平滑地复用到 SFT 阶段，显存压力主要来自模型的优化器状态和梯度。</p>
 </li>
 </ul>
-<hr>
 <h4 id="4-4-2-RLHF-Reinforcement-Learning-from-Human-Feedback-基于人类反馈的强化学习"><a href="#4-4-2-RLHF-Reinforcement-Learning-from-Human-Feedback-基于人类反馈的强化学习" class="headerlink" title="4.4.2 RLHF (Reinforcement Learning from Human Feedback - 基于人类反馈的强化学习)"></a>4.4.2 RLHF (Reinforcement Learning from Human Feedback - 基于人类反馈的强化学习)</h4><p>虽然 SFT 能让模型学会对话，但它存在“曝光偏差”（模型只能模仿，一旦偏离训练数据就不知道怎么说）且无法区分答案的“好坏程度”。RLHF 的引入是为了让模型的输出真正符合人类的价值观（有用、诚实、无害 - HHH）。</p>
 <p>RLHF 通常分为两个子阶段：</p>
 <ul>
-<li><p><strong>阶段 A：训练奖励模型 (Reward Model, RM)</strong><br>不再让人类写答案，而是让人类给模型的多个回答<strong>打分排序</strong>（A 比 B 好，B 比 C 好）。利用这些排序数据训练出一个“裁判模型”（RM），这个 RM 随后会代替人类给大模型的回答打分。</p>
+<li><p><strong>阶段 A：训练奖励模型 (Reward Model, RM)<strong>不再让人类写答案，而是让人类给模型的多个回答</strong>打分排序</strong>（A 比 B 好，B 比 C 好）。利用这些排序数据训练出一个“裁判模型”（RM），这个 RM 随后会代替人类给大模型的回答打分。</p>
 </li>
-<li><p><strong>阶段 B：使用 PPO 进行强化学习 (Proximal Policy Optimization)</strong><br>让模型（Actor）根据用户的 Prompt 自由生成回答，RM 给这些回答打分（提供 Reward）。然后使用强化学习算法（通常是 PPO）根据这个得分去更新模型的参数，促使它以后多生成高分回答。</p>
+<li><p>**阶段 B：使用 PPO 进行强化学习 (Proximal Policy Optimization)**让模型（Actor）根据用户的 Prompt 自由生成回答，RM 给这些回答打分（提供 Reward）。然后使用强化学习算法（通常是 PPO）根据这个得分去更新模型的参数，促使它以后多生成高分回答。</p>
 </li>
 </ul>
 <h5 id="💻-系统与-Infra-视角下的-RLHF（工程噩梦）"><a href="#💻-系统与-Infra-视角下的-RLHF（工程噩梦）" class="headerlink" title="💻 系统与 Infra 视角下的 RLHF（工程噩梦）"></a>💻 系统与 Infra 视角下的 RLHF（工程噩梦）</h5><p>对于底层架构而言，RLHF 极其复杂，它将<strong>高吞吐推理</strong>和<strong>大规模训练</strong>强行缝合在了一起。在一个标准的 PPO 训练循环中，你需要同时在显存中维护<strong>四个模型</strong>：</p>
@@ -937,7 +920,7 @@
 </li>
 </ol>
 <p><strong>总结来说：</strong> RL Pretrain 的端到端流程，就是把模型扔进一个只有“对错判断规则”的荒野中，通过海量的试错和奖励刺激，逼迫模型自己进化出“逻辑推理”的生存本能，而不是像 SFT 那样靠死记硬背人类的解题步骤。</p>
-<h3 id="4-6-那么需要写大量的验证规则吗？"><a href="#4-6-那么需要写大量的验证规则吗？" class="headerlink" title="4.6 那么需要写大量的验证规则吗？"></a>4.6 那么需要写大量的验证规则吗？</h3><p><strong>不需要写“大量”的规则，而是需要写“高度通用”的验证器（Validators）。</strong></p>
+<h3 id="4-6-验证规则"><a href="#4-6-验证规则" class="headerlink" title="4.6 验证规则"></a>4.6 验证规则</h3><p><strong>不需要写“大量”的规则，而是需要写“高度通用”的验证器（Validators）。</strong></p>
 <p>这是 RL Pretrain（特别是针对数学和代码等具有客观标准答案的领域）最优雅的地方：<strong>规则本身的代码量很少，但它能自动覆盖海量的数据。</strong></p>
 <p>你不需要针对每一道题写一个特定的判断逻辑，而是按照<strong>任务类型</strong>来构建几个核心的“规则引擎”。我们可以把它分为两大类来看：</p>
 <h4 id="4-6-1-数学类：符号计算引擎-Symbolic-Engine"><a href="#4-6-1-数学类：符号计算引擎-Symbolic-Engine" class="headerlink" title="4.6.1 数学类：符号计算引擎 (Symbolic Engine)"></a>4.6.1 数学类：符号计算引擎 (Symbolic Engine)</h4><p>对于数学题，规则引擎通常只有几百行 Python 代码，核心依赖于像 <code>SymPy</code> 这样的符号计算库。</p>
@@ -952,7 +935,7 @@
 </li>
 </ol>
 </li>
-<li><p><strong>为什么通用？</strong><br>模型输出的可能是 $x &#x3D; \frac{4}{2}$，而标准答案是 $2$；或者模型输出的是 $0.5$，标准答案是 $\frac{1}{2}$。符号计算引擎能通过底层逻辑判定它们是<strong>数学等价</strong>的，从而给出正向奖励（Reward &#x3D; +1.0）。一套这样的规则，就能验证几百万道涵盖代数、微积分、概率论的数学题。</p>
+<li><p><strong>为什么通用？</strong>模型输出的可能是 $x &#x3D; \frac{4}{2}$，而标准答案是 $2$；或者模型输出的是 $0.5$，标准答案是 $\frac{1}{2}$。符号计算引擎能通过底层逻辑判定它们是<strong>数学等价</strong>的，从而给出正向奖励（Reward &#x3D; +1.0）。一套这样的规则，就能验证几百万道涵盖代数、微积分、概率论的数学题。</p>
 </li>
 </ul>
 <h4 id="4-6-2-代码类：沙盒执行器-Sandbox-Execution"><a href="#4-6-2-代码类：沙盒执行器-Sandbox-Execution" class="headerlink" title="4.6.2 代码类：沙盒执行器 (Sandbox Execution)"></a>4.6.2 代码类：沙盒执行器 (Sandbox Execution)</h4><p>对于代码生成任务（比如写一段 Python 或 C++ 代码来实现特定功能），验证规则其实就是我们日常开发中极其熟悉的<strong>单元测试（Unit Tests）</strong>。</p>
@@ -969,28 +952,233 @@
 </li>
 </ol>
 </li>
-<li><p><strong>为什么通用？</strong><br>只要数据集（比如 LeetCode 题库）自带了 Input 和对应的 Expected Output，这套沙盒验证规则就是普适的。如果代码超时（TLE）、内存溢出（OOM）或者抛出异常，直接给负分；只有所有测试用例全部通过，才给满分。</p>
+<li><p><strong>为什么通用？</strong>只要数据集（比如 LeetCode 题库）自带了 Input 和对应的 Expected Output，这套沙盒验证规则就是普适的。如果代码超时（TLE）、内存溢出（OOM）或者抛出异常，直接给负分；只有所有测试用例全部通过，才给满分。</p>
 </li>
 </ul>
 <hr>
 <h4 id="4-6-3-真正的工程挑战：不在于“写规则”，而在于“跑规则”"><a href="#4-6-3-真正的工程挑战：不在于“写规则”，而在于“跑规则”" class="headerlink" title="4.6.3 真正的工程挑战：不在于“写规则”，而在于“跑规则”"></a>4.6.3 真正的工程挑战：不在于“写规则”，而在于“跑规则”</h4><p>虽然规则本身不复杂，但在千亿参数大模型的分布式训练集群中，<strong>如何高效地执行这些规则</strong>是一个巨大的 AI Infra 挑战。</p>
 <ol>
-<li><p><strong>CPU 与 GPU 的异构调度瓶颈：</strong><br>模型在 GPU 上飞速生成了几万个回答（Rollouts）。接下来，你需要把这些文本从 GPU 显存传回 CPU，在 CPU 上并行启动成千上万个 Python 进程或 Docker 容器来跑代码、算分数，然后再把计算好的 Reward 数值传回 GPU 进行梯度更新（PPO&#x2F;GRPO）。这个过程中的通信开销和 CPU 算力极容易成为阻塞整个训练流水的瓶颈。</p>
+<li><p><strong>CPU 与 GPU 的异构调度瓶颈：</strong>模型在 GPU 上飞速生成了几万个回答（Rollouts）。接下来，你需要把这些文本从 GPU 显存传回 CPU，在 CPU 上并行启动成千上万个 Python 进程或 Docker 容器来跑代码、算分数，然后再把计算好的 Reward 数值传回 GPU 进行梯度更新（PPO&#x2F;GRPO）。这个过程中的通信开销和 CPU 算力极容易成为阻塞整个训练流水的瓶颈。</p>
 </li>
-<li><p><strong>安全隔离（Sandboxing）：</strong><br>模型在探索阶段很可能会生成恶意代码（比如试图删除系统文件 <code>rm -rf /</code>，或者发起网络攻击）。如果沙盒隔离做得不好，模型在自我进化的过程中可能会把你的训练节点给搞崩。</p>
+<li><p><strong>安全隔离（Sandboxing）：</strong>模型在探索阶段很可能会生成恶意代码（比如试图删除系统文件 <code>rm -rf /</code>，或者发起网络攻击）。如果沙盒隔离做得不好，模型在自我进化的过程中可能会把你的训练节点给搞崩。</p>
 </li>
 </ol>
 <h4 id="4-6-4-一个有趣的类比"><a href="#4-6-4-一个有趣的类比" class="headerlink" title="4.6.4 一个有趣的类比"></a>4.6.4 一个有趣的类比</h4><p>这种完全依赖客观规则来驱动模型自主进化的反馈机制，其实和<strong>量化交易（Quantitative Trading）中的回测系统（Backtesting）</strong>非常相似。</p>
 <p>在开发高频交易策略时，你不需要一步步教算法具体怎么看订单簿（Order Book），你只需要写一个极其严谨的 PnL（盈亏）计算规则引擎。算法在历史 tick 数据中疯狂试错，只要最终的回测 PnL 为正且夏普比率合格，它就在被强化。RL Pretrain 也是同样的哲学：<strong>设定好客观的胜负规则，把剩下的探索空间全部交给模型。</strong></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://2026.hpca-conf.org/details/hpca-2026-main-conference/66/ARIADNE-Adaptive-UVM-Management-for-Efficient-GPU-Memory-Oversubscription" >ARIADNE: Adaptive UVM Management for Efficient GPU Memory Oversubscription (HPCA 2026 - Main Conference) - HPCA 2026 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/3712285.3759812" >HELM: Characterizing Unified Memory Accesses to Improve GPU Performance under Memory Oversubscription | Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://seed.bytedance.com/zh/direction/infrastructures" >字节跳动Seed-Infrastructures <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41185868/article/details/148834830" >LLMs之Pretrain：《Reinforcement Pre-Training》翻译与解读_pretrain → rl → pd+ep推理-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/638391233" >DeepMind 新作 AlphaDev 论文解读 —- 强化学习探索更优排序算法 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://gemini.google.com/app/d12b45d0c0aea85c?hl=zh-cn" >Google Gemini <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://gemini.google.com/app/e918b20f55494743?hl=zh-cn" >Google Gemini <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://gemini.google.com/app/78b2ca6a673cede3?hl=zh-cn" >Google Gemini <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://gemini.google.com/app/8b358193db545e5c?hl=zh-cn" >Google Gemini <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h1 id="二-框架阅读"><a href="#二-框架阅读" class="headerlink" title="二. 框架阅读"></a>二. 框架阅读</h1><h2 id="1-SGLang：高性能大语言模型推理框架"><a href="#1-SGLang：高性能大语言模型推理框架" class="headerlink" title="1. SGLang：高性能大语言模型推理框架"></a>1. SGLang：高性能大语言模型推理框架</h2><p>SGLang 是一个专为低延迟、高吞吐推理设计的先进、高性能 LLM 服务框架。其架构经过精细划分，能够从容应对现代大规模语言模型及多模态模型的复杂挑战。</p>
+<h3 id="1-1-核心架构组件"><a href="#1-1-核心架构组件" class="headerlink" title="1.1 核心架构组件"></a>1.1 核心架构组件</h3><h4 id="1-1-1-SGLang-运行时-SRT"><a href="#1-1-1-SGLang-运行时-SRT" class="headerlink" title="1.1.1 SGLang 运行时 (SRT)"></a>1.1.1 SGLang 运行时 (SRT)</h4><p>SRT 是系统的核心，专为极致效率而设计，由以下几个关键子模块组成：</p>
+<ul>
+<li><p>**<code>TokenizerManager</code>**：基于 FastAPI 的异步进程，是请求的主要入口。它负责反序列化、分词（tokenization）和多模态数据处理，将这些 CPU 密集型任务从核心调度逻辑中分离出来。</p>
+</li>
+<li><p><strong><code>Scheduler</code>（调度器）</strong>：运行时的“大脑”。负责管理请求批处理、调度策略（如连续批处理&#x2F;continuous batching），并与 GPU 工作线程协同。<strong>RadixCache</strong> 也驻留在此处，实现在具有相同前缀的不同请求间高效共享 KV 缓存。</p>
+</li>
+<li><p><strong><code>ModelExecutor</code>（模型执行器）</strong>：负责实际的模型前向传播。它利用 <strong>CUDA Graphs</strong> 来最小化 CPU 开销，并集成了针对注意力机制和量化等性能关键操作的自定义算子（kernels）。</p>
+</li>
+<li><p>**<code>RadixCache</code>**：一种特殊的内存管理系统，以基数树（radix tree）结构组织 KV 缓存。这使得前缀匹配和重用几乎在瞬时完成，显著减少了常见提示词（prompts）的重复计算。</p>
+</li>
+</ul>
+<h4 id="1-1-2-SGLang-语言-DSL"><a href="#1-1-2-SGLang-语言-DSL" class="headerlink" title="1.1.2 SGLang 语言 (DSL)"></a>1.1.2 SGLang 语言 (DSL)</h4><p>一种高级编程接口，允许开发者使用 Python 原生风格的编程原语来表达复杂的 LLM 工作流（如多步推理、结构化输出生成）：</p>
+<ul>
+<li><p>**<code>api.py</code>**：提供面向用户的函数，如 <code>sgl.gen</code>、<code>sgl.select</code> 和 <code>sgl.assistant</code>。</p>
+</li>
+<li><p>**<code>Interpreter</code> &amp; <code>Tracer</code>**：这些组件管理 SGLang 程序的执行流，既可以直接解释执行，也可以将其追踪（trace）为中间表示，以便在 SRT 后端进行优化执行。</p>
+</li>
+</ul>
+<h4 id="1-1-3-SGLang-算子库-Kernel"><a href="#1-1-3-SGLang-算子库-Kernel" class="headerlink" title="1.1.3 SGLang 算子库 (Kernel)"></a>1.1.3 SGLang 算子库 (Kernel)</h4><p>一个专门的自定义 CUDA 和 ROCm 算子库（<code>sgl-kernel/</code>），针对底层进行了深度优化：</p>
+<ul>
+<li><p><strong>注意力机制</strong>：针对 PagedAttention、FlashAttention 和 DeepSeek 的 MLA 架构定制的算子。</p>
+</li>
+<li><p><strong>量化支持</strong>：支持高性能的 FP8、FP4、INT4 和 AWQ 操作。</p>
+</li>
+<li><p><strong>采样</strong>：优化的 Logit 处理和受限采样（使用状态机 FSM 进行 JSON&#x2F;语法约束）。</p>
+</li>
+</ul>
+<h4 id="1-1-4-SGLang-模型网关"><a href="#1-1-4-SGLang-模型网关" class="headerlink" title="1.1.4 SGLang 模型网关"></a>1.1.4 SGLang 模型网关</h4><p>一个由 Rust 实现的高性能代理（<code>sgl-model-gateway/</code>），用于：</p>
+<ul>
+<li><p><strong>路由与负载均衡</strong>：在多个 SGLang 实例之间分配请求。</p>
+</li>
+<li><p><strong>监控与可观测性</strong>：为大规模部署提供集中的指标收集和追踪。</p>
+</li>
+<li><p><strong>gRPC 客户端</strong>：为网关提供健壮且低开销的通信通道。</p>
+</li>
+</ul>
+<h3 id="1-2-请求生命周期"><a href="#1-2-请求生命周期" class="headerlink" title="1.2 请求生命周期"></a>1.2 请求生命周期</h3><ol>
+<li><p><strong>接入</strong>：请求（如文本、图像）通过 HTTP (FastAPI) 或 gRPC 到达 <code>TokenizerManager</code>。</p>
+</li>
+<li><p><strong>分词</strong>：请求文本被转换为 token，多模态数据进行预处理（如图像缩放、归一化）。</p>
+</li>
+<li><p><strong>调度</strong>：分词后的请求通过 ZeroMQ 发送到 <code>Scheduler</code>。调度器检查 <code>RadixCache</code> 中的 KV 缓存命中情况，并将请求加入内部队列。</p>
+</li>
+<li><p><strong>批处理</strong>：调度器将请求打包成动态批次，优先处理缓存重用率高的请求或根据配置的调度策略进行处理。</p>
+</li>
+<li><p><strong>执行</strong>：批次被分发给 <code>ModelExecutor</code> 工作线程（可能通过张量并行或流水线并行分布在多个 GPU 上）。</p>
+</li>
+<li><p><strong>采样</strong>：模型输出的 Logit 由采样算子处理（如贪婪采样、Top-p 采样或通过 FSM 进行的约束采样）。</p>
+</li>
+<li><p><strong>反分词</strong>：生成的 token 发回 <code>DetokenizerManager</code>，将其转换为文本并将响应流式传输给用户。</p>
+</li>
+</ol>
+<h3 id="1-3-性能创新总结"><a href="#1-3-性能创新总结" class="headerlink" title="1.3 性能创新总结"></a>1.3 性能创新总结</h3><ul>
+<li><p><strong>RadixAttention</strong>：利用 Prompt 中的公共前缀重用 KV 缓存，带来显著的吞吐量提升。</p>
+</li>
+<li><p><strong>零开销 CPU 调度器</strong>：最小化调度循环的开销，确保 GPU 不会因为 CPU 处理速度而产生瓶颈。</p>
+</li>
+<li><p><strong>Prefill-Decode 分离（计算解耦）</strong>：将预填充（Prefill）和解码（Decode）阶段分离到不同的实例或节点上。这种解耦可以针对计算密集型的 Prefill 和访存密集型的 Decode 进行独立优化，防止长时间的 Prefill 任务导致 Decode 任务出现高抖动或停顿。</p>
+</li>
+<li><p><strong>Structured Output Steering（结构化输出引导）</strong>：通过内置的有限状态机（FSM）引导采样过程。与在外部进行后处理不同，SGLang 在算子层级集成了格式约束（如 JSON Schema 或正则表达式），极大地提升了生成结构化数据的速度和准确性。</p>
+</li>
+<li><p><strong>Multi-GPU Tensor Parallelism（多 GPU 张量并行）</strong>：原生支持跨多显卡的模型并行。利用经过优化的通信算子（如基于 NCCL 的全归约），将大型模型拆分并分发，从而支持超大规模参数模型的高效推理。</p>
+</li>
+<li><p><strong>Data-Dependent Control Flow（数据依赖型控制流）</strong>：借助 SGLang 的 DSL 接口，系统能够根据模型中间生成的 Token 实时决定后续的推理路径（如 <code>if-else</code> 分支），而无需频繁在 Python 后端和 GPU 执行引擎之间切换上下文。</p>
+</li>
+</ul>
+<h3 id="1-4-RadixCache"><a href="#1-4-RadixCache" class="headerlink" title="1.4 RadixCache"></a>1.4 RadixCache</h3><p>RadixCache 是 SGLang 的核心创新之一，它将 LLM 服务的 KV Cache 管理从传统的“线性队列”演进为“前缀树（Radix Tree）”。这种结构允许系统在多个请求之间高效地复用、共享和回收 KV Cache。</p>
+<h4 id="1-1-1-RadixCache-的核心概念"><a href="#1-1-1-RadixCache-的核心概念" class="headerlink" title="1.1.1 RadixCache 的核心概念"></a>1.1.1 RadixCache 的核心概念</h4><p>在传统的 LLM 推理（如 vLLM）中，KV Cache 通常以请求为单位进行管理。即使两个请求有共同的前缀（例如相同的System Prompt 或 Few-shot 示例），它们也可能重复计算并存储相同的前缀 KV Cache。</p>
+<p>RadixCache 的做法：</p>
+<ul>
+<li><p>前缀树结构：将 Token 序列看作路径，节点存储对应的 KV Cache 块。</p>
+</li>
+<li><p>多级复用：如果请求 A 的前缀是 [1, 2, 3]，请求 B 的前缀是 [1, 2, 4]，它们会共享节点 [1, 2] 的 KVCache，只在 3 和 4 处产生分支。</p>
+</li>
+<li><p>动态演进：随着推理的进行，树会不断生长。当生成结束时，这些节点不会立即释放，而是保留在树中供后续请求匹配。</p>
+</li>
+</ul>
+<h4 id="1-1-2-显存管理-VRAM-Management"><a href="#1-1-2-显存管理-VRAM-Management" class="headerlink" title="1.1.2 显存管理 (VRAM Management)"></a>1.1.2 显存管理 (VRAM Management)</h4><p>SGLang 的显存管理是基于 分页内存管理 (PagedAttention) 的思想，但增加了一层逻辑索引（Radix Tree）。</p>
+<p>A. 逻辑与物理分离</p>
+<ul>
+<li><p>物理池 (Physical Pool)：在初始化时，SGLang 会预分配一大块 GPU 显存，切分为固定大小的“块（Blocks）”。</p>
+</li>
+<li><p>逻辑节点 (Logical Nodes)：RadixCache 中的每个节点都记录了它对应的物理块索引（Token IDs -&gt; PhysicalBlock Indices）。B. 引用计数 (Reference Counting)每个 Radix 节点维护一个 ref_count：</p>
+</li>
+<li><p>ref_count &gt; 0：表示当前有正在运行的推理请求正在读取或写入该节点。这些节点是“锁定”的，绝对不能被置换。</p>
+</li>
+<li><p>ref_count &#x3D; 0：表示该节点当前没有被任务占用，但它仍然保留在显存中。这些节点是“可回收”的候选者。</p>
+</li>
+</ul>
+<h4 id="1-1-3-置换机制-Eviction-Policy"><a href="#1-1-3-置换机制-Eviction-Policy" class="headerlink" title="1.1.3 置换机制 (Eviction Policy)"></a>1.1.3 置换机制 (Eviction Policy)</h4><p>  当显存不足以容纳新请求的 KV Cache 时，RadixCache 会启动置换流程。A. LRU (Least Recently Used) 策略RadixCache 维护了一个 LRU 队列，用于管理所有 ref_count &#x3D;&#x3D; 0 的节点。</p>
+<ul>
+<li><p>每次节点被匹配成功（Cache Hit）或新创建时，都会更新其 last_accessed_time。</p>
+</li>
+<li><p>当需要释放空间时，系统从 LRU 队列中选择最久未使用的节点进行删除。B. 递归删除与剪枝</p>
+</li>
+<li><p>从叶到根：置换通常从叶子节点开始。如果一个叶子节点被删除，其父节点若也满足 ref_count &#x3D;&#x3D; 0且没有其他子节点，也可能被列入回收范围。</p>
+</li>
+<li><p>原子性：删除操作会将物理块索引归还给物理内存池的 free_list。C. 置换流程示例</p>
+</li>
+</ul>
+<ol>
+<li>请求进入：系统搜索 RadixTree，找到最长匹配前缀。</li>
+<li>空间检查：计算新 Token 需要的 Block 数量。如果 free_list 长度不足。</li>
+<li>触发置换：<ul>
+<li>查找 LRU 队列中 last_accessed_time 最早且 ref_count &#x3D;&#x3D; 0 的节点。</li>
+<li>释放该节点占用的物理块。</li>
+<li>重复此过程直到满足新请求的空间需求。</li>
+</ul>
+</li>
+<li>分配与锁定：从物理池获取新块，将新节点插入树中，并将 ref_count 加 1。</li>
+</ol>
+<h4 id="1-1-4-为什么-RadixCache-更高效？"><a href="#1-1-4-为什么-RadixCache-更高效？" class="headerlink" title="1.1.4 为什么 RadixCache 更高效？"></a>1.1.4 为什么 RadixCache 更高效？</h4><ol>
+<li>自动前缀复用：无需用户手动指定，系统自动识别 System Prompt、Few-shot、Chat History 的重复部分。</li>
+<li>跨请求共享：在多轮对话或并行采样（如 Tree-of-Thought）中，公共路径的 KV Cache 只存一份。</li>
+<li>零拷贝匹配：匹配过程只是简单的树遍历，开销极低（CPU 端完成），而节省的是昂贵的 GPU计算（Prefill）和显存。</li>
+</ol>
+<h4 id="1-1-5-总结"><a href="#1-1-5-总结" class="headerlink" title="1.1.5 总结"></a>1.1.5 总结</h4><p>RadixCache 将 KV Cache的生命周期从“请求生命周期”延长到了“服务器运行生命周期”。它通过引用计数保证运行安全性，通过 LRU算法实现高效的显存置换，通过前缀树最大化了显存的复用率，是 SGLang 高吞吐量的核心保障。</p>
+<h2 id="2-Megatron-LM：大规模语言模型训练框架"><a href="#2-Megatron-LM：大规模语言模型训练框架" class="headerlink" title="2. Megatron-LM：大规模语言模型训练框架"></a>2. Megatron-LM：大规模语言模型训练框架</h2><p>Megatron-LM 是一个用于训练大规模语言模型的强力框架，其特点是具有高度可扩展性（Scalable）和模块化的架构。该代码库目前正从早期的单体式设计（Monolithic design）向名为 <strong>Megatron Core (MCore)</strong> 的库导向结构转型。</p>
+<h3 id="2-1-高层架构概览"><a href="#2-1-高层架构概览" class="headerlink" title="2.1 高层架构概览"></a>2.1 高层架构概览</h3><p>该项目被划分为以下几个关键功能区域：</p>
+<ul>
+<li><p>**入口点 (<code>pretrain_*.py</code>)**：顶层脚本（如 <code>pretrain_gpt.py</code>, <code>pretrain_bert.py</code>），作为用户界面使用。它们定义了模型配置并调用训练编排逻辑。</p>
+</li>
+<li><p>**Megatron Core (<code>megatron/core/</code>)**：该库现代化的模块化核心。它包含针对各种并行策略（张量并行 TP、流水线并行 PP、数据并行 DP、上下文并行 CP 和专家并行 EP）高度优化的算子原语。</p>
+</li>
+<li><p>**遗留组件 (<code>megatron/legacy/</code>)**：为了向后兼容而保留的旧版单体实现。这包括旧版本的模型并行单元（MPU）和数据集加载器。</p>
+</li>
+<li><p>**训练编排 (<code>megatron/training/</code>)**：将模型、数据和优化器绑定在一起的“粘合剂”。<code>megatron/training/training.py</code> 中的核心预训练函数负责管理初始化、训练循环、验证和检查点保存。</p>
+</li>
+<li><p>**数据管理 (<code>megatron/core/datasets/</code> &amp; <code>megatron/training/datasets/</code>)**：处理复杂的数据加载、多数据集混合（Blending）以及在并行 Rank 之间的高效分片（Sharding）。</p>
+</li>
+<li><p>**检查点 (<code>megatron/training/checkpointing.py</code>)**：管理模型状态的保存与加载，越来越多地利用 <code>megatron/core/dist_checkpointing</code> 来支持分布式环境。</p>
+</li>
+</ul>
+<h3 id="2-2-核心组件与逻辑流"><a href="#2-2-核心组件与逻辑流" class="headerlink" title="2.2 核心组件与逻辑流"></a>2.2 核心组件与逻辑流</h3><h4 id="2-2-1-并行状态管理-megatron-core-parallel-state-py"><a href="#2-2-1-并行状态管理-megatron-core-parallel-state-py" class="headerlink" title="2.2.1 并行状态管理 (megatron/core/parallel_state.py)"></a>2.2.1 并行状态管理 (<code>megatron/core/parallel_state.py</code>)</h4><p>这是 Megatron 分布式执行的“大脑”。它为不同的并行维度（TP, PP, DP, CP, EP）初始化进程组，确保每个 Rank 都能明确其在全球计算中的角色。</p>
+<h4 id="2-2-2-模型提供者模式-Model-Provider-Pattern"><a href="#2-2-2-模型提供者模式-Model-Provider-Pattern" class="headerlink" title="2.2.2 模型提供者模式 (Model Provider Pattern)"></a>2.2.2 模型提供者模式 (Model Provider Pattern)</h4><p>入口脚本定义了一个 <code>model_provider</code> 函数。该函数利用 <code>megatron/core/models/</code>（或 <code>megatron/legacy/model/</code>）中的构建器，根据请求的并行设置构造特定的架构（如 GPT, BERT, T5）。</p>
+<h4 id="2-2-3-训练循环-megatron-training-training-py"><a href="#2-2-3-训练循环-megatron-training-training-py" class="headerlink" title="2.2.3 训练循环 (megatron/training/training.py)"></a>2.2.3 训练循环 (<code>megatron/training/training.py</code>)</h4><ol>
+<li><p><strong>初始化</strong>：设置分布式环境、随机种子和全局变量。</p>
+</li>
+<li><p><strong>模型&#x2F;优化器设置</strong>：调用模型提供者并初始化优化器（通常使用分布式优化器以提高显存效率）。</p>
+</li>
+<li><p><strong>数据迭代器</strong>：构建高效的数据加载器，处理分片和数据混合。</p>
+</li>
+<li><p><strong>训练迭代</strong>：</p>
+<ul>
+<li><p><strong>前向&#x2F;反向传播</strong>：由 <code>megatron/core/pipeline_parallel/schedules.py</code> 处理，负责管理复杂的流水线调度策略（如 <strong>1F1B</strong>）。</p>
+</li>
+<li><p><strong>权重更新</strong>：优化器执行 Step 操作，并处理梯度裁剪与缩放。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>验证&#x2F;评估</strong>：定期在验证集上运行推理。</p>
+</li>
+<li><p><strong>检查点保存</strong>：将模型和优化器状态保存到磁盘。</p>
+</li>
+</ol>
+<h3 id="2-3-支持工具与示例"><a href="#2-3-支持工具与示例" class="headerlink" title="2.3 支持工具与示例"></a>2.3 支持工具与示例</h3><ul>
+<li><p>**<code>tools/</code>**：包含用于数据预处理（<code>preprocess_data.py</code>）、检查点转换和专门性能测试的重要工具。</p>
+</li>
+<li><p>**<code>examples/</code>**：提供参考 Shell 脚本和配置，用于训练 Llama、Mistral 和 GPT-3 等知名模型。</p>
+</li>
+<li><p>**<code>tasks/</code>**：用于微调和评估等下游任务的工具。</p>
+</li>
+</ul>
+<h3 id="2-4-设计哲学总结"><a href="#2-4-设计哲学总结" class="headerlink" title="2.4 设计哲学总结"></a>2.4 设计哲学总结</h3><p>Megatron-LM 将<strong>可扩展性</strong>视为最高优先级。通过将模型定义（Core）与训练运行器（Training）解耦，它允许相同的核心并行原语在不同的模型架构和训练范式中复用，同时在 NVIDIA GPU 集群上保持巅峰性能。</p>
+<h3 id="2-5-并行实现"><a href="#2-5-并行实现" class="headerlink" title="2.5 并行实现"></a>2.5 并行实现</h3><p>Megatron-LM 实现并行的核心思想是将深度学习模型在多个维度上进行拆分，并通过高效的通信原语（Communication Primitives）保持同步。所有并行策略的协调中心是 megatron&#x2F;core&#x2F;parallel_state.py。</p>
+<p>以下是五种主要并行方式的实现机制：</p>
+<h4 id="2-5-1-数据并行-Data-Parallelism-DP"><a href="#2-5-1-数据并行-Data-Parallelism-DP" class="headerlink" title="2.5.1 数据并行 (Data Parallelism, DP)"></a>2.5.1 数据并行 (Data Parallelism, DP)</h4><p>这是最基础的并行方式。</p>
+<ul>
+<li>实现：将训练数据切分为 N 份，每个 DP 组内的 GPU 维护一份完整的模型副本（或分片的参数）。</li>
+<li>分布式优化器 (Distributed Optimizer)：为了节省内存，Megatron 通常使用分布式优化器。它不让每个 GPU都存一份完整的优化器状态（如 Adam 的动量），而是将优化器状态和梯度均匀地分片到 DP 组中的所有 GPU上。在更新权重后，通过 all-gather 同步最新的参数。</li>
+</ul>
+<h4 id="2-5-2-张量并行-Tensor-Parallelism-TP"><a href="#2-5-2-张量并行-Tensor-Parallelism-TP" class="headerlink" title="2.5.2 张量并行 (Tensor Parallelism, TP)"></a>2.5.2 张量并行 (Tensor Parallelism, TP)</h4><p>这是 Megatron 的“看家本领”，通过切分算子内部的矩阵来实现。</p>
+<ul>
+<li>路径：megatron&#x2F;core&#x2F;tensor_parallel&#x2F;</li>
+<li>ColumnParallelLinear：将权重矩阵按列切分。输入数据 X 在所有 GPU 上复制，每个 GPU 计算一部分输出 Y_i &#x3D;X * W_i。</li>
+<li>RowParallelLinear：将权重矩阵按行切分。每个 GPU 接收上一层切分后的输入 X_i，计算 Y_i &#x3D; X_i *W_i，最后通过 all-reduce 操作将结果汇总。</li>
+<li>通信优化：TP 通常局限在单机 8 卡内，利用 NVLink 提供的高带宽。</li>
+</ul>
+<h4 id="2-5-3-流水线并行-Pipeline-Parallelism-PP"><a href="#2-5-3-流水线并行-Pipeline-Parallelism-PP" class="headerlink" title="2.5.3 流水线并行 (Pipeline Parallelism, PP)"></a>2.5.3 流水线并行 (Pipeline Parallelism, PP)</h4><p>将模型的层（Layers）按顺序切分到不同的 GPU 组（Stages）上。</p>
+<ul>
+<li>路径：megatron&#x2F;core&#x2F;pipeline_parallel&#x2F;</li>
+<li>调度策略 (Schedules)：为了减少“流水线气泡（Bubble）”，Megatron 使用 1F1B (One Forward, One Backward)调度。即在同一个 Stage 上，交替执行微批次（Micro-batch）的前向和后向计算。</li>
+<li>P2P 通信：Stage 之间通过 send 和 recv 操作传递隐藏状态（Hidden States）和梯度。</li>
+</ul>
+<h4 id="2-5-4-上下文并行-Context-Parallelism-CP"><a href="#2-5-4-上下文并行-Context-Parallelism-CP" class="headerlink" title="2.5.4 上下文并行 (Context Parallelism, CP)"></a>2.5.4 上下文并行 (Context Parallelism, CP)</h4><p>针对超长文本（Long Context）设计的并行。</p>
+<ul>
+<li>实现：将 Sequence（序列）维度进行切分。与 TP 切分特征维度不同，CP 在计算 Attention 时，通过在 CP组内交换 Key&#x2F;Value 数据来完成完整的注意力计算。</li>
+<li>优势：解决了单张显存无法容纳极长序列 Attention 矩阵的问题。</li>
+</ul>
+<h4 id="2-5-5-专家并行-Expert-Parallelism-EP"><a href="#2-5-5-专家并行-Expert-Parallelism-EP" class="headerlink" title="2.5.5 专家并行 (Expert Parallelism, EP)"></a>2.5.5 专家并行 (Expert Parallelism, EP)</h4><p>专门用于混合专家模型 (Mixture of Experts, MoE)。</p>
+<ul>
+<li><p>实现：在 MoE 层中，将不同的“专家（Experts）”分布在不同的 GPU 上。</p>
+</li>
+<li><p>Router：根据输入 Token 的特征，将其路由到对应的 GPU 专家上。这涉及到复杂的 all-to-all 通信操作，将Token 发送到对应的专家，再将结果收集回来。</p>
+</li>
+</ul>
+<h4 id="2-5-6-总结：并行是如何协调的？"><a href="#2-5-6-总结：并行是如何协调的？" class="headerlink" title="2.5.6 总结：并行是如何协调的？"></a>2.5.6 总结：并行是如何协调的？</h4><p>Megatron 通过一个 3D（甚至 5D）并行网格 来管理所有 GPU。</p>
+<ul>
+<li><p>初始化：在启动时，parallel_state.py 会根据用户设置（如 –tensor-model-parallel-size 2–pipeline-model-parallel-size 4）将全局 Rank 划分到不同的正交进程组中。</p>
+</li>
+<li><p>嵌套关系：</p>
+<ul>
+<li><p>最内层：TP（通信最频繁，通常在单机内）。</p>
+</li>
+<li><p>中间层：CP &#x2F; EP。</p>
+</li>
+<li><p>最外层：PP 和 DP（通信频率较低，跨机扩展性好）。</p>
+</li>
+</ul>
+</li>
+<li><p>全局一致性：所有并行组通过 parallel_state 获取自己的 Rank 信息，确保在计算和通信时，每个 GPU都知道自己该处理哪一部分数据和权重。</p>
+</li>
+</ul>
 
             </div>
 
@@ -998,16 +1186,16 @@
                 <div class="post-copyright-info">
                     <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> infra paper reading</li>
+        <li><strong>Title:</strong> infra paper framework reading</li>
         <li><strong>Author:</strong> Ethereal</li>
         <li><strong>Created at:</strong> 2026-02-22 00:46:38</li>
         
             <li>
-                <strong>Updated at:</strong> 2026-02-22 01:17:21
+                <strong>Updated at:</strong> 2026-02-22 17:33:03
             </li>
         
         <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2026/02/22/infra-paper-reading/
+            <strong>Link:</strong> https://ethereal-o.github.io/2026/02/22/infra-paper-framework-reading/
         </li>
         <li>
             <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
@@ -1025,14 +1213,29 @@
             
                 <div class="article-nav">
                     
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2026/02/22/infra-paper-reading/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">infra paper reading</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
                     
                         <div class="article-next">
                             <a class="next"
                             rel="next"
-                            href="/2026/02/22/infra-paper-framework-reading/"
+                            href="/2026/02/22/%E6%A1%86%E6%9E%B6Learning/"
                             >
                                 <span class="title flex-center">
-                                    <span class="post-nav-title-item">infra paper framework reading</span>
+                                    <span class="post-nav-title-item">框架Learning</span>
                                     <span class="post-nav-item">Next posts</span>
                                 </span>
                                 <span class="right arrow-icon flex-center">
@@ -1097,8 +1300,8 @@
                 <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">infra paper reading</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%EF%BC%88Seed%EF%BC%89Understanding-Stragglers-in-Large-Model-Training-Using-What-if-Analysis"><span class="nav-text">1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95"><span class="nav-text">1.1 核心背景与研究方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%90%BD%E5%90%8E%E8%8A%82%E7%82%B9%E7%9A%84%E5%BD%B1%E5%93%8D%E5%88%86%E6%9E%90"><span class="nav-text">1.2 落后节点的影响分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%A0%B9%E6%9C%AC%E5%8E%9F%E5%9B%A0-Root-Causes-%E8%AF%8A%E6%96%AD"><span class="nav-text">1.3 根本原因 (Root Causes) 诊断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%AE%9E%E9%99%85%E8%90%BD%E5%9C%B0%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-text">1.4 实际落地与应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E6%98%AF%E5%90%A6%E5%AF%B9%E9%97%AE%E9%A2%98%E5%AF%B9%E5%BA%94%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%81%9A%E9%AA%8C%E8%AF%81%EF%BC%9F"><span class="nav-text">1.5 这篇文章是否对问题对应的解决方案做验证？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-%E5%AF%B9%E4%BA%8Epython%E7%9A%84gc%E9%97%AE%E9%A2%98%EF%BC%8C%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%EF%BC%8C%E7%B1%BB%E4%BC%BCc-%E7%9A%84raii%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%94%80%E6%AF%81%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AFstop-the-world%EF%BC%9F"><span class="nav-text">1.6 对于python的gc问题，是否可以通过框架设计，类似c++的raii，自动销毁，而不是stop the world？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-%E5%BD%93%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9E%8B%E7%A1%AE%E5%AE%9A%E6%97%B6%EF%BC%8C%E7%9B%AE%E5%89%8D%E5%B7%A5%E4%B8%9A%E7%95%8C%E6%98%AF%E5%90%A6%E6%9C%89%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6%E5%8F%AF%E4%BB%A5%E9%81%BF%E5%85%8Dgc%EF%BC%9F"><span class="nav-text">1.7 当一个模型确定时，目前工业界是否有推理框架可以避免gc？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%EF%BC%88Seed%EF%BC%89Comet-Fine-grained-Computation-communication"><span class="nav-text">2. （Seed）Comet: Fine-grained Computation-communication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98%EF%BC%9AMoE-%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%80%9A%E4%BF%A1%E7%93%B6%E9%A2%88"><span class="nav-text">2.1 核心问题：MoE 模型的通信瓶颈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-COMET-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0"><span class="nav-text">2.2 COMET 的核心技术创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E4%B8%8E%E8%90%BD%E5%9C%B0%E5%BD%B1%E5%93%8D"><span class="nav-text">2.3 实验结果与落地影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E8%BF%99%E4%B8%AA%E5%B7%A5%E4%BD%9C%E6%98%AF%E5%81%8F%E5%90%91%E8%AE%AD%E7%BB%83%E4%BE%A7%E8%BF%98%E6%98%AF%E6%8E%A8%E7%90%86%E4%BE%A7%EF%BC%9F"><span class="nav-text">2.4 这个工作是偏向训练侧还是推理侧？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HELM-Characterizing-Unified-Memory-Accesses-to-Improve-GPU-Performance-under-Memory-Oversubscription"><span class="nav-text">3. HELM: Characterizing Unified Memory Accesses to Improve GPU Performance under Memory Oversubscription</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%A0%B8%E5%BF%83%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E7%97%9B%E7%82%B9"><span class="nav-text">3.1 核心研究背景与痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%A0%B8%E5%BF%83%E5%88%9B%E6%96%B0%EF%BC%9AHELM-%E6%8C%87%E6%A0%87%E4%BD%93%E7%B3%BB"><span class="nav-text">3.2 核心创新：HELM 指标体系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E7%B3%BB%E7%BB%9F%E9%AA%8C%E8%AF%81%EF%BC%9A%E6%8C%87%E6%A0%87%E9%A9%B1%E5%8A%A8%E7%AE%A1%E7%90%86-MIM"><span class="nav-text">3.3 系统验证：指标驱动管理 (MIM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E4%B8%8E%E8%AF%84%E4%BC%B0"><span class="nav-text">3.4 实验结果与评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E6%A0%B8%E5%BF%83%E6%8C%87%E6%A0%87%E8%BF%9B%E8%A1%8C%E5%86%B3%E7%AD%96%E7%9A%84"><span class="nav-text">3.5 如何根据核心指标进行决策的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E8%80%83%E8%99%91slo%E5%86%8D%E8%BF%9B%E8%A1%8C%E8%A3%85%E7%AE%B1"><span class="nav-text">3.6 考虑slo再进行装箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-%E6%8F%90%E5%8F%96%E8%A3%85%E7%AE%B1%E5%87%BD%E6%95%B0"><span class="nav-text">3.7 提取装箱函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-%E5%BE%AE%E9%9B%86%E7%BE%A4%EF%BC%9F"><span class="nav-text">3.8 微集群？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-2-%E5%89%8D%E8%BF%B0%E6%80%BB%E7%BB%93"><span class="nav-text">3.8.2 前述总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-9-%E7%A2%8E%E7%89%87%E5%8C%96%EF%BC%9F"><span class="nav-text">3.9 碎片化？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-10-%E5%8F%8D%E5%90%91%E4%B8%A4%E7%BA%A7%E8%B0%83%E5%BA%A6"><span class="nav-text">3.10 反向两级调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-RL-Pretrain"><span class="nav-text">4. RL-Pretrain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-LLM-%E9%A2%86%E5%9F%9F%E7%9A%84-RL-Pretrain%EF%BC%88%E5%BD%93%E5%89%8D%E4%B8%BB%E6%B5%81%E8%AF%AD%E5%A2%83%EF%BC%89"><span class="nav-text">4.1 LLM 领域的 RL Pretrain（当前主流语境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%BC%A0%E7%BB%9F%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%A2%86%E5%9F%9F%E7%9A%84-RL-Pretrain"><span class="nav-text">4.2 传统强化学习领域的 RL Pretrain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E7%9A%84%E5%B7%A8%E5%A4%A7%E6%8C%91%E6%88%98"><span class="nav-text">4.3 底层基础设施的巨大挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-SFT%E5%92%8CRLHF%E6%A6%82%E5%BF%B5"><span class="nav-text">4.4 SFT和RLHF概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E4%BE%8B%E5%AD%90"><span class="nav-text">4.5 例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%E9%82%A3%E4%B9%88%E9%9C%80%E8%A6%81%E5%86%99%E5%A4%A7%E9%87%8F%E7%9A%84%E9%AA%8C%E8%AF%81%E8%A7%84%E5%88%99%E5%90%97%EF%BC%9F"><span class="nav-text">4.6 那么需要写大量的验证规则吗？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <div class="page-title">infra paper framework reading</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB"><span class="nav-text">一. 论文阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%EF%BC%88Seed%EF%BC%89Understanding-Stragglers-in-Large-Model-Training-Using-What-if-Analysis"><span class="nav-text">1. （Seed）Understanding Stragglers in Large Model Training Using What-if Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95"><span class="nav-text">1.1 核心背景与研究方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%90%BD%E5%90%8E%E8%8A%82%E7%82%B9%E7%9A%84%E5%BD%B1%E5%93%8D%E5%88%86%E6%9E%90"><span class="nav-text">1.2 落后节点的影响分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%A0%B9%E6%9C%AC%E5%8E%9F%E5%9B%A0%E8%AF%8A%E6%96%AD"><span class="nav-text">1.3 根本原因诊断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%AE%9E%E9%99%85%E8%90%BD%E5%9C%B0%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-text">1.4 实际落地与应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E6%80%9D%E8%80%83"><span class="nav-text">1.5 思考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%EF%BC%88Seed%EF%BC%89Comet-Fine-grained-Computation-communication"><span class="nav-text">2. （Seed）Comet: Fine-grained Computation-communication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98%EF%BC%9AMoE-%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%80%9A%E4%BF%A1%E7%93%B6%E9%A2%88"><span class="nav-text">2.1 核心问题：MoE 模型的通信瓶颈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-COMET-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E5%88%9B%E6%96%B0"><span class="nav-text">2.2 COMET 的核心技术创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E4%B8%8E%E8%90%BD%E5%9C%B0%E5%BD%B1%E5%93%8D"><span class="nav-text">2.3 实验结果与落地影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%80%9D%E8%80%83"><span class="nav-text">2.4 思考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HELM-Characterizing-Unified-Memory-Accesses-to-Improve-GPU-Performance-under-Memory-Oversubscription"><span class="nav-text">3. HELM: Characterizing Unified Memory Accesses to Improve GPU Performance under Memory Oversubscription</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%A0%B8%E5%BF%83%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF%E4%B8%8E%E7%97%9B%E7%82%B9"><span class="nav-text">3.1 核心研究背景与痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%A0%B8%E5%BF%83%E5%88%9B%E6%96%B0%EF%BC%9AHELM-%E6%8C%87%E6%A0%87%E4%BD%93%E7%B3%BB"><span class="nav-text">3.2 核心创新：HELM 指标体系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E7%B3%BB%E7%BB%9F%E9%AA%8C%E8%AF%81%EF%BC%9A%E6%8C%87%E6%A0%87%E9%A9%B1%E5%8A%A8%E7%AE%A1%E7%90%86-MIM"><span class="nav-text">3.3 系统验证：指标驱动管理 (MIM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E4%B8%8E%E8%AF%84%E4%BC%B0"><span class="nav-text">3.4 实验结果与评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E6%80%9D%E8%80%83"><span class="nav-text">3.5 思考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-RL-Pretrain"><span class="nav-text">4. RL-Pretrain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-LLM-%E9%A2%86%E5%9F%9F%E7%9A%84-RL-Pretrain%EF%BC%88%E5%BD%93%E5%89%8D%E4%B8%BB%E6%B5%81%E8%AF%AD%E5%A2%83%EF%BC%89"><span class="nav-text">4.1 LLM 领域的 RL Pretrain（当前主流语境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%BC%A0%E7%BB%9F%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%A2%86%E5%9F%9F%E7%9A%84-RL-Pretrain"><span class="nav-text">4.2 传统强化学习领域的 RL Pretrain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E7%9A%84%E5%B7%A8%E5%A4%A7%E6%8C%91%E6%88%98"><span class="nav-text">4.3 底层基础设施的巨大挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-SFT%E5%92%8CRLHF%E6%A6%82%E5%BF%B5"><span class="nav-text">4.4 SFT和RLHF概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E4%BE%8B%E5%AD%90"><span class="nav-text">4.5 例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%E9%AA%8C%E8%AF%81%E8%A7%84%E5%88%99"><span class="nav-text">4.6 验证规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C-%E6%A1%86%E6%9E%B6%E9%98%85%E8%AF%BB"><span class="nav-text">二. 框架阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-SGLang%EF%BC%9A%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-text">1. SGLang：高性能大语言模型推理框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84%E7%BB%84%E4%BB%B6"><span class="nav-text">1.1 核心架构组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%AF%B7%E6%B1%82%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">1.2 请求生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%80%A7%E8%83%BD%E5%88%9B%E6%96%B0%E6%80%BB%E7%BB%93"><span class="nav-text">1.3 性能创新总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-RadixCache"><span class="nav-text">1.4 RadixCache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Megatron-LM%EF%BC%9A%E5%A4%A7%E8%A7%84%E6%A8%A1%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%A1%86%E6%9E%B6"><span class="nav-text">2. Megatron-LM：大规模语言模型训练框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E9%AB%98%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A6%82%E8%A7%88"><span class="nav-text">2.1 高层架构概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E4%B8%8E%E9%80%BB%E8%BE%91%E6%B5%81"><span class="nav-text">2.2 核心组件与逻辑流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E6%94%AF%E6%8C%81%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.3 支持工具与示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%E6%80%BB%E7%BB%93"><span class="nav-text">2.4 设计哲学总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E5%B9%B6%E8%A1%8C%E5%AE%9E%E7%8E%B0"><span class="nav-text">2.5 并行实现</span></a></li></ol></li></ol></li></ol>
 
     </div>
 </div>
