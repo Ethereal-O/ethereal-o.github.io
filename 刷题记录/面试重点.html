@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 笔试题3321. 计算子数组的 x-sum II - 力扣（LeetCode）  codeforces-go&#x2F;leetcode&#x2F;SOLUTIONS.md at master · EndlessCheng&#x2F;codeforces-go  1.1 分类1.1.1 数组矩阵题A方向 双指针  滑动窗口  单调栈&#x2F;队列  考虑递减单调    B方向 动规  C优">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-11-03T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-01-22T14:42:07.374Z">
+<meta property="article:modified_time" content="2026-02-28T16:39:37.387Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -691,28 +691,27 @@
 </ul>
 </li>
 <li><p>Vermeer</p>
-</li>
-</ol>
 <ul>
 <li>OOP 设计</li>
 </ul>
-<ol start="3">
-<li>Volcano</li>
-</ol>
+</li>
+<li><p>Volcano</p>
 <ul>
 <li>帮派调度</li>
 </ul>
+</li>
+</ol>
 <h5 id="3-4-1-2-应用方面"><a href="#3-4-1-2-应用方面" class="headerlink" title="3.4.1.2 应用方面"></a>3.4.1.2 应用方面</h5><ol>
 <li><p>ProductionLineScheduler</p>
 </li>
 <li><p>湖杉调度器</p>
 </li>
 <li><p>Ray</p>
-</li>
-</ol>
 <ul>
 <li>TP&#x2F;PP&#x2F;DP&#x2F;ZeRo并行（参考CS336）</li>
 </ul>
+</li>
+</ol>
 <h5 id="3-4-1-3-资源调度"><a href="#3-4-1-3-资源调度" class="headerlink" title="3.4.1.3 资源调度"></a>3.4.1.3 资源调度</h5><ol>
 <li>LMCache<ul>
 <li>dist_connector</li>
@@ -850,6 +849,16 @@
 <li>rag&#x2F;agent&#x2F;volcano&#x2F;ray&#x2F;k8s</li>
 <li>pytorch&#x2F;rope&#x2F;moe&#x2F;TP&#x2F;DP&#x2F;PP&#x2F;CP&#x2F;EP&#x2F;ZeRo</li>
 <li>vllm&#x2F;lmcache&#x2F;cutile&#x2F;triton&#x2F;cublas&#x2F;cutlass&#x2F;nccl</li>
+<li>其他<ol>
+<li>temperature为0为什么还有随机性？<ol>
+<li>batch计算时调度随机，而浮点有非结合性</li>
+<li>MOE网络启用的专家不同</li>
+<li>异构硬件导致</li>
+<li>tie-breaking，完全相同时选择可能有随机性</li>
+</ol>
+</li>
+</ol>
+</li>
 </ol>
 <h5 id="3-4-3-5-自我介绍"><a href="#3-4-3-5-自我介绍" class="headerlink" title="3.4.3.5 自我介绍"></a>3.4.3.5 自我介绍</h5><ol>
 <li>基本信息</li>
