@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-02-14T15:37:42.373Z">
+<meta property="article:modified_time" content="2026-03-02T10:12:16.440Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -587,14 +587,72 @@
 </li>
 </ul>
 <h2 id="4-量派笔试"><a href="#4-量派笔试" class="headerlink" title="4. 量派笔试"></a>4. 量派笔试</h2><h3 id="4-1-填空选择"><a href="#4-1-填空选择" class="headerlink" title="4.1 填空选择"></a>4.1 填空选择</h3><ol>
-<li>多进程比多线程数据共享复杂（√）</li>
-<li>折半插入排序的稳定性、平均时间复杂度、平均比较次数不受数据顺序影响（√）</li>
-<li>一段代码：<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  fork();</span><br><span class="line">  fork() &amp;&amp; fork() &amp;&amp; fork();</span><br><span class="line">  fork() || fork();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-总共会创建多少个进程（含最初的）：24个。</li>
+<li><p>多进程比多线程数据共享复杂（√）</p>
+</li>
+<li><p>折半插入排序的稳定性、平均时间复杂度、平均比较次数不受数据顺序影响（√）</p>
+</li>
+<li><p>一段代码：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">fork();</span><br><span class="line">fork() &amp;&amp; fork() &amp;&amp; fork();</span><br><span class="line">fork() || fork();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>总共会创建多少个进程（含最初的）：24个。</p>
+</li>
 </ol>
 <h3 id="4-2-编程题"><a href="#4-2-编程题" class="headerlink" title="4.2 编程题"></a>4.2 编程题</h3><ol>
 <li>买卖股票最佳时机<a class="link"   target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/description/" >188. 买卖股票的最佳时机 IV - 力扣（LeetCode） <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
 <li>加减<a class="link"   target="_blank" rel="noopener" href="https://www.nowcoder.com/discuss/521806701349101568" >加减_牛客网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ol>
+<h2 id="5-衍复一面"><a href="#5-衍复一面" class="headerlink" title="5. 衍复一面"></a>5. 衍复一面</h2><h3 id="5-1-第一部分：面试核心问答与优化复盘"><a href="#5-1-第一部分：面试核心问答与优化复盘" class="headerlink" title="5.1 第一部分：面试核心问答与优化复盘"></a>5.1 第一部分：面试核心问答与优化复盘</h3><h4 id="1-简历项目深挖"><a href="#1-简历项目深挖" class="headerlink" title="1. 简历项目深挖"></a>1. 简历项目深挖</h4><ul>
+<li><p><strong>问题与讨论</strong>：面试官让你介绍实习经历。你详细阐述了在量化机构修复交易系统循环依赖、内存问题的经历 。随后深入探讨了三个核心项目：</p>
+<ol>
+<li><p><strong>分布式图计算引擎调度器</strong>：采用 Master-Worker 架构，支持 Batch 请求、优先级队列和 SLO 满足 。</p>
+</li>
+<li><p><strong>C++ 因子计算引擎</strong>：将 JSON 配置解析为因子表达式树，进行拓扑排序和节点裁剪；通过 Ring Buffer 与 Orderbook 对接；为每只股票分配独立线程，并通过单独线程同步截面计算 。</p>
+</li>
+<li><p><strong>大模型推理优化</strong>：针对 Prefill 和 Decode 分离架构，提出使用 RDMA 节点传输 KV Cache 以替代传统网络，降低延迟 。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="2-工程实践与代码测试规范（被点名批评的环节）"><a href="#2-工程实践与代码测试规范（被点名批评的环节）" class="headerlink" title="2. 工程实践与代码测试规范（被点名批评的环节）"></a>2. 工程实践与代码测试规范（被点名批评的环节）</h4><ul>
+<li><p><strong>问题与讨论</strong>：面试官询问代码上线流程。你回答主要跑回测和相关性分析（要求 0.99 以上，基本为 1），只要和 Python 结果一致、经过 Code Review 就可以 。面试官随即犀利指出你的测试风格有问题（例如 POP没有 RETURN），没有使用测试框架，代码中存在“隐形的 bug” 。</p>
+</li>
+<li><p><strong>评价</strong>：回答<strong>不及格</strong>。在对线上事故零容忍的量化圈，仅依赖“跑数据对齐”是非常不专业的表现。</p>
+</li>
+<li><p>💡 <strong>更好的回答模板</strong>：</p>
+<blockquote>
+<p>“除了业务层面的数据回测和 Python 基准相关性对齐（保证逻辑正确）之外，我们在 C++ 底层工程中必须引入严格的测试规范。首先，我会使用 GTest 等框架进行单元测试，覆盖边界条件；其次，在处理复杂并发结构（例如您刚才提到的无锁队列）时，我会利用 ThreadSanitizer 检测潜在的数据竞争，并严格审视原子操作的内存序（例如确保在 Compare-and-Swap 时的 <code>relaxed</code> 和 <code>release</code> 语义使用正确，防止指令重排引发的隐蔽 bug）。最后，还会配合 Valgrind 或 AddressSanitizer 进行内存泄漏和越界检查，确保上线的 C++ 代码绝对健壮。”</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="3-行业认知：为什么选择量化而不是互联网？（被面试官纠偏的环节）"><a href="#3-行业认知：为什么选择量化而不是互联网？（被面试官纠偏的环节）" class="headerlink" title="3. 行业认知：为什么选择量化而不是互联网？（被面试官纠偏的环节）"></a>3. 行业认知：为什么选择量化而不是互联网？（被面试官纠偏的环节）</h4><ul>
+<li><p><strong>问题与讨论</strong>：你表示互联网主要满足服务，性能差不多就行；而量化对性能的线划得很严，你更偏向底层开发 。面试官对你的观点进行了纠偏，指出量化其实也是<strong>策略先行</strong>，跑完发现时间偏差太离谱才会去做性能优化 。</p>
+</li>
+<li><p><strong>评价</strong>：回答<strong>偏于理想化</strong>。量化的本质是金融公司，赚钱（策略上线）永远排在技术自嗨（极致性能）前面。</p>
+</li>
+<li><p>💡 <strong>更好的回答模板</strong>：</p>
+<blockquote>
+<p>“我选择量化是因为这里对底层工程的把控更严密，但我深知量化开发的最终目的是服务于交易策略的快速落地（Time-to-Market）。我的理解是，日常开发中我们需要在‘快速交付策略’和‘极致系统性能’之间找到平衡。优先保证策略的正确性和按时上线，同时在系统架构设计之初就避免低级瓶颈。一旦 profiling 发现某段逻辑（比如截面计算或行情解析）成为短板，我会毫不犹豫地切入底层进行深度的 C++ 性能优化。”</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3 id="第二部分：笔试-x2F-手撕代码题目与解决方案"><a href="#第二部分：笔试-x2F-手撕代码题目与解决方案" class="headerlink" title="第二部分：笔试&#x2F;手撕代码题目与解决方案"></a>第二部分：笔试&#x2F;手撕代码题目与解决方案</h3><h4 id="题目：用栈实现队列-Implement-Queue-using-Stacks"><a href="#题目：用栈实现队列-Implement-Queue-using-Stacks" class="headerlink" title="题目：用栈实现队列 (Implement Queue using Stacks)"></a>题目：用栈实现队列 (Implement Queue using Stacks)</h4><ul>
+<li><strong>你的现场表现</strong>：你一开始提出用 <code>std::vector</code> 的 <code>push_back</code> 和 <code>pop_back</code> 来模拟栈操作 。但在构思队列的 <code>peek</code> 和 <code>pop</code> 操作时卡壳了，认为每次取底层元素都要把另一个栈全倒出来，“这样的话也不是均摊 O(1) 的呀” 。在面试官提示“它相当于只会进两次呀”之后，你才恍然大悟 。</li>
+</ul>
+<h4 id="💡-标准解决方案与分析"><a href="#💡-标准解决方案与分析" class="headerlink" title="💡 标准解决方案与分析"></a>💡 标准解决方案与分析</h4><p>这道题的核心思路是<strong>“双栈法”</strong>（一个输入栈 <code>stackIn</code>，一个输出栈 <code>stackOut</code>）。</p>
+<ol>
+<li><p>**Push (入队)**：永远直接压入 <code>stackIn</code>。时间复杂度 $O(1)$。</p>
+</li>
+<li><p>**Pop &#x2F; Peek (出队&#x2F;查看队头)**：</p>
+<ul>
+<li><p>如果 <code>stackOut</code> 不为空，直接从 <code>stackOut</code> 弹出或查看队首元素。</p>
+</li>
+<li><p>如果 <code>stackOut</code> 为空，则将 <code>stackIn</code> 中的所有元素依次弹出并压入 <code>stackOut</code>。此时最先进入 <code>stackIn</code> 的元素（也就是队头元素）就到了 <code>stackOut</code> 的栈顶。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>复杂度辨析（你当时卡住的地方）</strong>：为什么是<strong>均摊 $O(1)$<strong>？虽然在 <code>stackOut</code> 为空时，我们需要把 <code>stackIn</code> 的 $N$ 个元素搬移过去，单次操作最坏是 $O(N)$。但是，</strong>每一个元素在他的生命周期内，最多只会被压入 <code>stackIn</code> 一次，弹出 <code>stackIn</code> 一次，压入 <code>stackOut</code> 一次，弹出 <code>stackOut</code> 一次。</strong> 就像面试官提醒你的“只会进两次” ，每个元素身上的总操作次数是常数级别的，所以均摊到每次操作的时间复杂度就是 $O(1)$。</p>
+</li>
 </ol>
 
             
