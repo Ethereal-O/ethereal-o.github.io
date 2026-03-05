@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-03-04T15:43:13.257Z">
+<meta property="article:modified_time" content="2026-03-05T08:46:10.593Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -722,6 +722,64 @@
 </ol>
 </li>
 <li><p><strong>基于预测的全局调度（田忌赛马）：</strong> 通过参数化模型精准算出一个任务如果被换入显存所需的总时间（Swap-in 时间 + 预测执行时间）后 ，调度器才能准确判断这个操作是否能满足该任务的 SLO（服务等级目标），以及踢出其他任务引发的“级联超时”代价是否可控 。</p>
+</li>
+</ul>
+<h2 id="8-量派一面"><a href="#8-量派一面" class="headerlink" title="8. 量派一面"></a>8. 量派一面</h2><h3 id="1-性能分析工具（perf）的原理与局限性"><a href="#1-性能分析工具（perf）的原理与局限性" class="headerlink" title="1. 性能分析工具（perf）的原理与局限性"></a>1. 性能分析工具（<code>perf</code>）的原理与局限性</h3><ul>
+<li><p><strong>面试官的问题</strong>：在使用 <code>perf</code> 发现某个函数是热点时，能否得出“该函数的<strong>单次执行时间</strong>一定比其他函数长”的结论？</p>
+</li>
+<li><p><strong>候选人的错误回答</strong>：候选人认为 <code>perf</code> 采样概率反映了时间占用，并试图解释即使调用 1 万次只要总时间短，采样落入的概率就低，因此认为 <code>perf</code> 能反映单次执行时间的分布 。</p>
+</li>
+<li><p><strong>面试官的纠正与正确答案</strong>：</p>
+<ul>
+<li><p><strong>正确答案</strong>：<strong>不能得出该结论</strong>。<code>perf</code> 这类基于 CPU 性能计数器（PMU）的工具，其核心原理是<strong>定时采样（Sampling）</strong>（例如每秒中断 CPU 99 次，记录当前的指令指针位置）。</p>
+</li>
+<li><p>它只能统计出程序在某个函数上花费的<strong>总时间比例（CPU Cycles）</strong>，即“热度”。</p>
+</li>
+<li><p>它<strong>无法区分</strong>这个热点是因为“函数被调用了 100 万次，每次执行极快”导致的，还是因为“函数只被调用了 1 次，但单次执行极其耗时（例如发生阻塞）”导致的 。</p>
+</li>
+<li><p>如果要精确定量分析<strong>单次执行时间</strong>，不能依靠采样工具，必须使用<strong>插桩（Instrumentation）工具</strong>（如 <code>ftrace</code>、在代码中手动打点使用 <code>rdtsc</code> 指令读取 CPU 时钟周期等）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-操作系统底层：缺页中断（Page-Fault）的触发场景"><a href="#2-操作系统底层：缺页中断（Page-Fault）的触发场景" class="headerlink" title="2. 操作系统底层：缺页中断（Page Fault）的触发场景"></a>2. 操作系统底层：缺页中断（Page Fault）的触发场景</h3><ul>
+<li><p><strong>面试官的问题</strong>：解释一下操作系统里面“缺页”的概念，在什么情况下发生，以及操作系统怎么解决？</p>
+</li>
+<li><p><strong>候选人的错误回答</strong>：候选人过于陷入底层硬件细节，背诵了 CR3 寄存器（40位记录页表基地址）等不必要的细节，并错误地将 TLB Miss（转换检测缓冲区未命中）等同于产生缺页中断的主要原因 。</p>
+</li>
+<li><p><strong>面试官的纠正与正确答案</strong>：</p>
+<ul>
+<li><p>面试官明确指出，不需要背诵硬件字段，且 TLB Miss 本身是由 MMU（内存管理单元）硬件直接处理去查页表的，并不必然触发操作系统级别的缺页中断（Page Fault） 。</p>
+</li>
+<li><p><strong>正确的四大触发场景（面试官给出的标准答案）</strong>：</p>
+<ol>
+<li><p><strong>Demand Paging（请求分页）</strong>：程序申请了虚拟内存（如 <code>malloc</code>），但还未真正访问。首次访问时，发现没有对应的物理内存映射，触发缺页，OS 此时才分配真实的物理页帧 。</p>
+</li>
+<li><p><strong>权限错误（越权访问）</strong>：虚拟地址有效，但访问权限不对。例如用户态试图写一个只读页，或者试图访问内核态的地址空间（通常会导致 Segment Fault） 。</p>
+</li>
+<li><p><strong>共享内存未映射</strong>：其他进程已经申请并映射了某块共享的物理内存，但当前进程的页表中还未建立与该物理内存的映射关系，访问时会触发缺页并补齐映射 。</p>
+</li>
+<li><p><strong>Swap In（内存换入）</strong>：物理内存紧张时，该页面的数据被操作系统换出（Swap out）到了磁盘上。再次访问时发现不在内存中，触发缺页，OS 需要将数据从磁盘重新加载到内存中 。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-高频交易算法设计：限制-1-秒内下单不超过-300-次"><a href="#3-高频交易算法设计：限制-1-秒内下单不超过-300-次" class="headerlink" title="3. 高频交易算法设计：限制 1 秒内下单不超过 300 次"></a>3. 高频交易算法设计：限制 1 秒内下单不超过 300 次</h3><ul>
+<li><p><strong>面试官的问题</strong>：实现一个函数，传入当前时间，判断滑动的一秒钟之内下单是否超过 300 次 。</p>
+</li>
+<li><p><strong>候选人的次优回答</strong>：候选人给出了算法逻辑正确的答案——使用 Ring Buffer（环形缓冲区）记录最近 300 次的交易时间戳，并提出使用 C++ 的 <code>std::vector</code> 固定长度为 300 来实现 。</p>
+</li>
+<li><p><strong>面试官的纠正与正确答案（极致性能优化）</strong>：</p>
+<ul>
+<li><p><strong>正确&#x2F;最优答案</strong>：在高频交易（HFT）场景下，<strong>绝对应该避免使用 <code>std::vector</code><strong>。应该使用</strong>固定长度的普通原生数组（如 <code>long long timestamps[300]</code>）</strong>配合一个游标指针来实现 。</p>
+</li>
+<li><p><strong>为什么要这样优化</strong>：<code>std::vector</code> 是 STL 容器，其底层数据分配在<strong>堆（Heap）</strong>上 。动态分配内存可能会引入系统调用（System Call），并且会带来额外的开销 。在高频交易中，这种微秒&#x2F;纳秒级别的延迟是致命的。</p>
+</li>
+<li><p>使用原生数组，可以直接分配在<strong>栈（Stack）</strong>上或者作为<strong>全局变量（BSS&#x2F;Data段）</strong>，省去了动态内存分配的过程，速度更快，对 CPU 缓存（Cache）也更友好 。</p>
+</li>
+</ul>
 </li>
 </ul>
 
