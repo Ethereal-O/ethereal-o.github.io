@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-03-07T09:35:35.504Z">
+<meta property="article:modified_time" content="2026-03-08T13:01:08.339Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -783,6 +783,269 @@
 </li>
 </ul>
 <h2 id="8-Scientech笔试"><a href="#8-Scientech笔试" class="headerlink" title="8. Scientech笔试"></a>8. Scientech笔试</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Ethereal-O/scientech_testing" >Ethereal-O&#x2F;scientech_testing <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="9-Deepseek笔试"><a href="#9-Deepseek笔试" class="headerlink" title="9. Deepseek笔试"></a>9. Deepseek笔试</h2><h3 id="9-1-选择填空"><a href="#9-1-选择填空" class="headerlink" title="9.1 选择填空"></a>9.1 选择填空</h3><ol>
+<li><p>共享内存在第一个进程结束写之前，有自动操作阻止第二进程的读。</p>
+</li>
+<li><p>单处理器系统中，任何时刻恰好有一个进程处于运行状态。</p>
+</li>
+<li><p>C640，符号位1位，指数位8位，剩下分数位，这个值是$−2^{13}×1.5$。</p>
+</li>
+<li><p>10个人比赛，有一部分人晋级一部分人淘汰，可以问主持人N个问题，主持人只能回答是和否，最坏情况下10次才能知道所有人的情况（总共情况除以每次排除掉一半）。</p>
+</li>
+<li><p>N&#x3D;19901022，求一个集合，这个集合内所有元素都小于N且不相同，且所有元素的亦或值为N，这个集合最多有多少个元素：<strong>19901021</strong></p>
+</li>
+<li><p>比较a. T(n) &#x3D; lg(n)*T(n-1)+1 b. T(n) &#x3D; n*T(n&#x2F;2)+1 c. T(n) &#x3D; 3*n*T(n&#x2F;3)+1的复杂度：a≫b&gt;c</p>
+</li>
+</ol>
+<h3 id="9-2-编程题目"><a href="#9-2-编程题目" class="headerlink" title="9.2 编程题目"></a>9.2 编程题目</h3><h4 id="9-2-1-星际全息图的重建-25分"><a href="#9-2-1-星际全息图的重建-25分" class="headerlink" title="9.2.1 星际全息图的重建 (25分)"></a>9.2.1 星际全息图的重建 (25分)</h4><p>每题以多次提交中最高得分计分</p>
+<ul>
+<li><p><strong>时间限制</strong>：1秒</p>
+</li>
+<li><p><strong>空间限制</strong>：262MB</p>
+</li>
+<li><p><strong>限定语言</strong>：C(clang11), C++(clang++11), Python3(3.9), JavaScript Node(12.18.2), Rust(1.44), TypeScript(4.1.2)</p>
+</li>
+<li><p><strong>64bit IO Format</strong>：<code>%lld</code></p>
+</li>
+</ul>
+<blockquote>
+<p>本题可使用本地IDE编码，不能使用本地已有代码，无跳出限制，编码后请点击“保存并提交”按钮进行代码提交。</p>
+</blockquote>
+<hr>
+<h5 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h5><p>在“光环号”飞船启动曲率引擎穿越半人马座（题目3的内容）之前，导航电脑“深蓝”必须先对前方的时空区域进行一次全息扫描。</p>
+<p>扫描结果是一个 $N \times N$ 的二维矩阵（保证 $N$ 是 2 的整数次幂），矩阵中的每个数值代表该点的引力势能。</p>
+<p>由于量子内存容量有限，系统最多只能存储 $K$ 个“数据块”。为了在限制内存储整张地图，你需要利用“空间折叠”技术对数据进行压缩。</p>
+<h5 id="压缩机制"><a href="#压缩机制" class="headerlink" title="压缩机制"></a>压缩机制</h5><p>地图可以被划分为不同层级（Level）的方块进行存储：</p>
+<ul>
+<li><p><strong>Level 0</strong>：由 $1 \times 1$ 个像素组成，存储原始数值。</p>
+</li>
+<li><p><strong>Level 1</strong>：由 $2 \times 2$ 个像素区域聚合而成，存储这 4 个点的平均值（取整数，通常向下或四舍五入，本题约定使用算术平均值的浮点数进行误差计算）。</p>
+</li>
+<li><p><strong>Level L</strong>：由下一层级（Level L-1）的 $2 \times 2$ 个方块聚合而成。</p>
+</li>
+</ul>
+<h5 id="规则约束"><a href="#规则约束" class="headerlink" title="规则约束"></a>规则约束</h5><ol>
+<li><p><strong>分形对齐</strong>：所有聚合区域必须符合四叉树结构。例如，你不能从不对齐的坐标（如 (1,1)）开始聚合 $2 \times 2$ 的区域。</p>
+</li>
+<li><p><strong>完全覆盖</strong>：你选出的这 $K$ 个（或更少）数据块，必须像拼图一样，不多不少地完整覆盖整个 $N \times N$ 的地图区域。每个像素点只能属于一个数据块。</p>
+</li>
+</ol>
+<h5 id="计算任务"><a href="#计算任务" class="headerlink" title="计算任务"></a>计算任务</h5><p>你的目标是选择一种分块方案，使得数据块的总数量不超过 $K$，并且“信息损失”最小。</p>
+<p><strong>信息损失定义</strong>：地图上每一个像素点的（原始值 - 所在的块的平均值）的平方，然后将所有点的这个结果相加。</p>
+<p>请计算在满足块数 $\le K$ 的条件下，能达到的最小信息损失总和。（结果输出整数，如果计算过程中有小数，请保留精度，只在最后输出时四舍五入或取整，本题样例和数据保证结果通常为整数或极易处理）</p>
+<h5 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h5><p>第一行包含两个整数 $N$ 和 $K$。</p>
+<p>$N$ 代表地图边长（$N$ 是 2 的幂，如 2, 4, 8…）。</p>
+<p>$K$ 代表允许的最大数据块数量。</p>
+<p>接下来 $N$ 行，每行 $N$ 个整数，代表扫描到的引力势能矩阵。</p>
+<h5 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h5><p>输出一个整数，表示最小的“信息损失”总和。</p>
+<h5 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h5><p><strong>数据范围与提示</strong></p>
+<ul>
+<li><p>$N$ 的范围：1 到 512</p>
+</li>
+<li><p>$K$ 的范围：1 到 2000</p>
+</li>
+<li><p>像素值范围：0 到 255</p>
+</li>
+</ul>
+<h4 id="9-2-2-网络模拟器-25分"><a href="#9-2-2-网络模拟器-25分" class="headerlink" title="9.2.2 网络模拟器 (25分)"></a>9.2.2 网络模拟器 (25分)</h4><ul>
+<li><p>每题以多次提交中最高得分计分</p>
+</li>
+<li><p><strong>时间限制</strong>：1秒</p>
+</li>
+<li><p><strong>空间限制</strong>：524MB</p>
+</li>
+<li><p><strong>限定语言</strong>：C(clang11), C++(clang++11), Python3(3.9), JavaScript Node(12.18.2), Go(1.14.4), Rust(1.44), TypeScript(4.1.2)</p>
+</li>
+<li><p><strong>64bit IO Format</strong>：<code>%lld</code></p>
+</li>
+</ul>
+<blockquote>
+<p>本题可使用本地IDE编码，不能使用本地已有代码，无跳出限制，编码后请点击“保存并提交”按钮进行代码提交。</p>
+</blockquote>
+<hr>
+<h5 id="网络流量模拟器"><a href="#网络流量模拟器" class="headerlink" title="网络流量模拟器"></a>网络流量模拟器</h5><p>请实现一个网络流量模拟器，用于模拟两层胖树 (Fat-Tree) 拓扑结构中的消息传输过程。</p>
+<p>模拟器需要在包级别 (Packet-level) 精确计算消息传输的端到端延迟，需考虑固定的硬件延迟、链路带宽限制、交换机缓冲区管理以及流量调度机制。</p>
+<h6 id="1-模拟环境设定"><a href="#1-模拟环境设定" class="headerlink" title="1. 模拟环境设定"></a>1. 模拟环境设定</h6><ul>
+<li><p><strong>时间单位</strong>：最小时间单位为 1 纳秒 (ns)。</p>
+</li>
+<li><p><strong>数值计算</strong>：所有时间、带宽相关的计算保证结果为整数。</p>
+</li>
+</ul>
+<h6 id="2-网络拓扑结构-网络包含-4-台服务器、2-台叶交换机-Leaf-、2-台脊交换机-Spine-。"><a href="#2-网络拓扑结构-网络包含-4-台服务器、2-台叶交换机-Leaf-、2-台脊交换机-Spine-。" class="headerlink" title="2. 网络拓扑结构 网络包含 4 台服务器、2 台叶交换机 (Leaf)、2 台脊交换机 (Spine)。"></a>2. 网络拓扑结构 网络包含 4 台服务器、2 台叶交换机 (Leaf)、2 台脊交换机 (Spine)。</h6><ul>
+<li><p><strong>服务器</strong>：A, B, C, D</p>
+</li>
+<li><p><strong>叶交换机</strong>：leaf1, leaf2</p>
+</li>
+<li><p><strong>脊交换机</strong>：spine1, spine2</p>
+</li>
+<li><p><strong>连接关系</strong>：</p>
+<ul>
+<li><p>A, B 连接至 leaf1。</p>
+</li>
+<li><p>C, D 连接至 leaf2。</p>
+</li>
+<li><p>每个 Leaf 与所有 Spine 相连；每个 Spine 与所有 Leaf 相连。</p>
+</li>
+<li><p>所有链路均为全双工点对点链路。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="3-模拟参数详解"><a href="#3-模拟参数详解" class="headerlink" title="3. 模拟参数详解"></a>3. 模拟参数详解</h6><p>以下参数输入单位为纳秒 (ns) 或吉比特每秒 (Gbps)。</p>
+<p><strong>3.1 延迟模型</strong></p>
+<p>消息传输涉及以下固定延迟变量：</p>
+<ul>
+<li><p><strong>T_prog_send</strong> (程序发送延迟)：应用层提交数据到操作系统栈的时间。</p>
+</li>
+<li><p><strong>T_nic_send</strong> (网卡发送延迟)：DMA 获取数据并封装发送的时间。</p>
+</li>
+<li><p><strong>T_net_trans</strong> (网络传播延迟)：物理链路上的信号传播时间。</p>
+</li>
+<li><p><strong>T_switch_proc</strong> (交换机处理延迟)：交换机解析头部、主要查找并决策的时间。</p>
+</li>
+<li><p><strong>T_nic_recv</strong> (网卡接收延迟)：网卡接收并 DMA 到内存的时间。</p>
+</li>
+<li><p><strong>T_prog_recv</strong> (程序接收延迟)：应用层读取完整消息的时间。</p>
+</li>
+</ul>
+<p><em>重要并发关系：</em></p>
+<ul>
+<li><p>发送端总准备延迟 &#x3D; <code>T_prog_send + T_nic_send</code> (两者在硬件上并行发生，取其累加和作为数据包进入发送队列前的总固定等待时间)。</p>
+</li>
+<li><p>接收端总处理延迟 &#x3D; <code>T_nic_recv + T_prog_recv</code>。</p>
+</li>
+</ul>
+<p><strong>3.2 带宽与传输时间</strong></p>
+<ul>
+<li><p><strong>带宽定义</strong>：1 Gbps &#x3D; 1 bit&#x2F;ns。</p>
+</li>
+<li><p><strong>Server带宽</strong>：<code>BW_server</code> (Gbps)，即服务器网卡带宽。</p>
+</li>
+<li><p><strong>Switch带宽</strong>：<code>BW_switch</code> (Gbps)，即交换机端口带宽。</p>
+</li>
+<li><p>**包传输时间 (T_trans)**：对于大小为 P bits 的数据包，在带宽为 BW 的链路上占用链路的传输时间 &#x3D; <code>P / BW</code> (ns)。（输入保证能整除）</p>
+</li>
+</ul>
+<h6 id="4-传输与调度规则"><a href="#4-传输与调度规则" class="headerlink" title="4. 传输与调度规则"></a>4. 传输与调度规则</h6><p><strong>4.1 数据包 (Packet)</strong></p>
+<ul>
+<li><p><strong>拆包</strong>：所有消息被分割为固定大小的数据包，每个包大小为 <strong>1000 bits</strong>。</p>
+</li>
+<li><p><strong>完整性</strong>：输入保证每条消息大小是 1000 的整数倍。</p>
+</li>
+<li><p><strong>粒度</strong>：数据包是调度与传输的最小单位。</p>
+</li>
+</ul>
+<p><strong>4.2 传输流程</strong></p>
+<p>一条消息从发送到接收经历以下阶段：</p>
+<ul>
+<li><p><strong>发送准备阶段</strong>：在消息提交时间 <code>T_submit</code>，应用程序提交消息。经过 <code>(T_prog_send + T_nic_send)</code> 的延迟后，该消息的第一个数据包获得发送资格，进入源服务器网卡的发送队列。</p>
+</li>
+<li><p><strong>链路传输阶段</strong>：</p>
+<ul>
+<li><p><strong>独占性</strong>：链路在发送一个数据包的时间段内 (<code>T_trans</code>) 被占用，不可发送其他包。</p>
+</li>
+<li><p>**管道化 (Pipelining)**：链路支持流水线。第 n 个包可以在第 n-1 个包传完占用时间 (<code>T_trans</code>) 后立即开始传输，无需等待前一个包到达下一跳。</p>
+</li>
+<li><p><strong>单跳延迟</strong>：数据包经过一条链路的总耗时 &#x3D; <code>T_trans + T_net_trans</code>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>交换机处理阶段</strong>：</p>
+<ul>
+<li><p>数据包必须完整到达输入端口缓冲区。经过 <code>T_switch_proc</code> 处理后，数据包尝试进入输出端口的发送队列。</p>
+</li>
+<li><p><strong>处理后立即释放</strong>：一旦进入输出队列，立即释放输入缓冲区空间。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>4.3 调度机制 (Round-Robin)</strong></p>
+<ul>
+<li><p><strong>链路级调度</strong>：所有输出端口（服务器网卡、交换机端口）采用基于消息ID的轮询 (Round-Robin) 调度。</p>
+</li>
+<li><p><strong>规则</strong>：当有来自 k 个不同消息的数据包在等待时，调度器依次为每个消息发送一个数据包，循环往复。</p>
+</li>
+<li><p><strong>连续性</strong>：如果轮到某消息发送，且该消息有多个包排队，它只能发一个包，然后让出机会给下一个消息（除非队列中只有该消息的包）。</p>
+</li>
+</ul>
+<p><strong>4.4 缓冲区与流量控制 (Flow Control)</strong></p>
+<ul>
+<li><p><strong>缓冲区</strong>：交换机的每个输入端口有一个容量为 <code>N</code>（单位：包个数）的缓冲区。</p>
+</li>
+<li><p>**信用反压 (Credit-based Backpressure)**：发送方（上一跳）在发送数据包前，必须确保接收方（下一跳）的输入缓冲区有空位。假设发送方瞬时知晓接收方的缓冲区状态（不考虑流控信息的传播延迟）。</p>
+</li>
+<li><p><strong>规则</strong>：如果下游缓冲区满，数据包必须在上游等待，直到下游腾出空间。</p>
+</li>
+</ul>
+<p><strong>4.5 路径路由</strong></p>
+<ul>
+<li>输入显式指定路径（例如 “leaf1 spine1 leaf2”）。数据包严格按照指定路径转发。</li>
+</ul>
+<hr>
+<h5 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h5><ul>
+<li><p><strong>第一行</strong>：6个整数，表示延迟参数。<br><code>T_prog_send T_nic_send T_net_trans T_switch_proc T_nic_recv T_prog_recv</code></p>
+</li>
+<li><p><strong>第二行</strong>：2个整数，表示带宽参数 (Gbps)。<br><code>BW_server BW_switch</code></p>
+</li>
+<li><p><strong>第三行</strong>：1个整数 N，表示交换机输入端口缓冲区大小（包个数）。</p>
+</li>
+<li><p><strong>第四行</strong>：1个整数 M，表示消息数量。</p>
+</li>
+<li><p><strong>后续 M 行</strong>：每行描述一条消息。<br>提交时间 格式：<code>源服务器 目的服务器 消息大小 路径</code><br>路径由空格分隔的交换机名称组成。</p>
+</li>
+</ul>
+<h5 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h5><p>输出共 M 行。</p>
+<p>每行一个整数，表示对应消息被目的服务器应用程序完全接收（即最后一个包完成接收处理）的**绝对时间 (ns)**。</p>
+<hr>
+<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><p><strong>输入：</strong></p>
+<p>Plaintext<br>    200 2000 2000 500 2000 1000<br>    10 10<br>    2<br>    2<br>    0 A C 1000 leaf1 spine1 leaf2<br>    5000 A D 2000 leaf1 spine2 leaf2</p>
+<p><strong>输出：</strong></p>
+<p>Plaintext<br>    15100<br>    20200</p>
+<h4 id="9-2-3-海量数据流式去重（汉明距离）"><a href="#9-2-3-海量数据流式去重（汉明距离）" class="headerlink" title="9.2.3 海量数据流式去重（汉明距离）"></a>9.2.3 海量数据流式去重（汉明距离）</h4><p><strong>题目描述</strong></p>
+<p>在海量数据处理中，识别“几乎相同”的数据至关重要。</p>
+<p>现有一个长度为 $N$ 的向量序列流式输入，每个向量 $V$ 拥有 $D$ 个维度，且每个维度的取值仅为 0 或 1（即二进制向量）。</p>
+<p>对于每一个新输入的向量，你需要将其与当前已入库的所有向量进行如下比对：</p>
+<ol>
+<li><p><strong>判定重复</strong>：如果库中存在至少一个向量 $V’$，使得 $V’$ 与 $V$ 的汉明距离 (Hamming Distance) 小于等于 2，则判定为重复向量。</p>
+</li>
+<li><p><strong>入库操作</strong>：若判定为重复，则直接丢弃该向量；若判定为不重复，则将 $V$ 加入库中，并将其加入最终的输出序列。</p>
+</li>
+</ol>
+<p>输出经过上述动态去重流程后，最终留在库中的向量序列。</p>
+<hr>
+<h4 id="9-2-4-第二题：“光环号”的曲率航道导航"><a href="#9-2-4-第二题：“光环号”的曲率航道导航" class="headerlink" title="9.2.4 第二题：“光环号”的曲率航道导航"></a>9.2.4 第二题：“光环号”的曲率航道导航</h4><p><strong>题目描述</strong></p>
+<p>在 22 世纪，人类对宇宙的认知发生了颠覆性革命。物理学家发现，我们所处的星系并非虚无的真空，而是一个巨大的、类似流体的“时空洋流”系统。</p>
+<p>如果将四维时空投射到二维观测面上，整个星系结构就像是一池巨大的浴缸水面上漂浮簇拥的肥皂泡沫。每一个星际节点（恒星系）都处于这些时空泡沫的交汇点上。</p>
+<p>由于引力分布的不均匀，不同节点之间的时空表面张力（即<strong>时空曲率</strong>）剧烈波动。人类的探索飞船“光环号”正是利用这种曲率差异，通过<strong>曲率加速引擎进行超光速跳跃</strong>。</p>
+<p>你是指挥官，需要驾驶“光环号”穿越半人马座星系的 $n$ 个时空节点（编号 1 到 $n$）。</p>
+<p>节点之间存在 $m$ 条单向的“曲率航道”。由于“时空泡沫”的形态各异，每条航道都具有两个关键属性：</p>
+<ol>
+<li><p>**翘曲能量消耗 (c)**：</p>
+<ul>
+<li><p><strong>逆流航行</strong>：当飞船试图逆着时空梯度的方向航行（从低张力区强行进入高张力区），引擎需要通过“湮灭反应”输出巨大的能量（消耗值为正数）。</p>
+</li>
+<li><p><strong>顺流滑行</strong>：当飞船顺着时空梯度的方向航行（从高势能滑向低势能），引擎可以开启“真空零点能捕获模式”，吸收时空势能反向为电池充电（消耗值为负数）。</p>
+</li>
+</ul>
+</li>
+<li><p>**潮汐剪切力 (w)**：</p>
+<ul>
+<li>不同的航道因为曲率变化率不同，会产生不同强度的“引力潮汐”。这种潮汐剪切力会直接作用于飞船的物质结构。数值越大，意味着该处的时空越扭曲，对飞船龙骨的撕扯越严重。</li>
+</ul>
+</li>
+</ol>
+<p><strong>核心任务</strong></p>
+<p>你是本次航行的首席导航员。飞船需要从 <strong>起点 S</strong> 航行到 <strong>终点 E</strong>。</p>
+<p>为了确保飞船不在高强度的引力潮汐中解体，你必须设定一个飞船结构场的 <strong>安全阈值 X</strong>。导航电脑将自动屏蔽掉所有 <strong>潮汐剪切力大于 X</strong> 的航道（即飞船只被允许通行剪切力小于等于 X 的区域）。</p>
+<p>同时，受限于飞船携带的反应堆燃料和电池容量，整条路径的 <strong>累计翘曲能量消耗</strong> 必须 <strong>小于等于 K</strong>。</p>
+<p><em>（注：由于顺流滑行可以充能，路径的总能量消耗可以是负数，意味着到达终点时储备的能量比出发时更多，这在物理上是允许的，只要总净消耗不超过 K 即可。）</em></p>
+<p>请你计算出：为了成功抵达终点且不耗尽能源，飞船的结构场 <strong>最低</strong> 需要承受多大的安全阈值 X？</p>
+<p><strong>特别说明</strong></p>
+<p>根据广义相对论的时空闭合性原则（题目保证），<strong>在任何有效的阈值 X 下，星图中都不存在能量消耗总和为负数的“无限充能闭环”（无负环）</strong>，以免违背热力学定律。</p>
+<p><strong>输入描述</strong></p>
+<p>第一行包含五个整数: $n, m, K, S, E$。</p>
+<p>分别表示: 节点数量、航道数量、最大允许的能量消耗、起点、终点。</p>
+<p><em>(后续输入被图片截断，通常会是 m 行，每行包含 u, v, c, w 分别表示起点、终点、能量消耗、潮汐剪切力)</em></p>
 
             
         </div>
