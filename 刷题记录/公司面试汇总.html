@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-03-08T13:01:08.339Z">
+<meta property="article:modified_time" content="2026-03-09T07:50:07.794Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -1046,6 +1046,105 @@
 <p>第一行包含五个整数: $n, m, K, S, E$。</p>
 <p>分别表示: 节点数量、航道数量、最大允许的能量消耗、起点、终点。</p>
 <p><em>(后续输入被图片截断，通常会是 m 行，每行包含 u, v, c, w 分别表示起点、终点、能量消耗、潮汐剪切力)</em></p>
+<h2 id="10-字节AML一面"><a href="#10-字节AML一面" class="headerlink" title="10. 字节AML一面"></a>10. 字节AML一面</h2><p>虽然这场面试中候选人展现了非常出色的业务落地能力和底层逻辑，但在细节深究和基础理论环节确实暴露出了一些薄弱点。复盘是为了在下一轮（二面或交叉面）中表现得更完美。</p>
+<p>以下是针对本次面试中所有答得不够完美的点进行的全面梳理及正确应对方案：</p>
+<h3 id="1-K8s-Pod-启动开销的根因排查-Root-Cause-Analysis"><a href="#1-K8s-Pod-启动开销的根因排查-Root-Cause-Analysis" class="headerlink" title="1. K8s Pod 启动开销的根因排查 (Root Cause Analysis)"></a>1. K8s Pod 启动开销的根因排查 (Root Cause Analysis)</h3><ul>
+<li><p><strong>面试重现场景</strong>：候选人提到因为新建和销毁 Pod 有很大的时间开销，所以放弃了 K8s 原生调度，改写了一套自研调度系统 。面试官追问开销是否主要因为镜像拉取，并询问是否做过详细的 <code>root cause</code> (根因) 排查 。候选人承认没有排查过根因，只是单纯测了就绪时间发现很长，最终用常驻 Pod (Daemon) 的方式绕过了这个问题 。</p>
+</li>
+<li><p><strong>失分原因分析</strong>：AI Infra 岗位极度看重排查底层系统瓶颈的能力。遇到性能问题直接用常驻进程“绕开”，在工程上是可行的 Workaround，但在面试中暴露了对 K8s 容器生命周期缺乏深度剖析。面试官明确提示了可能是业务层面的初始化或使用姿势问题 。</p>
+</li>
+<li><p><strong>正确&#x2F;满分回答思路</strong>：<br>面对这类问题，需要展现结构化的排查链路：</p>
+<ol>
+<li><p><strong>链路拆解</strong>：说明 Pod 启动慢可以拆解为几个核心阶段：API Server 调度耗时 $\rightarrow$ 节点资源分配与 CNI 网络初始化 $\rightarrow$ CRI 容器拉起与镜像拉取耗时 $\rightarrow$ 业务应用本身（如加载大模型）的初始化耗时。</p>
+</li>
+<li><p><strong>排查工具</strong>：提到使用 <code>kubectl describe pod</code> 查看 Events 的耗时分布，或者通过查看 <code>kubelet</code> 和 <code>containerd</code> 日志来定位具体是哪个环节卡顿。</p>
+</li>
+<li><p><strong>应对方案</strong>：</p>
+<ul>
+<li><p>若是 CNI 分配 IP 慢，考虑优化 IPAM 或采用网络预热。</p>
+</li>
+<li><p>若是拉取镜像慢，可以引入 P2P 镜像加速（如 Dragonfly）或按需加载（Lazy Pulling）。</p>
+</li>
+<li><p>若是大模型加载慢，可以将模型权重挂载为局域网高速分布式存储（如候选人做过的 GPFS），而非强行打包在镜像中。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>总结</strong>：“当时为了快速满足业务，我们先采用了常驻进程池的方案。但如果做深度 RCA，我会按上述步骤排查，并针对性治理底层的网络或 CRI 瓶颈。”</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="2-K8s-核心源码机制：List-Watch"><a href="#2-K8s-核心源码机制：List-Watch" class="headerlink" title="2. K8s 核心源码机制：List-Watch"></a>2. K8s 核心源码机制：List-Watch</h3><ul>
+<li><p><strong>面试重现场景</strong>：面试官询问候选人是否看过 K8s 源码，特别是像 <code>List-Watch</code> 这样的核心机制 。候选人回答只是简单看了一下，没有深入看 。</p>
+</li>
+<li><p><strong>失分原因分析</strong>：候选人简历中写了大量的 K8s 二次开发经验（写过 Operator、交过 PR 等），因此面试官必然会按标准要求考察 K8s 的声明式 API 核心底座。直接回答“没深入看”会削弱前期建立的“底层架构”人设。</p>
+</li>
+<li><p><strong>正确&#x2F;满分回答思路</strong>：<br>需要准确阐述该机制的流转过程：</p>
+<ol>
+<li><p><strong>核心作用</strong>：它是 K8s 各个组件（如 Controller, Scheduler）与 API Server 同步资源状态的核心机制，替代了低效的轮询（Polling）。</p>
+</li>
+<li><p><strong>List 阶段</strong>：组件启动时，先通过短连接向 API Server 发起 <code>List</code> 请求，获取某一类资源的全量数据（从 etcd 中），用于建立本地的初始基线。</p>
+</li>
+<li><p><strong>Watch 阶段</strong>：全量获取后，利用 HTTP Chunked 机制建立长连接，监听 API Server 推送的该资源的增量事件（Add&#x2F;Update&#x2F;Delete）。</p>
+</li>
+<li><p><strong>Informer 架构</strong>：结合实际开发经验，说明客户端通常使用 <code>Informer</code> 框架。其内部的 <code>Reflector</code> 负责执行 List-Watch，将事件推入 <code>DeltaFIFO</code> 队列，最终更新到本地缓存（<code>Indexer</code>）中，极大降低了 API Server 的查询压力。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="3-K8s-调度器的约束与打散机制-Taints-x2F-Affinity"><a href="#3-K8s-调度器的约束与打散机制-Taints-x2F-Affinity" class="headerlink" title="3. K8s 调度器的约束与打散机制 (Taints&#x2F;Affinity)"></a>3. K8s 调度器的约束与打散机制 (Taints&#x2F;Affinity)</h3><ul>
+<li><p><strong>面试重现场景</strong>：面试官在聊到自研调度系统时，顺带问了是否看过原生调度器的约束逻辑，例如“打伞”（此处为语音识别错误，实为“打散”或“打点&#x2F;Taints”）之类的机制 。候选人回答“这个打赏（散）可能没有看，只是简单看了一下整个阶段” 。</p>
+</li>
+<li><p><strong>失分原因分析</strong>：既然是为了替换原生调度器而写自研调度，必然需要充分调研原生调度的能力边界。对基本的调度亲和性&#x2F;反亲和性不了解，会让面试官怀疑自研决策的严谨性。</p>
+</li>
+<li><p><strong>正确&#x2F;满分回答思路</strong>：</p>
+<ol>
+<li><p>**调度框架 (Scheduling Framework)**：简述原生调度分为过滤（Filter）和打分（Score）两大阶段。</p>
+</li>
+<li><p><strong>约束与打散机制</strong>：</p>
+<ul>
+<li><p>**Taints &amp; Tolerations (污点与容忍)**：用于节点排斥特定的 Pod（例如将 GPU 节点打上污点，只允许带有对应容忍度的推理 Pod 调度上去）。</p>
+</li>
+<li><p>**Node Affinity (节点亲和性)**：将 Pod 吸引到特定拓扑属性的节点上。</p>
+</li>
+<li><p>**Pod Anti-Affinity (Pod 打散&#x2F;反亲和性)**：确保同一个服务的多个实例被打散部署在不同的节点或可用区上，以保证高可用。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>自研动机圆场</strong>：“原生这些约束机制确实很完善，但由于我们关注的核心是避免推理模型启动瞬间的系统开销，并结合业务 VIP 队列等优先级控制，K8s 默认的通过扩展 Filter&#x2F;Score 插件的方式依然太重，所以才走向了自研轻量级调度。”</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="4-算法题：二叉树中和为目标值的最长路径"><a href="#4-算法题：二叉树中和为目标值的最长路径" class="headerlink" title="4. 算法题：二叉树中和为目标值的最长路径"></a>4. 算法题：二叉树中和为目标值的最长路径</h3><p><strong>【面试题目】</strong></p>
+<p>给定一棵二叉树和一个32位整数 <code>sum</code>，求累加和为 <code>sum</code> 的最长路径长度。路径是指从某个节点往下，每次最多选择一个孩子节点或者不选所形成的节点链。</p>
+<p><strong>【候选人失分原因分析】</strong> 在限时手撕代码环节，候选人的代码仅通过了第一个测试用例 。核心逻辑漏洞在于<strong>连通性断裂（隔空拼凑）</strong>。候选人试图在一个 DFS 函数中同时处理“包含当前节点”和“跳过当前节点（WithoutMe）”两种互相冲突的状态。这会导致底层的返回值可能是一条已经断裂的游离路径，但顶层节点却浑然不知地执行了 <code>+1</code>，强行把它与自己拼接在了一起。在满足题目要求的二叉树路径中，节点之间必须是严丝合缝、连续向下的。</p>
+<p><strong>【正确解答思路】</strong></p>
+<p>这里提供两种正确的解题思路，从基础的基础解法到面试官期望的最优解：</p>
+<p><strong>思路一：双重 DFS（纯递归拆分）</strong></p>
+<p>如果要顺着你最初“尝试每个起点”的直觉来写，<strong>必须</strong>将逻辑拆分为两个完全独立的函数，以此来守住路径连续性的底线：</p>
+<ol>
+<li><p><strong>全局遍历函数（主节点雷达）</strong>：负责遍历树中的每一个节点，把每一个节点都当做潜在的“路径起点”向下发起探测。</p>
+</li>
+<li><p><strong>连续探索函数（路径验证）</strong>：从指定的起点开始，<strong>严格向下连通</strong>地寻找目标和。这个函数内部绝对不允许包含“跳过当前节点去子树找”的逻辑，断了就是断了。</p>
+</li>
+</ol>
+<ul>
+<li><strong>复杂度缺陷</strong>：最坏情况下（树退化成单链表），时间复杂度会高达 $O(N^2)$。</li>
+</ul>
+<p><strong>思路二：前缀和 + 哈希表回溯（最优解 $O(N)$）</strong></p>
+<p>在 AI Infra 等对算法性能要求严格的岗位面试中，给出 $O(N)$ 的解法是锁定胜局的关键。</p>
+<ol>
+<li><p><strong>前缀和思想转换</strong>：将寻找局部的路径和，转换为寻找两个从根节点出发的“前缀和”之差。假设当前节点的前缀和为 <code>current_sum</code>，只要我们查到它的某一个祖先节点的前缀和正好等于 <code>current_sum - sum</code>，那么这两个节点之间的路径之和必然就是 <code>sum</code>。</p>
+</li>
+<li><p><strong>哈希表记录深度</strong>：维护一个哈希表，结构为 <code>&#123;前缀和: 首次出现的深度/层数&#125;</code>。这里强调<strong>首次</strong>，是因为深度越小（越靠近根节点），相减得出的路径跨度就越长，从而满足题目“最长路径”的要求。</p>
+</li>
+<li><p><strong>状态回溯（核心难点）</strong>：二叉树有左右两个独立的分支。当你 DFS 深入完左子树，准备去右子树探索时，左子树里的前缀和是绝对不能被右子树借用的（它们不是直系祖孙关系）。因此，在退出当前节点向上回溯时，<strong>必须</strong>将该节点刚加入哈希表的专属前缀和抹除掉，防止造成跨分支的“状态污染”。</p>
+</li>
+</ol>
+<ul>
+<li><strong>复杂度优势</strong>：每个节点仅被 DFS 遍历一次，哈希表查询时间复杂度为 $O(1)$，整体时间复杂度降至严格的 $O(N)$。空间复杂度为 $O(H)$（$H$ 为树的高度，主要用于系统调用栈和哈希表）。</li>
+</ul>
 
             
         </div>
