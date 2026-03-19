@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-03-17T12:05:47.977Z">
+<meta property="article:modified_time" content="2026-03-19T07:28:28.923Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -1844,6 +1844,46 @@
 </ul>
 </li>
 </ul>
+<h2 id="17-赫富笔试"><a href="#17-赫富笔试" class="headerlink" title="17. 赫富笔试"></a>17. 赫富笔试</h2><h3 id="17-1-编程语言与底层机制"><a href="#17-1-编程语言与底层机制" class="headerlink" title="17.1 编程语言与底层机制"></a>17.1 编程语言与底层机制</h3><ol>
+<li><p><strong><code>shared_ptr</code> 和 <code>weak_ptr</code> 是怎么实现的？</strong><br>通过“控制块”实现。<code>shared_ptr</code> 依靠强引用计数管理对象的生与死；<code>weak_ptr</code> 依靠弱引用计数进行观察，不控制生命周期，专门用来打破循环引用。</p>
+</li>
+<li><p><strong>构建 <code>shared_ptr</code> 有哪些方法？</strong><br>首推且最安全的是 <code>std::make_shared</code>（一次性分配内存）。其他还包括直接用 <code>new</code> 构造、使用自定义删除器、从 <code>unique_ptr</code> 转移所有权，以及拷贝&#x2F;移动构造等。</p>
+</li>
+<li><p><strong>析构 <code>shared_ptr</code> 控制块时有并发问题吗？需要加锁吗？</strong><br>没有并发问题，不需要手动加锁。控制块内部的引用计数使用的是轻量级的原子操作（<code>std::atomic</code>），天然保证了多线程下计数的安全递减和释放。</p>
+</li>
+<li><p><strong>怎么用 C++ 实现一个简单的文件系统接口？</strong><br>使用面向对象的“组合模式”。定义一个基础的 <code>Node</code> 类，派生出 <code>FileNode</code>（存内容）和 <code>DirectoryNode</code>（内部用哈希表和 <code>shared_ptr</code> 管理子节点）。核心难点在于实现路径解析逻辑。</p>
+</li>
+<li><p><strong>32 位机器上，<code>double = long</code> 会有精度损失吗？</strong><br>完全不会。32 位的 <code>long</code> 最多只有 32 位有效数据，而 64 位的 <code>double</code> 拥有 53 位的精度容量（尾数），可以完美无损地将其装下。</p>
+</li>
+</ol>
+<h3 id="17-2-操作系统与计算机组成原理"><a href="#17-2-操作系统与计算机组成原理" class="headerlink" title="17.2 操作系统与计算机组成原理"></a>17.2 操作系统与计算机组成原理</h3><ol start="6">
+<li><p><strong><code>.bss</code> 段存的是什么？和 <code>.rodata</code> 有什么区别？</strong><br><code>.bss</code> 存未初始化的全局&#x2F;静态变量，且<strong>不占用</strong>可执行文件的磁盘空间，运行时由系统清零。<code>.rodata</code> 存只读常量（如字符串），<strong>占用</strong>磁盘空间且运行时不可修改。</p>
+</li>
+<li><p><strong><code>1048576.5</code> 用 <code>float32</code> 可以精确表示吗？</strong><br>可以100%精确表示。它转换成二进制科学记数法后，尾数部分只需要 21 位，完全在 <code>float32</code> 提供的 23 位精度容量范围之内。</p>
+</li>
+<li><p><strong>只有系统调用才能进行进程切换吗？</strong><br>不正确。除了主动的系统调用，进程切换还会被硬件中断（如时钟中断、外部设备请求）和程序异常（如缺页中断）被动触发。</p>
+</li>
+<li><p><strong>DDR4 3200MHz 的内部真实频率是多少？</strong><br>内部频率只有 400 MHz。借助 8n 预取技术，内存核心一口气抓取 8 份数据，再通过双边沿传输（上下沿各传一次），最终实现了 3200 MT&#x2F;s 的等效速度。</p>
+</li>
+<li><p><strong>内存的传输速度怎么计算？</strong><br>公式为：等效数据频率 × 数据总线位宽（单通道通常为 64 位） ÷ 8。比如单根 DDR4 3200 的理论带宽约为 25.6 GB&#x2F;s。</p>
+</li>
+<li><p><strong>现代 CPU 如何用汇编指令往屏幕打印内容？</strong><br>现代 CPU 无法用汇编直接控制屏幕硬件。它必须通过 <code>syscall</code> 等指令向操作系统发起“系统调用”，把要打印的字符串数据和诉求提交给内核代为处理。</p>
+</li>
+<li><p><strong>操作系统接管打印请求后，屏幕是怎么亮起的？</strong><br>内核通过虚拟文件系统将请求交给 TTY 子系统，随后转交给终端或显卡驱动转化为像素数据并写入显存（VRAM），最后由 GPU 硬件控制器扫描显存并输出电信号点亮屏幕。</p>
+</li>
+</ol>
+<h3 id="17-3-系统架构与网络协议"><a href="#17-3-系统架构与网络协议" class="headerlink" title="17.3 系统架构与网络协议"></a>17.3 系统架构与网络协议</h3><ol start="13">
+<li><p><strong>什么是 DMA 和 NUMA？</strong><br>DMA（直接内存访问）是把 CPU 从繁重的 I&#x2F;O 数据搬运中解放出来的硬件控制器；NUMA（非统一内存访问）是通过将内存就近绑定给不同 CPU 节点，解决多核共享内存总线拥堵的架构。</p>
+</li>
+<li><p><strong>什么是 NUMA 自适应？</strong><br>为了避免 CPU 跨节点读取内存导致性能下降，操作系统（如 Linux 的 Auto NUMA）会在后台自动将内存页或线程迁移到同一个节点上；或者由程序员手动进行“绑核绑存”优化。</p>
+</li>
+<li><p><strong>什么是 NAT？</strong><br>NAT（网络地址转换）是路由器的“障眼法”。它把内网设备的私有 IP 统一替换成路由器的公网 IP 去上网，极大地节省了 IPv4 地址，但也阻碍了设备间的端到端直连。</p>
+</li>
+<li><p><strong>一台有公网 IP 的电脑如何带其他无网电脑上网？</strong><br>便捷方式：开启 Windows 自带的热点&#x2F;网络连接共享，或搭建简易代理服务器软件。快速&#x2F;高性能方式：使用 Linux 内核的 iptables 配置 NAT 转发，或者跑一个 OpenWrt 软路由虚拟机。</p>
+</li>
+<li><p><strong>既然有了 MAC 地址，为什么还需要 IP 地址？</strong><br>MAC 是身份，扁平化无规律，用于“局域网内的精准物理交付”；IP 是位置，层次化有规律，用于“广袤互联网上的宏观跨网段路由”。两者各司其职，缺一不可。</p>
+</li>
+</ol>
 
             
         </div>
