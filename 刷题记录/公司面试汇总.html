@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-04-08T08:04:32.897Z">
+<meta property="article:modified_time" content="2026-04-28T04:38:07.588Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2480,6 +2480,22 @@
 </li>
 <li><p><strong>满分标答：</strong> 除了被 Swap 出去，最常见的触发点是 <strong>Demand Paging（按需调页）引起的 Minor Page Fault</strong>。当程序通过 <code>malloc</code> 或 <code>mmap</code> 申请大块内存时，操作系统只会分配虚拟地址区间（VMA），而不会立刻分配物理页。只有当 CPU <strong>第一次访问（Touch）</strong> 对应虚拟地址的内存时，MMU 发现 PTE 还没有建立映射，才会触发 Page Fault，此时内核才真正分配物理内存并更新页表。这也是为什么量化实盘前通常要做 Memory Pre-faulting。</p>
 </li>
+</ul>
+<h2 id="28-佳期笔试"><a href="#28-佳期笔试" class="headerlink" title="28. 佳期笔试"></a>28. 佳期笔试</h2><ol>
+<li>给定一个整数数组，初始时都是0，然后给定一个操作数组，按顺序执行每一个操作，每一个操作会把整数数组中的下标为[left, right)的区间中的元素都改为target，让你输出执行完操作之后数组中的数据情况。数据量非常大-&gt;珂朵莉树</li>
+</ol>
+<h2 id="29-佳期二面"><a href="#29-佳期二面" class="headerlink" title="29. 佳期二面"></a>29. 佳期二面</h2><h3 id="1-算法题：3N数组求差值最小"><a href="#1-算法题：3N数组求差值最小" class="headerlink" title="1. 算法题：3N数组求差值最小"></a>1. 算法题：3N数组求差值最小</h3><p>给定一个长度为3n的正整数数组，从中拿走n个数，在2n个数里面，前n个和x，后n个y，求x-y最小值</p>
+<ul>
+<li><p><strong>审题出现偏差</strong>：你在写代码的后半段才意识到，题目要求的是求 <code>X - Y</code> 的最小值，而你一开始误以为是求绝对值 <code>|X - Y|</code> 。这直接导致了你前期思考方向的偏移。</p>
+</li>
+<li><p><strong>算法逻辑存在致命漏洞</strong>：你提出的“每次比较移动X和移动Y的收益”这种贪心思路，很容易陷入局部最优解 。当面试官追问“如果现在的左边和右边都不如原先的小呢”时，你提出的“直接跳过”方案并没有从根本上解决问题 。</p>
+</li>
+<li><p>正确解法是遍历切割点，每个切割点都统计左边的最小n个数和右边最大n个数</p>
+</li>
+</ul>
+<h3 id="2-C-并发编程：阻塞队列"><a href="#2-C-并发编程：阻塞队列" class="headerlink" title="2. C++ 并发编程：阻塞队列"></a>2. C++ 并发编程：阻塞队列</h3><p>线程安全的阻塞队列，模板类，没有容量限制，push一定成功，pop没有元素阻塞等待</p>
+<h3 id="3-硬件体系结构细节：Cache大小的混淆"><a href="#3-硬件体系结构细节：Cache大小的混淆" class="headerlink" title="3. 硬件体系结构细节：Cache大小的混淆"></a>3. 硬件体系结构细节：Cache大小的混淆</h3><ul>
+<li><strong>L1 Cache 的大小</strong>：当面试官问到每一级 Cache 的大小时，你回答 L1 Cache 是 64 字节 。实际上，<strong>64 字节（64 Bytes）通常是 Cache Line（缓存行）的大小</strong>，而 L1 Cache 的整体容量通常在 32KB 到 64KB 之间。这是一个比较基础的数据事实混淆。</li>
 </ul>
 
             
