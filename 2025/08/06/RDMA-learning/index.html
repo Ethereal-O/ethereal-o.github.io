@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 安装环境 安装扩展内核模块  1sudo apt install linux-modules-extra-$(uname -r)   安装rdma  RDMA：Soft-RoCE 环境搭建实验   运行程序  async-ucx&#x2F;.github&#x2F;workflows&#x2F;main.yml at main · madsys-dev&#x2F;async-ucx  123">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-08-06T05:06:09.000Z">
-<meta property="article:modified_time" content="2026-04-25T07:25:13.266Z">
+<meta property="article:modified_time" content="2026-05-08T08:25:38.118Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-25 15:25:13</span>
-            <span class="mobile">2026-04-25 15:25</span>
+            <span class="desktop">2026-05-08 16:25:38</span>
+            <span class="mobile">2026-05-08 16:25</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -577,6 +577,65 @@
 <li><strong>并发控制</strong>：处理多个并发的单边操作</li>
 <li><strong>内存信息交换</strong>：安全地交换内存地址和rkey</li>
 </ol>
+<h2 id="5-CQ"><a href="#5-CQ" class="headerlink" title="5. CQ"></a>5. CQ</h2><h3 id="5-1-RDMA-的核心抽象"><a href="#5-1-RDMA-的核心抽象" class="headerlink" title="5.1 RDMA 的核心抽象"></a>5.1 RDMA 的核心抽象</h3><p>RDMA 的设计目标是让两台机器的内存之间直接传数据，<strong>完全绕过 CPU 和操作系统</strong>。</p>
+<h4 id="5-1-1-QP（Queue-Pair）"><a href="#5-1-1-QP（Queue-Pair）" class="headerlink" title="5.1.1 QP（Queue Pair）"></a>5.1.1 QP（Queue Pair）</h4><p>QP 是 RDMA 的通信端点，里面有两个队列：<br>    ┌─────────────────────────────┐<br>    │           QP                │<br>    │                             │<br>    │  SQ（Send Queue）           │  ← 你把”要做什么”写到这里<br>    │  ┌────┬────┬────┬────┐      │<br>    │  │WQE │WQE │WQE │    │      │<br>    │  └────┴────┴────┴────┘      │<br>    │                             │<br>    │  RQ（Receive Queue）        │  ← 对端发过来的数据落这里<br>    │  ┌────┬────┬────┬────┐      │<br>    │  │RQE │RQE │    │    │      │<br>    │  └────┴────┴────┴────┘      │<br>    └─────────────────────────────┘</p>
+<p>你往 SQ 里放一个 <strong>WQE（Work Queue Entry）</strong>，告诉 NIC：</p>
+<ul>
+<li>做什么操作（WRITE &#x2F; READ &#x2F; SEND）</li>
+<li>本地内存地址和长度</li>
+<li>远端内存地址和 rkey</li>
+</ul>
+<p>NIC 看到 doorbell 被敲响，就去 SQ 里取 WQE 执行。</p>
+<h4 id="5-1-2-CQ（Completion-Queue）"><a href="#5-1-2-CQ（Completion-Queue）" class="headerlink" title="5.1.2 CQ（Completion Queue）"></a>5.1.2 CQ（Completion Queue）</h4><p>NIC 执行完一个 WQE 之后，往 CQ 里写一个 <strong>CQE（Completion Queue Entry）</strong>，告诉你这个操作完成了（成功或失败）。<br>    ┌─────────────────────────────┐<br>    │           CQ                │<br>    │                             │<br>    │  ┌────┬────┬────┬────┐      │<br>    │  │CQE │CQE │    │    │      │  ← NIC 写入<br>    │  └────┴────┴────┴────┘      │<br>    │           ↑                 │<br>    │        你来 poll            │<br>    └─────────────────────────────┘</p>
+<p>你（或 GPU kernel）不停地 poll CQ，看有没有新的 CQE，有了就知道操作完成了。<br>完整的一次 RDMA WRITE 流程</p>
+<hr>
+<pre><code>发送方                              接收方
+  │                                   │
+  │  1. 注册 MR（告诉 NIC 哪块内存可用）  │
+  │  2. 创建 QP                        │
+  │  3. 交换 QP 信息（通过带外通道）  ←→  │
+  │                                   │
+  │  4. 写 WQE 到 SQ：                 │
+  │     opcode = RDMA_WRITE            │
+  │     local_addr = 我的内存          │
+  │     remote_addr = 对方内存         │
+  │     rkey = 对方给的钥匙            │
+  │                                   │
+  │  5. 敲 doorbell                   │
+  │       │                           │
+  │       ↓                           │
+  │     NIC 读 WQE                    │
+  │     NIC DMA 读本地内存  ────────→  NIC DMA 写对方内存
+  │                                   │
+  │  6. NIC 写 CQE 到 CQ              │  （接收方完全不知道，CPU 不参与）
+  │  7. 你 poll CQ 拿到完成通知        │
+</code></pre>
+<h4 id="5-1-3-MR（Memory-Region）是什么"><a href="#5-1-3-MR（Memory-Region）是什么" class="headerlink" title="5.1.3 MR（Memory Region）是什么"></a>5.1.3 MR（Memory Region）是什么</h4><p>NIC 不能随便访问内存，必须先注册：<br>    struct ibv_mr *mr &#x3D; ibv_reg_mr(pd, ptr, size,<br>        IBV_ACCESS_LOCAL_WRITE |<br>        IBV_ACCESS_REMOTE_WRITE |<br>        IBV_ACCESS_REMOTE_READ);</p>
+<p>注册之后 NIC 拿到：</p>
+<ul>
+<li><strong>lkey</strong>：本地操作用（填 WQE 的 sge.lkey）</li>
+<li><strong>rkey</strong>：给对方用（对方填 wr.wr.rdma.rkey）</li>
+</ul>
+<p>rkey 相当于<strong>访问这块内存的钥匙</strong>，没有 rkey 就没有办法远程读写。<br>三种操作语义</p>
+<hr>
+<pre><code>RDMA WRITE：我把数据推到对方内存，对方 CPU/GPU 完全不知道
+RDMA READ ：我从对方内存拉数据，对方 CPU/GPU 完全不知道
+SEND/RECV ：需要对方预先 post RQE，双方配合，类似 socket
+</code></pre>
+<p>WRITE 和 READ 是真正的单边操作，CPU bypass 的核心价值就在这里。<br>对应到你的 GPU doorbell 场景</p>
+<hr>
+<pre><code>GPU kernel
+    │
+    ├─ 写 WQE 到 SQ（在某块内存里）
+    ├─ 写 doorbell（PCIe write 到 NIC 的 BAR 寄存器）
+    │         ↓
+    │       NIC 被唤醒，去 SQ 取 WQE
+    │       NIC 执行 RDMA READ（从远端拉数据到 GPU 显存）
+    │       NIC 写 CQE
+    │
+    └─ poll CQ（GPU 不停读 CQE 所在内存）
+</code></pre>
+<p>所以 WQE 放在哪（GPU显存 or host内存），CQE 放在哪，决定了 GPU 写 WQE 和 poll CQE 的 PCIe 开销，这才是你这个设计的延迟关键路径。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/553140760" >(22 封私信 &#x2F; 80 条消息) 使用 C++ 20 协程封装 RDMA 操作 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44727517/article/details/146471038" >深入解析RDMA：从原理到C++实践_rdma c++-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/wq897387/article/details/131870527" >使用Soft-RoCE实践RDMA_softroce-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -610,7 +669,7 @@
         <li><strong>Created at:</strong> 2025-08-06 13:06:09</li>
         
             <li>
-                <strong>Updated at:</strong> 2026-04-25 15:25:13
+                <strong>Updated at:</strong> 2026-05-08 16:25:38
             </li>
         
         <li>
@@ -720,7 +779,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">RDMA learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"><span class="nav-text">1. 安装环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8D%95%E8%BE%B9%E4%B8%8E%E5%8F%8C%E8%BE%B9"><span class="nav-text">2. 单边与双边</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%BC%82%E5%AF%B9%E6%AF%94"><span class="nav-text">📊 核心差异对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A7-%E4%BB%A3%E7%A0%81%E5%B1%82%E9%9D%A2%E7%9A%84%E5%85%B7%E4%BD%93%E5%B7%AE%E5%BC%82"><span class="nav-text">🔧 代码层面的具体差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-text">🎯 选择指南</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%E5%AE%9E%E9%99%85%E5%BB%BA%E8%AE%AE"><span class="nav-text">💡 实际建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8F%8C%E8%BE%B9"><span class="nav-text">3. 双边</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A7-RDMA%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%A4%BA%E4%BE%8B"><span class="nav-text">🔧 RDMA通信基础示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%BB-%E7%BC%96%E8%AF%91%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="nav-text">💻 编译与运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%8D-%E4%BB%A3%E7%A0%81%E5%85%B3%E9%94%AE%E7%82%B9%E8%AF%B4%E6%98%8E"><span class="nav-text">🔍 代码关键点说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9B%A0-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E8%80%83%E8%99%91"><span class="nav-text">🛠 实际应用考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8D%95%E8%BE%B9"><span class="nav-text">4. 单边</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A7-RDMA%E5%8D%95%E8%BE%B9%E5%86%99%E5%85%A5%E7%A4%BA%E4%BE%8B"><span class="nav-text">🔧 RDMA单边写入示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%8D-RDMA%E5%8D%95%E8%BE%B9%E6%93%8D%E4%BD%9C%E5%85%B3%E9%94%AE%E7%89%B9%E7%82%B9"><span class="nav-text">🔍 RDMA单边操作关键特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9B%A0-%E7%BC%96%E8%AF%91%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="nav-text">🛠 编译与运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E8%80%83%E8%99%91"><span class="nav-text">💡 实际应用考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"><span class="nav-text">1. 安装环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8D%95%E8%BE%B9%E4%B8%8E%E5%8F%8C%E8%BE%B9"><span class="nav-text">2. 单边与双边</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8A-%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%BC%82%E5%AF%B9%E6%AF%94"><span class="nav-text">📊 核心差异对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A7-%E4%BB%A3%E7%A0%81%E5%B1%82%E9%9D%A2%E7%9A%84%E5%85%B7%E4%BD%93%E5%B7%AE%E5%BC%82"><span class="nav-text">🔧 代码层面的具体差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-text">🎯 选择指南</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%E5%AE%9E%E9%99%85%E5%BB%BA%E8%AE%AE"><span class="nav-text">💡 实际建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8F%8C%E8%BE%B9"><span class="nav-text">3. 双边</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A7-RDMA%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%A4%BA%E4%BE%8B"><span class="nav-text">🔧 RDMA通信基础示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%BB-%E7%BC%96%E8%AF%91%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="nav-text">💻 编译与运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%8D-%E4%BB%A3%E7%A0%81%E5%85%B3%E9%94%AE%E7%82%B9%E8%AF%B4%E6%98%8E"><span class="nav-text">🔍 代码关键点说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9B%A0-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E8%80%83%E8%99%91"><span class="nav-text">🛠 实际应用考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8D%95%E8%BE%B9"><span class="nav-text">4. 单边</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%A7-RDMA%E5%8D%95%E8%BE%B9%E5%86%99%E5%85%A5%E7%A4%BA%E4%BE%8B"><span class="nav-text">🔧 RDMA单边写入示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%8D-RDMA%E5%8D%95%E8%BE%B9%E6%93%8D%E4%BD%9C%E5%85%B3%E9%94%AE%E7%89%B9%E7%82%B9"><span class="nav-text">🔍 RDMA单边操作关键特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9B%A0-%E7%BC%96%E8%AF%91%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="nav-text">🛠 编译与运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E8%80%83%E8%99%91"><span class="nav-text">💡 实际应用考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-CQ"><span class="nav-text">5. CQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-RDMA-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%BD%E8%B1%A1"><span class="nav-text">5.1 RDMA 的核心抽象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>

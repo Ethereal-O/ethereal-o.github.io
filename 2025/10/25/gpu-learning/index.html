@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://pic4.zhimg.com/v2-c8a7397139ece2247569de371530e8e3_1440w.jpg">
 <meta property="og:image" content="https://pic3.zhimg.com/v2-14c354948222132dc90c27e6352416e4_1440w.jpg">
 <meta property="article:published_time" content="2025-10-25T08:00:21.000Z">
-<meta property="article:modified_time" content="2025-10-25T10:05:11.475Z">
+<meta property="article:modified_time" content="2026-05-08T10:41:14.329Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic1.zhimg.com/v2-dfcbbabe781298abe6b032d5ae801890_1440w.jpg">
@@ -397,8 +397,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-25 18:05:11</span>
-            <span class="mobile">2025-10-25 18:05</span>
+            <span class="desktop">2026-05-08 18:41:14</span>
+            <span class="mobile">2026-05-08 18:41</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -682,6 +682,520 @@
 <div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp ~/Programs/gpgpu-sim_distribution/4_0/gpgpu-sim_distribution-4.0.1/configs/tested-cfgs/SM2_GTX480/* ./</span><br><span class="line">./hello</span><br></pre></td></tr></table></figure></div>
 
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/gpgpu-sim/cutlass-gpgpu-sim" >gpgpu-sim&#x2F;cutlass-gpgpu-sim <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="3-其他知识"><a href="#3-其他知识" class="headerlink" title="3. 其他知识"></a>3. 其他知识</h2><h3 id="3-1-UVM"><a href="#3-1-UVM" class="headerlink" title="3.1 UVM"></a>3.1 UVM</h3><p>UVM（Unified Virtual Memory，统一虚拟内存）是 CUDA 提供的一种内存管理机制，允许 CPU 和 GPU 共享同一个虚拟地址空间，使程序员无需手动管理数据在主机内存与设备内存之间的拷贝。</p>
+<h4 id="3-1-1-核心概念"><a href="#3-1-1-核心概念" class="headerlink" title="3.1.1 核心概念"></a>3.1.1 核心概念</h4><p>在传统 CUDA 编程中，需要显式使用 <code>cudaMalloc</code> + <code>cudaMemcpy</code> 在 Host 和 Device 之间搬运数据。UVM 引入了”托管内存（Managed Memory）”的概念，将内存管理的职责交给 CUDA 运行时和驱动程序：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统方式</span></span><br><span class="line"><span class="type">float</span> *d_ptr;</span><br><span class="line"><span class="built_in">cudaMalloc</span>(&amp;d_ptr, size);</span><br><span class="line"><span class="built_in">cudaMemcpy</span>(d_ptr, h_ptr, size, cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line"><span class="comment">// UVM 方式</span></span><br><span class="line"><span class="type">float</span> *unified_ptr;</span><br><span class="line"><span class="built_in">cudaMallocManaged</span>(&amp;unified_ptr, size);  <span class="comment">// CPU 和 GPU 都可以直接访问</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-1-2-工作原理"><a href="#3-1-2-工作原理" class="headerlink" title="3.1.2 工作原理"></a>3.1.2 工作原理</h4><p>UVM 的核心是<strong>按需页面迁移（Demand Paging）</strong>：</p>
+<ol>
+<li>当 GPU 访问一个不在 GPU 显存中的页面时，触发<strong>缺页中断（Page Fault）</strong>。</li>
+<li>CUDA 驱动程序捕获此中断，将对应的内存页从 CPU 内存迁移到 GPU 显存。</li>
+<li>反之，当 CPU 访问一个在 GPU 显存中的页面时，同样触发迁移。</li>
+</ol>
+<p>这种机制在 Pascal 架构（GTX 1080&#x2F;P100）之后才得到硬件支持，在更早的架构上只是逻辑统一（物理数据仍需拷贝）。</p>
+<h4 id="3-1-3-性能优化-API"><a href="#3-1-3-性能优化-API" class="headerlink" title="3.1.3 性能优化 API"></a>3.1.3 性能优化 API</h4><p>UVM 提供了两个重要的提示 API 来优化性能，避免频繁的缺页中断：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 内存访问建议 (Hint)：告诉运行时数据的访问模式</span></span><br><span class="line"><span class="comment">// 将 unified_ptr 标记为主要由 device 0 访问</span></span><br><span class="line"><span class="built_in">cudaMemAdvise</span>(unified_ptr, size, cudaMemAdviseSetPreferredLocation, device_id);</span><br><span class="line"><span class="comment">// 标记 CPU 只读该数据（可以在所有设备上保留副本）</span></span><br><span class="line"><span class="built_in">cudaMemAdvise</span>(unified_ptr, size, cudaMemAdviseSetReadMostly, cudaCpuDeviceId);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 异步预取 (Prefetch)：在实际使用前主动迁移数据</span></span><br><span class="line"><span class="comment">// 在 kernel 启动前，将数据预先迁移到 GPU</span></span><br><span class="line"><span class="built_in">cudaMemPrefetchAsync</span>(unified_ptr, size, device_id, stream);</span><br><span class="line"><span class="comment">// kernel 完成后，预取回 CPU</span></span><br><span class="line"><span class="built_in">cudaMemPrefetchAsync</span>(unified_ptr, size, cudaCpuDeviceId, stream);</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-1-4-内存超订阅（Memory-Oversubscription）"><a href="#3-1-4-内存超订阅（Memory-Oversubscription）" class="headerlink" title="3.1.4 内存超订阅（Memory Oversubscription）"></a>3.1.4 内存超订阅（Memory Oversubscription）</h4><p>UVM 支持<strong>超订阅</strong>，即分配的托管内存总量可以超过 GPU 显存容量。当 GPU 显存不足时，驱动会自动将最近最少使用的页面换出到 CPU 内存，类似操作系统的虚拟内存换页机制。这对于处理超大模型或数据集非常有用，但频繁换页会带来显著的性能损耗。</p>
+<h4 id="3-1-5-使用注意事项"><a href="#3-1-5-使用注意事项" class="headerlink" title="3.1.5 使用注意事项"></a>3.1.5 使用注意事项</h4><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据仅被 GPU 访问</td>
+<td>使用 <code>cudaMemAdviseSetPreferredLocation(GPU)</code> + <code>cudaMemPrefetchAsync</code></td>
+</tr>
+<tr>
+<td>数据被 CPU 和 GPU 交替访问</td>
+<td>UVM 是合适的选择，配合 Prefetch 减少缺页</td>
+</tr>
+<tr>
+<td>追求极致性能</td>
+<td>建议使用传统显式拷贝，避免缺页开销</td>
+</tr>
+<tr>
+<td>数据量超过显存容量</td>
+<td>UVM 超订阅是主要解决方案</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-TMA"><a href="#3-2-TMA" class="headerlink" title="3.2 TMA"></a>3.2 TMA</h3><p>TMA（Tensor Memory Accelerator，张量内存加速器）是 NVIDIA Hopper 架构（H100）引入的硬件单元，专门用于在全局内存（Global Memory）和共享内存（Shared Memory）之间进行高效的、硬件管理的批量数据搬运。</p>
+<h4 id="3-2-1-为什么需要-TMA"><a href="#3-2-1-为什么需要-TMA" class="headerlink" title="3.2.1 为什么需要 TMA"></a>3.2.1 为什么需要 TMA</h4><p>在传统的 CUDA 编程中，数据从 Global Memory 搬运到 Shared Memory 的流程是：</p>
+<ol>
+<li>每个线程计算自己负责加载的内存地址（需要大量寄存器和指令）。</li>
+<li>每个线程执行 <code>cp.async</code> 指令。</li>
+<li>整个 Warp 协同完成一个 Tile 的搬运。</li>
+</ol>
+<p>这种方式的缺点是：地址计算消耗大量寄存器（影响 Occupancy），并且需要 Warp 中的所有线程参与才能完成一次数据搬运。</p>
+<p>TMA 将整个过程<strong>卸载（offload）给硬件</strong>，只需要一个线程（甚至不占用计算资源）即可发起一次完整 Tile 的搬运。</p>
+<h4 id="3-2-2-核心特性"><a href="#3-2-2-核心特性" class="headerlink" title="3.2.2 核心特性"></a>3.2.2 核心特性</h4><ul>
+<li><strong>单线程发起</strong>：只需一个线程调用一条指令，即可完成整块 Tile（最高 5D 张量）的异步搬运。</li>
+<li><strong>硬件地址计算</strong>：Tensor descriptor 预先描述了张量的形状、步幅（stride）、数据类型，硬件自动计算地址。</li>
+<li><strong>异步执行</strong>：搬运与计算可以重叠（overlap），使用 <code>mbarrier</code>（内存屏障）进行同步。</li>
+<li><strong>支持多维度</strong>：支持 1D 到 5D 的张量 Tile 拷贝，自然匹配矩阵分块的内存布局。</li>
+<li><strong>支持 Swizzle</strong>：可以在搬运时对数据进行 Swizzle（重排），消除 Shared Memory 的 Bank Conflict。</li>
+</ul>
+<h4 id="3-2-3-工作流程"><a href="#3-2-3-工作流程" class="headerlink" title="3.2.3 工作流程"></a>3.2.3 工作流程</h4><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// 1. 在 Host 端创建 Tensor Map（描述符），描述张量的形状和访问方式</span><br><span class="line">CUtensorMap tensor_map;</span><br><span class="line">cuTensorMapEncodeTiled(</span><br><span class="line">    &amp;tensor_map,</span><br><span class="line">    CU_TENSOR_MAP_DATA_TYPE_FLOAT32,</span><br><span class="line">    2,              // rank (维度数)</span><br><span class="line">    global_ptr,     // 全局内存基地址</span><br><span class="line">    &#123;M, K&#125;,         // 全局张量形状</span><br><span class="line">    &#123;strides&#125;,      // 步幅</span><br><span class="line">    &#123;BLOCK_M, BLOCK_K&#125;, // 每次搬运的 Tile 大小</span><br><span class="line">    CU_TENSOR_MAP_INTERLEAVE_NONE,</span><br><span class="line">    CU_TENSOR_MAP_SWIZZLE_128B,  // 消除 bank conflict</span><br><span class="line">    CU_TENSOR_MAP_L2_PROMOTION_NONE,</span><br><span class="line">    CU_TENSOR_MAP_FLOAT_OOB_FILL_NAN_REQUEST_ZERO_FMA</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">// 2. 在 Kernel 内部，一个线程发起异步 TMA 搬运</span><br><span class="line">// 等价于：将全局内存中坐标 (tile_row, tile_col) 处的 Tile 拷贝到 smem</span><br><span class="line">if (threadIdx.x == 0) &#123;</span><br><span class="line">    // 使用 cp.async.bulk.tensor PTX 指令</span><br><span class="line">    cuda::memcpy_async(smem_ptr, &amp;tensor_map, &#123;tile_row, tile_col&#125;, barrier);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 3. 所有线程等待搬运完成</span><br><span class="line">barrier.arrive_and_wait();</span><br><span class="line"></span><br><span class="line">// 4. 正常读取 Shared Memory 中的数据进行计算</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-2-4-TMA-与传统-cp-async-的对比"><a href="#3-2-4-TMA-与传统-cp-async-的对比" class="headerlink" title="3.2.4 TMA 与传统 cp.async 的对比"></a>3.2.4 TMA 与传统 cp.async 的对比</h4><table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>cp.async</code>（传统）</th>
+<th>TMA</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>发起线程数</td>
+<td>整个 Warp（32线程）</td>
+<td>仅 1 个线程</td>
+</tr>
+<tr>
+<td>地址计算</td>
+<td>软件（消耗寄存器）</td>
+<td>硬件（Tensor Descriptor）</td>
+</tr>
+<tr>
+<td>支持维度</td>
+<td>1D（线性地址）</td>
+<td>1D ～ 5D</td>
+</tr>
+<tr>
+<td>Swizzle</td>
+<td>需手动实现</td>
+<td>硬件内置支持</td>
+</tr>
+<tr>
+<td>同步机制</td>
+<td><code>cp.async.wait_group</code></td>
+<td><code>mbarrier</code>（更灵活）</td>
+</tr>
+<tr>
+<td>适用架构</td>
+<td>Ampere（A100）及以上</td>
+<td>Hopper（H100）及以上</td>
+</tr>
+</tbody></table>
+<h3 id="3-3-拓扑"><a href="#3-3-拓扑" class="headerlink" title="3.3 拓扑"></a>3.3 拓扑</h3><h4 id="3-3-1-拓扑架构"><a href="#3-3-1-拓扑架构" class="headerlink" title="3.3.1 拓扑架构"></a>3.3.1 拓扑架构</h4><ol>
+<li><p>PIX</p>
+</li>
+<li><p>NODE</p>
+</li>
+<li><p>SYS</p>
+</li>
+</ol>
+<h4 id="3-3-2-区别"><a href="#3-3-2-区别" class="headerlink" title="3.3.2 区别"></a>3.3.2 区别</h4><ul>
+<li>当使用同一个numa节点时，做内存到CPU内存到拷贝，带宽是52GB&#x2F;s，说明PCIE没有问题。</li>
+<li>当使用同一个numa节点时，做CPU内存到内存的RDMA，带宽是32GB&#x2F;s（因为做同时读写，带宽&#x2F;2，没有问题）。</li>
+<li>当使用同一个numa节点时，当从内存向GPU做RDMA时（GPU和内存都在同一个numa下），带宽是22GB&#x2F;s（首先是同时做读写，带宽&#x2F;2，此外，受限于NODE架构而更小）。</li>
+<li>当使用同一个numa节点时，当从GPU向内存做RDMA时（GPU和内存都在同一个numa下），带宽是16GB&#x2F;s（在前一个基础上，RDMA写要更慢）。</li>
+</ul>
+<h3 id="3-4-Warp-Specialization"><a href="#3-4-Warp-Specialization" class="headerlink" title="3.4 Warp Specialization"></a>3.4 Warp Specialization</h3><p>Warp Specialization（Warp 专化）是一种编程范式，将同一个 ThreadBlock 内的不同 Warp 赋予不同的”角色”，典型地分为<strong>生产者 Warp（Producer）</strong>和<strong>消费者 Warp（Consumer）</strong>，以实现数据搬运与计算的深度流水线重叠。这一范式在 Hopper 架构配合 TMA 使用时达到最佳效果。</p>
+<h4 id="3-4-1-传统模式-vs-Warp-Specialization"><a href="#3-4-1-传统模式-vs-Warp-Specialization" class="headerlink" title="3.4.1 传统模式 vs Warp Specialization"></a>3.4.1 传统模式 vs Warp Specialization</h4><p><strong>传统模式（所有 Warp 职责相同）：</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">所有 Warp:  [Load A] [Load B] → [同步] → [Compute MMA] → [Load A] [Load B] → ...</span><br></pre></td></tr></table></figure></div>
+
+<p>所有 Warp 交替执行数据加载和矩阵计算，中间的同步（<code>__syncthreads</code>）导致流水线停顿。</p>
+<p><strong>Warp Specialization 模式：</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Producer Warp:  [TMA Load A0] → [TMA Load B0] → [TMA Load A1] → [TMA Load B1] → ...</span><br><span class="line">Consumer Warp:                         → [Wait A0,B0] → [MMA Compute] → [Wait A1,B1] → [MMA Compute] → ...</span><br></pre></td></tr></table></figure></div>
+
+<p>生产者 Warp 专门负责发起 TMA 异步搬运，消费者 Warp 专门负责 Tensor Core 计算，两者通过 <code>mbarrier</code> 进行细粒度同步，真正实现”搬运和计算同时进行”。</p>
+<h4 id="3-4-2-核心实现要素"><a href="#3-4-2-核心实现要素" class="headerlink" title="3.4.2 核心实现要素"></a>3.4.2 核心实现要素</h4><p><strong>1. 角色划分</strong></p>
+<p>通过 <code>warpId</code> 区分 Warp 的角色，让不同 Warp 执行不同的代码路径：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int warp_id = threadIdx.x / 32;</span><br><span class="line"></span><br><span class="line">if (warp_id &lt; NUM_PRODUCER_WARPS) &#123;</span><br><span class="line">    // Producer: 只负责 TMA 数据搬运</span><br><span class="line">    producer_loop(smem, mbar, ...);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    // Consumer: 只负责 MMA 计算</span><br><span class="line">    consumer_loop(smem, mbar, ...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>2. 环形共享内存缓冲区（Circular Buffer &#x2F; Ping-Pong Buffer）</strong></p>
+<p>为了让生产者和消费者能够并行工作，共享内存被划分为多个 Stage（通常2～4个），形成环形缓冲区：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Stage 0: [正在被 Consumer 计算]</span><br><span class="line">Stage 1: [正在被 Producer 加载]</span><br><span class="line">Stage 2: [已加载，等待 Consumer 使用]</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>3. mbarrier 同步</strong></p>
+<p><code>mbarrier</code>（Memory Barrier）是 Hopper 引入的细粒度同步原语，替代了传统的 <code>__syncthreads</code>。它允许只在特定 Warp 之间同步，而不是整个 ThreadBlock，大幅减少同步开销。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// Producer 完成一次加载后，通知 Consumer</span><br><span class="line">cuda::barrier&lt;cuda::thread_scope_block&gt; mbar[NUM_STAGES];</span><br><span class="line"></span><br><span class="line">// Producer: arrive（发信号）</span><br><span class="line">mbar[stage].arrive(1);</span><br><span class="line"></span><br><span class="line">// Consumer: wait（等待数据就绪）</span><br><span class="line">mbar[stage].wait(phase);</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-4-3-性能收益"><a href="#3-4-3-性能收益" class="headerlink" title="3.4.3 性能收益"></a>3.4.3 性能收益</h4><p>Warp Specialization 的主要收益来自两方面：</p>
+<ul>
+<li><strong>计算与搬运重叠</strong>：消费者 Warp 在做 MMA 计算时，生产者 Warp 同时在做下一轮数据的 TMA 搬运，极大提升硬件利用率。</li>
+<li><strong>减少寄存器压力</strong>：生产者 Warp 和消费者 Warp 的寄存器使用场景不同，可以在编译器层面分别优化，避免两类操作共用寄存器导致 Occupancy 下降。</li>
+</ul>
+<p>这一模式是 H100 上实现接近理论峰值的 GEMM 性能的关键技术之一，FlashAttention-3、CUTLASS 3.x 的 Hopper 内核均大量采用此范式。</p>
+<h3 id="3-5-GPTQ和AWQ量化"><a href="#3-5-GPTQ和AWQ量化" class="headerlink" title="3.5 GPTQ和AWQ量化"></a>3.5 GPTQ和AWQ量化</h3><p>模型量化是将浮点权重（FP16&#x2F;BF16）压缩为低比特整数（INT4&#x2F;INT8）的技术，目的是在保持模型精度的同时，大幅降低显存占用和提升推理吞吐。GPTQ 和 AWQ 是目前最主流的两种 LLM PTQ（训练后量化）方法。</p>
+<h4 id="3-5-1-GPTQ（基于-Hessian-的逐层量化）"><a href="#3-5-1-GPTQ（基于-Hessian-的逐层量化）" class="headerlink" title="3.5.1 GPTQ（基于 Hessian 的逐层量化）"></a>3.5.1 GPTQ（基于 Hessian 的逐层量化）</h4><p>GPTQ（Generative Pre-Training Quantization）的核心思想是：对每一层权重矩阵，利用<strong>二阶梯度信息（Hessian 矩阵）</strong>来最小化量化误差。</p>
+<p><strong>核心算法：Optimal Brain Quantization（OBQ）</strong></p>
+<p>对于权重矩阵 $W$，量化某一列 $w_q$ 时，补偿误差会传播到剩余的未量化列：</p>
+<p>$$\delta W &#x3D; -\frac{(w_q - \text{quant}(w_q))}{[H^{-1}]<em>{qq}} \cdot (H^{-1})</em>{:,q}$$</p>
+<p>GPTQ 对列进行<strong>顺序量化</strong>，每量化一列后，立刻用上述公式补偿剩余列，使整体量化误差最小。</p>
+<p><strong>主要特点：</strong></p>
+<ul>
+<li>使用少量校准数据（通常 128 条样本）计算 Hessian</li>
+<li>量化粒度：每组（group）权重共享一组量化参数（scale + zero_point），group size 通常为 128</li>
+<li>支持 INT4、INT3 量化</li>
+<li>量化速度较慢（需要 Hessian 计算），但精度较高</li>
+</ul>
+<h4 id="3-5-2-AWQ（激活感知权重量化）"><a href="#3-5-2-AWQ（激活感知权重量化）" class="headerlink" title="3.5.2 AWQ（激活感知权重量化）"></a>3.5.2 AWQ（激活感知权重量化）</h4><p>AWQ（Activation-aware Weight Quantization）的核心洞察是：<strong>不是所有权重对模型精度的影响都相同</strong>，只有约 1% 的”显著权重”（对应激活值较大的通道）对精度至关重要。</p>
+<p><strong>核心思想：</strong></p>
+<p>直接对重要权重使用更高精度（不量化）会带来硬件实现的不规则性，AWQ 换了一种思路：<strong>通过缩放（scaling）将重要权重的量化误差转移</strong>。</p>
+<p>对于线性层 $y &#x3D; Wx$，等价变换：</p>
+<p>$$y &#x3D; (W \cdot \text{diag}(s)^{-1}) \cdot (\text{diag}(s) \cdot x) &#x3D; W’ \cdot x’$$</p>
+<p>通过对激活值较大的通道对应的权重进行<strong>放大再量化</strong>（量化后再除以放大系数），可以降低重要通道的量化误差，同时保持硬件计算的规整性。</p>
+<p><strong>主要特点：</strong></p>
+<ul>
+<li>不需要反向传播，只需前向校准数据</li>
+<li>量化速度快，内存占用低</li>
+<li>通常 AWQ 的精度与 GPTQ 相当甚至更好</li>
+<li>被 vLLM、TGI 等主流推理框架广泛支持</li>
+</ul>
+<h4 id="3-5-3-对比"><a href="#3-5-3-对比" class="headerlink" title="3.5.3 对比"></a>3.5.3 对比</h4><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>GPTQ</th>
+<th>AWQ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>理论基础</td>
+<td>二阶优化（Hessian）</td>
+<td>激活感知缩放</td>
+</tr>
+<tr>
+<td>量化速度</td>
+<td>较慢（分钟～小时级）</td>
+<td>较快（分钟级）</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>高</td>
+<td>相当或更好</td>
+</tr>
+<tr>
+<td>推理内核</td>
+<td>ExLlama &#x2F; GPTQ-for-LLaMA</td>
+<td>AWQ CUDA kernel</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>追求极致压缩比</td>
+<td>快速部署、生产推理</td>
+</tr>
+</tbody></table>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/697761176" >深入理解AWQ量化技术 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/Big-Yellow/p/19182016" >模型量化操作————GPTQ和AWQ量化 - Big-Yellow-J - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="3-6-MMA"><a href="#3-6-MMA" class="headerlink" title="3.6 MMA"></a>3.6 MMA</h3><p>MMA（Matrix Multiply-Accumulate）是 NVIDIA Tensor Core 的核心操作，对应 PTX 指令集中的 <code>mma.sync</code> 指令。Tensor Core 是专用于矩阵乘加运算的硬件单元，从 Volta 架构（V100）开始引入，在 Hopper（H100）上演进到 Wgmma（Warp Group MMA）。</p>
+<h4 id="3-6-1-基本概念"><a href="#3-6-1-基本概念" class="headerlink" title="3.6.1 基本概念"></a>3.6.1 基本概念</h4><p>Tensor Core 在每个时钟周期内执行一个小型矩阵乘加：</p>
+<p>$$D &#x3D; A \times B + C$$</p>
+<p>其中 A、B、C、D 是小型矩阵（Fragment），尺寸取决于数据类型和架构，例如 Volta 上的 <code>m16n16k16</code>（FP16）。</p>
+<h4 id="3-6-2-PTX-MMA-指令"><a href="#3-6-2-PTX-MMA-指令" class="headerlink" title="3.6.2 PTX MMA 指令"></a>3.6.2 PTX MMA 指令</h4><p>PTX 中的 <code>mma.sync</code> 指令格式如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mma.sync.aligned.m16n8k16.row.col.f32.f16.f16.f32</span><br><span class="line">    &#123;d0, d1, d2, d3&#125;,   // 输出 D（fp32 寄存器）</span><br><span class="line">    &#123;a0, a1, a2, a3&#125;,   // 输入 A（fp16 寄存器）</span><br><span class="line">    &#123;b0, b1&#125;,           // 输入 B（fp16 寄存器）</span><br><span class="line">    &#123;c0, c1, c2, c3&#125;;   // 输入 C（fp32 累加器）</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>**<code>sync</code>**：Warp 内所有 32 个线程同步参与，每个线程持有 Fragment 的一部分（通过固定的线程-数据映射）。</li>
+<li>**<code>m16n8k16</code>**：矩阵分块大小为 M&#x3D;16, N&#x3D;8, K&#x3D;16。</li>
+<li>**<code>row.col</code>**：A 矩阵行主序，B 矩阵列主序。</li>
+</ul>
+<p>在 CUDA C++ 中，通常通过 WMMA API（<code>nvcuda::wmma</code>）或 CUTLASS 封装来使用 Tensor Core，而不直接编写 PTX：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;mma.h&gt;</span><br><span class="line">using namespace nvcuda::wmma;</span><br><span class="line"></span><br><span class="line">// 声明 Fragment</span><br><span class="line">fragment&lt;matrix_a, 16, 16, 16, half, row_major&gt; a_frag;</span><br><span class="line">fragment&lt;matrix_b, 16, 16, 16, half, col_major&gt; b_frag;</span><br><span class="line">fragment&lt;accumulator, 16, 16, 16, float&gt; c_frag;</span><br><span class="line">fragment&lt;accumulator, 16, 16, 16, float&gt; d_frag;</span><br><span class="line"></span><br><span class="line">// 从共享内存加载</span><br><span class="line">load_matrix_sync(a_frag, smem_a, lda);</span><br><span class="line">load_matrix_sync(b_frag, smem_b, ldb);</span><br><span class="line">fill_fragment(c_frag, 0.0f);</span><br><span class="line"></span><br><span class="line">// 执行矩阵乘加</span><br><span class="line">mma_sync(d_frag, a_frag, b_frag, c_frag);</span><br><span class="line"></span><br><span class="line">// 将结果写回全局内存</span><br><span class="line">store_matrix_sync(out_ptr, d_frag, ldc, mem_row_major);</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-6-3-各架构-MMA-演进"><a href="#3-6-3-各架构-MMA-演进" class="headerlink" title="3.6.3 各架构 MMA 演进"></a>3.6.3 各架构 MMA 演进</h4><table>
+<thead>
+<tr>
+<th>架构</th>
+<th>指令</th>
+<th>主要改进</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Volta (V100)</strong></td>
+<td><code>wmma</code> (CUDA) &#x2F; <code>mma.sync</code> (PTX)</td>
+<td>首次引入 Tensor Core，支持 FP16</td>
+</tr>
+<tr>
+<td><strong>Turing (T4)</strong></td>
+<td><code>mma.sync</code></td>
+<td>增加 INT8、INT4 支持</td>
+</tr>
+<tr>
+<td><strong>Ampere (A100)</strong></td>
+<td><code>mma.sync</code> (m16n8k16)</td>
+<td>支持 BF16、TF32，稀疏矩阵加速（2:4 sparsity）</td>
+</tr>
+<tr>
+<td><strong>Hopper (H100)</strong></td>
+<td><strong><code>wgmma.mma_async</code></strong></td>
+<td>Warp Group MMA（128线程），与 TMA 深度配合，支持 FP8</td>
+</tr>
+</tbody></table>
+<h4 id="3-6-4-线程-数据映射（Thread-Data-Mapping）"><a href="#3-6-4-线程-数据映射（Thread-Data-Mapping）" class="headerlink" title="3.6.4 线程-数据映射（Thread-Data Mapping）"></a>3.6.4 线程-数据映射（Thread-Data Mapping）</h4><p>MMA 指令的关键难点在于理解每个线程负责 Fragment 的哪些元素。以 <code>m16n8k16</code> FP16 为例：</p>
+<ul>
+<li>一个 Warp（32 线程）共同持有 A 矩阵（16×16 FP16）的片段。</li>
+<li>每个线程持有 A 矩阵中 8 个 FP16 值，分布在矩阵的特定行列位置（由 NVIDIA 官方文档给出固定映射表）。</li>
+</ul>
+<p>这种映射决定了数据必须按特定方式存放在寄存器中，也是为什么从共享内存 <code>load_matrix_sync</code> 时对内存布局有严格要求（需消除 Bank Conflict，或使用 TMA Swizzle）。</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/621855199" >Nvidia Tensor Core-MMA PTX编程入门 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="3-7-寄存器分配影响"><a href="#3-7-寄存器分配影响" class="headerlink" title="3.7 寄存器分配影响"></a>3.7 寄存器分配影响</h3><p>寄存器（Register）是 GPU 上最快的存储单元，但每个 SM（Streaming Multiprocessor）的寄存器总量是有限的（通常为 65536 个 32-bit 寄存器）。寄存器分配策略对内核性能有两方面深远影响：<strong>Occupancy（占用率）</strong>和<strong>寄存器溢出（Register Spilling）</strong>。</p>
+<h4 id="3-7-1-寄存器与-Occupancy-的关系"><a href="#3-7-1-寄存器与-Occupancy-的关系" class="headerlink" title="3.7.1 寄存器与 Occupancy 的关系"></a>3.7.1 寄存器与 Occupancy 的关系</h4><p><strong>Occupancy</strong> 是指一个 SM 上实际同时运行的 Warp 数量与 SM 理论最大 Warp 数量的比值，是衡量 GPU 利用率的重要指标。</p>
+<p>一个 SM 的可用寄存器总数（如 65536）被所有并发 ThreadBlock 共享。每个内核的每个线程使用的寄存器越多，一个 SM 能同时容纳的 ThreadBlock &#x2F; Warp 就越少，Occupancy 越低。</p>
+<p><strong>示例计算（以 A100 为例，SM 有 65536 寄存器，最大 64 Warp）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>每线程寄存器数</th>
+<th>每线程块（256线程）总寄存器</th>
+<th>可并发线程块数</th>
+<th>总并发 Warp 数</th>
+<th>Occupancy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>32</td>
+<td>8192</td>
+<td>8</td>
+<td>64</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>64</td>
+<td>16384</td>
+<td>4</td>
+<td>32</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>128</td>
+<td>32768</td>
+<td>2</td>
+<td>16</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>255</td>
+<td>65280</td>
+<td>1</td>
+<td>8</td>
+<td>12.5%</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>可以用 <code>nvcc --ptxas-options=-v</code> 查看内核实际使用的寄存器数量。</p>
+</blockquote>
+<h4 id="3-7-2-控制寄存器使用量的方法"><a href="#3-7-2-控制寄存器使用量的方法" class="headerlink" title="3.7.2 控制寄存器使用量的方法"></a>3.7.2 控制寄存器使用量的方法</h4><p><strong>1. 编译器指令 <code>__launch_bounds__</code></strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 告知编译器：每个 Block 最多 256 线程，每个 SM 至少运行 4 个 Block</span><br><span class="line">__global__ __launch_bounds__(256, 4) void my_kernel(...) &#123; ... &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>这会提示 NVCC 限制寄存器使用量，以满足 Occupancy 目标。代价是编译器可能无法做某些激进的寄存器优化，性能未必更好。</p>
+<p><strong>2. 编译器参数 <code>--maxrregcount</code></strong></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc --maxrregcount=64 my_kernel.cu -o my_kernel</span><br></pre></td></tr></table></figure></div>
+
+<p>强制限制每个线程最多使用 64 个寄存器。</p>
+<p><strong>3. 手动减少寄存器使用</strong></p>
+<ul>
+<li>减少局部变量，复用变量。</li>
+<li>使用共享内存缓存中间结果（但增加延迟）。</li>
+<li>将不常用的数据放入共享内存或全局内存。</li>
+</ul>
+<h4 id="3-7-3-寄存器溢出（Register-Spilling）"><a href="#3-7-3-寄存器溢出（Register-Spilling）" class="headerlink" title="3.7.3 寄存器溢出（Register Spilling）"></a>3.7.3 寄存器溢出（Register Spilling）</h4><p>当编译器限制了寄存器数量，但内核实际需要更多时，多余的数据会被”溢出”到 <strong>Local Memory</strong>（实际上是 L1&#x2F;L2 Cache 或全局内存）。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># ptxas 输出示例（表示发生了溢出）</span><br><span class="line">ptxas info    : Used 128 registers, 512 bytes cmem[0], 96 bytes lmem</span><br><span class="line">#                                              ^^^^^^^ 这里！Local Memory 非零说明发生了 spilling</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Register Spilling 的性能代价：</strong></p>
+<ul>
+<li>Local Memory 访问延迟远高于寄存器（几百个时钟周期 vs. 1 个时钟周期）。</li>
+<li>溢出会引发大量的 L1&#x2F;L2 Cache 访问，甚至全局内存访问，严重降低计算密集型内核的性能。</li>
+</ul>
+<h4 id="3-7-4-Occupancy-与性能的关系"><a href="#3-7-4-Occupancy-与性能的关系" class="headerlink" title="3.7.4 Occupancy 与性能的关系"></a>3.7.4 Occupancy 与性能的关系</h4><p>需要注意的是，<strong>高 Occupancy 并不总是等于高性能</strong>。这是一个常见误区：</p>
+<ul>
+<li><strong>高 Occupancy 的作用</strong>：主要是通过多 Warp 掩盖内存访问延迟（Latency Hiding）。对于内存带宽受限的内核，高 Occupancy 通常有益。</li>
+<li><strong>低 Occupancy 的场景</strong>：对于计算密集型内核（如使用大量 Tensor Core 的 GEMM 内核），每个 Warp 本身就能让硬件保持满负荷运行，此时低 Occupancy + 更多寄存器（减少 spilling）反而性能更好。</li>
+</ul>
+<p><strong>实际调优建议：</strong></p>
+<ol>
+<li>用 <code>ncu</code>（Nsight Compute）分析内核瓶颈，确认是计算受限（Compute Bound）还是内存受限（Memory Bound）。</li>
+<li>如果内存受限，提高 Occupancy（减少寄存器用量）可能有帮助。</li>
+<li>如果计算受限，不要为了提高 Occupancy 而牺牲寄存器，避免引入 spilling。</li>
+<li>关注 <code>ncu</code> 报告中的 <code>Theoretical Occupancy</code>、<code>Achieved Occupancy</code> 和 <code>Register File Theoretical Occupancy</code>。</li>
+</ol>
+<h3 id="3-8-NsightCompute查看瓶颈"><a href="#3-8-NsightCompute查看瓶颈" class="headerlink" title="3.8 NsightCompute查看瓶颈"></a>3.8 NsightCompute查看瓶颈</h3><h4 id="3-8-1-Step-0：先确认编译期寄存器数"><a href="#3-8-1-Step-0：先确认编译期寄存器数" class="headerlink" title="3.8.1 Step 0：先确认编译期寄存器数"></a>3.8.1 Step 0：先确认编译期寄存器数</h4><p>Makefile 里 gemmV2.o 已带 <code>-Xptxas -v</code>，每次 <code>make</code> 时直接打印：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ptxas info    : Compiling entry function &#x27;vector_add_dream_tma_pipelined&#x27; ...</span><br><span class="line">ptxas info    : Used 96 registers, 8192 bytes smem, 400 bytes cmem[0]</span><br></pre></td></tr></table></figure></div>
+
+<p>用这个数字做基准：</p>
+<ul>
+<li><p>H100 每 SM 65536 个寄存器</p>
+</li>
+<li><p>blockDim.x &#x3D; 256 时：<code>floor(65536 / (N_regs × 256))</code> &#x3D; 理论最大并发 block 数&#x2F;SM</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>N_regs</th>
+<th>最大 block&#x2F;SM</th>
+<th>理论 warp occupancy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>64</td>
+<td>4</td>
+<td>1024&#x2F;2048 &#x3D; 50%</td>
+</tr>
+<tr>
+<td>96</td>
+<td>2</td>
+<td>512&#x2F;2048 &#x3D; 25%</td>
+</tr>
+<tr>
+<td>128</td>
+<td>2</td>
+<td>512&#x2F;2048 &#x3D; 25%</td>
+</tr>
+<tr>
+<td>256</td>
+<td>1</td>
+<td>256&#x2F;2048 &#x3D; 12.5%</td>
+</tr>
+</tbody></table>
+<p>加了 <code>__launch_bounds__(256, 2)</code> 后，编译器会把寄存器压到 ≤128。</p>
+<h4 id="3-8-2-Step-1：最小化-ncu-命令——只看寄存器数和-occupancy"><a href="#3-8-2-Step-1：最小化-ncu-命令——只看寄存器数和-occupancy" class="headerlink" title="3.8.2 Step 1：最小化 ncu 命令——只看寄存器数和 occupancy"></a>3.8.2 Step 1：最小化 ncu 命令——只看寄存器数和 occupancy</h4><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ethereal/vm2/dream/uvm/jwsz_dream/benchmarks/seq</span><br><span class="line">ncu --metrics <span class="string">&quot;launch__registers_per_thread,sm__maximum_warps_per_active_cycle_pct,sm__warps_active.avg.pct_of_peak_sustained_active&quot;</span> \</span><br><span class="line">  --kernel-name vector_add_dream_tma_pipelined \</span><br><span class="line">  --launch-count 1 \</span><br><span class="line">  ./gemmV2 --mode dream --n 4194304 --iters 1 --dream-gpu-mem-mb 512</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>输出解读：</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>含义</th>
+<th>判断</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>launch__registers_per_thread</code></td>
+<td>每线程实际用的寄存器数</td>
+<td>对照 Step 0 的计算</td>
+</tr>
+<tr>
+<td><code>sm__maximum_warps_per_active_cycle_pct</code></td>
+<td><strong>理论 occupancy</strong>（寄存器&#x2F;smem&#x2F;blockDim 三者取最小）</td>
+<td>看上限在哪</td>
+</tr>
+<tr>
+<td><code>sm__warps_active.avg.pct_of_peak_sustained_active</code></td>
+<td><strong>实测 occupancy</strong>（warp 真正活跃的比例）</td>
+<td>看实际执行情况</td>
+</tr>
+</tbody></table>
+<p><strong>典型场景解读：</strong></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">理论 occupancy = 25%，实测 occupancy = 24%</span><br><span class="line">→ 实测 ≈ 理论，说明寄存器/smem 已经是硬上限，继续减寄存器可以提高 occupancy</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">理论 occupancy = 50%，实测 occupancy = 15%</span><br><span class="line">→ 实测 ≪ 理论，说明 warp 因为内存延迟或 stall 没有被充分调度，</span><br><span class="line">此时减寄存器提高理论 occupancy 的收益很小，瓶颈不在这里</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-8-3-Step-2：确认-smem-也不是限制因素"><a href="#3-8-3-Step-2：确认-smem-也不是限制因素" class="headerlink" title="3.8.3 Step 2：确认 smem 也不是限制因素"></a>3.8.3 Step 2：确认 smem 也不是限制因素</h4><p>smem 同样限制 occupancy，需要排除：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ncu --metrics <span class="string">&quot;launch__shared_mem_per_block_static,launch__shared_mem_per_block_dynamic,sm__maximum_warps_per_active_cycle_pct&quot;</span> \</span><br><span class="line">  --kernel-name vector_add_dream_tma_pipelined \</span><br><span class="line">  --launch-count 1 \</span><br><span class="line">  ./gemmV2 --mode dream --n 4194304 --iters 1 --dream-gpu-mem-mb 512</span><br></pre></td></tr></table></figure></div>
+
+<p><code>smem_bytes = request_size × sizeof(float) = 2048 × 4 = 8192 bytes = 8 KB</code></p>
+<p>H100 每 SM 228 KB smem；以 8 KB&#x2F;block 计，最多 <code>floor(228/8) = 28</code> 个 block&#x2F;SM，smem 不是瓶颈。</p>
+<h4 id="3-8-4-Step-3：判断瓶颈是计算、内存还是延迟"><a href="#3-8-4-Step-3：判断瓶颈是计算、内存还是延迟" class="headerlink" title="3.8.4 Step 3：判断瓶颈是计算、内存还是延迟"></a>3.8.4 Step 3：判断瓶颈是计算、内存还是延迟</h4><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ncu --metrics <span class="string">&quot;smsp__inst_executed.avg.pct_of_peak_sustained_elapsed,smsp__sass_average_data_bytes_per_sector_mem_global_op_ld.pct,l1tex__t_sector_hit_rate.pct,smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct&quot;</span> \</span><br><span class="line">  --kernel-name vector_add_dream_tma_pipelined \</span><br><span class="line">  --launch-count 1 \</span><br><span class="line">  ./gemmV2 --mode dream --n 4194304 --iters 1 --dream-gpu-mem-mb 512</span><br></pre></td></tr></table></figure></div>
+
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>高 → 瓶颈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>smsp__inst_executed.avg.pct_of_peak_sustained_elapsed</code></td>
+<td>高 → 计算密集（compute bound）</td>
+</tr>
+<tr>
+<td><code>smsp__inst_executed.avg.pct_of_peak_sustained_elapsed</code></td>
+<td>高 → 计算密集（compute bound）</td>
+</tr>
+<tr>
+<td><code>smsp__warp_issue_stalled_long_scoreboard_per_warp_active.pct</code></td>
+<td>高 → 等内存返回（memory latency bound）</td>
+</tr>
+<tr>
+<td><code>l1tex__t_sector_hit_rate.pct</code></td>
+<td>低 → L1 cache 命中率差，需要更多 warp 来隐藏延迟</td>
+</tr>
+<tr>
+<td><code>smsp__sass_average_data_bytes_per_sector_mem_global_op_ld.pct</code></td>
+<td>低 → 内存访问效率差（可能是随机访问）</td>
+</tr>
+</tbody></table>
+<p><strong>如果 <code>long_scoreboard stall</code> 很高：</strong></p>
+<ul>
+<li><p>说明 warp 在等内存，增加 occupancy（减寄存器）可以用更多 warp 覆盖这个延迟</p>
+</li>
+<li><p>这时减寄存器有意义</p>
+</li>
+</ul>
+<h4 id="3-8-5-Step-4：一键生成完整报告（Roofline）"><a href="#3-8-5-Step-4：一键生成完整报告（Roofline）" class="headerlink" title="3.8.5 Step 4：一键生成完整报告（Roofline）"></a>3.8.5 Step 4：一键生成完整报告（Roofline）</h4><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ncu --<span class="built_in">set</span> full \</span><br><span class="line">  --kernel-name vector_add_dream_tma_pipelined \</span><br><span class="line">  --launch-count 1 \</span><br><span class="line">  --<span class="built_in">export</span> gemmV2_register_profile \</span><br><span class="line">  ./gemmV2 --mode dream --n 4194304 --iters 1 --dream-gpu-mem-mb 512</span><br></pre></td></tr></table></figure></div>
+
+<p>在本机 Nsight Compute GUI 里打开 <code>gemmV2_register_profile.ncu-rep</code>，在 <strong>Roofline</strong> 页面可以直接看 kernel 落在哪条屋顶线下方（compute roof 还是 memory bandwidth roof）。</p>
+<p><strong>如何阅读？</strong></p>
+<p>图中的蓝线代表了当前硬件的物理极限：</p>
+<ul>
+<li><p><strong>水平实线（平屋顶） - 算力瓶颈 (Compute Bound):</strong></p>
+<ul>
+<li><p>这条横线代表了硬件的<strong>理论峰值计算性能</strong>（在这张图上大约在 20-30 TFLOP&#x2F;s 之间）。</p>
+</li>
+<li><p>无论你的算法有多完美，单精度浮点运算的速度都不可能超过这条线。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>斜线（斜屋顶） - 内存&#x2F;带宽瓶颈 (Memory Bound):</strong></p>
+<ul>
+<li><p>图中有三条斜线，它们通常代表不同层级的内存带宽（例如：L1缓存、L2缓存、主内存DRAM）。最左侧的斜线代表最慢的内存（主存），最右侧的斜线代表最快的缓存。</p>
+</li>
+<li><p>斜线的斜率就是该层级内存的<strong>峰值带宽</strong>。如果你的算术强度（X轴）很低，性能就会被卡在这些斜线下方，因为计算单元得不到足够的数据喂养。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>转折点 (Ridge Point):</strong></p>
+<ul>
+<li>斜线和水平线的交点。它表示为了达到硬件的最高计算性能，你的程序至少需要达到多大的算术强度。</li>
+</ul>
+</li>
+</ul>
+<p>图中的彩色圆点代表你实际测试的不同程序、函数或Kernel：</p>
+<ul>
+<li><p><strong>如果圆点贴近斜线（如左侧的紫色和橙色点）：</strong></p>
+<ul>
+<li><p><strong>诊断</strong>：你的程序处于内存受限（Memory Bound）状态。此时程序的算术强度低（约 $0.5$），主要瓶颈是内存传输速度太慢，计算核心在“干等”数据。</p>
+</li>
+<li><p><strong>优化方向</strong>：优化内存访问模式、合并访存、使用缓存分块（Cache Blocking）等减少内存读取的操作。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>如果圆点在右侧很远，但离水平线很远（如右侧的绿色点）：</strong></p>
+<ul>
+<li><p><strong>诊断</strong>：这个点的算术强度很高（接近 $300$），按理说不缺数据，但性能只有 $1$ TFLOP&#x2F;s，远低于硬件峰值（平屋顶）。这说明它既没有被内存卡住，也没有发挥出计算性能。</p>
+</li>
+<li><p><strong>优化方向</strong>：可能是代码没有很好地向量化（Vectorization）、存在严重的指令依赖、分支预测失败、或者线程负载不均衡。需要针对指令级或线程级进行计算优化。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>如果圆点贴近水平线：</strong></p>
+<ul>
+<li><strong>诊断</strong>：恭喜你，你的程序处于<strong>计算受限（Compute Bound）</strong>，并且已经榨干了硬件的算力，优化空间已经很小了。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-8-6-Step-5：对比-launch-bounds-前后效果"><a href="#3-8-6-Step-5：对比-launch-bounds-前后效果" class="headerlink" title="3.8.6 Step 5：对比 __launch_bounds__ 前后效果"></a>3.8.6 Step 5：对比 <code>__launch_bounds__</code> 前后效果</h4><p>先备份：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> gemmV2.cu gemmV2_baseline.cu</span><br></pre></td></tr></table></figure></div>
+
+<p>编译两个版本分别 profile：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改前（注释掉 __launch_bounds__）</span></span><br><span class="line">ncu --metrics <span class="string">&quot;launch__registers_per_thread,sm__maximum_warps_per_active_cycle_pct,sm__warps_active.avg.pct_of_peak_sustained_active&quot;</span> \</span><br><span class="line">  --kernel-name vector_add_dream_tma_pipelined --launch-count 1 \</span><br><span class="line">  ./gemmV2_baseline --mode dream --n 4194304 --iters 1 --dream-gpu-mem-mb 512</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改后（有 __launch_bounds__(256, 2)）</span></span><br><span class="line">ncu --metrics <span class="string">&quot;launch__registers_per_thread,sm__maximum_warps_per_active_cycle_pct,sm__warps_active.avg.pct_of_peak_sustained_active&quot;</span> \</span><br><span class="line">  --kernel-name vector_add_dream_tma_pipelined --launch-count 1 \</span><br><span class="line">  ./gemmV2 --mode dream --n 4194304 --iters 1 --dream-gpu-mem-mb 512</span><br></pre></td></tr></table></figure></div>
+
+<p>若改后 <code>sm__warps_active</code> 明显上升 → 减寄存器有效，occupancy 提高了。  </p>
+<p>若基本不变 → 瓶颈不在寄存器，看 Step 3 的 stall 原因。</p>
+<h4 id="3-8-7-快速决策树"><a href="#3-8-7-快速决策树" class="headerlink" title="3.8.7 快速决策树"></a>3.8.7 快速决策树</h4><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ncu 跑完后：</span><br><span class="line">理论 occupancy &lt; 50%？</span><br><span class="line">├─ 是 → 看是什么限制的</span><br><span class="line">│        ├─ 寄存器 &gt; 128：__launch_bounds__ 或 --maxrregcount 压寄存器</span><br><span class="line">│        └─ smem 大：考虑减 smem 或分 tile</span><br><span class="line">└─ 否 → occupancy 不是主要问题，往 Step 3 看 stall</span><br><span class="line"></span><br><span class="line">long_scoreboard stall &gt; 30%？</span><br><span class="line">├─ 是 → 内存延迟是瓶颈，需要更高 occupancy 覆盖延迟</span><br><span class="line">│        → 减寄存器、减 smem 来提高 occupancy</span><br><span class="line">└─ 否 → 可能是 compute bound 或 smem bank conflict，</span><br><span class="line">         减寄存器收益有限</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-8-8-注意事项"><a href="#3-8-8-注意事项" class="headerlink" title="3.8.8 注意事项"></a>3.8.8 注意事项</h4><ul>
+<li><p><code>ncu</code> profiling 会显著拖慢 kernel 执行，建议 <code>--iters 1</code></p>
+</li>
+<li><p>DREAM 的 RDMA 路径可能导致 ncu 等待超时，加 <code>--launch-timeout 120000</code>（毫秒）</p>
+</li>
+<li><p>若 kernel 跑不起来（RDMA 初始化失败），先用 <code>--mode uvm</code> 验证 ncu 环境</p>
+</li>
+</ul>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1919816304271028292" >(15 封私信 &#x2F; 80 条消息) 新兴 Python 算子开发：Triton、CuTeDSL、MOJO 🔥等概览 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/684473453" >(15 封私信 &#x2F; 80 条消息) OpenAI Triton 入门教程 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/369673760" >(15 封私信 &#x2F; 80 条消息) Ubuntu 20.04 下安装运行 GPGPU-Sim - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -709,6 +1223,7 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.linmao.dev/series/gpgpu-sim/1240/" >GPGPU-Sim Get Started | LinMao’s Blog（林茂的博客） <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://huweim.github.io/post/%E5%AE%9E%E9%AA%8C_%E6%90%AD%E5%BB%BAsim%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8Cdocker/#1-ubuntu2004-in-docker" >搭建GPGPU-Sim实验环境 - Weiming Hu <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/zhutmost/gpgpusim-demo" >zhutmost&#x2F;gpgpusim-demo <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/567938328" >使用Nsight Compute构建roofline model - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -721,7 +1236,7 @@
         <li><strong>Created at:</strong> 2025-10-25 16:00:21</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-10-25 18:05:11
+                <strong>Updated at:</strong> 2026-05-08 18:41:14
             </li>
         
         <li>
@@ -831,7 +1346,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">gpu learning</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-GPU%E6%9E%B6%E6%9E%84"><span class="nav-text">1. GPU架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-text">1.1 架构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%BB%8B%E7%BB%8D"><span class="nav-text">1.2 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BE%8B%E5%AD%90"><span class="nav-text">1.3 例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Simulator"><span class="nav-text">2. Simulator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-text">2.1 安装依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%AE%89%E8%A3%85%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="nav-text">2.2 安装模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.3 运行程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-GPU%E6%9E%B6%E6%9E%84"><span class="nav-text">1. GPU架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-text">1.1 架构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%BB%8B%E7%BB%8D"><span class="nav-text">1.2 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BE%8B%E5%AD%90"><span class="nav-text">1.3 例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Simulator"><span class="nav-text">2. Simulator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-text">2.1 安装依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%AE%89%E8%A3%85%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="nav-text">2.2 安装模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.3 运行程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%85%B6%E4%BB%96%E7%9F%A5%E8%AF%86"><span class="nav-text">3. 其他知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-UVM"><span class="nav-text">3.1 UVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-TMA"><span class="nav-text">3.2 TMA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%8B%93%E6%89%91"><span class="nav-text">3.3 拓扑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-Warp-Specialization"><span class="nav-text">3.4 Warp Specialization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-GPTQ%E5%92%8CAWQ%E9%87%8F%E5%8C%96"><span class="nav-text">3.5 GPTQ和AWQ量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-MMA"><span class="nav-text">3.6 MMA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%86%E9%85%8D%E5%BD%B1%E5%93%8D"><span class="nav-text">3.7 寄存器分配影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-NsightCompute%E6%9F%A5%E7%9C%8B%E7%93%B6%E9%A2%88"><span class="nav-text">3.8 NsightCompute查看瓶颈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
