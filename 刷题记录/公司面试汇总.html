@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-04-28T04:38:07.588Z">
+<meta property="article:modified_time" content="2026-05-15T13:01:22.160Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2496,6 +2496,191 @@
 <h3 id="2-C-并发编程：阻塞队列"><a href="#2-C-并发编程：阻塞队列" class="headerlink" title="2. C++ 并发编程：阻塞队列"></a>2. C++ 并发编程：阻塞队列</h3><p>线程安全的阻塞队列，模板类，没有容量限制，push一定成功，pop没有元素阻塞等待</p>
 <h3 id="3-硬件体系结构细节：Cache大小的混淆"><a href="#3-硬件体系结构细节：Cache大小的混淆" class="headerlink" title="3. 硬件体系结构细节：Cache大小的混淆"></a>3. 硬件体系结构细节：Cache大小的混淆</h3><ul>
 <li><strong>L1 Cache 的大小</strong>：当面试官问到每一级 Cache 的大小时，你回答 L1 Cache 是 64 字节 。实际上，<strong>64 字节（64 Bytes）通常是 Cache Line（缓存行）的大小</strong>，而 L1 Cache 的整体容量通常在 32KB 到 64KB 之间。这是一个比较基础的数据事实混淆。</li>
+</ul>
+<h2 id="30-佳期线下面"><a href="#30-佳期线下面" class="headerlink" title="30. 佳期线下面"></a>30. 佳期线下面</h2><h3 id="一、-完全没答上来或直接卡死的硬伤（Hard-Misses）"><a href="#一、-完全没答上来或直接卡死的硬伤（Hard-Misses）" class="headerlink" title="一、 完全没答上来或直接卡死的硬伤（Hard Misses）"></a>一、 完全没答上来或直接卡死的硬伤（Hard Misses）</h3><p><strong>1. 扑克牌智力题（第二轮）</strong></p>
+<ul>
+<li><p><strong>问题重现：</strong> 52张牌中抽5张，展示4张，如何让对方猜出第5张牌的点数和花色 ？</p>
+</li>
+<li><p><strong>你的表现：</strong> 试图用4张牌代表4个比特，并且需要展示两次 。在面试官不断提示“抽屉原理（必有两张同花色）”和“剩余3张牌的排列组合数（3的阶乘&#x3D;6）”以及“同花色任意两张牌距离小于12”之后 ，依然无法将线索串联起来，最终表示“需要额外信息”放弃了推导 。</p>
+</li>
+<li><p><strong>核心盲区：</strong> 典型的量化信息论与编码问题（Fitch Cheney’s Five Card Trick），对利用排列组合（排列的字典序）来传递信息熵缺乏直觉。</p>
+</li>
+</ul>
+<p><strong>2. NUMA 架构下的 Linux 内存分配策略（第一轮）</strong></p>
+<ul>
+<li><p><strong>问题重现：</strong> 在NUMA架构下，Linux 对于内存分配的策略有什么区别 ？</p>
+</li>
+<li><p><strong>你的表现：</strong> 虽然你知道工程上用 <code>numactl</code> 绑核 ，但对底层操作系统的分配策略直接表示“不是特别了解” 。</p>
+</li>
+<li><p><strong>核心盲区：</strong> 缺乏对 Linux 内存管理策略（如 Default 本地优先、Interleave 交错分配、Bind 严格绑定）在极低延迟场景下影响的了解。</p>
+</li>
+</ul>
+<h3 id="二、-答偏了或需要重度提示的痛点（Sub-optimal-Answers）"><a href="#二、-答偏了或需要重度提示的痛点（Sub-optimal-Answers）" class="headerlink" title="二、 答偏了或需要重度提示的痛点（Sub-optimal Answers）"></a>二、 答偏了或需要重度提示的痛点（Sub-optimal Answers）</h3><p><strong>1. 网络丢包的“根因预防” vs “事后恢复”（第二轮）</strong></p>
+<ul>
+<li><p><strong>问题重现：</strong> 负责接收行情数据，下游反馈有 UDP 丢包，你作为 owner 怎么解决这个问题，使得“以后不会再去丢包” ？</p>
+</li>
+<li><p><strong>你的表现：</strong> 你的第一反应和大部分篇幅都在回答“如何事后补救&#x2F;合并数据（Merge&#x2F;Recovery）”和“定位哪段行情文件损坏” 。</p>
+</li>
+<li><p><strong>面试官纠偏：</strong> 面试官不得不打断并明确指出他更关心的是“如何防止未来再发生” 。随后你才提到排查网络链路和增加 TCP 备用方案 。</p>
+</li>
+<li><p><strong>核心盲区：</strong> 缺乏实际的运维排障思维（Troubleshooting）。高频交易中，事后合并数据没有意义，必须从源头（网卡丢包、CPU 绑核、内核缓冲区占满、进程被调度抢占）去找原因。</p>
+</li>
+</ul>
+<p><strong>2. 极低延迟风控模块的数据结构演进（第三轮）</strong></p>
+<ul>
+<li><p><strong>问题重现：</strong> 实现防止自成交的防对敲模块，优化 <code>check</code> 和 <code>cancel</code> 的长尾延迟 。</p>
+</li>
+<li><p><strong>你的表现：</strong></p>
+<ul>
+<li><p>起手用了 <code>std::set</code> 和 <code>std::unordered_map</code> ，对 <code>set::erase</code> 的最坏复杂度产生犹豫，面试官纠正“最坏情况不一定是O1” 。</p>
+</li>
+<li><p>能意识到 <code>unordered_map</code> 的 rehash 扩容会导致延迟不稳定，但没有立刻意识到红黑树 rebalance（旋转调整）同样是极高频交易的灾难 。</p>
+</li>
+<li><p>在尝试将 <code>set</code> 换成连续内存的 <code>vector</code> + 堆（Heap）时，<strong>卡在了“如何根据 ID 从堆的中间删除元素”</strong> 。认为只能遍历或者无法二分查找 。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>面试官纠偏：</strong> 面试官直接给出了标准答案：“把 heap 的最末尾的元素提到前面，然后…向上的 shift 或者向下的 shift”，从而实现常数级的时间开销控制 。</p>
+</li>
+</ul>
+<p><strong>3. 数组配对求最小差值平方和的 DP 推导（第一轮）</strong></p>
+<ul>
+<li><p><strong>问题重现：</strong> 给定数组，选 M 对数，求差值平方和的最小值 。</p>
+</li>
+<li><p><strong>你的表现：</strong> 一开始陷入了回溯（Backtracking）的思路，时间复杂度爆炸 。</p>
+</li>
+<li><p><strong>面试官纠偏：</strong> 面试官提示“每一对数字一定是相邻的”，引导你往 DP 的方向想 。你在口述递归关系（Top-down）时逻辑有些绕，面试官表示“没有体现出地推递推关系”，经过反复拉扯和自证，面试官最后才勉强认可“正确性应该没什么太大的问题” 。整个过程不够干净利落。</p>
+</li>
+</ul>
+<p><strong>4. 基础数据结构的字段遗漏（第二轮）</strong></p>
+<ul>
+<li><p><strong>问题重现：</strong> 设计一个行情（Market Data）的结构体 。</p>
+</li>
+<li><p><strong>你的表现：</strong> 定义了 ID、买卖方向、数量、价格、订单类型 。</p>
+</li>
+<li><p><strong>面试官纠偏：</strong> 忘记了对于时序数据最致命的字段：<strong>时间戳（Timestamp）</strong>。面试官直接指出了这个遗漏 。</p>
+</li>
+</ul>
+<p><strong>5. 内存分配性能问题的排查工具（方向性跑偏）</strong></p>
+<ul>
+<li><p><strong>录音位置：</strong> 00:34:50 左右（第一轮）</p>
+</li>
+<li><p><strong>面试官提问：</strong> “你怎么判断他的内存分配会不会有问题？…可以通过什么指标体现出来，或者你怎么样去验证这个猜想？”</p>
+</li>
+<li><p><strong>你的回答：</strong> 你提到了使用 GDB 的 ASAN (AddressSanitizer)，去跟踪看是不是每次申请很小的内存又马上释放。</p>
+</li>
+<li><p><strong>跑偏分析：</strong></p>
+<ul>
+<li><p><strong>ASAN 是查 bug 的，不是查性能的。</strong> ASAN 的原理是插桩（Instrumentation），开启后程序性能会成倍下降，它主要是用来抓内存泄漏（Memory Leak）、越界（Out-of-bounds）等<strong>正确性</strong>问题的。</p>
+</li>
+<li><p>面试官在这个语境下，问的是“性能调优 (Latency Optimization)”。在高频量化中，频繁的动态内存分配（<code>new</code>&#x2F;<code>malloc</code>）会导致全局锁竞争（Lock Contention）、产生内存碎片，并引发系统调用（<code>brk</code>&#x2F;<code>mmap</code>）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>满分解法：</strong> 你应该回答通过 <code>perf</code> 观察系统调用中 <code>sys_mmap</code> 或 <code>sys_brk</code> 的占比；观察缺页中断（Page Fault）的频率；或者提到使用 <code>tcmalloc</code>&#x2F;<code>jemalloc</code> 自带的 Heap Profiler 来分析内存分配的热点；甚至提一句“在高频路径上我们通常用内存池（Memory Pool）预分配来规避运行时的动态分配”。</p>
+</li>
+</ul>
+<p><strong>6. 滑动窗口进阶：任意时间窗口的最值查询（算法结构降维）</strong></p>
+<ul>
+<li><p><strong>录音位置：</strong> 01:51:40 左右（第二轮）</p>
+</li>
+<li><p><strong>面试官提问：</strong> 在计算过去5分钟最高成交价的基础上，“如果这个时间不一定是5分钟，有可能是任意的一个指定的时间周期，或者是一些非常 random 的数据，怎么样去改这个接口更灵活？”</p>
+</li>
+<li><p><strong>你的回答：</strong> 用 C++ Template，写一个 <code>template &lt;int minutes&gt;</code>，在初始化时生成 5分钟、10分钟等不同版本的对象。</p>
+</li>
+<li><p><strong>跑偏分析：</strong></p>
+<ul>
+<li><p>你的回答在工程上可行，但<strong>仅仅适用于时间窗口在编译期或初始化时固定的情况</strong>。</p>
+</li>
+<li><p>面试官强调了“任意指定”、“非常 random”。在量化 Research 阶段，研究员可能会在运行时（Runtime）动态地去查“过去 3 分 27 秒”的最大值。如果你用单调队列，队列的头部淘汰逻辑会被彻底打乱，因为你不知道该淘汰谁。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>满分解法：</strong> 这是一个经典的高级数据结构考点。面试官在试探你是否知道<strong>线段树（Segment Tree）</strong>或者结合时序数据的<strong>分块机制（Block Decomposition &#x2F; 桶排序思想）</strong>。用线段树维护时间轴上的区间极值，才能真正做到在 $O(\log N)$ 时间内支持<strong>任意时间段</strong>的查询，而不是靠多开几个单调队列来穷举。</p>
+</li>
+</ul>
+<p><strong>7. 必须使用强内存序 (<code>seq_cst</code>) 的理论场景（知其然不知其所以然）</strong></p>
+<ul>
+<li><p><strong>录音位置：</strong> 00:12:30 左右（第一轮）</p>
+</li>
+<li><p><strong>面试官提问：</strong> “什么时候 acquire-release 会不够用？需要选择更强的这种内存序（指 <code>seq_cst</code>）？”</p>
+</li>
+<li><p><strong>你的回答：</strong> 坦诚表示自己没完全遇到过非得用的情况，之前在无锁链表里用，是为了“保证 Windows 上面也能有更好的这种一致性”。</p>
+</li>
+<li><p><strong>跑偏分析：</strong></p>
+<ul>
+<li><p>这个回答在工程实战上比较实在，但在技术深度面试中没拿到分。你把跨平台兼容性当成了内存模型的答案，但 C++ 的内存序本身就是一套跨平台的抽象。</p>
+</li>
+<li><p>面试官想听到的是你对并发理论的深度理解（比如我在上一次对话中为你解释的 Store-Load 乱序或者 IRIW 独立读独立写问题）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>满分解法：</strong> 应该指出：“当系统存在多个独立的写线程和读线程，并且读线程必须以完全一致的全局顺序观察到这些写操作时（例如 Peterson 锁机制的实现），硬件的 Store Buffer 会导致 <code>acquire-release</code> 降级，必须用 <code>seq_cst</code> 插入全能屏障（如 <code>MFENCE</code>）来强制清空 Buffer。”</p>
+</li>
+</ul>
+<p><strong>8. 操作系统的进程加载原理（偏笼统）</strong></p>
+<ul>
+<li><p><strong>录音位置：</strong> 00:26:08 左右（第一轮）</p>
+</li>
+<li><p><strong>面试官提问：</strong> “一个程序从二进制到加载起来变成运行中的进程，大概过程是怎样的？”</p>
+</li>
+<li><p><strong>你的回答：</strong> 提到了通过 glibc 拉起来、放到内存里、构建 VMA &#x2F; Memory 信息、进程 ID，然后 PC 寄存器指向它运行。</p>
+</li>
+<li><p><strong>跑偏分析：</strong></p>
+<ul>
+<li>回答偏向应用层开发者的宏观印象，缺少了操作系统内核视角下的关键系统调用和机制。</li>
+</ul>
+</li>
+<li><p><strong>满分解法：</strong> 在底层基础要求极高的团队，回答应该串起几个硬核黑话：</p>
+<ol>
+<li><p><strong>进程创建：</strong> <code>fork()</code> 创建子进程，复制父进程的页表和描述符；<code>execve()</code> 替换当前进程的执行上下文。</p>
+</li>
+<li><p><strong>解析二进制：</strong> 内核解析 ELF 头，建立代码段、数据段的 VMA 映射。</p>
+</li>
+<li><p><strong>惰性加载：</strong> 此时<strong>不分配实际的物理内存</strong>（这是关键点！），只建立虚拟页表。</p>
+</li>
+<li><p><strong>动态链接：</strong> 加载动态链接器（如 <code>ld-linux.so</code>），解析共享库依赖。</p>
+</li>
+<li><p><strong>启动与缺页：</strong> PC 指向程序的入口（如 <code>_start</code>），CPU 执行第一条指令时触发 Page Fault，此时物理内存才被真正分配，拷贝进 CPU Cache 中运行。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>9. <code>read</code> 系统调用</strong></p>
+<p><strong>【问题重现】</strong> 第一轮面试官问：“执行一个 <code>read</code> 操作从磁盘读数据到程序里，这个过程大概会发生什么事情？”</p>
+<p><strong>【你的回答要点】</strong> 发起系统调用 -&gt; 陷入内核态 -&gt; 给磁盘发消息加载到内存 -&gt; 磁盘加载完发中断给 CPU -&gt; 触发信号处理 -&gt; 返回用户态。</p>
+<p><strong>【佳期视角的失分原因】</strong></p>
+<p>你的回答描述了最基础的 I&#x2F;O 中断模型，但这只是“冰山一角”。对于高频量化和底层基建岗位，面试官真正在乎的是“在这个过程中，CPU 的时间被浪费在了哪里？内存拷贝发生了几次？” 你的回答完全漏掉了现代 Linux I&#x2F;O 栈中最核心的性能机制：</p>
+<ol>
+<li><p><strong>漏掉了 Page Cache（页缓存）：</strong></p>
+<ul>
+<li><strong>核心盲点</strong>：你假设 <code>read</code> 一定会去读磁盘。但在真实的 Linux 系统中，<code>read</code> 首先会去查内核的 <strong>Page Cache</strong>。如果数据刚好在缓存里（Cache Hit），内核直接把数据拷给用户态就返回了，根本不会发生磁盘 I&#x2F;O 和中断！只有 Cache Miss 才会真正去读盘。在高频交易中，我们极其依赖 Page Cache（甚至用 <code>mmap</code> 绕过 <code>read</code> 的内核态拷贝）来降低延迟。</li>
+</ul>
+</li>
+<li><p><strong>漏掉了 DMA（直接内存访问）与 CPU 拷贝的区分：</strong></p>
+<ul>
+<li><p><strong>核心盲点</strong>：你提到“给磁盘发消息加载到内存”。实际上，CPU 并不会自己去搬运磁盘数据。系统调用会配置 DMA 控制器，由 DMA 负责将数据从磁盘搬到内核缓冲区（这是零 CPU 开销的）。然后，<strong>CPU 需要将数据从内核缓冲区（Kernel Space）拷贝到你传入的 <code>buffer</code>（User Space）中</strong>。</p>
+</li>
+<li><p><strong>量化考点</strong>：这中间发生了<strong>两次数据拷贝</strong>（DMA 拷贝 + CPU 拷贝）和<strong>两次上下文切换</strong>。这也是为什么高频系统里都要搞 <code>Zero-copy</code>（零拷贝）或者直接绕过内核（Kernel Bypass）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>漏掉了进程调度（Scheduling）的细节：</strong></p>
+<ul>
+<li>如果去读磁盘，当前进程会被内核从运行队列（Runqueue）中摘除，状态变为 <code>TASK_INTERRUPTIBLE</code>（睡眠状态），CPU 会去执行其他线程。等磁盘中断到来，内核再把它唤醒。这个“睡眠-唤醒”的开销是微秒级的，在低延迟系统中是致命的。</li>
+</ul>
+</li>
+</ol>
+<p><strong>10. 盲点 1：对“分支预测（Branch Prediction）”的盲目信任</strong></p>
+<ul>
+<li><p><strong>录音位置：</strong> 第三轮风控系统优化时（03:13:33 左右）</p>
+</li>
+<li><p><strong>场景：</strong> 讨论 <code>if (buy_price &lt; sell_price)</code> 这个条件分支是否会导致性能不稳定。</p>
+</li>
+<li><p><strong>你的回答：</strong> “我觉得这种这种应该，就是CPU已经做得很好了，那应该不需要加（优化）… CPU 能够预测正确的把分支跳转到这里… 做优化的话可能就是这边加一个 <code>[[likely]]</code>。”</p>
+</li>
+<li><p><strong>HFT（高频交易）视角的致命伤：</strong><br>在极端低延迟开发中，<strong>“绝对不要盲目信任 CPU 的分支预测器”</strong> 是一条铁律。虽然你提到了 C++20 的 <code>[[likely]]</code> 属性，但这只是给编译器的 Hint（提示），优化效果有限。如果在极端行情下（比如突然涌入大量不可成交的废单），分支预测一旦连续失败，导致的流水线冲刷（Pipeline Flush）开销高达几十纳秒。<br><strong>满分思路：</strong> 面试官其实是希望你探讨 <strong>“无分支编程（Branchless Programming）”</strong>，比如用位运算（Bitwise operations）或者条件传送指令（<code>CMOV</code>）来替代 <code>if-else</code>。</p>
+</li>
 </ul>
 
             
