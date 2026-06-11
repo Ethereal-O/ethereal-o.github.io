@@ -18,15 +18,15 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. 下载1curl -fsSL https:&#x2F;&#x2F;openclaw.ai&#x2F;install.sh | bash -s -- --install-method git  2. 配置注意，目前openclaw尚未支持通过http代理访问gemini，故可以使用qwen 2.1 配置环境需要安装很多组件，包括git, nodejs, homegrew, build-essential等，由于本地已经有了，">
+        <meta name="description" content="1. 下载1curl -fsSL https:&#x2F;&#x2F;openclaw.ai&#x2F;install.sh | bash -s -- --install-method git  2. 配置2.1 配置环境需要安装很多组件，包括git, nodejs, homegrew, build-essential等，由于本地已经有了，在此略过。 2.2 配置使用命令openclaw onboard即可。 其中，配置飞书需">
 <meta property="og:type" content="article">
 <meta property="og:title" content="openclaw">
 <meta property="og:url" content="http://example.com/2026/02/26/openclaw/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 下载1curl -fsSL https:&#x2F;&#x2F;openclaw.ai&#x2F;install.sh | bash -s -- --install-method git  2. 配置注意，目前openclaw尚未支持通过http代理访问gemini，故可以使用qwen 2.1 配置环境需要安装很多组件，包括git, nodejs, homegrew, build-essential等，由于本地已经有了，">
+<meta property="og:description" content="1. 下载1curl -fsSL https:&#x2F;&#x2F;openclaw.ai&#x2F;install.sh | bash -s -- --install-method git  2. 配置2.1 配置环境需要安装很多组件，包括git, nodejs, homegrew, build-essential等，由于本地已经有了，在此略过。 2.2 配置使用命令openclaw onboard即可。 其中，配置飞书需">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-02-25T16:18:25.000Z">
-<meta property="article:modified_time" content="2026-04-26T15:07:27.016Z">
+<meta property="article:modified_time" content="2026-06-11T07:22:07.172Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-26 23:07:27</span>
-            <span class="mobile">2026-04-26 23:07</span>
+            <span class="desktop">2026-06-11 15:22:07</span>
+            <span class="mobile">2026-06-11 15:22</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -420,8 +420,7 @@
             <div class="article-content markdown-body">
                 <h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1. 下载"></a>1. 下载</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method git</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="2-配置"><a href="#2-配置" class="headerlink" title="2. 配置"></a>2. 配置</h2><p><strong>注意，目前openclaw尚未支持通过http代理访问gemini，故可以使用qwen</strong></p>
-<h3 id="2-1-配置环境"><a href="#2-1-配置环境" class="headerlink" title="2.1 配置环境"></a>2.1 配置环境</h3><p>需要安装很多组件，包括<code>git, nodejs, homegrew, build-essential</code>等，由于本地已经有了，在此略过。</p>
+<h2 id="2-配置"><a href="#2-配置" class="headerlink" title="2. 配置"></a>2. 配置</h2><h3 id="2-1-配置环境"><a href="#2-1-配置环境" class="headerlink" title="2.1 配置环境"></a>2.1 配置环境</h3><p>需要安装很多组件，包括<code>git, nodejs, homegrew, build-essential</code>等，由于本地已经有了，在此略过。</p>
 <h3 id="2-2-配置"><a href="#2-2-配置" class="headerlink" title="2.2 配置"></a>2.2 配置</h3><p>使用命令<code>openclaw onboard</code>即可。</p>
 <p>其中，配置飞书需要注意：<strong>Group chat policy与DM access policies都必须是Open</strong></p>
 <p>配置Tavily Skill参考：</p>
@@ -434,6 +433,23 @@
 
 <p>子智能体配置以及级数限制：</p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.openclaw.ai/zh-CN/tools/subagents" >子智能体 - OpenClaw <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="3-应用"><a href="#3-应用" class="headerlink" title="3. 应用"></a>3. 应用</h2><h3 id="3-1-qq机器人"><a href="#3-1-qq机器人" class="headerlink" title="3.1 qq机器人"></a>3.1 qq机器人</h3><p>qq本身机器人审核非常复杂，故采用其他方式</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2012467385257459750" >让 QQ 接入 openclaw！让你的助手掌管千人大群 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h4 id="3-1-1-napcat连入QQ"><a href="#3-1-1-napcat连入QQ" class="headerlink" title="3.1.1 napcat连入QQ"></a>3.1.1 napcat连入QQ</h4><p><a class="link"   target="_blank" rel="noopener" href="https://napneko.github.io/" >NapCatQQ | 现代化的基于 NTQQ 的 Bot 协议端实现 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>选择你的账号，点【配置服务】，然后选择 WebSocket 服务端（正向ws）</p>
+<p>名称随便起，token也就是密码，你自己起一串，然后记住。端口3001</p>
+<p>消息格式选择数组，启用选项用下面这组：enable, report_self,force_push</p>
+<h4 id="3-1-2-openclaw插件"><a href="#3-1-2-openclaw插件" class="headerlink" title="3.1.2 openclaw插件"></a>3.1.2 openclaw插件</h4><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openclaw plugins install @kirigaya/openclaw-onebot</span><br><span class="line">openclaw onebot setup</span><br></pre></td></tr></table></figure></div>
+
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/LSTM-Kirigaya/openclaw-onebot" >LSTM-Kirigaya&#x2F;openclaw-onebot: 小龙虾 openclaw 的 onebot 接入框架，可用于接入 QQ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h4 id="3-1-3-配置管理权限"><a href="#3-1-3-配置管理权限" class="headerlink" title="3.1.3 配置管理权限"></a>3.1.3 配置管理权限</h4><p>接口文档：</p>
+<ul>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://napneko.github.io/api/4.18.6" >NapCatQQ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://napcat.apifox.cn/226656748e0" >群组踢人 - NapCat <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+</ul>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Ethereal-O/openclaw_qi_qq_bot_workspace" >Ethereal-O&#x2F;openclaw_qi_qq_bot_workspace <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://openclaws.io/zh/install" >安装 | OpenClaw | 能干活的 AI 助手 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="http://localhost:18789/instances" >OpenClaw Control <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.openclaw.ai/gateway/remote-gateway-readme" >Remote Gateway Setup - OpenClaw <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
@@ -459,6 +475,18 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://openclawlaunch.com/zh/proxy" >OpenClaw 代理配置指南 — 国内用户网络代理设置教程 | OpenClaw Launch <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://clashx.tech/openclaw-clashx-proxy-guide" >OpenClaw + ClashX 代理配置指南【2026】本地AI Agent网络设置 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://docs.openclaw.ai/zh-CN/tools/subagents" >子智能体 - OpenClaw <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.openclaw.ai/zh-CN/channels/qqbot" >QQ Bot - OpenClaw <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/oNiFengZhe/article/details/158890275" >别让 AI 越权！OpenClaw 权限配置完全指南-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2012467385257459750" >让 QQ 接入 openclaw！让你的助手掌管千人大群 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://napneko.github.io/" >NapCatQQ | 现代化的基于 NTQQ 的 Bot 协议端实现 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2031427726972819313" >OpenClaw——Agents、MultiAgents和Channels配置 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/LSTM-Kirigaya/openclaw-onebot" >LSTM-Kirigaya&#x2F;openclaw-onebot: 小龙虾 openclaw 的 onebot 接入框架，可用于接入 QQ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://napneko.github.io/guide/boot/Shell" >Shell | NapCatQQ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/EasonC13-agent/overleaf-skill/blob/main/SKILL.md" >overleaf-skill&#x2F;SKILL.md at main · EasonC13-agent&#x2F;overleaf-skill <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/jkulhanek/pyoverleaf" >jkulhanek&#x2F;pyoverleaf: Python Overleaf API and simple CLI <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://napneko.github.io/api/4.18.6" >NapCatQQ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://napcat.apifox.cn/226656748e0" >群组踢人 - NapCat <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Ethereal-O/openclaw_qi_qq_bot_workspace" >Ethereal-O&#x2F;openclaw_qi_qq_bot_workspace <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
             </div>
 
@@ -471,7 +499,7 @@
         <li><strong>Created at:</strong> 2026-02-26 00:18:25</li>
         
             <li>
-                <strong>Updated at:</strong> 2026-04-26 23:07:27
+                <strong>Updated at:</strong> 2026-06-11 15:22:07
             </li>
         
         <li>
@@ -581,7 +609,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">openclaw</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="nav-text">1. 下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE"><span class="nav-text">2. 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-text">2.1 配置环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B"><span class="nav-text">2.3 自定义模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9E%B6%E6%9E%84"><span class="nav-text">3. 架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="nav-text">1. 下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE"><span class="nav-text">2. 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-text">2.1 配置环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B"><span class="nav-text">2.3 自定义模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9E%B6%E6%9E%84"><span class="nav-text">3. 架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BA%94%E7%94%A8"><span class="nav-text">3. 应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-qq%E6%9C%BA%E5%99%A8%E4%BA%BA"><span class="nav-text">3.1 qq机器人</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
 
     </div>
 </div>
