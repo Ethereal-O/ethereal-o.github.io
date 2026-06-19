@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-05-21T04:47:48.954Z">
+<meta property="article:modified_time" content="2026-06-19T02:59:31.085Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2734,6 +2734,53 @@
 </ul>
 </li>
 </ol>
+<h2 id="32-半鞅笔试"><a href="#32-半鞅笔试" class="headerlink" title="32. 半鞅笔试"></a>32. 半鞅笔试</h2><h3 id="32-1-第一题：DNA序列求最高-GC-比例子串"><a href="#32-1-第一题：DNA序列求最高-GC-比例子串" class="headerlink" title="32.1 第一题：DNA序列求最高 GC 比例子串"></a>32.1 第一题：DNA序列求最高 GC 比例子串</h3><h4 id="32-1-1-核心需求"><a href="#32-1-1-核心需求" class="headerlink" title="32.1.1 核心需求"></a>32.1.1 核心需求</h4><p>给定一个长 DNA 字符串和一个目标长度 N，要求找出长度正好为 N（或 $\ge N$）且包含 ‘G’ 和 ‘C’ 字符比例最高的子串。如果比例相同，通常要求输出最先出现的。</p>
+<h4 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h4><h5 id="32-1-1-1-如果题目是“长度等于-N”"><a href="#32-1-1-1-如果题目是“长度等于-N”" class="headerlink" title="32.1.1.1 如果题目是“长度等于 N”"></a>32.1.1.1 如果题目是“长度等于 N”</h5><ul>
+<li><p><strong>解法：</strong> 定长滑动窗口。</p>
+</li>
+<li><p><strong>特点：</strong> 窗口大小锁死为 N，右边进一个字符，左边出一个字符。</p>
+</li>
+<li><p><strong>时间复杂度：</strong> 极致的 $O(L)$（L 为字符串长度）。</p>
+</li>
+</ul>
+<h5 id="32-1-1-2-如果题目是“长度大于等于-N”（我们探讨的版本）"><a href="#32-1-1-2-如果题目是“长度大于等于-N”（我们探讨的版本）" class="headerlink" title="32.1.1.2 如果题目是“长度大于等于 N”（我们探讨的版本）"></a>32.1.1.2 如果题目是“长度大于等于 N”（我们探讨的版本）</h5><ul>
+<li><p><strong>解法：起点枚举 + 动态累加扩展</strong>（也就是我们最终版代码的逻辑）。</p>
+</li>
+<li><p><strong>特点：</strong> 外层循环固定一个起点 <code>i</code>，内层循环指针 <code>j</code> 从 <code>i + N - 1</code> 开始一直向字符串末尾扩展。在扩展的过程中，<strong>直接在之前的 GC 计数上进行 <code>+1</code> 累加</strong>，而不是每次都从头数。</p>
+</li>
+<li><p><strong>时间复杂度：</strong> $O(L^2)$。在机试中，如果字符串长度在两三千以内，这种解法配合“交叉相乘”去浮点误差，是可以直接拿到满分的。</p>
+</li>
+</ul>
+<h5 id="32-1-1-3-补充一个硬核知识点（真正的-O-L-log-L-最优解）"><a href="#32-1-1-3-补充一个硬核知识点（真正的-O-L-log-L-最优解）" class="headerlink" title="32.1.1.3 补充一个硬核知识点（真正的 $O(L \log L)$ 最优解）"></a>32.1.1.3 补充一个硬核知识点（真正的 $O(L \log L)$ 最优解）</h5><p>如果在极端苛刻的竞赛题中，要求解“长度 $\ge N$ 的最大平均值&#x2F;比例”且字符串长度达到了 $10^5$ 级别，$O(L^2)$ 也会超时。</p>
+<p>那时候真正的标准答案是一种非常高级的套路：<strong>二分答案 + 前缀和</strong>。</p>
+<ol>
+<li><p><strong>二分答案：</strong> 猜测一个比例 <code>mid</code>。</p>
+</li>
+<li><p><strong>变形：</strong> 把原数组里是 G&#x2F;C 的变成 <code>1 - mid</code>，不是的变成 <code>0 - mid</code>。</p>
+</li>
+<li><p><strong>校验：</strong> 利用前缀和找距离 $\ge N$ 的最大子段和，看是否大于 0。</p>
+</li>
+</ol>
+<h3 id="32-2-第二题：基于共同爱好的公司推荐系统"><a href="#32-2-第二题：基于共同爱好的公司推荐系统" class="headerlink" title="32.2 第二题：基于共同爱好的公司推荐系统"></a>32.2 第二题：基于共同爱好的公司推荐系统</h3><p><strong>1. 核心需求</strong></p>
+<p>系统支持动态添加“用户-喜欢的公司”记录。查询某个用户时，根据“同好的同好也是同好”（即推荐关系的无限传递性），计算出该用户所在生态圈中，还有多少家公司是他目前还没点赞过的。</p>
+<p><strong>2. 常见踩坑点（导致 TLE 或逻辑错误的原因）</strong></p>
+<ul>
+<li><p><strong>两层&#x2F;多层循环暴力查图：</strong> 面对“传递性”问题，如果每次查询都去遍历用户的朋友、朋友的朋友……时间复杂度会呈指数级爆炸，必定超时。</p>
+</li>
+<li><p><strong>用错去重数据结构：</strong> 在海量数据中，如果用数组（List&#x2F;Vector）去存储和频繁查找某个公司是否已被喜欢，会因为 $O(N)$ 的查找时间导致系统卡死。</p>
+</li>
+<li><p><strong>并查集的合并对象搞反：</strong> 如果去合并“用户”，在计算总公司数和去重时，逻辑会变得非常绕且难以维护。</p>
+</li>
+</ul>
+<p><strong>3. 标准满分答案思路（并查集 Union-Find - 且合并主体为“公司”）</strong></p>
+<ul>
+<li><p><strong>降维打击的抽象设计：</strong> 不去维护人际关系网，而是<strong>把“公司”作为节点连通</strong>。如果一个用户喜欢了公司 A、B、C，就直接把这三家公司放到同一个“并查集连通块”中，代表它们属于同一个推荐生态圈。</p>
+</li>
+<li><p><strong>动态维护集合大小：</strong> 在合并公司的同时，维护每个连通块（生态圈）里总共包含多少家不同的公司。</p>
+</li>
+<li><p><strong>极致的 $O(1)$ 查询：</strong> 当查询某个用户时，只需随便拿一家他喜欢的公司，找到这家公司所在生态圈的“总公司数量”，直接<strong>减去该用户已经喜欢的“公司数量”</strong>。不需要图遍历，不需要额外去重，一行简单的减法公式直接得出最终推荐数。</p>
+</li>
+</ul>
 
             
         </div>
