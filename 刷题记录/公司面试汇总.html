@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-07-05T08:39:08.588Z">
+<meta property="article:modified_time" content="2026-08-17T11:05:37.997Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2832,6 +2832,75 @@
 <li><p><strong>行情选优（Feed Arbitration）的标准工程实现</strong>：为每个 Symbol 维护一个状态机，记录当前已处理的最新 Sequence Number 或 Exchange Timestamp。当多路信号到达时，通过原子操作对比序号，第一路到达的信号直接穿透推送并更新序号，后续到达的重复信号直接 Drop。整体过程追求极致的纳秒级指令精简，通常不在这个环节做任何复杂的窗口切分。</p>
 </li>
 </ul>
+</li>
+</ul>
+<h2 id="34-半鞅线下二面"><a href="#34-半鞅线下二面" class="headerlink" title="34. 半鞅线下二面"></a>34. 半鞅线下二面</h2><h3 id="34-1-核心问题背景"><a href="#34-1-核心问题背景" class="headerlink" title="34.1 核心问题背景"></a>34.1 核心问题背景</h3><p>在量化高频&#x2F;做市策略的订单簿回测中，我们需要将自己策略产生的订单插入历史订单簿，但<strong>不能修改真实历史订单的状态（即“零市场冲击”假设）</strong>。<br>在这个过程中，会遇到三个极其棘手的工程与逻辑难题：</p>
+<ol>
+<li><strong>排队位置（Queue Position）</strong>：如何准确判断自己的订单何时真正到达了堆顶可以成交？</li>
+<li><strong>ABA问题（重复撮合）</strong>：因为历史对手方的订单额度没有被我们扣减，当下一个事件切片到来时，系统可能再次扫描到同一个历史订单，导致我们的影子订单被错误地“重复撮合”。（当撮合减少自己的订单额度，这时候有一个更优的对手方从市场到达，还是可以减少自己的订单额度，结果发现后面一个订单（刚刚第一次撮合的）还在，那么又会撮合减少）</li>
+<li><strong>隐藏流动性错失（Order D问题）</strong>：如果只依赖历史 <code>TradeEvent</code>（成交事件），当历史中出现一个新订单（Order D），它本可以和我们的影子订单成交，但在真实历史中它因为没有对手盘而转为挂单或撤单，此时没有成交记录，就会导致我们“漏单”。</li>
+</ol>
+<h3 id="34-2-最终正确答案：标记-撮合列表（Match-List）"><a href="#34-2-最终正确答案：标记-撮合列表（Match-List）" class="headerlink" title="34.2 最终正确答案：标记+撮合列表（Match List）"></a>34.2 最终正确答案：标记+撮合列表（Match List）</h3><p>为了彻底解决上述问题，回测引擎必须放弃简单的“扣减额度”逻辑，转向“基于事件溯源（Event Sourcing）”的高精度架构。具体解决方案如下：</p>
+<h4 id="34-2-1-物理隔离：订单簿标记"><a href="#34-2-1-物理隔离：订单簿标记" class="headerlink" title="34.2.1 物理隔离：订单簿标记"></a>34.2.1 物理隔离：订单簿标记</h4><p>自己的订单插入订单簿的时候做标记。</p>
+<h4 id="34-2-2-终极武器：撮合列表（Match-List）解决-ABA-问题"><a href="#34-2-2-终极武器：撮合列表（Match-List）解决-ABA-问题" class="headerlink" title="34.2.2 终极武器：撮合列表（Match List）解决 ABA 问题"></a>34.2.2 终极武器：撮合列表（Match List）解决 ABA 问题</h4><p>为每一个影子订单对象增加一个“已处理事件&#x2F;订单哈希表”。</p>
+<ul>
+<li>当判断影子订单可以与某个对手方订单（或历史成交事件）撮合时，将该<strong>对手方订单的唯一 ID（或事件 ID）记录在案</strong>。</li>
+<li>每次撮合前，先查表。如果该 ID 已经在列表里，说明之前已经吃过它的额度了，直接跳过。这就从根本上杜绝了 ABA 重复撮合的问题。</li>
+</ul>
+<h4 id="34-2-3-撮合双引擎：应对“排队成交”与“跨越成交”"><a href="#34-2-3-撮合双引擎：应对“排队成交”与“跨越成交”" class="headerlink" title="34.2.3 撮合双引擎：应对“排队成交”与“跨越成交”"></a>34.2.3 撮合双引擎：应对“排队成交”与“跨越成交”</h4><ul>
+<li>让自己的订单带有一个撮合列表，表示已经撮合过的对手方订单，这样就能解决ABA问题。</li>
+</ul>
+<h2 id="35-字节AML三面"><a href="#35-字节AML三面" class="headerlink" title="35. 字节AML三面"></a>35. 字节AML三面</h2><h3 id="35-1-没有回答好的题目"><a href="#35-1-没有回答好的题目" class="headerlink" title="35.1 没有回答好的题目"></a>35.1 没有回答好的题目</h3><h4 id="35-1-1-调度与多步决策优化（针对级联效应问题的专业解答）"><a href="#35-1-1-调度与多步决策优化（针对级联效应问题的专业解答）" class="headerlink" title="35.1.1 调度与多步决策优化（针对级联效应问题的专业解答）"></a>35.1.1 调度与多步决策优化（针对级联效应问题的专业解答）</h4><p>在面试中关于“只看一步（Greedy）如何保证决策相对较优”以及“如何应对长任务导致的级联超时与串扰”的问题，其背后的专业解法和理论模型主要包括以下几个方面：</p>
+<ul>
+<li><p>多步前瞻与回滚（Lookahead &#x2F; Rollout）</p>
+<ul>
+<li><p><strong>原理</strong>：放弃单纯的单步贪心（Greedy），引入 <strong>$k$ 步前瞻（$k$-step Lookahead）</strong> 或模拟仿真（Rollout）。在决策时，利用轻量级模拟器对未来 $k$ 个时间窗口的队列状态进行推演，计算不同决策分支下的累积代价（如总延迟、SLO 违约率），选择期望收益最优的分支。</p>
+</li>
+<li><p><strong>应用</strong>：在任务排队系统中，评估执行当前长任务是否会堵塞后续高优先级任务，若未来多个任务将发生级联超时，则触发降级或延迟执行（Lazy Execution）。</p>
+</li>
+</ul>
+</li>
+<li><p>马尔可夫决策过程（MDP）与强化学习（RL）</p>
+<ul>
+<li><p><strong>原理</strong>：将任务调度建模为一个 MDP：</p>
+<ul>
+<li><p><strong>状态（State）</strong>：当前队列中所有任务的剩余计算量、到达率、已有资源的占用情况。</p>
+</li>
+<li><p><strong>动作（Action）</strong>：选择哪个任务立即调度、哪个任务延迟或重排（Reorder）。</p>
+</li>
+<li><p><strong>奖励（Reward）</strong>：综合考虑吞吐量、资源利用率以及长远视角下的 SLO 满足度惩罚。</p>
+</li>
+<li><p><strong>优势</strong>：通过价值函数（Value Function）或策略梯度，隐式地将“长任务对未来潜在串扰”的影响纳入长远收益考量，避免局部最优。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>基于松弛度（Slack）与关键路径的动态优先级</p>
+<ul>
+<li><p><strong>原理</strong>：为每个任务引入 <strong>Slack（松弛时间）</strong> 概念：$\text{Slack} &#x3D; \text{Deadline} - \text{Current_Time} - \text{Remaining_Execution_Time}$。</p>
+</li>
+<li><p><strong>策略</strong>：当长任务的执行会压缩后续任务的 Slack 导致其跌破安全阈值时，自动提升后续任务的优先级或强制对长任务进行分段、抢占（Preemption），从而限制级联效应的扩散范围。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="35-2-代码题"><a href="#35-2-代码题" class="headerlink" title="35.2 代码题"></a>35.2 代码题</h3><ul>
+<li><p><strong>题目名称</strong>：<strong>带格式的表格打印</strong></p>
+</li>
+<li><p><strong>输入形式</strong>：一个二维数组（Python 中为 <code>list</code>），其中第一行为表头（Heading），后续行为表格单元格中的数据。</p>
+</li>
+<li><p><strong>核心格式要求</strong>：</p>
+<ol>
+<li><p><strong>列数对齐</strong>：表格的整体列数需要与所有行中<strong>拥有最多列的那一行</strong>保持一致。</p>
+</li>
+<li><p><strong>列宽与对齐</strong>：每一列的列宽由当前列中<strong>最长的字符串长度</strong>决定；若字符串长度不够，则在右侧用<strong>空格</strong>填充以实现对齐。</p>
+</li>
+<li><p><strong>表头修饰</strong>：表头行及表格框架需要通过制表符（加号 <code>+</code>、减号 <code>-</code>、竖线 <code>|</code>）进行包围和格式化。</p>
+</li>
+<li><p><strong>缺省&#x2F;空单元格处理</strong>：若某些行的列数少于最大列数（或特定单元格没有字符），则该位置全部用<strong>空格</strong>排定填充。</p>
+</li>
+</ol>
 </li>
 </ul>
 
