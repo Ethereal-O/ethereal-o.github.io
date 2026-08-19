@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-08-17T11:05:37.997Z">
+<meta property="article:modified_time" content="2026-08-19T12:05:29.619Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2901,6 +2901,81 @@
 <li><p><strong>缺省&#x2F;空单元格处理</strong>：若某些行的列数少于最大列数（或特定单元格没有字符），则该位置全部用<strong>空格</strong>排定填充。</p>
 </li>
 </ol>
+</li>
+</ul>
+<h2 id="36-百度昆仑芯一面"><a href="#36-百度昆仑芯一面" class="headerlink" title="36. 百度昆仑芯一面"></a>36. 百度昆仑芯一面</h2><h3 id="36-1-没答上来-x2F-答得不太好的问题及标准答案"><a href="#36-1-没答上来-x2F-答得不太好的问题及标准答案" class="headerlink" title="36.1 没答上来 &#x2F; 答得不太好的问题及标准答案"></a>36.1 没答上来 &#x2F; 答得不太好的问题及标准答案</h3><h4 id="36-1-1-问题一：PagedAttention-中的-Slot-Mapping-机制是怎样的？"><a href="#36-1-1-问题一：PagedAttention-中的-Slot-Mapping-机制是怎样的？" class="headerlink" title="36.1.1 问题一：PagedAttention 中的 Slot Mapping 机制是怎样的？"></a>36.1.1 问题一：PagedAttention 中的 Slot Mapping 机制是怎样的？</h4><ul>
+<li><p><strong>面试表现</strong>：面试官询问在 PagedAttention 中，为了将 KV Cache 存放到物理页中，中间使用到的 <code>slot mapping</code> 的作用是什么。候选人明确表示对此“不是特别了解”。</p>
+</li>
+<li><p><strong>标准答案</strong>：PagedAttention 的核心思想是参考操作系统的虚拟内存分页机制。逻辑上连续的 Token 的 KV Cache，在物理显存上是被划分成固定大小的 Block 分散存储的。<code>slot mapping</code>（或 Block Table）的作用就是建立从<strong>逻辑 Token 索引</strong>到物理显存 Block 及其内部偏移量（Slot）的映射关系。计算 Attention 时，系统通过 <code>slot mapping</code> 能够精准定位离散存储的 KV 数据，从而彻底解决变长序列带来的显存碎片问题，极大提高 GPU 内存利用率。</p>
+</li>
+</ul>
+<h4 id="36-1-2-问题二：讲述一遍完整的-Attention-计算链路细节"><a href="#36-1-2-问题二：讲述一遍完整的-Attention-计算链路细节" class="headerlink" title="36.1.2 问题二：讲述一遍完整的 Attention 计算链路细节"></a>36.1.2 问题二：讲述一遍完整的 Attention 计算链路细节</h4><ul>
+<li><p><strong>面试表现</strong>：面试官要求从输入到输出讲述 Attention 的完整计算流程。候选人初步只给出了基础的公式（$Q \times K$ 除以根号 d，乘 Softmax 再乘 $V$）。当面试官试图引导其说出网络中涉及的 RMSNorm 等其他计算细节时，候选人显得有些吃力。</p>
+</li>
+<li><p><strong>标准答案</strong>：在主流的大语言模型（如 LLaMA 结构）中，单层 Attention 的完整正向计算链路通常包含：</p>
+<ol>
+<li><p><strong>归一化</strong>：输入 Tensor 首先经过 RMSNorm 进行层归一化。</p>
+</li>
+<li><p><strong>线性映射</strong>：与权重相乘，生成 Query (Q)、Key (K)、Value (V) 矩阵。</p>
+</li>
+<li><p><strong>位置编码</strong>：对 Q 和 K 应用旋转位置编码（RoPE，Rotary Position Embedding）。</p>
+</li>
+<li><p><strong>计算注意力分数</strong>：计算 $Q \times K^T$，除以缩放因子 $\sqrt{d}$，并加上 Causal Mask（确保解码时只能看到前面的 Token）。</p>
+</li>
+<li><p><strong>Softmax</strong>：对分数进行 Softmax 归一化。</p>
+</li>
+<li><p><strong>加权求和</strong>：将概率分数与 V 矩阵相乘。</p>
+</li>
+<li><p><strong>输出映射</strong>：最后经过输出线性投影层（O_proj），进入后续的 FFN（前馈神经网络）或 MoE（混合专家模型）层。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="36-1-3-问题三：对大模型的常见算子（Operators）有什么了解？"><a href="#36-1-3-问题三：对大模型的常见算子（Operators）有什么了解？" class="headerlink" title="36.1.3 问题三：对大模型的常见算子（Operators）有什么了解？"></a>36.1.3 问题三：对大模型的常见算子（Operators）有什么了解？</h4><ul>
+<li><p><strong>面试表现</strong>：面试官询问候选人是否了解大模型常用的算子，并举例了激活算子（如 SwiGLU）和规约算子（如 RMSNorm）。候选人坦诚回答“大模型的算子。说实话，我不是特别了解”，并承认没有做过相关算子的优化。</p>
+</li>
+<li><p><strong>标准答案</strong>：大模型推理中，除了耗时占比最大的通用矩阵乘（GEMM，用于 Linear 层计算），还有大量细碎的<strong>访存密集型算子（Memory-bound）</strong>。常见的包括：</p>
+<ul>
+<li><p>激活函数算子：如 SwiGLU、GeLU。</p>
+</li>
+<li><p>归一化算子：如 RMSNorm、LayerNorm。</p>
+</li>
+<li><p>位置编码算子：如 RoPE（旋转位置编码）。</p>
+</li>
+<li><p><strong>算子优化方向（Kernel Fusion）</strong>：因为这些独立的小算子会频繁读写 Global Memory 导致带宽受限，所以 AI 芯片&#x2F;框架底层优化的核心操作是将它们融合（Fusion）。例如，将 RMSNorm 读写、线性映射和 RoPE 计算合并写成一个底层的 CUDA Kernel，使得数据在寄存器或 Shared Memory 中直接处理完毕，大幅提升计算效率。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="36-1-4-问题四：对主流开源模型（如千问、Kimi-等）的架构了解吗？"><a href="#36-1-4-问题四：对主流开源模型（如千问、Kimi-等）的架构了解吗？" class="headerlink" title="36.1.4 问题四：对主流开源模型（如千问、Kimi 等）的架构了解吗？"></a>36.1.4 问题四：对主流开源模型（如千问、Kimi 等）的架构了解吗？</h4><ul>
+<li><p><strong>面试表现</strong>：面试官询问候选人对 Qwen（千问）、Kimi 等具体开源大模型的结构是否有了解。候选人回答“说实话，也没有那么了解”。</p>
+</li>
+<li><p><strong>标准答案</strong>：作为 AI Infra 工程师，通常需要了解主流模型的架构特点以适配框架：</p>
+<ul>
+<li><p><strong>Qwen（千问）</strong>：采用了改进型的 Transformer 架构，普遍使用 SwiGLU 激活函数、RMSNorm、RoPE。较新的版本中引入了 GQA（分组查询注意力）以减少 KV Cache 的显存占用，并推出了基于 MoE（混合专家）架构的版本以提升推理效率。</p>
+</li>
+<li><p><strong>Kimi</strong>：核心特点是支持超长上下文（Long Context）。从底层来看，这要求推理框架在 KV Cache 的压缩算法、长序列的动态显存分配策略（Context Chunking）以及分布式并行（如 Context Parallelism）上有特殊的适配和深度优化。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="36-2-手撕代码题目分析"><a href="#36-2-手撕代码题目分析" class="headerlink" title="36.2 手撕代码题目分析"></a>36.2 手撕代码题目分析</h3><p>在共享屏幕环节，面试官出了一道非常基础的算法题，主要考察候选人的代码手感以及对并行计算空间划分的基础认知。</p>
+<ul>
+<li><p><strong>题目要求</strong>：用 C++ 编写一个简单的矩阵乘法（Matrix Multiplication）。</p>
+</li>
+<li><p><strong>输入输出约定</strong>：面试官给定了矩阵的维度，要求输入两个矩阵（矩阵 A 的维度为 $M \times N$，矩阵 B 的维度为 $N \times C$），输出一个结果矩阵（维度为 $M \times C$）。</p>
+</li>
+<li><p><strong>实现细节要求</strong>：面试官明确表示不需要写 CUDA 或者接入框架层（如 PT 算子），只需用纯 C++ 按原理写出基础的计算过程即可。</p>
+</li>
+<li><p><strong>候选人解法与延伸追问</strong>：</p>
+<ul>
+<li><p>候选人编写了最基础的<strong>三层嵌套 <code>for</code> 循环</strong>实现了矩阵相乘。</p>
+</li>
+<li><p><strong>面试官追问（优化点）</strong>：在写完基础版本后，面试官询问“延伸出来还有什么优化点吗？”。</p>
+</li>
+<li><p><strong>候选人回答</strong>：候选人正确指出了可以使用 Tiling（分块计算）技术，根据 Block Size 和矩阵大小对数据进行切分，这也是体系结构和 GPU 编程中减少 Cache Miss、提升缓存命中率的核心优化手段。</p>
+</li>
+</ul>
 </li>
 </ul>
 
