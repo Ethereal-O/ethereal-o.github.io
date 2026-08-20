@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-08-19T12:05:29.619Z">
+<meta property="article:modified_time" content="2026-08-20T16:21:21.810Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2976,6 +2976,51 @@
 <li><p><strong>候选人回答</strong>：候选人正确指出了可以使用 Tiling（分块计算）技术，根据 Block Size 和矩阵大小对数据进行切分，这也是体系结构和 GPU 编程中减少 Cache Miss、提升缓存命中率的核心优化手段。</p>
 </li>
 </ul>
+</li>
+</ul>
+<h2 id="37-腾讯TEG存储一面"><a href="#37-腾讯TEG存储一面" class="headerlink" title="37. 腾讯TEG存储一面"></a>37. 腾讯TEG存储一面</h2><h3 id="37-1-答得不好的题及标准答案思路"><a href="#37-1-答得不好的题及标准答案思路" class="headerlink" title="37.1 答得不好的题及标准答案思路"></a>37.1 答得不好的题及标准答案思路</h3><p><strong>A. 题目：如何在生产环境中设计高可靠的 AI Agent（代码生成）系统，降低不确定性？</strong></p>
+<ul>
+<li><p><strong>候选人表现：</strong> 候选人最初认为“Human in the loop（人工介入）是绝对必要性的”，面对面试官“不依靠人工”的追问时，态度略显急躁，反问“怎么可能保证百分之百正确”。随后在引导下才勉强答出了任务拆解和状态传递。</p>
+</li>
+<li><p><strong>标准&#x2F;优秀答案思路：</strong> 面试官的考点并非要求模型达到100%正确率，而是<strong>如何通过工程化手段控制大模型的“幻觉”和“不确定性”</strong>。</p>
+<ul>
+<li><p><strong>任务拆解与降维：</strong> 将大任务拆分为极小粒度的子任务，降低单次生成的复杂度。</p>
+</li>
+<li><p><strong>结构化契约：</strong> 强制 Agent 输出强类型、结构化的数据（如带 Schema 校验的 JSON），便于后置代码进行参数验证。</p>
+</li>
+<li><p><strong>沙盒执行与自反思（Self-Reflection）：</strong> 在隔离的沙盒中执行代码，捕获报错信息后，将“报错日志 + 原始代码”重新回传给 Agent 进行多轮自我修复。</p>
+</li>
+<li><p><strong>多 Agent 共识（Review机制）：</strong> 引入独立的“审查者” Agent 专门负责找错，两者博弈通过后再输出。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>B. 题目：为大型分布式存储系统设计一个应对高并发、高吞吐的“诊断日志（Log）系统”。</strong></p>
+<ul>
+<li><p><strong>候选人表现：</strong> 候选人完全偏离了需求，将“诊断问题的应用日志”误解为了“数据库的 WAL (Write-Ahead Log) 或 LSM-Tree 日志”。候选人纠结于 PCIe 带宽、读写权衡、随机写、甚至修改日志等伪需求，并试图用 <code>mmap</code> 解决问题，导致面试官多次打断并重新澄清。</p>
+</li>
+<li><p><strong>标准&#x2F;优秀答案思路：</strong> 面试官想听的是<strong>高并发下的异步日志打印策略</strong>，以确保写日志不会阻塞核心业务的主线程。</p>
+<ul>
+<li><p><strong>异步无锁队列（Ring Buffer）：</strong> 业务线程只负责将日志以极低的延迟推入内存队列，由独立的后台消费线程负责落盘。</p>
+</li>
+<li><p><strong>批量刷盘（Batching）：</strong> 积攒一定大小（如 4KB 刷一次）或一定时间间隔后再进行 IO 操作。</p>
+</li>
+<li><p><strong>顺序追加（Append-only）：</strong> 严格的顺序写，最大化利用磁盘的顺序吞吐能力。</p>
+</li>
+<li><p><strong>降级与背压（Backpressure）：</strong> 在突发流量写满内存队列时，要有选择性丢弃（如丢弃 Debug 级日志，保留 Error 级）或限流策略，绝不能拖垮内存。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="37-2-笔试题拆解"><a href="#37-2-笔试题拆解" class="headerlink" title="37.2 笔试题拆解"></a>37.2 笔试题拆解</h3><p><strong>题目：简化逻辑系统的路径（对应力扣经典题 LeetCode 71: Simplify Path）</strong></p>
+<ul>
+<li><p><strong>题意：</strong> 给定一个包含 <code>.</code>、<code>..</code> 和多重斜杠 <code>/</code> 的绝对路径字符串，要求将其转化为最简的规范路径。</p>
+</li>
+<li><p><strong>候选人的初始解法：</strong> 使用 <code>vector</code> 或 <code>stack</code>，通过遍历字符串，遇到有效目录名就压栈，遇到 <code>..</code> 就出栈，最后将栈内元素重新拼接。这是最中规中矩的 $O(N)$ 空间复杂度解法。</p>
+</li>
+<li><p><strong>面试官的进阶要求（Follow-up）：</strong> 面试官指出既然输入本身就是字符串，要求不使用 <code>vector</code> 或栈，直接在原字符串上进行“原地修改”（In-place modification）以达到 $O(1)$ 的额外空间复杂度。</p>
+</li>
+<li><p><strong>最终方案：</strong> 候选人接受了面试官的建议，采用原地覆盖的逻辑（通常利用双指针，读指针遍历原字符串，写指针在前面直接覆盖重写）完成了代码编写。</p>
 </li>
 </ul>
 
