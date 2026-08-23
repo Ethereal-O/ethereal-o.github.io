@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-08-20T16:21:21.810Z">
+<meta property="article:modified_time" content="2026-08-23T09:23:37.992Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -3021,6 +3021,56 @@
 <li><p><strong>面试官的进阶要求（Follow-up）：</strong> 面试官指出既然输入本身就是字符串，要求不使用 <code>vector</code> 或栈，直接在原字符串上进行“原地修改”（In-place modification）以达到 $O(1)$ 的额外空间复杂度。</p>
 </li>
 <li><p><strong>最终方案：</strong> 候选人接受了面试官的建议，采用原地覆盖的逻辑（通常利用双指针，读指针遍历原字符串，写指针在前面直接覆盖重写）完成了代码编写。</p>
+</li>
+</ul>
+<h2 id="38-鸣石笔试"><a href="#38-鸣石笔试" class="headerlink" title="38. 鸣石笔试"></a>38. 鸣石笔试</h2><h3 id="38-1-单选题"><a href="#38-1-单选题" class="headerlink" title="38.1 单选题"></a>38.1 单选题</h3><p><strong>1. Linux 调度中的优先级继承</strong></p>
+<ul>
+<li><p><strong>问题</strong>：什么是优先级继承？为什么需要它？</p>
+</li>
+<li><p><strong>知识</strong>：解决<strong>优先级反转</strong>问题。例：高优先级H等低优先级L的锁，中优先级M抢占CPU导致H一直等。解法：L临时继承H的高优先级，快速执行并释放锁，恢复原优先级。Linux内核<code>mutex</code>和用户态<code>futex PI</code>实现了此机制。</p>
+</li>
+</ul>
+<p><strong>2. 网络地址 <code>192.168.4.3/30</code> 能被多少机器接收？</strong></p>
+<ul>
+<li><p><strong>问题</strong>：这个报文最多被几个机器接收？</p>
+</li>
+<li><p><strong>知识</strong>：&#x2F;30掩码（255.255.255.252）只有2位主机位，共4个IP（.0~.3）。其中<code>.0</code>是网络地址，<code>.1</code>和<code>.2</code>是可用主机，<code>.3</code>是<strong>广播地址</strong>。因此发往<code>.3</code>的广播报文能被子网内<strong>2台</strong>机器（<code>.1</code>和<code>.2</code>）接收。</p>
+</li>
+</ul>
+<p><strong>3. Linux <code>recv</code> 接口返回值含义</strong></p>
+<ul>
+<li><p><strong>问题</strong>：<code>recv</code>返回的值分别代表什么？</p>
+</li>
+<li><p><strong>知识</strong>：**&gt;0<strong>为实际读取字节数（可能小于请求长度，需循环读）；</strong>&#x3D;&#x3D;0<strong>表示对端优雅关闭连接（EOF）；</strong>-1**为出错，需看<code>errno</code>：<code>EAGAIN/EWOULDBLOCK</code>（非阻塞无数据，重试）、<code>EINTR</code>（被信号中断，重试）、<code>ECONNRESET</code>等（致命错误，关闭socket）。</p>
+</li>
+</ul>
+<p><strong>4. 判断整数乘法溢出（及能否用<code>!=</code>）</strong></p>
+<ul>
+<li><p><strong>问题</strong>：如何判断溢出？能否用<code>!=</code>判断？</p>
+</li>
+<li><p><strong>知识</strong>：推荐用编译器内置函数<code>__builtin_mul_overflow</code>。<strong>无符号数</strong>可以用<code>(a*b)/b != a</code>（溢出回绕定义明确）。**有符号数绝对不能用<code>!=</code>**，因为<code>a*b</code>溢出是未定义行为（UB），编译器会优化掉该分支，必须用内置函数或升位（<code>long long</code>）预检。</p>
+</li>
+</ul>
+<p><strong>5. 多读单写的Seqlock（版本号机制）</strong></p>
+<ul>
+<li><p><strong>问题</strong>：写线程改版本号(奇→写结构体→偶)，读线程轮询偶数后读数据，如何消除结构体的Data Race？</p>
+</li>
+<li><p><strong>知识</strong>：</p>
+<ul>
+<li><p><strong>关键点</strong>：<code>release/acquire</code>内存屏障（FENCE）保证“写结构体”早于“版本号变偶数”全局可见，防止读线程看到新版本号却读到旧数据。</p>
+</li>
+<li><p><strong>赋值的问题</strong>：并发对非原子结构体赋值<code>data = new</code>在C++标准下是数据竞争（UB），有编译器优化和非平凡拷贝风险。</p>
+</li>
+<li><p><strong>解决方案</strong>：彻底消除用<strong>RCU（指针原子切换）</strong>让读写操作不同内存；符合标准用<code>std::atomic&lt;Struct&gt;</code>或C++20的<code>std::atomic_ref</code>；工程妥协可用<code>memcpy</code>+FENCE（主流平台可用，但仍是标准UB）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="38-2-代码题"><a href="#38-2-代码题" class="headerlink" title="38.2 代码题"></a>38.2 代码题</h3><p><strong>1. 统计“V形三元组”个数</strong></p>
+<ul>
+<li><p><strong>问题</strong>：数组<code>nums</code>，统计<code>i&lt;j&lt;k</code>且<code>nums[i]==nums[k] &gt; nums[j]</code>的三元组数目。</p>
+</li>
+<li><p><strong>知识</strong>：固定中间<code>j</code>，用<strong>树状数组</strong>动态维护左右两侧相同值的乘积<code>L[v]*R[v]</code>。遍历<code>j</code>时，从右侧移除<code>nums[j]</code>，查询树状数组中大于<code>nums[j]</code>的乘积总和累加，再将<code>nums[j]</code>加入左侧。时间复杂度O(n log n)。</p>
 </li>
 </ul>
 
