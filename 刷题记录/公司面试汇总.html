@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-08-23T09:23:37.992Z">
+<meta property="article:modified_time" content="2026-08-26T17:15:47.591Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -3071,6 +3071,80 @@
 <li><p><strong>问题</strong>：数组<code>nums</code>，统计<code>i&lt;j&lt;k</code>且<code>nums[i]==nums[k] &gt; nums[j]</code>的三元组数目。</p>
 </li>
 <li><p><strong>知识</strong>：固定中间<code>j</code>，用<strong>树状数组</strong>动态维护左右两侧相同值的乘积<code>L[v]*R[v]</code>。遍历<code>j</code>时，从右侧移除<code>nums[j]</code>，查询树状数组中大于<code>nums[j]</code>的乘积总和累加，再将<code>nums[j]</code>加入左侧。时间复杂度O(n log n)。</p>
+</li>
+</ul>
+<h2 id="39-腾讯TEG存储二面"><a href="#39-腾讯TEG存储二面" class="headerlink" title="39. 腾讯TEG存储二面"></a>39. 腾讯TEG存储二面</h2><h3 id="39-1-答得不好的题及标准答案思路"><a href="#39-1-答得不好的题及标准答案思路" class="headerlink" title="39.1 答得不好的题及标准答案思路"></a>39.1 答得不好的题及标准答案思路</h3><p><strong>1. 哈希表在内存中的 CPU Cache 局部性（Locality）如何？</strong></p>
+<ul>
+<li><p><strong>面试表现</strong>：候选人认为“哈希表连续分配，Cache 局部性很好”。</p>
+</li>
+<li><p><strong>面试官指正</strong>：好的哈希函数核心在于均匀随机散列，导致数据访问是随机的，Cache 局部性其实很差。</p>
+</li>
+<li><p><strong>标准答案</strong>：哈希表由于散列的随机性，查找与插入时会产生非连续的随机内存寻址，无法利用 CPU Cache Line 的预取（Prefetching）机制，导致空间局部性较差。若要改善局部性，通常需要采用基于开放寻址法的线性探测（Linear Probing）或 Blocked Cuckoo Hashing。</p>
+</li>
+</ul>
+<p><strong>2. 布谷鸟哈希（Cuckoo Hashing）的动机是什么？扩容能否彻底解决踢人成环（死循环）？</strong></p>
+<ul>
+<li><p><strong>面试表现</strong>：候选人对动机记忆模糊，且认为扩容一次一定能解环。</p>
+</li>
+<li><p><strong>面试官指正</strong>：扩容不一定能解决成环，成环是由于冲突拓扑产生了闭环，单纯按模数 $2N$ 扩大容量可能依然会映射到相同的冲突依赖中。</p>
+</li>
+<li><p><strong>标准答案</strong>：</p>
+<ul>
+<li><p><strong>核心优势</strong>：查找操作保证最坏 $O(1)$ 时间复杂度，查找时最多只需检查固定数量的两个槽位。</p>
+</li>
+<li><p><strong>成环与扩容解决</strong>：当发生踢人死循环（剔除链成环）时，说明当前哈希函数下发生了严重的冲突拓扑或装载因子过高。解决成环通常需要更换新的哈希函数（Rehash）并扩大容量，重新映射所有元素，才能打破冲突环。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. NVMe SSD 场景下 LSM-Tree 相比 B+ 树的写放大与顺序写优势是否还有必要？</strong></p>
+<ul>
+<li><p><strong>面试表现</strong>：候选人仅回答“顺序写依然比随机写快”，未能深入分析 SSD 内部 FTL、垃圾回收（GC）与写放大的底层机制。</p>
+</li>
+<li><p><strong>标准答案</strong>：依然非常有必要。</p>
+<ul>
+<li><p><strong>避免原地更新（In-place Update）</strong>：B+ 树的随机脏页刷盘属于原地更新，会触发频繁的闪存块擦除（P&#x2F;E cycles），导致高昂的 SSD 内部写放大（Write Amplification），缩短磁盘寿命。</p>
+</li>
+<li><p><strong>减少 FTL 垃圾回收开销</strong>：LSM-Tree 采用 Append-only（追加写）与批量 SSTable 刷盘，连续的大块写入能够显著简化 SSD 内部 Flash Translation Layer (FTL) 的垃圾回收（GC）负担，维持稳定的写入高吞吐。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. 如何设计线程安全&#x2F;并发的布谷鸟哈希？</strong></p>
+<ul>
+<li><p><strong>面试表现</strong>：候选人提出一种无锁的“连续 4 次原子读与状态校验”逻辑，但该方案无法保证线性一致性，面对并发剔除时极易产生脏读，被质疑后承认不可行。</p>
+</li>
+<li><p><strong>标准答案</strong>：由于布谷鸟哈希的插入涉及多个 Slot 的“链式踢人（Kick-out）”，难以实现纯 Lock-free。业界常见做法：</p>
+<ul>
+<li><p><strong>分段锁（Bucket-Striped Locks）</strong>：将哈希桶划分为多个 Segment，每个 Segment 独立加锁。插入与踢人时对涉及到的 Segment 加锁，保证数据迁移的原子性。</p>
+</li>
+<li><p><strong>乐观读+加锁写（Optimistic Read &#x2F; Seqlock）</strong>：查找时不加锁，仅读取版本号（Version），结束前校验版本号是否改变；若有并发踢人动作（版本号改变）则重试或降级加锁读。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="39-2-笔试题"><a href="#39-2-笔试题" class="headerlink" title="39.2 笔试题"></a>39.2 笔试题</h3><p><strong>题目</strong>：实现布谷鸟哈希（Cuckoo Hash）的数据结构，包含 <code>insert</code>（插入）、<code>remove</code>（删除）与 <code>find</code>（查找）接口。</p>
+<p><strong>核心解题思路</strong>：</p>
+<ul>
+<li><p><strong>结构设计</strong>：维护两个表&#x2F;桶数组（<code>Table 1</code> 与 <code>Table 2</code>），以及两个不同的哈希函数 $h_1(key)$ 和 $h_2(key)$。</p>
+</li>
+<li><p><strong>查找（<code>find</code>）</strong>：分别计算 $h_1(key)$ 和 $h_2(key)$，检查对应位置是否存在且 Key 匹配。查找只需检查 2 个槽，时间复杂度恒为 $O(1)$。</p>
+</li>
+<li><p><strong>删除（<code>remove</code>）</strong>：在 $h_1(key)$ 或 $h_2(key)$ 找到对应节点后，将该 Slot 标记为未占用即可。</p>
+</li>
+<li><p><strong>插入（<code>insert</code>）与踢人逻辑</strong>：</p>
+<ol>
+<li><p>依次检查 $h_1(key)$ 和 $h_2(key)$ 是否有空槽，若有则直接放入。</p>
+</li>
+<li><p>若两个位置都被占用，发起剔除：强制抢占 $h_1(key)$ 的位置，把原有元素“踢出（Kick out）”。</p>
+</li>
+<li><p>被踢出的元素尝试去它的备用桶（若原本在 Table 1 则去 Table 2 的 $h_2$ 位置，反之亦然）。</p>
+</li>
+<li><p>重复上述“踢出-重新选择”过程。</p>
+</li>
+<li><p><strong>成环检测与扩容</strong>：设置最大踢出步数（<code>Max Kicks</code>）或记录最开始被踢出的初始 Key。若踢人次数超限或检测到重新踢出了初始 Key（发生死循环），则触发 Rehash 扩容（数组容量翻倍并更新哈希函数），重新插入所有元素。</p>
+</li>
+</ol>
 </li>
 </ul>
 
