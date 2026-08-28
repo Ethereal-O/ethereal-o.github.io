@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-08-26T17:15:47.591Z">
+<meta property="article:modified_time" content="2026-08-28T10:12:23.842Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -3145,6 +3145,41 @@
 <li><p><strong>成环检测与扩容</strong>：设置最大踢出步数（<code>Max Kicks</code>）或记录最开始被踢出的初始 Key。若踢人次数超限或检测到重新踢出了初始 Key（发生死循环），则触发 Rehash 扩容（数组容量翻倍并更新哈希函数），重新插入所有元素。</p>
 </li>
 </ol>
+</li>
+</ul>
+<h2 id="40-诚奇一面"><a href="#40-诚奇一面" class="headerlink" title="40. 诚奇一面"></a>40. 诚奇一面</h2><h3 id="40-1-设计题"><a href="#40-1-设计题" class="headerlink" title="40.1 设计题"></a>40.1 设计题</h3><p><strong>1. 多账户并发下单的统筹与限流设计</strong></p>
+<ul>
+<li><p><strong>业务场景</strong>：算法交易中，多账户（如100个独立进程）根据同一信号在同一时间段对相同标的下单，若总单量超过市场流动性，会导致严重滑点或“冲爆市场”。</p>
+</li>
+<li><p><strong>你的回答</strong>：两种方案。</p>
+<ul>
+<li>第一种是全局协调器。但是问题在于单点故障和延迟过高。好处是数学上比较准确。</li>
+<li>第二种是类似Linux“彩票调度”的本地计算分配思路，各账户自行决定下单量，并在底层网关（Gateway）设置拦截器（Interceptor）。若买超，由拦截器按优先级控制总量并拒单。全局协调器定期向每个账户更新彩票的优先级。</li>
+</ul>
+</li>
+<li><p><strong>标准答案</strong>：<strong>全局中央协调器（Coordinator）与等比例分配（Prorata Allocation）</strong>。拦截器方案会导致被拒单的账户内部订单状态管理混乱，且极易引发某些账户持续被拒的“饥饿”现象。正确的做法是在订单生成前，由独立的 Coordinator 获取市场当前维度的流动性上限，根据各账户的资产规模或优先级权重进行全局数学分配（Scale down），随后向各账户下发明确的限制份额，从源头避免废单。</p>
+</li>
+</ul>
+<p><strong>2. 30秒滑动窗口的实时成交量计算</strong></p>
+<ul>
+<li><p><strong>业务场景</strong>：高频流式逐笔数据（带时间戳和成交量）不断涌入，需要实时计算并维护过去30秒内的总成交量。</p>
+</li>
+<li><p><strong>你的回答</strong>：设计了按1秒粒度切片的 Ring Buffer，Ring Buffer每个Slot是队列和MetaData，不断 Pop 过期数据。</p>
+</li>
+<li><p><strong>标准答案</strong>：<strong>双端队列（Deque）&#x2F;普通队列 + 滑动累加器</strong>。不需要按1秒切片（会强制损失毫秒&#x2F;微秒级精度）。新数据 <code>(timestamp, volume)</code> 入队尾，并执行 <code>total_volume += volume</code>；同时检查队首，若 <code>head.timestamp &lt; current_time - 30s</code> 则循环出队，并同步执行 <code>total_volume -= head.volume</code>。此方案支持任意时间精度，每次操作均摊时间复杂度为极致的 O(1)。</p>
+</li>
+</ul>
+<p><strong>3. 多账户极速精准撤单与按极值（最高&#x2F;最低价）撤单</strong></p>
+<ul>
+<li><p><strong>业务场景</strong>：系统维护大量包含账户ID，账户下有订单ID、价格等属性的订单，需要极速支持：① 根据特定账户ID和订单ID精准撤单；② 撤掉某账户在某标的下价格最高或最低的订单。③ 撤掉全局价格最高或最低的单。</p>
+</li>
+<li><p><strong>你的回答</strong>：提出“线段树（Segment Tree）+ 优先队列（Priority Queue）&#x2F; Set”的两级结构。用线段树寻找极值，账户内部用订单簿维护。</p>
+</li>
+<li><p><strong>标准答案</strong>：<strong>多重索引容器（Multi-Index Container）：哈希表 + 红黑树（或价格数组） + 双向链表</strong>。</p>
+<ul>
+<li><strong>O(1) 定点精准撤单</strong>：维护 <code>HashMap&lt;AccountID, HashMap&lt;OrderID, OrderNode*&gt;&gt;</code>。收到精准撤单指令时，通过哈希表直接拿到订单在内存中的绝对指针，从所属的双向链表中以 O(1) 时间复杂度摘除。</li>
+<li><strong>O(log P) 账户级极值撤单</strong>：相当于为每个账户挂载一个本地微型订单簿 <code>HashMap&lt;AccountID, DoublyLinkedList std::map&lt;Price,&gt;&gt;</code>。通过红黑树的 <code>.rbegin()</code> 或 <code>.begin()</code> 极速获取该账户最高&#x2F;最低价对应的订单双向链表，再以 O(1) 摘除单子。若价格 Tick 变动固定且密集，可将 <code>std::map</code> 优化为连续数组索引，将查询复杂度进一步压榨到 O(1)。</li>
+</ul>
 </li>
 </ul>
 
