@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-08-28T10:12:23.842Z">
+<meta property="article:modified_time" content="2026-09-02T13:39:40.505Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -3182,6 +3182,247 @@
 </ul>
 </li>
 </ul>
+<h2 id="41-百度笔试"><a href="#41-百度笔试" class="headerlink" title="41. 百度笔试"></a>41. 百度笔试</h2><h3 id="41-1-题目"><a href="#41-1-题目" class="headerlink" title="41.1 题目"></a>41.1 题目</h3><p>有一些银行卡，银行卡密码都是两位数字。（单个数字补0）每个密码可以任意修改一位数字，就可以映射到一个新密码。求解至少多少个密码，可以让所有银行卡都可以通过修改或者不修改变成这些密码的子集？就是给定一个数组，求解。因为可能只需要一个就行</p>
+<h3 id="41-2-答案"><a href="#41-2-答案" class="headerlink" title="41.2 答案"></a>41.2 答案</h3><p><strong>明确覆盖规则</strong></p>
+<p>分析一个目标密码 $(t_1, t_2)$ 能够覆盖输入数组中的哪些密码。由于“修改或不修改一位”意味着原密码与目标密码的第一位相同，或者第二位相同，因此在 10×10 的数字网格中，一个目标密码 $(t_1, t_2)$ 实际上能够覆盖整个第 $t_1$ 行和整个第 $t_2$ 列的所有密码。</p>
+<p><strong>转化为集合覆盖问题</strong></p>
+<p>将所有可能的 100 个两位数（00-99）都视为候选目标。每一个候选目标都能“吃掉”（覆盖）输入数组中的一部分密码。目标是挑选出最少数量的候选目标，使得它们的并集能够完全包含输入数组中的所有密码。</p>
+<p><strong>求解算法思路</strong></p>
+<ul>
+<li><p><strong>预处理计算：</strong> 遍历 00 到 99 的所有 100 个可能目标，分别计算出它们各自能覆盖输入数组中的哪些密码。</p>
+</li>
+<li><p><strong>贪心策略（快速近似解）：</strong></p>
+</li>
+</ul>
+<ol>
+<li><p>维护一个“未被覆盖的密码”集合（初始为输入的整个数组）。</p>
+</li>
+<li><p>每次在 100 个目标中挑选一个能够覆盖<strong>最多未覆盖密码</strong>的目标。</p>
+</li>
+<li><p>将该目标加入结果集，并从“未被覆盖的密码”中剔除它所能覆盖的密码。</p>
+</li>
+<li><p>重复上述步骤，直到所有输入密码都被覆盖。</p>
+</li>
+</ol>
+<ul>
+<li><strong>精确搜索（如需绝对最优解）：</strong><br>由于候选总数只有 100 个，如果贪心策略的结果不够完美，可以从小到大枚举选择的数量 $k$（$k&#x3D;1, 2, 3 \dots$），利用广度优先搜索（BFS）或回溯法检查是否存在长度为 $k$ 的组合能够完全覆盖输入数组，找到的第一个 $k$ 即为绝对最小值。</li>
+</ul>
+<h2 id="42-百度二面"><a href="#42-百度二面" class="headerlink" title="42. 百度二面"></a>42. 百度二面</h2><h3 id="42-1-答得不好的问题以及标准答案"><a href="#42-1-答得不好的问题以及标准答案" class="headerlink" title="42.1 答得不好的问题以及标准答案"></a>42.1 答得不好的问题以及标准答案</h3><ol>
+<li><strong>业务背景抽象与表达能力薄弱</strong></li>
+</ol>
+<ul>
+<li><p>候选人在介绍GDR显存搬运优化项目时，未能在第一时间说明前置业务条件，直接切入底层技术细节（如CPU开销、UVM缺陷等）。</p>
+</li>
+<li><p>导致面试官连续追问了四五次“背景是啥”、“硬件平台是什么样子”、“推什么模型”、“为什么会有CPU的数据”等基础信息，严重影响沟通效率。</p>
+</li>
+<li><p><strong>标准答案（STAR原则表述）</strong>：“在单张24G显卡部署千问7B&#x2F;14B无量化模型时，由于权重占用了约14G，留给KV Cache的显存极其有限。当并发较高时，vLLM会将部分KV Cache卸载到CPU内存（Swap out）。我们发现默认的拷贝或UVM机制会带来显著的CPU调度延时，因此引入GDR（GPU Direct RDMA）直连搬运，将带宽利用率拉升至18-19GB&#x2F;s，从而隐藏访存开销。”</p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>未清晰界定系统优化的“反面代价”</strong></li>
+</ol>
+<ul>
+<li><p>面试官提问如果不做搬运优化或不放CPU内存，系统的代价是什么，候选人未能立刻给出清晰的推理引擎侧答案，在“重算”和“TTFT（首字延迟）”的影响上表述犹豫。</p>
+</li>
+<li><p><strong>标准答案</strong>：“如果不将KV Cache卸载到内存，显存耗尽时只能强行终止当前请求或极大地限制Batch Size，导致吞吐量骤降。如果直接丢弃KV Cache而不做Swap，当被抢占的任务重新调度时，必须重新走一遍完整的Prefill（预填充）阶段进行重算，这会引发海量的矩阵乘法计算，从而极大地拖慢TTFT，严重影响用户体验。因此，高效的Swap搬运是维持高吞吐和低延迟的必须手段。”</p>
+</li>
+</ul>
+<ol start="3">
+<li><strong>对工业界算子开发（Kernel Development）的边界认知存在偏差</strong></li>
+</ol>
+<ul>
+<li><p>候选人在反问环节提出“算子如何兼顾性能与功能（如矩阵过大时算子自主控制内存换出）”，暴露出对底层算子与上层框架职责划分不清晰的问题。</p>
+</li>
+<li><p>面试官明确指出，纯算子层不负责复杂的内存换出逻辑，只需关注特定规模下的分块（Tile）与计算访存比。</p>
+</li>
+<li><p><strong>标准答案</strong>：“工业界的算子开发高度专注于特定硬件架构下的极限性能压榨，核心在于通过合理的切分策略（Tiling）、流水线排布、软流水、指令发射优化及低精度&#x2F;稀疏化适配来解决Memory Bound或Compute Bound问题。内存的Swap调度、显存池管理及大矩阵的切分下发，属于上层分布式框架或推理引擎（如vLLM调度器）的职责，算子层保持纯粹的计算语义即可。”</p>
+</li>
+</ul>
+<h2 id="43-世纪前沿一面"><a href="#43-世纪前沿一面" class="headerlink" title="43. 世纪前沿一面"></a>43. 世纪前沿一面</h2><h3 id="43-1-答得不好的问题以及标准答案"><a href="#43-1-答得不好的问题以及标准答案" class="headerlink" title="43.1 答得不好的问题以及标准答案"></a>43.1 答得不好的问题以及标准答案</h3><h4 id="1-std-atomic-在-Relaxed-内存序下的原子性认知有误"><a href="#1-std-atomic-在-Relaxed-内存序下的原子性认知有误" class="headerlink" title="1. std::atomic 在 Relaxed 内存序下的原子性认知有误"></a>1. <code>std::atomic</code> 在 Relaxed 内存序下的原子性认知有误</h4><ul>
+<li><p><strong>面试表现</strong>：面试官询问将变量改为 <code>std::atomic&lt;int&gt;</code> 并由两个线程各自进行 100 次自增时，在 <code>std::memory_order_relaxed</code> 内存序下最终结果是多少。候选人回答结果仍可能是 100 到 200 之间的随机值。</p>
+</li>
+<li><p><strong>瑕疵分析</strong>：混淆了“操作的原子性（Atomicity）”与“内存指令排序&#x2F;可见性约束（Memory Ordering）”。</p>
+</li>
+<li><p><strong>标准答案</strong>：最终结果<strong>必定是 200</strong>。<code>std::memory_order_relaxed</code> 仅放松了对其他非原子&#x2F;原子变量的指令重排与跨线程内存可见性顺序，但<strong>对该原子变量本身的读-改-写（Read-Modify-Write，如自增操作）的原子性依然严格保证</strong>。因此无论选择何种内存序，两个线程各自增 100 次的最终累加值都是 200。</p>
+</li>
+</ul>
+<h4 id="2-C-多态分类与概念归类混乱"><a href="#2-C-多态分类与概念归类混乱" class="headerlink" title="2. C++ 多态分类与概念归类混乱"></a>2. C++ 多态分类与概念归类混乱</h4><ul>
+<li><p><strong>面试表现</strong>：面试官询问 C++ 有几种多态，候选人回答“继承”和“重载”，并认为这两者均属于运行期多态，经面试官提示后才补充了“模板”。</p>
+</li>
+<li><p><strong>瑕疵分析</strong>：误将属于编译期（静态）多态的函数重载归类到了运行期多态。</p>
+</li>
+<li><p><strong>标准答案</strong>：C++ 多态分为两大类：</p>
+</li>
+<li><p><strong>静态多态（编译期多态）</strong>：在编译阶段确定具体调用的函数，主要通过函数重载（Function Overloading）<strong>和</strong>模板（Templates &#x2F; CRTP）实现，没有运行时开销。</p>
+</li>
+<li><p><strong>动态多态（运行期多态）</strong>：在运行阶段根据对象的实际类型动态绑定函数，主要通过虚函数（Virtual Functions）与继承机制实现（依托虚表 vtable 和虚指针 vptr）。</p>
+</li>
+</ul>
+<h4 id="3-无锁队列（SPSC-Ring-Buffer）Push-操作步骤顺序颠倒"><a href="#3-无锁队列（SPSC-Ring-Buffer）Push-操作步骤顺序颠倒" class="headerlink" title="3. 无锁队列（SPSC Ring Buffer）Push 操作步骤顺序颠倒"></a>3. 无锁队列（SPSC Ring Buffer）Push 操作步骤顺序颠倒</h4><ul>
+<li><p><strong>面试表现</strong>：在描述无锁队列入队逻辑时，候选人表述为“先将 tail 指针&#x2F;索引自增，再写数据”。被面试官追问“什么时候写数据”后，才意识到顺序搞反并进行纠正。</p>
+</li>
+<li><p><strong>瑕疵分析</strong>：无锁数据结构中更新尾部指针属于“对外发布通知”操作。若先更新指针再写入数据，消费者线程会立刻检测到新数据并读取未初始化的内存数据（脏数据）。</p>
+</li>
+<li><p><strong>标准答案</strong>：单生产者单消费者无锁队列的 Push 标准步骤为：</p>
+<ul>
+<li>校验队列状态（比较 tail 与 head 确认未满）。</li>
+<li><strong>先将数据写入当前 tail 对应的缓冲区节点（Slot）中</strong>。</li>
+<li><strong>最后更新 tail 索引&#x2F;指针</strong>（通常配合 <code>std::memory_order_release</code>），确保消费者在读到更新后的 tail 时，对应的数据已完整写入内存。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-结构体大小计算中混淆“位（bit）”与“字节（Byte）”"><a href="#4-结构体大小计算中混淆“位（bit）”与“字节（Byte）”" class="headerlink" title="4. 结构体大小计算中混淆“位（bit）”与“字节（Byte）”"></a>4. 结构体大小计算中混淆“位（bit）”与“字节（Byte）”</h4><ul>
+<li><p><strong>面试表现</strong>：面试官给出包含 <code>int8_t</code>、<code>int16_t</code>、<code>int32_t</code> 的结构体时，候选人第一时间将 8、16、32 直接误当作字节数相加（算成 56 字节），经提示后才更正为 1、2、4 字节。</p>
+</li>
+<li><p><strong>瑕疵分析</strong>：对 C++ 定长数据类型的单位（Bits vs Bytes）产生了瞬时反应失误。</p>
+</li>
+<li><p><strong>标准答案</strong>：</p>
+<ul>
+<li><p><code>int8_t</code> 占 1 字节，<code>int16_t</code> 占 2 字节，<code>int32_t</code> 占 4 字节。</p>
+</li>
+<li><p>按照 4 字节对齐规则，顺序为 <code>int8_t, int16_t, int32_t</code> 时：1 字节 + 1 字节（填充）+ 2 字节 + 4 字节 &#x3D; <strong>8 字节</strong>。</p>
+</li>
+<li><p>调整顺序为 <code>int32_t, int16_t, int8_t</code> 时：4 字节 + 2 字节 + 1 字节 + 1 字节（尾部填充）&#x3D; <strong>8 字节</strong>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-进程虚拟地址空间布局表述模糊"><a href="#5-进程虚拟地址空间布局表述模糊" class="headerlink" title="5. 进程虚拟地址空间布局表述模糊"></a>5. 进程虚拟地址空间布局表述模糊</h4><ul>
+<li><p><strong>面试表现</strong>：被问及进程地址空间包含哪些段落时，表述缺乏条理，提到了“全局的栈”等非标准术语，且对各段从低地址到高地址的排布顺序记忆混乱。</p>
+</li>
+<li><p><strong>瑕疵分析</strong>：对操作系统底层内存布局的记忆不够系统。</p>
+</li>
+<li><p><strong>标准答案</strong>：Linux 进程虚拟地址空间从低地址到高地址的标准布局依次为：</p>
+<ul>
+<li><p><strong>代码段（.text）</strong>：存放可执行的机器指令。</p>
+</li>
+<li><p><strong>数据段（.data）</strong>：存放已初始化的全局变量和静态变量。</p>
+</li>
+<li><p><strong>BSS 段（.bss）</strong>：存放未初始化的全局变量和静态变量（系统自动清零）。</p>
+</li>
+<li><p><strong>堆区（Heap）</strong>：向高地址增长，由 <code>malloc</code>&#x2F;<code>new</code> 动态分配。</p>
+</li>
+<li><p><strong>内存映射区（Memory Mapping Segment）</strong>：用于加载共享动态链接库、<code>mmap</code> 映射等。</p>
+</li>
+<li><p><strong>栈区（Stack）</strong>：向低地址增长，存放局部变量、函数参数与上下文（每个线程拥有独立的栈 space）。</p>
+</li>
+<li><p><strong>内核空间（Kernel Space）</strong>：位于最高的虚拟地址区域，用户态程序不可直接访问。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="44-腾讯三面"><a href="#44-腾讯三面" class="headerlink" title="44. 腾讯三面"></a>44. 腾讯三面</h2><h3 id="44-1-答得不好的问题以及标准答案"><a href="#44-1-答得不好的问题以及标准答案" class="headerlink" title="44.1 答得不好的问题以及标准答案"></a>44.1 答得不好的问题以及标准答案</h3><h4 id="44-1-1-3w个节点的单向链表，找第2w大的元素，要求空间复杂度小于10000"><a href="#44-1-1-3w个节点的单向链表，找第2w大的元素，要求空间复杂度小于10000" class="headerlink" title="44.1.1 3w个节点的单向链表，找第2w大的元素，要求空间复杂度小于10000"></a>44.1.1 3w个节点的单向链表，找第2w大的元素，要求空间复杂度小于10000</h4><p>当空间复杂度被严格限制在 10,000 以下时，意味着我们<strong>既不能把所有数据转成数组（需 30,000 空间），也不能使用之前的堆方法（即使优化后也需要 10,001 空间）</strong>。</p>
+<p>面对这种对内存极其苛刻的限制（比如在单片机、嵌入式设备或极端面试题中），我们需要转变思路，牺牲一点点时间来换取极低的空间。以下是两种完美破解此限制的算法：</p>
+<h5 id="方法一：值域二分查找（首选，空间复杂度-O-1-，不破坏链表）"><a href="#方法一：值域二分查找（首选，空间复杂度-O-1-，不破坏链表）" class="headerlink" title="方法一：值域二分查找（首选，空间复杂度 $O(1)$，不破坏链表）"></a>方法一：值域二分查找（首选，空间复杂度 $O(1)$，不破坏链表）</h5><p>如果我们知道链表中存储的是整数（比如 32 位整型），我们可以直接在<strong>数值的取值范围</strong>上进行二分查找，而不是在物理位置上查找。这种方法只需要几个常数级别的变量。</p>
+<p>算法步骤：</p>
+<ol>
+<li><p><strong>第一趟遍历</strong>：遍历整个链表，找出链表中的<strong>最大值（Max）</strong>和<strong>最小值（Min）</strong>。</p>
+</li>
+<li><p><strong>二分猜测</strong>：取中间值 <code>Mid = Min + (Max - Min) / 2</code>。</p>
+</li>
+<li><p><strong>第二趟遍历</strong>：再次遍历链表，统计<strong>大于等于 <code>Mid</code> 的元素个数（Count）</strong>。</p>
+</li>
+<li><p><strong>调整范围</strong>：</p>
+</li>
+</ol>
+<ul>
+<li><p>如果 <code>Count &gt;= 20000</code>：说明第 20,000 大的元素在 <code>[Mid, Max]</code> 区间内。更新 <code>Min = Mid</code>。</p>
+</li>
+<li><p>如果 <code>Count &lt; 20000</code>：说明第 20,000 大的元素在 <code>[Min, Mid - 1]</code> 区间内。更新 <code>Max = Mid - 1</code>。</p>
+</li>
+</ul>
+<ol start="5">
+<li>重复步骤 2-4，直到 <code>Min == Max</code>，这个值就是全链表第 20,000 大的元素！</li>
+</ol>
+<p>复杂度分析：</p>
+<ul>
+<li><p><strong>空间复杂度</strong>：$O(1)$。全程只需要记录 <code>Min</code>、<code>Max</code>、<code>Mid</code> 和 <code>Count</code> 这 4 个变量，完美符合 <code>&lt; 10000</code> 的要求。</p>
+</li>
+<li><p><strong>时间复杂度</strong>：$O(N \log W)$，$W$ 是最大值和最小值的差值。如果是 32 位整数，最多只需二分 32 次。也就是遍历链表 32 次，约 $32 \times 30000 \approx 100$ 万次操作，在现代 CPU 上耗时仅在 1 毫秒左右。</p>
+</li>
+</ul>
+<h5 id="方法二：链表原地快速选择（空间复杂度-O-log-N-，需改变链表结构）"><a href="#方法二：链表原地快速选择（空间复杂度-O-log-N-，需改变链表结构）" class="headerlink" title="方法二：链表原地快速选择（空间复杂度 $O(\log N)$，需改变链表结构）"></a>方法二：链表原地快速选择（空间复杂度 $O(\log N)$，需改变链表结构）</h5><p>如果在面试中，面试官不允许做多次遍历，且允许你<strong>修改原链表的指针</strong>，你可以直接在链表上做快速选择算法（QuickSelect）。</p>
+<p>算法步骤：</p>
+<ol>
+<li><p><strong>选基准（Pivot）</strong>：从链表头部取一个节点作为基准值。</p>
+</li>
+<li><p><strong>原地拆分</strong>：遍历剩余节点，通过修改指针，将链表拆分为三部分（3 条小链表）：</p>
+</li>
+</ol>
+<ul>
+<li><p><code>List_Large</code>：所有大于 Pivot 的节点。</p>
+</li>
+<li><p><code>List_Equal</code>：所有等于 Pivot 的节点。</p>
+</li>
+<li><p><code>List_Small</code>：所有小于 Pivot 的节点。</p>
+</li>
+</ul>
+<ol start="3">
+<li><strong>判断去向</strong>：</li>
+</ol>
+<ul>
+<li><p>假设 <code>List_Large</code> 的长度为 $L$。</p>
+</li>
+<li><p>如果 $L \ge 20000$，说明目标在 <code>List_Large</code> 中，对其递归寻找第 20,000 大。</p>
+</li>
+<li><p>如果 $L + List_Equal的长度 \ge 20000$，说明目标就是 Pivot！直接返回。</p>
+</li>
+<li><p>否则，目标在 <code>List_Small</code> 中，对其递归寻找第 $(20000 - L - List_Equal的长度)$ 大。</p>
+</li>
+</ul>
+<ol start="4">
+<li>（可选）最后将这三段链表重新拼接还原。</li>
+</ol>
+<p>复杂度分析：</p>
+<ul>
+<li><p><strong>空间复杂度</strong>：$O(\log N)$。因为是原地拆分指针，不需要额外数组，唯一的空间消耗是递归调用栈的深度。对于 3 万的数据，递归深度约为 $\log_2(30000) \approx 15$，远远小于 10,000。</p>
+</li>
+<li><p><strong>时间复杂度</strong>：平均 $O(N)$。只需遍历常数次。</p>
+</li>
+</ul>
+<h5 id="总结对比"><a href="#总结对比" class="headerlink" title="总结对比"></a>总结对比</h5><table>
+<thead>
+<tr>
+<th><strong>方法</strong></th>
+<th><strong>空间占用</strong></th>
+<th><strong>遍历次数</strong></th>
+<th><strong>是否修改原链表</strong></th>
+<th><strong>适用场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>值域二分法</strong></td>
+<td><strong>极低 ($O(1)$)</strong></td>
+<td>~32 次</td>
+<td><strong>否</strong></td>
+<td><strong>最推荐</strong>。极其稳定，不碰指针，工程上最安全，时间也完全可以接受。</td>
+</tr>
+<tr>
+<td><strong>原地快速选择</strong></td>
+<td>极低 ($O(\log N)$)</td>
+<td>~2 次平均</td>
+<td>是 (改指针)</td>
+<td>面试官死抠必须 $O(N)$ 时间复杂度，且允许破坏数据结构时使用。</td>
+</tr>
+</tbody></table>
+<h4 id="44-1-2-对磁盘上原本的1-N文件，读取他们的前32个字节，根据这个部分排序，排好序后重命名成1-N，怎么做，如何尽可能减少重命名次数"><a href="#44-1-2-对磁盘上原本的1-N文件，读取他们的前32个字节，根据这个部分排序，排好序后重命名成1-N，怎么做，如何尽可能减少重命名次数" class="headerlink" title="44.1.2 对磁盘上原本的1-N文件，读取他们的前32个字节，根据这个部分排序，排好序后重命名成1-N，怎么做，如何尽可能减少重命名次数"></a>44.1.2 对磁盘上原本的1-N文件，读取他们的前32个字节，根据这个部分排序，排好序后重命名成1-N，怎么做，如何尽可能减少重命名次数</h4><p>要<strong>尽可能减少重命名次数</strong>，这在计算机科学中是一个经典的 <strong>置换环（Permutation Cycle）</strong> 问题，其底层思想类似于<strong>圈排序（Cycle Sort）</strong>。</p>
+<p>在上一版的“两步重命名法”中，所有文件无论是否已经在正确的位置上，都会被重命名 2 次，总重命名次数为 $2N$。</p>
+<p>要达到理论上的<strong>最小重命名次数</strong>，核心思路是：</p>
+<ol>
+<li><p><strong>已经在正确位置的文件，0 次重命名</strong>。</p>
+</li>
+<li><p><strong>位置错乱的文件，按“环”来处理</strong>。例如，文件 1 应该变成 3，3 应该变成 5，5 应该变成 1（这是一个 1-&gt;3-&gt;5-&gt;1 的闭环）。我们只需要用<strong>一个</strong>临时文件名作为中转，腾出位置，把对应的文件一个个“拉”进去即可。处理一个长度为 $L$ 的环，只需要 $L + 1$ 次重命名。</p>
+</li>
+</ol>
+<p>整体重命名次数将从 $2N$ 大幅下降到接近 $N$（具体为 $N - K + C$，其中 $K$ 是已在原位的文件数，$C$ 是环的数量），<strong>I&#x2F;O 操作几乎减少了一半</strong>。</p>
+<p><strong>结果对比：</strong></p>
+<ul>
+<li><p><strong>之前的无脑两次重命名法</strong>：3 个文件需 $3 \times 2 &#x3D; 6$ 次磁盘重命名。</p>
+</li>
+<li><p><strong>置换环最优解</strong>：仅需 $3 + 1 &#x3D; 4$ 次磁盘重命名，且完美避免了冲突。在海量文件或 SSD 寿命敏感的场景下，这是一种极度优雅的做法。</p>
+</li>
+</ul>
+<h3 id="44-2-代码题"><a href="#44-2-代码题" class="headerlink" title="44.2 代码题"></a>44.2 代码题</h3><p>链表k宽度翻转，每k个形成一个chunk，以chunk粒度翻转，chunk内部顺序不变。</p>
 
             
         </div>
