@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/12/22/nfs-ganesha路径梳理/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. 结构及组成1.1 FSALFSAL（File System Abstraction Layer），文件系统抽象层，将后端存储抽象为统一的、命名空间独立的API，供应用层来调用。 命名空间是什么？内核命名空间？ FSAL provides a namespace independent API  1.2 ntirpc一个nfs ganesha的组件，与GRPC相比？ 为什么内核中喜欢使用RPC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nfs-ganesha路径梳理">
+<meta property="og:url" content="http://example.com/2024/12/22/nfs-ganesha%E8%B7%AF%E5%BE%84%E6%A2%B3%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 结构及组成1.1 FSALFSAL（File System Abstraction Layer），文件系统抽象层，将后端存储抽象为统一的、命名空间独立的API，供应用层来调用。 命名空间是什么？内核命名空间？ FSAL provides a namespace independent API  1.2 ntirpc一个nfs ganesha的组件，与GRPC相比？ 为什么内核中喜欢使用RPC">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
+<meta property="article:published_time" content="2024-12-22T12:20:26.000Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.195Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            nfs-ganesha路径梳理 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">nfs-ganesha路径梳理</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv5</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-12-22 20:20:26</span>
+        <span class="mobile">2024-12-22 20:20</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-结构及组成"><a href="#1-结构及组成" class="headerlink" title="1. 结构及组成"></a>1. 结构及组成</h2><h3 id="1-1-FSAL"><a href="#1-1-FSAL" class="headerlink" title="1.1 FSAL"></a>1.1 FSAL</h3><p>FSAL（File System Abstraction Layer），文件系统抽象层，将后端存储抽象为统一的、命名空间独立的API，供应用层来调用。</p>
+<p>命名空间是什么？内核命名空间？</p>
+<p>FSAL provides a namespace independent</p>
+<p>API</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/blog_migrate/4ab501d475f973bcb0b48f6b6465a012.png"
+                      alt="4ab501d475f973bcb0b48f6b6465a012"
+                ></p>
+<h3 id="1-2-ntirpc"><a href="#1-2-ntirpc" class="headerlink" title="1.2 ntirpc"></a>1.2 ntirpc</h3><p>一个nfs ganesha的组件，与GRPC相比？</p>
+<p>为什么内核中喜欢使用RPC？（OpenHarmony内核中使用了大量的RPC，几乎每个组件都具有client与server）<br>Ganesha 的核心模块</p>
+<h3 id="1-3-Memory-Manager"><a href="#1-3-Memory-Manager" class="headerlink" title="1.3 Memory Manager"></a>1.3 Memory Manager</h3><p>负责 Ganesha 的内存管理。</p>
+<h3 id="1-4-RPCSEC-GSS"><a href="#1-4-RPCSEC-GSS" class="headerlink" title="1.4 RPCSEC_GSS"></a>1.4 RPCSEC_GSS</h3><p>负责使用 RPCSEC_GSS 的数据传输，通常使用 krb5, SPKM3 或 LIPKEY 来管理安全。</p>
+<h3 id="1-5-NFS-协议模块"><a href="#1-5-NFS-协议模块" class="headerlink" title="1.5 NFS 协议模块"></a>1.5 NFS 协议模块</h3><p>负责 NFS 消息结构的管理Metadata（Inode）</p>
+<h3 id="1-6-Cache"><a href="#1-6-Cache" class="headerlink" title="1.6 Cache"></a>1.6 Cache</h3><p>负责元数据缓存管理</p>
+<h3 id="1-7-File-Content-Cache"><a href="#1-7-File-Content-Cache" class="headerlink" title="1.7 File Content Cache"></a>1.7 File Content Cache</h3><p>负责数据缓存管理</p>
+<h3 id="1-8-Hash-Tables"><a href="#1-8-Hash-Tables" class="headerlink" title="1.8 Hash Tables"></a>1.8 Hash Tables</h3><p>提供了基于红黑树的哈希表，这个模块在 Ganesha 里用到很多。</p>
+<h3 id="1-9-LTTNG"><a href="#1-9-LTTNG" class="headerlink" title="1.9 LTTNG"></a>1.9 LTTNG</h3><p>用于追踪应用程序路径，通过编译时-DUSE_LTTNG&#x3D;ON激活</p>
+<h2 id="2-调用链"><a href="#2-调用链" class="headerlink" title="2. 调用链"></a>2. 调用链</h2><h3 id="2-1-启动"><a href="#2-1-启动" class="headerlink" title="2.1 启动"></a>2.1 启动</h3><ol>
+<li><p>由src&#x2F;MainNFSD&#x2F;nfs_main.c或src&#x2F;MainNFSD&#x2F;nfs_lib.c中的main函数，启动后台服务进程（编译好的文件为&#x2F;usr&#x2F;bin&#x2F;ganesha.nfsd，服务文件为src&#x2F;scripts&#x2F;systemd&#x2F;nfs-ganesha.service.el7）。</p>
+</li>
+<li><p>Main函数中做参数解析操作后，转入nfs_prereq_init，初始化tirpc。</p>
+</li>
+<li><p>之后进入nfs_init_init，初始化Init的mutex和cond，之后进行初始化操作。</p>
+</li>
+<li><p>屏蔽SIGPIPE信号（由sig handler处理（sig handler里只是简单忽略并标记client已经关闭））</p>
+</li>
+<li><p>启动start_fsals，主要包括mdcache（CEPH）和pseudofs. </p>
+<ul>
+<li>start_fsals-&gt;load_config_from_parse-&gt;proc_block-&gt;do_block_init（载入FASL)</li>
+</ul>
+</li>
+<li><p>init_server_pkgs，初始化mdcache_pkginit</p>
+</li>
+<li><p>nfs_start_grace&#x2F;nfs_wait_for_grace_enforcement，恢复</p>
+</li>
+<li><p>nfs_start，正式启动</p>
+<ol>
+<li><p>nfs_Init，包括exports_pkginit，初始化clientid（通过hashtable存储）和state_id（通过hashtable存储），owner（hashtable），session_id（hash_table)以及session_pool（提前分配空间，用于memalloc时将数据存储在一起，避免碎片），dupreq2_pkginit，create_pseudofs，<strong>nfs_Init_svc</strong>，nfs_rpc_cb_pkginit</p>
+</li>
+<li><p>nfs_Start_threads，包括delayed executor（多个线程），sigmgr_thrid（信号处理），admin_thrid（主线程），reaper thread，fridgethr_init（类似idle）</p>
+</li>
+<li><p>delayed_get_work：通过avltree_container_of</p>
+</li>
+<li><p>nfs_Init_svc中创建Create_SVCXPRTs，即创建Create_udp和Create_tcp，绑定处理方式，为nfs_rpc_dispatch_udp_NFS和nfs_rpc_dispatch_tcp_NFS，其中均绑定为nfs_rpc_valid_NFS，并通过Register_program将handler注册到ntirpc中，在nfs_rpc_valid_NFS其中由nfs_rpc_process_request进行处理。其中通过svc_auth_authenticate鉴权（ntirpc中成员），最终移交给service_function，即nfs4_Compound，其中process_one_op进行处理（client发送可以发送多个请求，但是处理将一个一个处理），其中通过optabv4分发到具体操作，例如nfs4_op_access等。<strong>nfs4_op_setclientid等也是其中成员</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-2-操作"><a href="#2-2-操作" class="headerlink" title="2.2 操作"></a>2.2 操作</h3><ol>
+<li><p>按照上述，当请求到来时会分发到nfs4_op_create等操作中。</p>
+</li>
+<li><p>以nfs4_op_create为例，先进行check_quota，然后移交给fsal_create</p>
+</li>
+<li><p>统一文件处理结构如下：</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">compound_data</span> &#123;</span><br><span class="line">    nfs_fh4 currentFH;    <span class="comment">/*&lt; Current filehandle */</span></span><br><span class="line">    nfs_fh4 savedFH;    <span class="comment">/*&lt; Saved filehandle */</span></span><br><span class="line">    stateid4 current_stateid;    <span class="comment">/*&lt; Current stateid */</span></span><br><span class="line">    <span class="type">bool</span> current_stateid_valid;    <span class="comment">/*&lt; Current stateid is valid */</span></span><br><span class="line">    stateid4 saved_stateid;    <span class="comment">/*&lt; Saved stateid */</span></span><br><span class="line">    <span class="type">bool</span> saved_stateid_valid;    <span class="comment">/*&lt; Saved stateid is valid */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> minorversion;    <span class="comment">/*&lt; NFSv4 minor version */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_obj_handle</span> *current_obj;    <span class="comment">/*&lt; Current object handle */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_obj_handle</span> *saved_obj;    <span class="comment">/*&lt; saved object handle */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_ds_handle</span> *current_ds;    <span class="comment">/*&lt; current ds handle */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_ds_handle</span> *saved_ds;    <span class="comment">/*&lt; Saved DS handle */</span></span><br><span class="line">    <span class="type">object_file_type_t</span> current_filetype;    <span class="comment">/*&lt; File type of current obj */</span></span><br><span class="line">    <span class="type">object_file_type_t</span> saved_filetype;    <span class="comment">/*&lt; File type of saved entry */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">gsh_export</span> *saved_export; <span class="comment">/*&lt; Export entry related to the</span></span><br><span class="line"><span class="comment">                         savedFH */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">fsal_pnfs_ds</span> *saved_pnfs_ds; <span class="comment">/*&lt; DS related to the savedFH */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">export_perms</span> saved_export_perms; <span class="comment">/*&lt; Permissions for export for</span></span><br><span class="line"><span class="comment">                           savedFH */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">svc_req</span> *req;    <span class="comment">/*&lt; RPC Request related to the compound */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timespec</span> op_start_time;</span><br><span class="line">    nfs_argop4 *argarray;</span><br><span class="line">    <span class="type">nfs_res_t</span> *res;</span><br><span class="line">    nfs_resop4 *resarray;</span><br><span class="line">    <span class="type">uint32_t</span> argarray_len;</span><br><span class="line">    <span class="type">nfs_client_cred_t</span> credential;    <span class="comment">/*&lt; Raw RPC credentials */</span></span><br><span class="line">    <span class="type">nfs_client_id_t</span> *preserved_clientid;    <span class="comment">/*&lt; clientid that has lease</span></span><br><span class="line"><span class="comment">                           reserved, if any */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">nfs41_session_slot__</span> *slot;    <span class="comment">/*&lt; NFv41: pointer to the</span></span><br><span class="line"><span class="comment">                            session&#x27;s slot */</span></span><br><span class="line">    nfsstat4 cached_result_status; <span class="comment">/* &lt;NFv41: save the</span></span><br><span class="line"><span class="comment">        slot-&gt;cached_result-&gt;status for reply request */</span></span><br><span class="line">    <span class="type">bool</span> sa_cachethis;    <span class="comment">/*&lt; True if cachethis was specified in</span></span><br><span class="line"><span class="comment">                    SEQUENCE op. */</span></span><br><span class="line">    nfs_opnum4 opcode;    <span class="comment">/*&lt; Current NFS4 OP */</span></span><br><span class="line">    <span class="type">uint32_t</span> oppos;        <span class="comment">/*&lt; Position of the operation within the</span></span><br><span class="line"><span class="comment">                    request processed  */</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *opname;    <span class="comment">/*&lt; Name of the operation */</span></span><br><span class="line">    <span class="type">char</span> *tagname;</span><br><span class="line">    <span class="type">void</span> *op_data;        <span class="comment">/*&lt; operation specific data for resume */</span></span><br><span class="line">    <span class="type">nfs41_session_t</span> *session;    <span class="comment">/*&lt; Related session</span></span><br><span class="line"><span class="comment">                       (found by OP_SEQUENCE) */</span></span><br><span class="line">    sequenceid4 sequence;    <span class="comment">/*&lt; Sequence ID of the current compound</span></span><br><span class="line"><span class="comment">                   (if applicable) */</span></span><br><span class="line">    slotid4 slotid;        <span class="comment">/*&lt; Slot ID of the current compound</span></span><br><span class="line"><span class="comment">                   (if applicable) */</span></span><br><span class="line">    <span class="type">uint32_t</span> resp_size;    <span class="comment">/*&lt; Running total response size. */</span></span><br><span class="line">    <span class="type">uint32_t</span> op_resp_size;    <span class="comment">/*&lt; Current op&#x27;s response size. */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li><p>请求为一组有序的操作，第一个为getrootfh。getrootfh会设置全局的file handler和data中的current_obj。这些都是fsal定义的统一类型。后续操作中，会获取当前的current_obj，然后转换为自己的file handler（例如VFS使用container of和偏移量来计算得到自己的file handler），然后调用文件系统接口获得fd，进行实际操作。</p>
+</li>
+<li><p>NFS存在一系列的exports，这些exports例如文件路径&#x2F;etc&#x2F;nfs，首先通过getrootfh获得根的file handler(ganesha会使用pseudofs)来将路径映射到file handler（函数get_gsh_export_by_pseudo-&gt;_get_gsh_export_ref）通过比较每个export中记录的地址来映射到pseudofs中的路径。</p>
+</li>
+</ol>
+<h2 id="3-client提供信息"><a href="#3-client提供信息" class="headerlink" title="3. client提供信息"></a>3. client提供信息</h2><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">LogEvent</span>(COMPONENT_DISPATCH,</span><br><span class="line">             <span class="string">&quot;Request from %s for Program %&quot;</span> PRIu32</span><br><span class="line">             <span class="string">&quot;, Version %&quot;</span> PRIu32</span><br><span class="line">             <span class="string">&quot;, Function %&quot;</span> PRIu32</span><br><span class="line">             <span class="string">&quot; has xid=%&quot;</span> PRIu32,</span><br><span class="line">             client_ip,</span><br><span class="line">             reqdata-&gt;svc.rq_msg.cb_prog,</span><br><span class="line">             reqdata-&gt;svc.rq_msg.cb_vers,</span><br><span class="line">             reqdata-&gt;svc.rq_msg.cb_proc,</span><br><span class="line">             reqdata-&gt;svc.rq_msg.rm_xid);</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Dec 23 02:47:59 openeuler-vm-2203 nfs-ganesha[53234]: [svc_5] nfs_rpc_process_request :DISP :EVENT :hello= of 44 bytes and str len 0</span><br><span class="line">Dec 23 02:47:59 openeuler-vm-2203 nfs-ganesha[53234]: [svc_5] nfs_rpc_process_request :DISP :EVENT :Request from fe80::f25a:bfe1:2ad5:29a for Program 100003, Version 4, Function 1 has xid=3737409323</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><p>存在auth字段（opaque_auth已废弃，采用rq_cred_body），但是内容为空</p>
+</li>
+<li><p>rm_xid和rm_xdr：ntirpc中的标识？</p>
+</li>
+<li><p>rpcprog_t cb_prog; rpcvers_t cb_vers; rpcproc_t cb_proc; 程序，版本，函数</p>
+</li>
+<li><p>可以拿到ip</p>
+</li>
+</ul>
+<h2 id="4-并行"><a href="#4-并行" class="headerlink" title="4. 并行"></a>4. 并行</h2><p>包括三种技术</p>
+<ol>
+<li><p>pNFS（客户端首先发送请求获取数据分布信息，后直接与NFS存储节点进行交互，跳过NFS元数据节点，部分文件系统使用）</p>
+</li>
+<li><p>multipath（创建多个客户端，通过不同IP连接同一个server）</p>
+</li>
+<li><p>nconnect（创建多个客户端，连接同一个server）</p>
+</li>
+</ol>
+<h3 id="4-1-pNFS"><a href="#4-1-pNFS" class="headerlink" title="4.1 pNFS"></a>4.1 pNFS</h3><ul>
+<li><p>首先向server通过getlayout请求获取layout，服务端返回当前请求文件的对应地址的ds的id，接着客户端发送getdeviceinfo获取对应的ip，后直接与ds交流，通过is_hole来获取空地址，向空地址写入后，发送到ds，然后向服务器更新layout（layoutcommit），最后layout return（nfs-ganesha中规定必须return），当server没有人读时，尝试merge这些layout（ext4中实现或相应fsal中实现），完成COW操作。（通过bl_submit_bio和zero_user_segment初始化页）</p>
+</li>
+<li><p>lock：租期锁，超时释放，客户端重启后通过grace重新拿到同一把锁。并发写是被允许的，因为支持直接向ds通过COW写入，但是错误不会保证。</p>
+</li>
+<li><p>layoutdriver：使用set_pnfs_layoutdriver与set_layoutdriver设置驱动。加载内核模块之后，nfs简单地写入块设备即可，由块设备负责进行同步（例如使用iscsi）。当前同一filesystem的一种layouttype只支持一种driver。当bio callback需要drain时，调用do_callback_layoutrecall。如果是file，那么需要layoutcommit。</p>
+</li>
+<li><p>pNFS在Linux中支持三种方式（LAYOUT_FLEX_FILES、LAYOUT_BLOCK_VOLUME、LAYOUT_SCSI）。在nfs-ganesha中也支持。但是GPFS中只支持LAYOUT_FLEX_FILES。在linux源码仓库中，<code>linux/fs/nfsd</code>是服务端，<code>linux/fs/nfs</code>是客户端。</p>
+</li>
+<li><p>路径</p>
+<ul>
+<li><p>nfs4_get_device_info-&gt;nfs4_proc_getdeviceinfo-&gt;nfs4_call_sync-&gt;nfs4_do_call_sync  alloc_deviceid_node</p>
+</li>
+<li><p>nfs4_ff_layout_prepare_ds-&gt;nfs4_pnfs_ds_connect-&gt;_nfs4_pnfs_v4_ds_connect-&gt;nfs4_set_ds_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
+</li>
+<li><p>nfs4_do_open-&gt;&gt;&gt;bl_alloc_lseg-&gt;bl_alloc_extent-&gt;bl_find_get_deviceid-&gt;nfs4_find_get_deviceid-&gt;</p>
+</li>
+<li><p><strong>nfs_readpage</strong>-&gt;nfs_readpage_async-&gt;nfs_pageio_do_add_request-&gt;（Layoutget）（pnfs_layout_segment）pg_init-&gt;pnfs_layout_process-&gt;bl_alloc_lseg-&gt;bl_alloc_extent-&gt;bl_find_get_deviceid-&gt;nfs4_find_get_deviceid-&gt;</p>
+</li>
+<li><p><strong>nfs_readpage</strong>-&gt;(读取page，通过page_file_mapping获取到inode)&gt;pnfs_generic_pg_readpages-&gt;pnfs_do_read-&gt;pnfs_try_to_read_data-&gt;read_pagelist-&gt;bl_read_pagelist-&gt;bl_submit_bio-&gt;submit_bio</p>
+</li>
+<li><p>nfs_page_async_flush-&gt;__nfs_pageio_add_request-&gt;pnfs_generic_pg_writepages…</p>
+</li>
+<li><p>vs_proc-&gt;svc_generic_init_request-&gt;</p>
+</li>
+</ul>
+</li>
+<li><p>layoutget</p>
+<ul>
+<li><p>原数据</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">LAYOUTGET4resok</span> &#123;</span></span><br><span class="line">        <span class="type">bool</span>               logr_return_on_close;</span><br><span class="line">        stateid4           logr_stateid;</span><br><span class="line">        layout4            logr_layout&lt;&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">layout4</span> &#123;</span></span><br><span class="line">        offset4                 lo_offset;</span><br><span class="line">        length4                 lo_length;</span><br><span class="line">        layoutiomode4           lo_iomode;</span><br><span class="line">        layout_content4         lo_content;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>解析(通过nfsd4_decode_layoutget解析)</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> __be32</span><br><span class="line"><span class="title function_">nfsd4_decode_compound</span><span class="params">(<span class="keyword">struct</span> nfsd4_compoundargs *argp)</span></span><br><span class="line">&#123;</span><br><span class="line">    argp-&gt;taglen = be32_to_cpup(p++);</span><br><span class="line">    argp-&gt;minorversion = be32_to_cpup(p++);</span><br><span class="line">    argp-&gt;opcnt = be32_to_cpup(p++);</span><br><span class="line">    op-&gt;opnum = be32_to_cpup(p++);</span><br><span class="line">    op-&gt;status = nfsd4_dec_ops[op-&gt;opnum](argp, &amp;op-&gt;u);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> __be32</span><br><span class="line"><span class="title function_">nfsd4_decode_layoutget</span><span class="params">(<span class="keyword">struct</span> nfsd4_compoundargs *argp,</span></span><br><span class="line"><span class="params">        <span class="keyword">struct</span> nfsd4_layoutget *lgp)</span></span><br><span class="line">&#123;</span><br><span class="line">    DECODE_HEAD;</span><br><span class="line"></span><br><span class="line">    READ_BUF(<span class="number">36</span>);</span><br><span class="line">    lgp-&gt;lg_signal = be32_to_cpup(p++);</span><br><span class="line">    lgp-&gt;lg_layout_type = be32_to_cpup(p++);</span><br><span class="line">    lgp-&gt;lg_seg.iomode = be32_to_cpup(p++);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_seg.offset);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_seg.length);</span><br><span class="line">    p = xdr_decode_hyper(p, &amp;lgp-&gt;lg_minlength);</span><br><span class="line"></span><br><span class="line">    status = nfsd4_decode_stateid(argp, &amp;lgp-&gt;lg_sid);</span><br><span class="line">    <span class="keyword">if</span> (status)</span><br><span class="line">        <span class="keyword">return</span> status;</span><br><span class="line"></span><br><span class="line">    READ_BUF(<span class="number">4</span>);</span><br><span class="line">    lgp-&gt;lg_maxcount = be32_to_cpup(p++);</span><br><span class="line"></span><br><span class="line">    DECODE_TAIL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">listen</span>():</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_COMPOUND4res</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.COMPOUND4res()</span><br><span class="line">    data.status = self.unpack_nfsstat4()</span><br><span class="line">    data.tag = self.unpack_utf8str_cs()</span><br><span class="line">    data.resarray = self.unpack_array(self.unpack_nfs_resop4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_COMPOUND4res&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_COMPOUND4res&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_array</span>(<span class="params">self, unpack_item</span>):</span><br><span class="line">    n = self.unpack_uint()</span><br><span class="line">    <span class="keyword">return</span> self.unpack_farray(n, unpack_item)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_nfs_resop4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.nfs_resop4()</span><br><span class="line">    data.resop = self.unpack_nfs_opnum4()</span><br><span class="line">    <span class="keyword">if</span> data.resop == const.OP_ACCESS:</span><br><span class="line">        data.opaccess = self.unpack_ACCESS4res()</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_LAYOUTGET4res</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.LAYOUTGET4res()</span><br><span class="line">    data.logr_status = self.unpack_nfsstat4()</span><br><span class="line">    <span class="keyword">if</span> data.logr_status == const.NFS4_OK:</span><br><span class="line">        data.logr_resok4 = self.unpack_LAYOUTGET4resok()</span><br><span class="line">    <span class="keyword">elif</span> data.logr_status == const.NFS4ERR_LAYOUTTRYLATER:</span><br><span class="line">        data.logr_will_signal_layout_avail = self.unpack_bool()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4res&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4res&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_LAYOUTGET4resok</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.LAYOUTGET4resok()</span><br><span class="line">    data.logr_return_on_close = self.unpack_bool()</span><br><span class="line">    data.logr_stateid = self.unpack_stateid4()</span><br><span class="line">    data.logr_layout = self.unpack_array(self.unpack_layout4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4resok&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_LAYOUTGET4resok&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_layout4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.layout4()</span><br><span class="line">    data.lo_offset = self.unpack_offset4()</span><br><span class="line">    data.lo_length = self.unpack_length4()</span><br><span class="line">    data.lo_iomode = self.unpack_layoutiomode4()</span><br><span class="line">    data.lo_content = self.unpack_layout_content4()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_layout4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_layout4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_layout_content4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.layout_content4()</span><br><span class="line">    data.loc_type = self.unpack_layouttype4()</span><br><span class="line">    data.loc_body = self.unpack_opaque()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_layout_content4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_layout_content4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> layout.loc_type == LAYOUT4_NFSV4_1_FILES:</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_pnfs_block_layout4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.pnfs_block_layout4()</span><br><span class="line">    data.blo_extents = self.unpack_array(self.unpack_pnfs_block_extent4)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_pnfs_block_layout4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_pnfs_block_layout4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpack_pnfs_block_extent4</span>(<span class="params">self</span>):</span><br><span class="line">    data = types.pnfs_block_extent4()</span><br><span class="line">    data.bex_vol_id = self.unpack_deviceid4()</span><br><span class="line">    data.bex_file_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_length = self.unpack_length4()</span><br><span class="line">    data.bex_storage_offset = self.unpack_offset4()</span><br><span class="line">    data.bex_state = self.unpack_pnfs_block_extent_state4()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>):</span><br><span class="line">        data = <span class="built_in">getattr</span>(self, <span class="string">&#x27;filter_pnfs_block_extent4&#x27;</span>)(data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>返回值</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">nfs4_layoutget_res</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">nfs4_sequence_res</span> <span class="title">seq_res</span>;</span></span><br><span class="line">  <span class="type">int</span> status;</span><br><span class="line">  __u32 return_on_close;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_range</span> <span class="title">range</span>;</span></span><br><span class="line">  __u32 type;</span><br><span class="line">  nfs4_stateid stateid;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">nfs4_layoutdriver_data</span> *<span class="title">layoutp</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>转换类型</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_segment</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">pls_list</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">pls_lc_list</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">pls_commits</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_range</span> <span class="title">pls_range</span>;</span></span><br><span class="line">  <span class="type">refcount_t</span> pls_refcount;</span><br><span class="line">  u32 pls_seq;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> pls_flags;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pnfs_layout_hdr</span> *<span class="title">pls_layout</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-multipath"><a href="#4-2-multipath" class="headerlink" title="4.2 multipath"></a>4.2 multipath</h3><p>直接复用nconnect，只不过创建的server地址不同</p>
+<h3 id="4-3-nconnect"><a href="#4-3-nconnect" class="headerlink" title="4.3 nconnect"></a>4.3 nconnect</h3><ul>
+<li>路径：</li>
+</ul>
+<p>nfs4_set_client(nfs_v4)(nfs_v4_clientops)-&gt;nfs4_alloc_client-&gt;nfs_create_rpc_client-&gt;rpc_create</p>
+<ul>
+<li>是</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ol>
+<li>打印日志(src&#x2F;include&#x2F;log.h)</li>
+</ol>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">LogInfo</span>(COMPONENT_DISPATCH,</span><br><span class="line">    <span class="string">&quot;Could not authenticate request... rejecting with AUTH_STAT=%s&quot;</span>,</span><br><span class="line">    <span class="built_in">auth_stat2str</span>(auth_rc)</span><br><span class="line">);</span><br><span class="line">        <span class="built_in">LogFullDebug</span>(COMPONENT_DISPATCH,</span><br><span class="line">         <span class="string">&quot;RPCSEC_GSS no_dispatch=%d&quot;</span>, no_dispatch);</span><br><span class="line">        <span class="built_in">LogDebug</span>(COMPONENT_DISPATCH,</span><br><span class="line">     <span class="string">&quot;Cannot get client block for Program %&quot;</span> PRIu32</span><br><span class="line">     <span class="string">&quot;, Version %&quot;</span> PRIu32</span><br><span class="line">     <span class="string">&quot;, Function %&quot;</span> PRIu32,</span><br><span class="line">     reqdata-&gt;svc.rq_msg.cb_prog,</span><br><span class="line">     reqdata-&gt;svc.rq_msg.cb_vers,</span><br><span class="line">     reqdata-&gt;svc.rq_msg.cb_proc);</span><br><span class="line"></span><br><span class="line">            <span class="built_in">LogCrit</span>(COMPONENT_DISPATCH,</span><br><span class="line">        <span class="string">&quot;DUP: Unknown duplicate request cache status. This should never be reached!&quot;</span>);</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/bandaoyu/article/details/122302684" >【ceph】什么是NFS-Ganesha和fuse-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.infoq.cn/article/qKE8tJzit8EHwtDFx0Ff" >NFS-Ganesha 核心架构解读_文化 &amp; 方法_陈涛_InfoQ精选文章 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/suncoolcat/p/3366045.html" >LTTng 简介&amp;使用实战 - 新一 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="http://www.selinuxplus.com/?p=800" >RGW NFS&#x2F;ganesha 源码分析 – 下一代安全 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/0c2e07293121" >nfs-ganesha - Session - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/2c61594c922e" >nfs-ganesha - Open - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/jiang4357291/article/details/103337655" >nfs-ganesha rados_ng恢复原理分析_grace period ganesha-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/sunbines/p/17070548.html" >【nfs-ganesha】nfs4.1 rados_cluster数据恢复机制 - 苏格拉底的落泪 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/5092fe878424" >nfs-ganesha - thread model - fridgethr - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/choumin/article/details/114461137" >使用glibc xdr对结构体进行编解码_a-xdr编码-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/kuno_y/article/details/124764840" >[LTTng学习之旅]——环境搭建_编译tlg需要依赖fst的环境,请参考文档安装fts相关环境-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zangjiaoshou/article/details/80495510" >nfs-ganesha cache代码分析，转mdcache readdir_nfs-ganesha 去mdcache-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/tongh/p/13493316.html" >Kerberos认证原理及基于Kerberos认证的NFS文件共享 - 佟晖 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/RPCSEC_GSS" >RPCSEC_GSS · nfs-ganesha&#x2F;nfs-ganesha Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/issues/903" >How does nfs-ganesha handle kerberos authentication？ · Issue #903 · nfs-ganesha&#x2F;nfs-ganesha <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/Kerberos-setup-for-NFS-Ganesha-in-Ceph" >Kerberos setup for NFS Ganesha in Ceph · nfs-ganesha&#x2F;nfs-ganesha Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://wiki.linux-nfs.org/wiki/index.php/Nfsv4_configuration" >Nfsv4 configuration - Linux NFS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://bugs.archlinux.org/task/50663" >FS#50663 : [nfs-utils] rpc-gssd.service: Inconsistency detected by ld.so: dl-close.c: 811 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/564883932" >nfsv4 在内核中的相关流程 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://geekdaxue.co/read/shvinq@neyvzg/ar3uhd" >DBus - D-Bus模块-调试 - 《Linux》 - 极客文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/Fsalsupport#user-content-FSAL_MDCACHE" >Fsalsupport · nfs-ganesha&#x2F;nfs-ganesha Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/File-Systems" >File Systems · nfs-ganesha&#x2F;nfs-ganesha Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/dc62097ed95d" >NFS handle - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://nfs-ganesha.github.io/nfs-ganesha/structpseudofs.html" >nfs-ganesha: pseudofs Struct Reference <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="http://nfs-ganesha.github.io/nfs-ganesha/nfs4__pseudo_8c.html" >nfs-ganesha: nfs4_pseudo.c File Reference <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.netapp.com/zh-cn/netapp-solutions/vmware/vmware-vsphere8-nfs-nconnect.html#%E6%8A%80%E6%9C%AF%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF" >NetApp和VMware的NFS nConnect功能 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://forum.openeuler.org/t/topic/3104/6" >支持NFS Multipathing的系统版本 - Kernel - openEuler 论坛 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.flamingbytes.com/blog/using-nconnect-to-improve-nfs-performance/" >How to tune nconnect to improve NFS performance | FlamingBytes <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://medium.com/@emilypotyraj/use-nconnect-to-effortlessly-increase-nfs-performance-4ceb46c64089" >Use nconnect to effortlessly increase NFS performance | by Emily Potyraj | Medium <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.51cto.com/u_14499/10333793" >nfs存储多路径 nfs 缓存_coolfengsy的技术博客_51CTO博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.openeuler.org/zh/docs/23.03/docs/NfsMultipath/%E8%AE%A4%E8%AF%86NFS%E5%A4%9A%E8%B7%AF%E5%BE%84.html" >认识NFS多路径 | openEuler文档 | openEuler社区 | v23.03 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/courses/nfs/nfs-multipath.html" >nfs多路径 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.suse.com/support/kb/doc/?id=000019933" >NFS 挂载选项说明：nconnect&#x3D;、nosharetransport、sharetransport&#x3D; |技术支持 |SUSE <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/issues/681" >nfs-ganesha I&#x2F;O performance · Issue #681 · nfs-ganesha&#x2F;nfs-ganesha <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.webopedia.com/definitions/pnfs/" >What is pNFS? | Webopedia <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.enterprisestorageforum.com/networking/nfs-enters-a-parallel-universe/" >NFS Enters a Parallel Universe | Enterprise Storage Forum <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://vdan.cz/vmware/esxi/add-nconnect-support-to-nfs-v4-1/" >Add nConnect Support to NFS v4.1 - vDan <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://support.vastdata.com/s/article/UUID-c43bd6a6-9b4d-96ef-ade5-44ea59d2052e" >NFS Features for Enhanced Performance <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.vmware.com/docs/nfs-iscsi-multipathing-in-vsphere" >vmware.com&#x2F;docs&#x2F;nfs-iscsi-multipathing-in-vsphere <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://wiki.linux-nfs.org/wiki/index.php/PNFS_Development_Road_Map" >PNFS Development Road Map - Linux NFS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8526734" >NFS系统read调用过程（四）-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://rfc2cn.com/rfc5663.html" >RFC5663 中文翻译 中文RFC RFC文档 RFC翻译 RFC中文版 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc5663" >RFC 5663：并行 NFS （pNFS） 块&#x2F;卷布局 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://rfc2cn.com/rfc6688.html" >RFC6688 中文翻译 中文RFC RFC文档 RFC翻译 RFC中文版 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc6688" >RFC 6688: Parallel NFS (pNFS) Block Disk Protection <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/src/translations/nfs/pnfs.com.html" >pnfs.com <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/src/translations/nfs/pnfs-development.html" >linux-nfs.org PNFS Development <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/courses/nfs/pnfs.html" >Parallel NFS (pNFS) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.redhat.com/zh-cn/documentation/red_hat_enterprise_linux/7/html/storage_administration_guide/nfs-pnfs" >8.9. pNFS | Red Hat Product Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/qinlulu/p/14671475.html" >详谈：pNFS增强文件系统架构 - 开源Linux - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.redhat.com/zh-cn/documentation/red_hat_enterprise_linux/7/html/storage_administration_guide/enabling-pnfs-scsi#enabling-pnfs-scsi" >8.10. 在 NFS 中启用 pNFS SCSI 布局 | Red Hat Product Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/838f9bc02fee68185c1c6e667d6a7ab0eb5948a1/Documentation/admin-guide/nfs/pnfs-block-server.rst" >linux&#x2F;Documentation&#x2F;admin-guide&#x2F;nfs&#x2F;pnfs-block-server.rst at 838f9bc02fee68185c1c6e667d6a7ab0eb5948a1 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://wenku.csdn.net/answer/9je62en5m5#:~:text=%E5%9C%A8%20NFSv3%20%E9%A9%B1%E5%8A%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%EF%BC%8C%22xdr%22%20%E6%98%AF%20%22External%20Data%20Representation%22,%E7%9A%84%E7%BC%A9%E5%86%99%EF%BC%8C%E8%A1%A8%E7%A4%BA%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%A4%BA%E3%80%82%20%E5%AE%83%E6%98%AF%E4%B8%80%E7%A7%8D%E7%94%A8%E4%BA%8E%E5%9C%A8%E7%BD%91%E7%BB%9C%E4%B8%AD%E4%BC%A0%E8%BE%93%E6%95%B0%E6%8D%AE%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E6%A0%BC%E5%BC%8F%E3%80%82%20NFSv3%20%E5%8D%8F%E8%AE%AE%E4%BD%BF%E7%94%A8%20XDR%20%E6%9D%A5%E7%BC%96%E7%A0%81%E5%92%8C%E8%A7%A3%E7%A0%81%E6%95%B0%E6%8D%AE%EF%BC%8C%E4%BB%A5%E4%BE%BF%E5%9C%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B9%8B%E9%97%B4%E8%BF%9B%E8%A1%8C%E9%80%9A%E4%BF%A1%E3%80%82%20XDR%20%E6%98%AF%E4%B8%80%E7%A7%8D%E4%B8%8E%E6%9C%BA%E5%99%A8%E6%97%A0%E5%85%B3%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%A1%AE%E4%BF%9D%E6%95%B0%E6%8D%AE%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E7%B3%BB%E7%BB%9F%E4%B9%8B%E9%97%B4%E4%BC%A0%E8%BE%93%E6%97%B6%E8%83%BD%E5%A4%9F%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%9E%90%E3%80%82" >nfs3驱动代码中xdr什么意思 - CSDN文库 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8744847" >理解filelayout中layout创建过程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8749127" >NFSv4布局获取处理-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/category_1320297.html" >NFS文件系统_ycnian的博客-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8719051" >FILE LAYOUT_file layout(rfc5661)-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/ask/sof/111090104" >如何在NFS上使用扩展文件属性？-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8731344" >理解NFSv4.1布局类型及其在MDS中的查找过程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/zhenjing/archive/2011/07/04/filelock.html" >文件锁与NFS文件锁 - zhenjing - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ycnian/article/details/8731755" >pNFS客户端布局驱动-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zhang_shuai_2011/article/details/7386507" >从nfs_page结构看PNFS读写流程_nfs的pageio什么意思-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/ha_weii/article/details/80586753" >iSCSI 远程块存储 （共享设备）-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/filesystems/nfs/pnfs.html" >Reference counting in pnfs — The Linux Kernel documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.ibm.com/docs/en/storage-scale/4.2.2?topic=services-configuring-enabling-block-service" >Configuring and enabling the BLOCK service - IBM Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/79554619" >《性能之巅》学习笔记之内存和文件系统 其三 vm_area_struct 与 虚拟内存 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45337360/article/details/126940438" >Linux 物理内存管理涉及的三大结构体之struct page-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45030965/article/details/133879766" >Linux文件系统 struct inode 结构体解析-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/72a5a1e947c4" >Sunrpc in Linux Kernel - 简书 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/yuyin86/article/details/7994415" >SunRPC分布式系统RPC程序编写教程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.51cto.com/article/768392.html" >NFS协议端到端实例解析之写数据流程-51CTO.COM <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/search?q=repo:nfs-ganesha/nfs-ganesha%20pnfs&type=code" >Code search results <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/tree/v6.18-rc2/fs/nfsd" >linux&#x2F;fs&#x2F;nfsd at v6.18-rc2 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/v6.18-rc2/fs/nfsd/nfs4layouts.c" >linux&#x2F;fs&#x2F;nfsd&#x2F;nfs4layouts.c at v6.18-rc2 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/tree/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs" >linux&#x2F;fs&#x2F;nfs at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs/pnfs.c#L353" >linux&#x2F;fs&#x2F;nfs&#x2F;pnfs.c at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs/pnfs_nfs.c#L178" >linux&#x2F;fs&#x2F;nfs&#x2F;pnfs_nfs.c at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/6548d364a3e850326831799d7e3ea2d7bb97ba08/fs/nfs/blocklayout/blocklayout.c" >linux&#x2F;fs&#x2F;nfs&#x2F;blocklayout&#x2F;blocklayout.c at 6548d364a3e850326831799d7e3ea2d7bb97ba08 · torvalds&#x2F;linux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40477248/article/details/142854643" >nfs-ganesha对比NFS最佳实践-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> nfs-ganesha路径梳理</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2024-12-22 20:20:26</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/12/22/nfs-ganesha路径梳理/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2025/02/07/kafka-with-others/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">kafka with others</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2024/12/02/lustre%E4%B8%8Egpfs%E5%AD%A6%E4%B9%A0/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">lustre与gpfs学习</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">nfs-ganesha路径梳理</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BB%93%E6%9E%84%E5%8F%8A%E7%BB%84%E6%88%90"><span class="nav-text">1. 结构及组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-FSAL"><span class="nav-text">1.1 FSAL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-ntirpc"><span class="nav-text">1.2 ntirpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Memory-Manager"><span class="nav-text">1.3 Memory Manager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-RPCSEC-GSS"><span class="nav-text">1.4 RPCSEC_GSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-NFS-%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9D%97"><span class="nav-text">1.5 NFS 协议模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-Cache"><span class="nav-text">1.6 Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-File-Content-Cache"><span class="nav-text">1.7 File Content Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-Hash-Tables"><span class="nav-text">1.8 Hash Tables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-9-LTTNG"><span class="nav-text">1.9 LTTNG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B0%83%E7%94%A8%E9%93%BE"><span class="nav-text">2. 调用链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%90%AF%E5%8A%A8"><span class="nav-text">2.1 启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%93%8D%E4%BD%9C"><span class="nav-text">2.2 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-client%E6%8F%90%E4%BE%9B%E4%BF%A1%E6%81%AF"><span class="nav-text">3. client提供信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B9%B6%E8%A1%8C"><span class="nav-text">4. 并行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-pNFS"><span class="nav-text">4.1 pNFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-multipath"><span class="nav-text">4.2 multipath</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-nconnect"><span class="nav-text">4.3 nconnect</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

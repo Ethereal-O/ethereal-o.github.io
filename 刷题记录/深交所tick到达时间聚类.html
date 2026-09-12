@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/深交所tick到达时间聚类.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="0. 问题深交所的行情快照是 3 秒一个周期 推送的。交易所内部有多台前置机&#x2F;编码机，每台机器负责一批股票：同一台机器上的股票，快照会在同一个时间点被打包发出，在同一条链路上到达我们的网卡。于是有一个可观测的现象：  同机器的股票，tick 到达时刻非常接近，而且是「一起抖」的——机器忙一点，这一批股票全部晚到；机器闲一点，这一批全部早到。  反过来，只要能把这种「一起抖」量化出来，就能">
+<meta property="og:type" content="website">
+<meta property="og:title" content="深交所 tick 到达时间聚类：识别同一台行情机上的股票">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E6%B7%B1%E4%BA%A4%E6%89%80tick%E5%88%B0%E8%BE%BE%E6%97%B6%E9%97%B4%E8%81%9A%E7%B1%BB.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="0. 问题深交所的行情快照是 3 秒一个周期 推送的。交易所内部有多台前置机&#x2F;编码机，每台机器负责一批股票：同一台机器上的股票，快照会在同一个时间点被打包发出，在同一条链路上到达我们的网卡。于是有一个可观测的现象：  同机器的股票，tick 到达时刻非常接近，而且是「一起抖」的——机器忙一点，这一批股票全部晚到；机器闲一点，这一批全部早到。  反过来，只要能把这种「一起抖」量化出来，就能">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-12T13:30:00.000Z">
+<meta property="article:modified_time" content="2026-09-12T15:39:58.508Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            深交所 tick 到达时间聚类：识别同一台行情机上的股票 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h2 id="0-问题"><a href="#0-问题" class="headerlink" title="0. 问题"></a>0. 问题</h2><p>深交所的行情快照是 <strong>3 秒一个周期</strong> 推送的。交易所内部有多台前置机&#x2F;编码机，<br>每台机器负责一批股票：同一台机器上的股票，快照会在同一个时间点被打包发出，<br>在同一条链路上到达我们的网卡。于是有一个可观测的现象：</p>
+<blockquote>
+<p><strong>同机器的股票，tick 到达时刻非常接近，而且是「一起抖」的</strong>——<br>机器忙一点，这一批股票全部晚到；机器闲一点，这一批全部早到。</p>
+</blockquote>
+<p>反过来，只要能把这种「一起抖」量化出来，就能反推出交易所内部的机器分组。<br>这件事的实用价值在于：如果你只关心某几只票，知道它们在哪台机器上，就能知道<br>该订阅哪条组播流、该盯哪一段延迟；做行情延迟监控时也能按机器而不是按股票归因。</p>
+<p>整体做两段：</p>
+<ol>
+<li><strong>第一段</strong>：读 tick 明细 → 提取每只股票的到达时间序列 → 两两相关系数 → 存 csv + 画到达时间图；</li>
+<li><strong>第二段</strong>：读相关系数 csv → 图论（全联通子图 &#x2F; 团）聚类 → 画「3 秒折叠图」和「聚类图」。</li>
+</ol>
+<h2 id="1-关键的建模选择：不要直接相关原始时间戳"><a href="#1-关键的建模选择：不要直接相关原始时间戳" class="headerlink" title="1. 关键的建模选择：不要直接相关原始时间戳"></a>1. 关键的建模选择：不要直接相关原始时间戳</h2><p>一开始最容易想到的是「把两只股票的到达时间戳序列直接做相关」，但这没用——<br>时间戳本身单调递增，任意两只票的相关系数都会接近 1，信息全在趋势里。</p>
+<p>正确的做法是<strong>把趋势（3s 周期本身）去掉，只留相位</strong>：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">offset(s, k) = ts(s, k) mod 3s</span><br></pre></td></tr></table></figure></div>
+
+<p>即第 k 个周期里，股票 s 的快照落在周期内的第几毫秒。<br>同一台机器上的股票，<code>offset</code> 序列 &#x3D; 机器共同抖动 + 股票在机内发包顺序的固定偏移，<br>所以相关系数接近 1；不同机器之间互相独立，相关系数接近 0。</p>
+<p>一个很容易踩的坑是<strong>周期边界</strong>：如果某台机器的相位刚好落在 0 &#x2F; 3000ms 附近，<br>取模之后序列会在 2999 和 1 之间反复横跳，方差被放大到 ~1400ms，相关系数直接被打垮。<br>下面第一段脚本里的 <code>unwrap_cycle_boundary()</code> 用「圆周均值」把这种股票掰直，<br>这是实测中必须要处理的一步（后面测试数据里刚好有一台机器踩到了这个边界）。</p>
+<h2 id="2-第一段：到达时间提取-两两相关系数"><a href="#2-第一段：到达时间提取-两两相关系数" class="headerlink" title="2. 第一段：到达时间提取 + 两两相关系数"></a>2. 第一段：到达时间提取 + 两两相关系数</h2><p>真实 csv 还没落地，所以 <code>load_ticks()</code> 只保留接口：列名、时间单位、日期补齐都做成参数，<br>拿到真实数据后<strong>只需要改这一个函数</strong>，后面全部不用动。</p>
+<p>注意时间列要用 <strong>本机接收时间戳（recv_time）</strong>，不是交易所打的 <code>quote_time</code>——<br>机器分组依赖的是链路延迟，交易所自己打的时间戳已经把这部分信息抹掉了。</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">第一段：深交所 tick 到达时间提取 + 股票两两相关系数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">思路</span></span><br><span class="line"><span class="string">----</span></span><br><span class="line"><span class="string">深交所行情快照按 3 秒一个周期推送。同一台前置机（或同一条编码/发布链路）上的</span></span><br><span class="line"><span class="string">股票，其快照在每个 3s 周期内的**发布相位**（周期内偏移量）是高度一致的：</span></span><br><span class="line"><span class="string">同涨同落、同抖动。因此：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    对每只股票取「每个 3s 周期内的到达偏移量序列」，</span></span><br><span class="line"><span class="string">    再对股票两两做 Pearson 相关 —— 同机器的股票相关系数接近 1。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">对外只暴露 load_ticks() 一个数据接口，换真实 csv 时只改这里。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">&quot;Agg&quot;</span>)</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">CYCLE_NS = <span class="number">3_000_000_000</span>  <span class="comment"># 深交所快照周期 3s</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 1. 数据接口（预留：真实 csv 落地后只改这个函数）</span></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_ticks</span>(<span class="params">csv_path,</span></span><br><span class="line"><span class="params">               symbol_col=<span class="string">&quot;symbol&quot;</span>,</span></span><br><span class="line"><span class="params">               time_col=<span class="string">&quot;recv_time&quot;</span>,</span></span><br><span class="line"><span class="params">               time_unit=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">               date=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;读取深交所 tick 明细，返回标准化后的 DataFrame。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    csv_path : str      原始 tick csv 路径</span></span><br><span class="line"><span class="string">    symbol_col : str    证券代码列名</span></span><br><span class="line"><span class="string">    time_col : str      **本地接收时间戳**列名（不是交易所打的 quote_time，</span></span><br><span class="line"><span class="string">                        机器分组依赖的是落到本机网卡的时刻）</span></span><br><span class="line"><span class="string">    time_unit : str     若该列是整数时间戳，给出单位 &#x27;s&#x27;/&#x27;ms&#x27;/&#x27;us&#x27;/&#x27;ns&#x27;；</span></span><br><span class="line"><span class="string">                        为 None 时按字符串日期时间解析</span></span><br><span class="line"><span class="string">    date : str          当时间列只有当日时分秒时，用于补齐日期，如 &#x27;2025-09-24&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    DataFrame[symbol: str, ts: int64(ns since epoch)]，按 ts 升序</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    df = pd.read_csv(csv_path)</span><br><span class="line">    out = pd.DataFrame()</span><br><span class="line">    out[<span class="string">&quot;symbol&quot;</span>] = df[symbol_col].astype(<span class="built_in">str</span>).<span class="built_in">str</span>.zfill(<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">    raw = df[time_col]</span><br><span class="line">    <span class="keyword">if</span> time_unit <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        ts = pd.to_datetime(raw.astype(<span class="string">&quot;int64&quot;</span>), unit=time_unit)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        s = raw.astype(<span class="built_in">str</span>)</span><br><span class="line">        <span class="keyword">if</span> date <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            s = date + <span class="string">&quot; &quot;</span> + s</span><br><span class="line">        ts = pd.to_datetime(s)</span><br><span class="line">    out[<span class="string">&quot;ts&quot;</span>] = ts.astype(<span class="string">&quot;int64&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> out.sort_values(<span class="string">&quot;ts&quot;</span>, ignore_index=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 2. 按 3s 周期整理成 [周期 x 股票] 的到达偏移矩阵</span></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">build_offset_matrix</span>(<span class="params">ticks, cycle_ns=CYCLE_NS, origin=<span class="literal">None</span>, unwrap=<span class="literal">True</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;把 tick 流整理成 DataFrame：index=周期序号, columns=股票, value=周期内偏移(ms)。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    同一周期同一股票出现多条时取第一条（快照到达时刻）。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> origin <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        origin = <span class="built_in">int</span>(ticks[<span class="string">&quot;ts&quot;</span>].<span class="built_in">min</span>())</span><br><span class="line">    rel = ticks[<span class="string">&quot;ts&quot;</span>].to_numpy() - origin</span><br><span class="line">    cycle = rel // cycle_ns</span><br><span class="line">    offset_ms = (rel % cycle_ns) / <span class="number">1e6</span></span><br><span class="line"></span><br><span class="line">    tmp = pd.DataFrame(&#123;<span class="string">&quot;cycle&quot;</span>: cycle, <span class="string">&quot;symbol&quot;</span>: ticks[<span class="string">&quot;symbol&quot;</span>].to_numpy(),</span><br><span class="line">                        <span class="string">&quot;offset_ms&quot;</span>: offset_ms&#125;)</span><br><span class="line">    tmp = tmp.drop_duplicates([<span class="string">&quot;cycle&quot;</span>, <span class="string">&quot;symbol&quot;</span>], keep=<span class="string">&quot;first&quot;</span>)</span><br><span class="line">    mat = tmp.pivot(index=<span class="string">&quot;cycle&quot;</span>, columns=<span class="string">&quot;symbol&quot;</span>, values=<span class="string">&quot;offset_ms&quot;</span>).sort_index()</span><br><span class="line">    <span class="keyword">if</span> unwrap:</span><br><span class="line">        mat = unwrap_cycle_boundary(mat, cycle_ns / <span class="number">1e6</span>)</span><br><span class="line">    <span class="keyword">return</span> mat</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unwrap_cycle_boundary</span>(<span class="params">mat, cycle_ms</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;把骑在周期边界上的股票掰直。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    相位落在 0 / 3000ms 附近的机器，取模之后会在 2999 和 1 之间来回跳，</span></span><br><span class="line"><span class="string">    方差被放大成 ~1400ms，相关系数直接被打垮。这里按「圆周均值」把每只股票</span></span><br><span class="line"><span class="string">    的偏移重新映射到 (mu - 1.5s, mu + 1.5s]，值可能为负或超过 3000，</span></span><br><span class="line"><span class="string">    画图时再 % cycle_ms 折回来即可。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    out = mat.copy()</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> out.columns:</span><br><span class="line">        v = out[col].to_numpy(dtype=<span class="built_in">float</span>)</span><br><span class="line">        ok = np.isfinite(v)</span><br><span class="line">        <span class="keyword">if</span> ok.<span class="built_in">sum</span>() == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        ang = <span class="number">2</span> * np.pi * v[ok] / cycle_ms</span><br><span class="line">        mu = np.arctan2(np.sin(ang).mean(), np.cos(ang).mean()) * cycle_ms / (<span class="number">2</span> * np.pi)</span><br><span class="line">        v[ok] = (v[ok] - mu + cycle_ms / <span class="number">2</span>) % cycle_ms - cycle_ms / <span class="number">2</span> + mu</span><br><span class="line">        out[col] = v</span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 3. 两两相关系数</span></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pairwise_corr</span>(<span class="params">offset_mat, min_periods=<span class="number">30</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;列与列之间的 Pearson 相关系数（成对剔除缺失周期）。&quot;&quot;&quot;</span></span><br><span class="line">    corr = offset_mat.corr(method=<span class="string">&quot;pearson&quot;</span>, min_periods=min_periods)</span><br><span class="line">    <span class="keyword">return</span> corr</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">corr_to_edges</span>(<span class="params">corr, threshold=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;相关系数矩阵 -&gt; 上三角长表，便于后续图论处理。&quot;&quot;&quot;</span></span><br><span class="line">    cols = <span class="built_in">list</span>(corr.columns)</span><br><span class="line">    a, b = np.triu_indices(<span class="built_in">len</span>(cols), k=<span class="number">1</span>)</span><br><span class="line">    edges = pd.DataFrame(&#123;</span><br><span class="line">        <span class="string">&quot;symbol_a&quot;</span>: [cols[i] <span class="keyword">for</span> i <span class="keyword">in</span> a],</span><br><span class="line">        <span class="string">&quot;symbol_b&quot;</span>: [cols[j] <span class="keyword">for</span> j <span class="keyword">in</span> b],</span><br><span class="line">        <span class="string">&quot;corr&quot;</span>: corr.to_numpy()[a, b],</span><br><span class="line">    &#125;).dropna(subset=[<span class="string">&quot;corr&quot;</span>])</span><br><span class="line">    <span class="keyword">if</span> threshold <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        edges = edges[edges[<span class="string">&quot;corr&quot;</span>] &gt;= threshold]</span><br><span class="line">    <span class="keyword">return</span> edges.sort_values(<span class="string">&quot;corr&quot;</span>, ascending=<span class="literal">False</span>, ignore_index=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 4. 所有股票到达时间戳的图</span></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_arrival</span>(<span class="params">ticks, out_png, max_symbols=<span class="literal">None</span>, seconds=<span class="number">30</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;横轴=绝对时间(s)，纵轴=股票，点=一次 tick 到达。&quot;&quot;&quot;</span></span><br><span class="line">    origin = <span class="built_in">int</span>(ticks[<span class="string">&quot;ts&quot;</span>].<span class="built_in">min</span>())</span><br><span class="line">    d = ticks.copy()</span><br><span class="line">    d[<span class="string">&quot;t_s&quot;</span>] = (d[<span class="string">&quot;ts&quot;</span>] - origin) / <span class="number">1e9</span></span><br><span class="line">    d = d[d[<span class="string">&quot;t_s&quot;</span>] &lt;= seconds]</span><br><span class="line"></span><br><span class="line">    syms = <span class="built_in">sorted</span>(d[<span class="string">&quot;symbol&quot;</span>].unique())</span><br><span class="line">    <span class="keyword">if</span> max_symbols:</span><br><span class="line">        syms = syms[:max_symbols]</span><br><span class="line">        d = d[d[<span class="string">&quot;symbol&quot;</span>].isin(syms)]</span><br><span class="line">    idx = &#123;s: i <span class="keyword">for</span> i, s <span class="keyword">in</span> <span class="built_in">enumerate</span>(syms)&#125;</span><br><span class="line"></span><br><span class="line">    fig, ax = plt.subplots(figsize=(<span class="number">14</span>, <span class="built_in">max</span>(<span class="number">4</span>, <span class="built_in">len</span>(syms) * <span class="number">0.16</span>)))</span><br><span class="line">    ax.scatter(d[<span class="string">&quot;t_s&quot;</span>], d[<span class="string">&quot;symbol&quot;</span>].<span class="built_in">map</span>(idx), s=<span class="number">3</span>, marker=<span class="string">&quot;|&quot;</span>, color=<span class="string">&quot;#1f77b4&quot;</span>)</span><br><span class="line">    ax.set_yticks(<span class="built_in">range</span>(<span class="built_in">len</span>(syms)))</span><br><span class="line">    ax.set_yticklabels(syms, fontsize=<span class="number">6</span>)</span><br><span class="line">    ax.set_xlabel(<span class="string">&quot;arrival time since session start (s)&quot;</span>)</span><br><span class="line">    ax.set_title(<span class="string">&quot;SZSE tick arrival timestamps&quot;</span>)</span><br><span class="line">    ax.grid(axis=<span class="string">&quot;x&quot;</span>, alpha=<span class="number">.3</span>)</span><br><span class="line">    fig.tight_layout()</span><br><span class="line">    fig.savefig(out_png, dpi=<span class="number">140</span>)</span><br><span class="line">    plt.close(fig)</span><br><span class="line">    <span class="keyword">return</span> out_png</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    p = argparse.ArgumentParser()</span><br><span class="line">    p.add_argument(<span class="string">&quot;csv&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;原始 tick csv&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--symbol-col&quot;</span>, default=<span class="string">&quot;symbol&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--time-col&quot;</span>, default=<span class="string">&quot;recv_time&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--time-unit&quot;</span>, default=<span class="literal">None</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--date&quot;</span>, default=<span class="literal">None</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--out-corr&quot;</span>, default=<span class="string">&quot;corr_matrix.csv&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--out-offsets&quot;</span>, default=<span class="string">&quot;offset_matrix.csv&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--out-edges&quot;</span>, default=<span class="string">&quot;corr_edges.csv&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--out-png&quot;</span>, default=<span class="string">&quot;arrival.png&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--min-periods&quot;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">30</span>)</span><br><span class="line">    a = p.parse_args()</span><br><span class="line"></span><br><span class="line">    ticks = load_ticks(a.csv, a.symbol_col, a.time_col, a.time_unit, a.date)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[load] <span class="subst">&#123;<span class="built_in">len</span>(ticks)&#125;</span> ticks / <span class="subst">&#123;ticks[<span class="string">&#x27;symbol&#x27;</span>].nunique()&#125;</span> symbols&quot;</span>)</span><br><span class="line"></span><br><span class="line">    mat = build_offset_matrix(ticks)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[matrix] cycles=<span class="subst">&#123;mat.shape[<span class="number">0</span>]&#125;</span> symbols=<span class="subst">&#123;mat.shape[<span class="number">1</span>]&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    mat.to_csv(a.out_offsets)</span><br><span class="line"></span><br><span class="line">    corr = pairwise_corr(mat, a.min_periods)</span><br><span class="line">    corr.to_csv(a.out_corr)</span><br><span class="line">    corr_to_edges(corr).to_csv(a.out_edges, index=<span class="literal">False</span>)</span><br><span class="line">    plot_arrival(ticks, a.out_png)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[done] <span class="subst">&#123;a.out_corr&#125;</span> / <span class="subst">&#123;a.out_offsets&#125;</span> / <span class="subst">&#123;a.out_edges&#125;</span> / <span class="subst">&#123;a.out_png&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<p>跑法：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python3 tick_corr.py szse_ticks.csv \</span><br><span class="line">    --symbol-col symbol --time-col recv_time --time-unit ns \</span><br><span class="line">    --out-corr corr_matrix.csv --out-offsets offset_matrix.csv \</span><br><span class="line">    --out-edges corr_edges.csv --out-png arrival.png</span><br></pre></td></tr></table></figure></div>
+
+<p>产出四个文件：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>corr_matrix.csv</code></td>
+<td>股票 × 股票 的相关系数方阵，第二段的输入</td>
+</tr>
+<tr>
+<td><code>offset_matrix.csv</code></td>
+<td>周期 × 股票 的周期内偏移(ms)，第二段画 3s 折叠图要用</td>
+</tr>
+<tr>
+<td><code>corr_edges.csv</code></td>
+<td>上三角长表（symbol_a, symbol_b, corr），按相关系数降序，人肉看最方便</td>
+</tr>
+<tr>
+<td><code>arrival.png</code></td>
+<td>所有股票到达时间戳的散点图（横轴绝对时间）</td>
+</tr>
+</tbody></table>
+<h2 id="3-第二段：图论聚类（全联通子图）"><a href="#3-第二段：图论聚类（全联通子图）" class="headerlink" title="3. 第二段：图论聚类（全联通子图）"></a>3. 第二段：图论聚类（全联通子图）</h2><p>把「相关系数 ≥ threshold」当作一条边建图之后，<strong>不能直接取连通分量</strong>：<br>连通分量对噪声毫无抵抗力，只要有一条虚假的强相关边，两台机器就会被粘成一个。</p>
+<p>正确的口径是<strong>团（clique，全联通子图）</strong>：同一台机器上的股票，两两之间都必须强相关，<br>所以一台机器在图里对应一个团。实现上枚举所有极大团（<code>nx.find_cliques</code>），<br>按规模从大到小贪心占坑，剩下的孤立点标 <code>-1</code>。</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">第二段：读相关系数 csv -&gt; 图论（全联通子图/团）聚类 -&gt; 两张图</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">聚类口径</span></span><br><span class="line"><span class="string">--------</span></span><br><span class="line"><span class="string">把「相关系数 &gt;= threshold」看作一条边。同一台机器上的股票两两之间都应该强相关，</span></span><br><span class="line"><span class="string">所以一台机器对应图里的一个**团（clique，全联通子图）**，而不是普通连通分量——</span></span><br><span class="line"><span class="string">连通分量会因为一条噪声边把两台机器粘在一起，团不会。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">做法：枚举所有极大团，按规模从大到小贪心占坑，剩下的孤立点各自成组。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">matplotlib.use(<span class="string">&quot;Agg&quot;</span>)</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">CYCLE_MS = <span class="number">3000.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_corr</span>(<span class="params">path</span>):</span><br><span class="line">    <span class="keyword">return</span> pd.read_csv(path, index_col=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">build_graph</span>(<span class="params">corr, threshold=<span class="number">0.9</span></span>):</span><br><span class="line">    g = nx.Graph()</span><br><span class="line">    g.add_nodes_from(corr.columns.astype(<span class="built_in">str</span>))</span><br><span class="line">    cols = <span class="built_in">list</span>(corr.columns.astype(<span class="built_in">str</span>))</span><br><span class="line">    v = corr.to_numpy()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(cols)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>, <span class="built_in">len</span>(cols)):</span><br><span class="line">            c = v[i, j]</span><br><span class="line">            <span class="keyword">if</span> np.isfinite(c) <span class="keyword">and</span> c &gt;= threshold:</span><br><span class="line">                g.add_edge(cols[i], cols[j], weight=<span class="built_in">float</span>(c))</span><br><span class="line">    <span class="keyword">return</span> g</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clique_clustering</span>(<span class="params">g, min_size=<span class="number">2</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;极大团贪心划分：返回 &#123;symbol: cluster_id&#125;，噪声点 cluster_id = -1。&quot;&quot;&quot;</span></span><br><span class="line">    cliques = <span class="built_in">sorted</span>((<span class="built_in">sorted</span>(c) <span class="keyword">for</span> c <span class="keyword">in</span> nx.find_cliques(g)),</span><br><span class="line">                     key=<span class="keyword">lambda</span> c: (-<span class="built_in">len</span>(c), c))</span><br><span class="line">    label, cid = &#123;&#125;, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> cl <span class="keyword">in</span> cliques:</span><br><span class="line">        free = [n <span class="keyword">for</span> n <span class="keyword">in</span> cl <span class="keyword">if</span> n <span class="keyword">not</span> <span class="keyword">in</span> label]</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(free) &lt; min_size:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># 只有当剩余节点之间仍然两两相连（本来就是团的子集，必然成立）才建组</span></span><br><span class="line">        <span class="keyword">for</span> n <span class="keyword">in</span> free:</span><br><span class="line">            label[n] = cid</span><br><span class="line">        cid += <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> g.nodes:</span><br><span class="line">        label.setdefault(n, -<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> label</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">labels_to_frame</span>(<span class="params">label</span>):</span><br><span class="line">    <span class="keyword">return</span> (pd.DataFrame(&#123;<span class="string">&quot;symbol&quot;</span>: <span class="built_in">list</span>(label), <span class="string">&quot;cluster&quot;</span>: <span class="built_in">list</span>(label.values())&#125;)</span><br><span class="line">            .sort_values([<span class="string">&quot;cluster&quot;</span>, <span class="string">&quot;symbol&quot;</span>], ignore_index=<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 图 1：横轴只有 3s —— 所有股票到达时间规约到一个周期内</span></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_folded_3s</span>(<span class="params">offset_mat, label, out_png</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;offset_mat: [周期 x 股票] 的周期内偏移(ms)，由第一段脚本导出。&quot;&quot;&quot;</span></span><br><span class="line">    syms = [s <span class="keyword">for</span> s <span class="keyword">in</span> offset_mat.columns.astype(<span class="built_in">str</span>)]</span><br><span class="line">    order = <span class="built_in">sorted</span>(syms, key=<span class="keyword">lambda</span> s: (label.get(s, -<span class="number">1</span>),</span><br><span class="line">                                        np.nanmedian(offset_mat[s].to_numpy() % CYCLE_MS)))</span><br><span class="line">    pos = &#123;s: i <span class="keyword">for</span> i, s <span class="keyword">in</span> <span class="built_in">enumerate</span>(order)&#125;</span><br><span class="line">    clusters = <span class="built_in">sorted</span>(<span class="built_in">set</span>(label.values()))</span><br><span class="line">    cmap = plt.get_cmap(<span class="string">&quot;tab20&quot;</span>)</span><br><span class="line">    color = &#123;c: (<span class="string">&quot;#bbbbbb&quot;</span> <span class="keyword">if</span> c == -<span class="number">1</span> <span class="keyword">else</span> cmap(c % <span class="number">20</span>)) <span class="keyword">for</span> c <span class="keyword">in</span> clusters&#125;</span><br><span class="line"></span><br><span class="line">    fig, ax = plt.subplots(figsize=(<span class="number">12</span>, <span class="built_in">max</span>(<span class="number">4</span>, <span class="built_in">len</span>(order) * <span class="number">0.16</span>)))</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> order:</span><br><span class="line">        y = offset_mat[s].to_numpy(dtype=<span class="built_in">float</span>) % CYCLE_MS / <span class="number">1000.0</span>  <span class="comment"># 折回 [0,3)s</span></span><br><span class="line">        y = y[np.isfinite(y)]</span><br><span class="line">        ax.scatter(y, np.full(y.shape, pos[s]), s=<span class="number">4</span>, marker=<span class="string">&quot;|&quot;</span>,</span><br><span class="line">                   color=color[label.get(s, -<span class="number">1</span>)])</span><br><span class="line">    ax.set_xlim(<span class="number">0</span>, CYCLE_MS / <span class="number">1000.0</span>)</span><br><span class="line">    ax.set_yticks(<span class="built_in">range</span>(<span class="built_in">len</span>(order)))</span><br><span class="line">    ax.set_yticklabels(order, fontsize=<span class="number">6</span>)</span><br><span class="line">    ax.set_xlabel(<span class="string">&quot;offset inside the 3s snapshot cycle (s)&quot;</span>)</span><br><span class="line">    ax.set_title(<span class="string">&quot;Arrival time folded into one 3s cycle (color = machine group)&quot;</span>)</span><br><span class="line">    ax.grid(axis=<span class="string">&quot;x&quot;</span>, alpha=<span class="number">.3</span>)</span><br><span class="line">    fig.tight_layout()</span><br><span class="line">    fig.savefig(out_png, dpi=<span class="number">140</span>)</span><br><span class="line">    plt.close(fig)</span><br><span class="line">    <span class="keyword">return</span> out_png</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 图 2：直观展示聚类（左：按簇重排的相关系数热力图；右：图布局）</span></span><br><span class="line"><span class="comment"># --------------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_clusters</span>(<span class="params">corr, g, label, out_png</span>):</span><br><span class="line">    order = <span class="built_in">sorted</span>(corr.columns.astype(<span class="built_in">str</span>),</span><br><span class="line">                   key=<span class="keyword">lambda</span> s: (label.get(s, -<span class="number">1</span>), s))</span><br><span class="line">    m = corr.loc[order, order].to_numpy(dtype=<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">    fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">16</span>, <span class="number">7.5</span>))</span><br><span class="line">    ax = axes[<span class="number">0</span>]</span><br><span class="line">    im = ax.imshow(np.nan_to_num(m), vmin=-<span class="number">1</span>, vmax=<span class="number">1</span>, cmap=<span class="string">&quot;RdBu_r&quot;</span>)</span><br><span class="line">    ax.set_title(<span class="string">&quot;correlation matrix reordered by cluster&quot;</span>)</span><br><span class="line">    ax.set_xticks([]); ax.set_yticks([])</span><br><span class="line">    <span class="comment"># 画簇边界</span></span><br><span class="line">    b, prev = <span class="number">0</span>, label.get(order[<span class="number">0</span>], -<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">for</span> i, s <span class="keyword">in</span> <span class="built_in">enumerate</span>(order):</span><br><span class="line">        <span class="keyword">if</span> label.get(s, -<span class="number">1</span>) != prev:</span><br><span class="line">            ax.axhline(i - <span class="number">.5</span>, color=<span class="string">&quot;k&quot;</span>, lw=<span class="number">.8</span>)</span><br><span class="line">            ax.axvline(i - <span class="number">.5</span>, color=<span class="string">&quot;k&quot;</span>, lw=<span class="number">.8</span>)</span><br><span class="line">            prev = label.get(s, -<span class="number">1</span>)</span><br><span class="line">    fig.colorbar(im, ax=ax, fraction=<span class="number">.046</span>)</span><br><span class="line"></span><br><span class="line">    ax = axes[<span class="number">1</span>]</span><br><span class="line">    cmap = plt.get_cmap(<span class="string">&quot;tab20&quot;</span>)</span><br><span class="line">    pos = nx.spring_layout(g, seed=<span class="number">7</span>, weight=<span class="string">&quot;weight&quot;</span>)</span><br><span class="line">    cols = [(<span class="string">&quot;#bbbbbb&quot;</span> <span class="keyword">if</span> label.get(n, -<span class="number">1</span>) == -<span class="number">1</span> <span class="keyword">else</span> cmap(label[n] % <span class="number">20</span>))</span><br><span class="line">            <span class="keyword">for</span> n <span class="keyword">in</span> g.nodes]</span><br><span class="line">    nx.draw_networkx_edges(g, pos, ax=ax, alpha=<span class="number">.25</span>, width=<span class="number">.6</span>)</span><br><span class="line">    nx.draw_networkx_nodes(g, pos, ax=ax, node_color=cols, node_size=<span class="number">90</span>,</span><br><span class="line">                           linewidths=<span class="number">.4</span>, edgecolors=<span class="string">&quot;k&quot;</span>)</span><br><span class="line">    nx.draw_networkx_labels(g, pos, ax=ax, font_size=<span class="number">5</span>)</span><br><span class="line">    ax.set_title(<span class="string">&quot;clique clustering (one clique = one machine)&quot;</span>)</span><br><span class="line">    ax.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    fig.tight_layout()</span><br><span class="line">    fig.savefig(out_png, dpi=<span class="number">140</span>)</span><br><span class="line">    plt.close(fig)</span><br><span class="line">    <span class="keyword">return</span> out_png</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    p = argparse.ArgumentParser()</span><br><span class="line">    p.add_argument(<span class="string">&quot;corr_csv&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;offset_csv&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;第一段导出的 offset_matrix.csv&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--threshold&quot;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.9</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--out-labels&quot;</span>, default=<span class="string">&quot;clusters.csv&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--out-fold&quot;</span>, default=<span class="string">&quot;folded_3s.png&quot;</span>)</span><br><span class="line">    p.add_argument(<span class="string">&quot;--out-cluster&quot;</span>, default=<span class="string">&quot;clusters.png&quot;</span>)</span><br><span class="line">    a = p.parse_args()</span><br><span class="line"></span><br><span class="line">    corr = load_corr(a.corr_csv)</span><br><span class="line">    corr.columns = corr.columns.astype(<span class="built_in">str</span>)</span><br><span class="line">    corr.index = corr.index.astype(<span class="built_in">str</span>)</span><br><span class="line">    offsets = pd.read_csv(a.offset_csv, index_col=<span class="number">0</span>)</span><br><span class="line">    offsets.columns = offsets.columns.astype(<span class="built_in">str</span>)</span><br><span class="line"></span><br><span class="line">    g = build_graph(corr, a.threshold)</span><br><span class="line">    label = clique_clustering(g)</span><br><span class="line">    labels_to_frame(label).to_csv(a.out_labels, index=<span class="literal">False</span>)</span><br><span class="line">    n = <span class="built_in">len</span>(&#123;c <span class="keyword">for</span> c <span class="keyword">in</span> label.values() <span class="keyword">if</span> c &gt;= <span class="number">0</span>&#125;)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[cluster] <span class="subst">&#123;n&#125;</span> groups, <span class="subst">&#123;<span class="built_in">sum</span>(v == -<span class="number">1</span> <span class="keyword">for</span> v <span class="keyword">in</span> label.values())&#125;</span> singletons&quot;</span>)</span><br><span class="line"></span><br><span class="line">    plot_folded_3s(offsets, label, a.out_fold)</span><br><span class="line">    plot_clusters(corr, g, label, a.out_cluster)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[done] <span class="subst">&#123;a.out_labels&#125;</span> / <span class="subst">&#123;a.out_fold&#125;</span> / <span class="subst">&#123;a.out_cluster&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<p>跑法：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 tick_cluster.py corr_matrix.csv offset_matrix.csv --threshold 0.9</span><br></pre></td></tr></table></figure></div>
+
+<p>两张图分别是：</p>
+<ul>
+<li>**<code>folded_3s.png</code>**：横轴只有 3 秒，所有股票的到达时刻按 3s 周期折叠到一个周期内，<br>颜色 &#x3D; 机器分组。同一台机器的股票在图上是一条整齐的横向色带，肉眼就能数出有几台机器；</li>
+<li>**<code>clusters.png</code>**：左边是按簇重排后的相关系数热力图（对角线上一个个红色方块 &#x3D; 一个机器组），<br>右边是 spring layout 的图布局，同一个团聚成一坨。</li>
+</ul>
+<h2 id="4-怎么证明它是对的：合成数据-端到端测试"><a href="#4-怎么证明它是对的：合成数据-端到端测试" class="headerlink" title="4. 怎么证明它是对的：合成数据 + 端到端测试"></a>4. 怎么证明它是对的：合成数据 + 端到端测试</h2><p>没有真实 csv 的时候，最稳妥的办法是造一份<strong>带 ground truth 的假数据</strong>，<br>按上面的物理模型正向生成，再看脚本能不能反解出来。</p>
+<p>生成器里刻意放了四个真实世界的特征：机器级 AR(1) 共同抖动、机内串行发包的固定间隔、<br>股票自身的小噪声、2% 的随机丢包。</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;造一份带 ground truth 的假 tick csv，用来验证两段脚本。&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np, pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">make</span>(<span class="params">n_machines=<span class="number">6</span>, per_machine=<span class="number">8</span>, n_cycles=<span class="number">1200</span>, seed=<span class="number">0</span>,</span></span><br><span class="line"><span class="params">         csv_path=<span class="string">&quot;fake_ticks.csv&quot;</span>, truth_path=<span class="string">&quot;fake_truth.csv&quot;</span></span>):</span><br><span class="line">    rng = np.random.default_rng(seed)</span><br><span class="line">    base_t0 = pd.Timestamp(<span class="string">&quot;2025-09-24 09:30:00&quot;</span>).value  <span class="comment"># ns</span></span><br><span class="line"></span><br><span class="line">    rows, truth = [], []</span><br><span class="line">    <span class="keyword">for</span> m <span class="keyword">in</span> <span class="built_in">range</span>(n_machines):</span><br><span class="line">        <span class="comment"># 每台机器在 3s 周期内的起始相位 + 逐周期共同抖动（这是可识别的信号）</span></span><br><span class="line">        phase0 = rng.uniform(<span class="number">100</span>, <span class="number">2500</span>)                      <span class="comment"># ms</span></span><br><span class="line">        jitter = np.zeros(n_cycles)                          <span class="comment"># ms, 机器级共同抖动</span></span><br><span class="line">        eps = rng.normal(<span class="number">0</span>, <span class="number">10</span>, n_cycles)                     <span class="comment"># AR(1)，平稳不漂移</span></span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n_cycles):</span><br><span class="line">            jitter[k] = <span class="number">0.9</span> * jitter[k - <span class="number">1</span>] + eps[k]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(per_machine):</span><br><span class="line">            sym = <span class="string">f&quot;<span class="subst">&#123;<span class="number">300000</span> + m * <span class="number">100</span> + i:06d&#125;</span>&quot;</span></span><br><span class="line">            truth.append((sym, m))</span><br><span class="line">            slot = i * <span class="number">1.5</span>                                   <span class="comment"># 机内串行发包的固定间隔</span></span><br><span class="line">            noise = rng.normal(<span class="number">0</span>, <span class="number">0.8</span>, n_cycles)             <span class="comment"># 股票自身噪声（小）</span></span><br><span class="line">            off = phase0 + slot + jitter + noise</span><br><span class="line">            miss = rng.random(n_cycles) &lt; <span class="number">0.02</span>                <span class="comment"># 2% 丢包</span></span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(n_cycles):</span><br><span class="line">                <span class="keyword">if</span> miss[k]:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                rows.append((sym, base_t0 + k * <span class="number">3_000_000_000</span> + <span class="built_in">int</span>(off[k] * <span class="number">1e6</span>)))</span><br><span class="line"></span><br><span class="line">    df = pd.DataFrame(rows, columns=[<span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;recv_time&quot;</span>]).sort_values(<span class="string">&quot;recv_time&quot;</span>)</span><br><span class="line">    df.to_csv(csv_path, index=<span class="literal">False</span>)</span><br><span class="line">    pd.DataFrame(truth, columns=[<span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;machine&quot;</span>]).to_csv(truth_path, index=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">return</span> csv_path, truth_path</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(make())</span><br></pre></td></tr></table></figure></div>
+
+<p>测试脚本走完整条链路，并且对每个环节都下断言：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;端到端验证：假数据 -&gt; 相关系数 -&gt; 团聚类 -&gt; 与 ground truth 比对。&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> os, numpy <span class="keyword">as</span> np, pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn_free_ari <span class="keyword">import</span> adjusted_rand</span><br><span class="line"><span class="keyword">import</span> make_fake_ticks, tick_corr, tick_cluster</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    csv, truth_csv = make_fake_ticks.make()</span><br><span class="line">    ticks = tick_corr.load_ticks(csv, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;recv_time&quot;</span>, time_unit=<span class="string">&quot;ns&quot;</span>)</span><br><span class="line">    <span class="keyword">assert</span> ticks[<span class="string">&quot;symbol&quot;</span>].nunique() == <span class="number">48</span>, ticks[<span class="string">&quot;symbol&quot;</span>].nunique()</span><br><span class="line"></span><br><span class="line">    mat = tick_corr.build_offset_matrix(ticks)</span><br><span class="line">    <span class="keyword">assert</span> mat.shape[<span class="number">1</span>] == <span class="number">48</span> <span class="keyword">and</span> mat.shape[<span class="number">0</span>] &gt;= <span class="number">1199</span></span><br><span class="line">    folded = mat.to_numpy() % <span class="number">3000.0</span></span><br><span class="line">    <span class="keyword">assert</span> np.nanmin(folded) &gt;= <span class="number">0</span> <span class="keyword">and</span> np.nanmax(folded) &lt;= <span class="number">3000.0</span>  <span class="comment"># 折回后落在 3s 内</span></span><br><span class="line"></span><br><span class="line">    corr = tick_corr.pairwise_corr(mat)</span><br><span class="line">    corr.to_csv(<span class="string">&quot;corr_matrix.csv&quot;</span>); mat.to_csv(<span class="string">&quot;offset_matrix.csv&quot;</span>)</span><br><span class="line">    edges = tick_corr.corr_to_edges(corr)</span><br><span class="line">    edges.to_csv(<span class="string">&quot;corr_edges.csv&quot;</span>, index=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    truth = pd.read_csv(truth_csv, dtype=&#123;<span class="string">&quot;symbol&quot;</span>: <span class="built_in">str</span>&#125;).set_index(<span class="string">&quot;symbol&quot;</span>)[<span class="string">&quot;machine&quot;</span>]</span><br><span class="line">    same = truth.loc[edges[<span class="string">&quot;symbol_a&quot;</span>]].to_numpy() == truth.loc[edges[<span class="string">&quot;symbol_b&quot;</span>]].to_numpy()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;  同机器对 corr 中位数 = <span class="subst">&#123;edges[<span class="string">&#x27;corr&#x27;</span>][same].median():<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;  跨机器对 corr 中位数 = <span class="subst">&#123;edges[<span class="string">&#x27;corr&#x27;</span>][~same].median():<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">assert</span> edges[<span class="string">&quot;corr&quot;</span>][same].<span class="built_in">min</span>() &gt; <span class="number">0.9</span></span><br><span class="line">    <span class="keyword">assert</span> edges[<span class="string">&quot;corr&quot;</span>][~same].<span class="built_in">max</span>() &lt; <span class="number">0.5</span></span><br><span class="line"></span><br><span class="line">    g = tick_cluster.build_graph(corr, threshold=<span class="number">0.9</span>)</span><br><span class="line">    label = tick_cluster.clique_clustering(g)</span><br><span class="line">    pred = pd.Series(label)</span><br><span class="line">    ari = adjusted_rand(truth.loc[pred.index].to_numpy(), pred.to_numpy())</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;  ARI = <span class="subst">&#123;ari:<span class="number">.4</span>f&#125;</span>, 组数 = <span class="subst">&#123;<span class="built_in">len</span>(<span class="built_in">set</span>(pred)) &#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">assert</span> ari == <span class="number">1.0</span>, ari</span><br><span class="line"></span><br><span class="line">    tick_corr.plot_arrival(ticks, <span class="string">&quot;arrival.png&quot;</span>)</span><br><span class="line">    tick_cluster.plot_folded_3s(mat, label, <span class="string">&quot;folded_3s.png&quot;</span>)</span><br><span class="line">    tick_cluster.plot_clusters(corr, g, label, <span class="string">&quot;clusters.png&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> [<span class="string">&quot;arrival.png&quot;</span>, <span class="string">&quot;folded_3s.png&quot;</span>, <span class="string">&quot;clusters.png&quot;</span>]:</span><br><span class="line">        <span class="keyword">assert</span> os.path.getsize(f) &gt; <span class="number">10000</span>, f</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;ALL TESTS PASSED&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<p>（<code>adjusted_rand</code> 是为了不引 sklearn 手写的调整兰德指数，<code>scipy.special.comb</code> 就够用：）</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy.special <span class="keyword">import</span> comb</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">adjusted_rand</span>(<span class="params">a, b</span>):</span><br><span class="line">    a = np.asarray(a); b = np.asarray(b)</span><br><span class="line">    ua, ub = np.unique(a), np.unique(b)</span><br><span class="line">    c = np.array([[np.<span class="built_in">sum</span>((a == x) &amp; (b == y)) <span class="keyword">for</span> y <span class="keyword">in</span> ub] <span class="keyword">for</span> x <span class="keyword">in</span> ua])</span><br><span class="line">    sij = comb(c, <span class="number">2</span>).<span class="built_in">sum</span>(); si = comb(c.<span class="built_in">sum</span>(<span class="number">1</span>), <span class="number">2</span>).<span class="built_in">sum</span>(); sj = comb(c.<span class="built_in">sum</span>(<span class="number">0</span>), <span class="number">2</span>).<span class="built_in">sum</span>()</span><br><span class="line">    n = comb(<span class="built_in">len</span>(a), <span class="number">2</span>); exp = si * sj / n</span><br><span class="line">    <span class="keyword">return</span> (sij - exp) / ((si + sj) / <span class="number">2</span> - exp)</span><br></pre></td></tr></table></figure></div>
+
+<p>输出：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  同机器对 corr 中位数 = 0.9987</span><br><span class="line">  跨机器对 corr 中位数 = 0.0138</span><br><span class="line">  ARI = 1.0000, 组数 = 6</span><br><span class="line">ALL TESTS PASSED</span><br></pre></td></tr></table></figure></div>
+
+<p>同机器 0.9987、跨机器 0.0138，两个分布之间的间隔极大，<code>threshold=0.9</code> 怎么选都不敏感；<br>ARI &#x3D; 1.0 说明 6 台机器 × 8 只股票被<strong>完全正确</strong>地还原出来了。</p>
+<h2 id="5-调试过程中踩到的三个坑"><a href="#5-调试过程中踩到的三个坑" class="headerlink" title="5. 调试过程中踩到的三个坑"></a>5. 调试过程中踩到的三个坑</h2><p>这三个都是跑测试时真实撞上的，直接决定了脚本里几处看起来”多余”的代码：</p>
+<ol>
+<li><strong>周期边界折返</strong>。第一版测试里有一台机器怎么都聚不进去，查下来它的 <code>offset</code> 标准差<br>是 1429ms（其他机器都是 ~20ms）——相位落在 0ms 附近，抖动一跨越边界就被取模翻到 2900+。<br>加上 <code>unwrap_cycle_boundary()</code> 之后同机器相关系数从 0.79 回到 0.999。<br>在折叠图里还能直接看到这台机器：它的色带同时出现在横轴的 0.0 和 3.0 两端。</li>
+<li><strong>样本量不够会产生虚假相关</strong>。机器抖动是自相关的 AR(1) 序列，两条独立的 AR(1)<br>在只有 300 个周期时，虚假相关系数能冲到 0.5 以上。把周期数提到 1200（真实一天大约 4800 个周期）<br>之后，跨机器相关系数的中位数掉到 0.014。<strong>结论：至少拿一小时的数据来跑，别拿几分钟的。</strong></li>
+<li><strong>丢包必须成对剔除</strong>。用 <code>DataFrame.corr(min_periods=...)</code> 做成对剔除，<br>而不是先 <code>dropna()</code> 再整体算——后者在几十只股票、各自随机丢包的情况下，<br>会把大部分周期都丢光。</li>
+</ol>
+<h2 id="6-拿到真实数据之后要注意的"><a href="#6-拿到真实数据之后要注意的" class="headerlink" title="6. 拿到真实数据之后要注意的"></a>6. 拿到真实数据之后要注意的</h2><ul>
+<li><code>load_ticks()</code> 里务必确认时间列是<strong>本机接收时间</strong>；如果抓包时间戳能用 PTP&#x2F;硬件打点就更好，<br>软件时间戳的抖动（几十 μs）对这里的 ms 级信号影响不大，但别用交易所时间戳。</li>
+<li>3s 周期只对<strong>快照行情</strong>成立；逐笔委托&#x2F;逐笔成交是事件驱动的，<br>这套方法不能直接套，需要换成「按固定时间窗计数再相关」的口径。</li>
+<li>开盘集合竞价、盘中临停、收盘阶段的推送节奏和连续竞价不一样，<br>建议只取 09:30–11:30 &#x2F; 13:00–14:57 的连续竞价段来算。</li>
+<li>交易所扩容或者主备切换之后分组会变，这个结果要定期重算，不能算一次用一年。</li>
+<li>如果发现某只股票同时和两个团都强相关，大概率是它被双发了（主备同时推），<br>这种点在 <code>clusters.csv</code> 里会落到某一个团里，值得单独捞出来看一眼。</li>
+</ul>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

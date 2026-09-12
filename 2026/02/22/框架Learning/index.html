@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2026/02/22/框架learning/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. SGLang：高性能大语言模型推理框架SGLang 是一个专为低延迟、高吞吐推理设计的先进、高性能 LLM 服务框架。其架构经过精细划分，能够从容应对现代大规模语言模型及多模态模型的复杂挑战。 1.1 核心架构组件1. SGLang 运行时 (SRT)SRT 是系统的核心，专为极致效率而设计，由以下几个关键子模块组成：  **TokenizerManager**：基于 FastAPI 的异步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="框架Learning">
+<meta property="og:url" content="http://example.com/2026/02/22/%E6%A1%86%E6%9E%B6Learning/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. SGLang：高性能大语言模型推理框架SGLang 是一个专为低延迟、高吞吐推理设计的先进、高性能 LLM 服务框架。其架构经过精细划分，能够从容应对现代大规模语言模型及多模态模型的复杂挑战。 1.1 核心架构组件1. SGLang 运行时 (SRT)SRT 是系统的核心，专为极致效率而设计，由以下几个关键子模块组成：  **TokenizerManager**：基于 FastAPI 的异步">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-21T16:37:33.000Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.199Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            框架Learning -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">框架Learning</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv5</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-02-22 00:37:33</span>
+        <span class="mobile">2026-02-22 00:37</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-SGLang：高性能大语言模型推理框架"><a href="#1-SGLang：高性能大语言模型推理框架" class="headerlink" title="1. SGLang：高性能大语言模型推理框架"></a>1. SGLang：高性能大语言模型推理框架</h2><p>SGLang 是一个专为低延迟、高吞吐推理设计的先进、高性能 LLM 服务框架。其架构经过精细划分，能够从容应对现代大规模语言模型及多模态模型的复杂挑战。</p>
+<h3 id="1-1-核心架构组件"><a href="#1-1-核心架构组件" class="headerlink" title="1.1 核心架构组件"></a>1.1 核心架构组件</h3><h4 id="1-SGLang-运行时-SRT"><a href="#1-SGLang-运行时-SRT" class="headerlink" title="1. SGLang 运行时 (SRT)"></a>1. SGLang 运行时 (SRT)</h4><p>SRT 是系统的核心，专为极致效率而设计，由以下几个关键子模块组成：</p>
+<ul>
+<li><p>**<code>TokenizerManager</code>**：基于 FastAPI 的异步进程，是请求的主要入口。它负责反序列化、分词（tokenization）和多模态数据处理，将这些 CPU 密集型任务从核心调度逻辑中分离出来。</p>
+</li>
+<li><p><strong><code>Scheduler</code>（调度器）</strong>：运行时的“大脑”。负责管理请求批处理、调度策略（如连续批处理&#x2F;continuous batching），并与 GPU 工作线程协同。<strong>RadixCache</strong> 也驻留在此处，实现在具有相同前缀的不同请求间高效共享 KV 缓存。</p>
+</li>
+<li><p><strong><code>ModelExecutor</code>（模型执行器）</strong>：负责实际的模型前向传播。它利用 <strong>CUDA Graphs</strong> 来最小化 CPU 开销，并集成了针对注意力机制和量化等性能关键操作的自定义算子（kernels）。</p>
+</li>
+<li><p>**<code>RadixCache</code>**：一种特殊的内存管理系统，以基数树（radix tree）结构组织 KV 缓存。这使得前缀匹配和重用几乎在瞬时完成，显著减少了常见提示词（prompts）的重复计算。</p>
+</li>
+</ul>
+<h4 id="2-SGLang-语言-DSL"><a href="#2-SGLang-语言-DSL" class="headerlink" title="2. SGLang 语言 (DSL)"></a>2. SGLang 语言 (DSL)</h4><p>一种高级编程接口，允许开发者使用 Python 原生风格的编程原语来表达复杂的 LLM 工作流（如多步推理、结构化输出生成）：</p>
+<ul>
+<li><p>**<code>api.py</code>**：提供面向用户的函数，如 <code>sgl.gen</code>、<code>sgl.select</code> 和 <code>sgl.assistant</code>。</p>
+</li>
+<li><p>**<code>Interpreter</code> &amp; <code>Tracer</code>**：这些组件管理 SGLang 程序的执行流，既可以直接解释执行，也可以将其追踪（trace）为中间表示，以便在 SRT 后端进行优化执行。</p>
+</li>
+</ul>
+<h4 id="3-SGLang-算子库-Kernel"><a href="#3-SGLang-算子库-Kernel" class="headerlink" title="3. SGLang 算子库 (Kernel)"></a>3. SGLang 算子库 (Kernel)</h4><p>一个专门的自定义 CUDA 和 ROCm 算子库（<code>sgl-kernel/</code>），针对底层进行了深度优化：</p>
+<ul>
+<li><p><strong>注意力机制</strong>：针对 PagedAttention、FlashAttention 和 DeepSeek 的 MLA 架构定制的算子。</p>
+</li>
+<li><p><strong>量化支持</strong>：支持高性能的 FP8、FP4、INT4 和 AWQ 操作。</p>
+</li>
+<li><p><strong>采样</strong>：优化的 Logit 处理和受限采样（使用状态机 FSM 进行 JSON&#x2F;语法约束）。</p>
+</li>
+</ul>
+<h4 id="4-SGLang-模型网关"><a href="#4-SGLang-模型网关" class="headerlink" title="4. SGLang 模型网关"></a>4. SGLang 模型网关</h4><p>一个由 Rust 实现的高性能代理（<code>sgl-model-gateway/</code>），用于：</p>
+<ul>
+<li><p><strong>路由与负载均衡</strong>：在多个 SGLang 实例之间分配请求。</p>
+</li>
+<li><p><strong>监控与可观测性</strong>：为大规模部署提供集中的指标收集和追踪。</p>
+</li>
+<li><p><strong>gRPC 客户端</strong>：为网关提供健壮且低开销的通信通道。</p>
+</li>
+</ul>
+<hr>
+<h3 id="1-2-请求生命周期"><a href="#1-2-请求生命周期" class="headerlink" title="1.2 请求生命周期"></a>1.2 请求生命周期</h3><ol>
+<li><p><strong>接入</strong>：请求（如文本、图像）通过 HTTP (FastAPI) 或 gRPC 到达 <code>TokenizerManager</code>。</p>
+</li>
+<li><p><strong>分词</strong>：请求文本被转换为 token，多模态数据进行预处理（如图像缩放、归一化）。</p>
+</li>
+<li><p><strong>调度</strong>：分词后的请求通过 ZeroMQ 发送到 <code>Scheduler</code>。调度器检查 <code>RadixCache</code> 中的 KV 缓存命中情况，并将请求加入内部队列。</p>
+</li>
+<li><p><strong>批处理</strong>：调度器将请求打包成动态批次，优先处理缓存重用率高的请求或根据配置的调度策略进行处理。</p>
+</li>
+<li><p><strong>执行</strong>：批次被分发给 <code>ModelExecutor</code> 工作线程（可能通过张量并行或流水线并行分布在多个 GPU 上）。</p>
+</li>
+<li><p><strong>采样</strong>：模型输出的 Logit 由采样算子处理（如贪婪采样、Top-p 采样或通过 FSM 进行的约束采样）。</p>
+</li>
+<li><p><strong>反分词</strong>：生成的 token 发回 <code>DetokenizerManager</code>，将其转换为文本并将响应流式传输给用户。</p>
+</li>
+</ol>
+<hr>
+<h3 id="1-3-性能创新总结"><a href="#1-3-性能创新总结" class="headerlink" title="1.3 性能创新总结"></a>1.3 性能创新总结</h3><ul>
+<li><p><strong>RadixAttention</strong>：利用 Prompt 中的公共前缀重用 KV 缓存，带来显著的吞吐量提升。</p>
+</li>
+<li><p><strong>零开销 CPU 调度器</strong>：最小化调度循环的开销，确保 GPU 不会因为 CPU 处理速度而产生瓶颈。</p>
+</li>
+<li><p><strong>Prefill-Decode 分离（计算解耦）</strong>：将预填充（Prefill）和解码（Decode）阶段分离到不同的实例或节点上。这种解耦可以针对计算密集型的 Prefill 和访存密集型的 Decode 进行独立优化，防止长时间的 Prefill 任务导致 Decode 任务出现高抖动或停顿。</p>
+</li>
+<li><p><strong>Structured Output Steering（结构化输出引导）</strong>：通过内置的有限状态机（FSM）引导采样过程。与在外部进行后处理不同，SGLang 在算子层级集成了格式约束（如 JSON Schema 或正则表达式），极大地提升了生成结构化数据的速度和准确性。</p>
+</li>
+<li><p><strong>Multi-GPU Tensor Parallelism（多 GPU 张量并行）</strong>：原生支持跨多显卡的模型并行。利用经过优化的通信算子（如基于 NCCL 的全归约），将大型模型拆分并分发，从而支持超大规模参数模型的高效推理。</p>
+</li>
+<li><p><strong>Data-Dependent Control Flow（数据依赖型控制流）</strong>：借助 SGLang 的 DSL 接口，系统能够根据模型中间生成的 Token 实时决定后续的推理路径（如 <code>if-else</code> 分支），而无需频繁在 Python 后端和 GPU 执行引擎之间切换上下文。</p>
+</li>
+</ul>
+<h3 id="1-4-RadixCache"><a href="#1-4-RadixCache" class="headerlink" title="1.4 RadixCache"></a>1.4 RadixCache</h3><p>RadixCache 是 SGLang 的核心创新之一，它将 LLM 服务的 KV Cache 管理从传统的“线性队列”演进为“前缀树（Radix<br>  Tree）”。这种结构允许系统在多个请求之间高效地复用、共享和回收 KV Cache。</p>
+<h4 id="1-RadixCache-的核心概念"><a href="#1-RadixCache-的核心概念" class="headerlink" title="1. RadixCache 的核心概念"></a>1. RadixCache 的核心概念</h4><p>在传统的 LLM 推理（如 vLLM）中，KV Cache 通常以请求为单位进行管理。即使两个请求有共同的前缀（例如相同的<br>System Prompt 或 Few-shot 示例），它们也可能重复计算并存储相同的前缀 KV Cache。</p>
+<p>RadixCache 的做法：</p>
+<ul>
+<li><p>前缀树结构：将 Token 序列看作路径，节点存储对应的 KV Cache 块。</p>
+</li>
+<li><p>多级复用：如果请求 A 的前缀是 [1, 2, 3]，请求 B 的前缀是 [1, 2, 4]，它们会共享节点 [1, 2] 的 KV<br>Cache，只在 3 和 4 处产生分支。</p>
+</li>
+<li><p>动态演进：随着推理的进行，树会不断生长。当生成结束时，这些节点不会立即释放，而是保留在树中供后续请求匹<br>配。</p>
+</li>
+</ul>
+<h4 id="2-显存管理-VRAM-Management"><a href="#2-显存管理-VRAM-Management" class="headerlink" title="2. 显存管理 (VRAM Management)"></a>2. 显存管理 (VRAM Management)</h4><p>  SGLang 的显存管理是基于 分页内存管理 (PagedAttention) 的思想，但增加了一层逻辑索引（Radix Tree）。</p>
+<p>  A. 逻辑与物理分离</p>
+<ul>
+<li><p>物理池 (Physical Pool)：在初始化时，SGLang 会预分配一大块 GPU 显存，切分为固定大小的“块（Blocks）”。</p>
+</li>
+<li><p>逻辑节点 (Logical Nodes)：RadixCache 中的每个节点都记录了它对应的物理块索引（Token IDs -&gt; Physical<br>Block Indices）。<br>B. 引用计数 (Reference Counting)<br>每个 Radix 节点维护一个 ref_count：</p>
+</li>
+<li><p>ref_count &gt; 0：表示当前有正在运行的推理请求正在读取或写入该节点。这些节点是“锁定”的，绝对不能被置换。</p>
+</li>
+<li><p>ref_count &#x3D; 0：表示该节点当前没有被任务占用，但它仍然保留在显存中。这些节点是“可回收”的候选者。</p>
+<h4 id="3-置换机制-Eviction-Policy"><a href="#3-置换机制-Eviction-Policy" class="headerlink" title="3. 置换机制 (Eviction Policy)"></a>3. 置换机制 (Eviction Policy)</h4><p> 当显存不足以容纳新请求的 KV Cache 时，RadixCache 会启动置换流程。<br>A. LRU (Least Recently Used) 策略<br>RadixCache 维护了一个 LRU 队列，用于管理所有 ref_count &#x3D;&#x3D; 0 的节点。</p>
+</li>
+<li><p>每次节点被匹配成功（Cache Hit）或新创建时，都会更新其 last_accessed_time。</p>
+</li>
+<li><p>当需要释放空间时，系统从 LRU 队列中选择最久未使用的节点进行删除。<br>B. 递归删除与剪枝</p>
+</li>
+<li><p>从叶到根：置换通常从叶子节点开始。如果一个叶子节点被删除，其父节点若也满足 ref_count &#x3D;&#x3D; 0<br>且没有其他子节点，也可能被列入回收范围。</p>
+</li>
+<li><p>原子性：删除操作会将物理块索引归还给物理内存池的 free_list。<br>C. 置换流程示例</p>
+</li>
+</ul>
+<ol>
+<li>请求进入：系统搜索 RadixTree，找到最长匹配前缀。</li>
+<li>空间检查：计算新 Token 需要的 Block 数量。如果 free_list 长度不足。</li>
+<li>触发置换：<ul>
+<li>查找 LRU 队列中 last_accessed_time 最早且 ref_count &#x3D;&#x3D; 0 的节点。</li>
+<li>释放该节点占用的物理块。</li>
+<li>重复此过程直到满足新请求的空间需求。</li>
+</ul>
+</li>
+<li>分配与锁定：从物理池获取新块，将新节点插入树中，并将 ref_count 加 1。</li>
+</ol>
+<h4 id="4-为什么-RadixCache-更高效？"><a href="#4-为什么-RadixCache-更高效？" class="headerlink" title="4. 为什么 RadixCache 更高效？"></a>4. 为什么 RadixCache 更高效？</h4><ol>
+<li>自动前缀复用：无需用户手动指定，系统自动识别 System Prompt、Few-shot、Chat History 的重复部分。</li>
+<li>跨请求共享：在多轮对话或并行采样（如 Tree-of-Thought）中，公共路径的 KV Cache 只存一份。</li>
+<li>零拷贝匹配：匹配过程只是简单的树遍历，开销极低（CPU 端完成），而节省的是昂贵的 GPU<br>计算（Prefill）和显存。</li>
+</ol>
+<h4 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h4><p>RadixCache 将 KV Cache的生命周期从“请求生命周期”延长到了“服务器运行生命周期”。它通过引用计数保证运行安全性，通过 LRU算法实现高效的显存置换，通过前缀树最大化了显存的复用率，是 SGLang 高吞吐量的核心保障。</p>
+<h2 id="2-Megatron-LM：大规模语言模型训练框架"><a href="#2-Megatron-LM：大规模语言模型训练框架" class="headerlink" title="2. Megatron-LM：大规模语言模型训练框架"></a>2. Megatron-LM：大规模语言模型训练框架</h2><p>Megatron-LM 是一个用于训练大规模语言模型的强力框架，其特点是具有高度可扩展性（Scalable）和模块化的架构。该代码库目前正从早期的单体式设计（Monolithic design）向名为 <strong>Megatron Core (MCore)</strong> 的库导向结构转型。</p>
+<h3 id="2-1-高层架构概览"><a href="#2-1-高层架构概览" class="headerlink" title="2.1 高层架构概览"></a>2.1 高层架构概览</h3><p>该项目被划分为以下几个关键功能区域：</p>
+<ul>
+<li><p>**入口点 (<code>pretrain_*.py</code>)**：顶层脚本（如 <code>pretrain_gpt.py</code>, <code>pretrain_bert.py</code>），作为用户界面使用。它们定义了模型配置并调用训练编排逻辑。</p>
+</li>
+<li><p>**Megatron Core (<code>megatron/core/</code>)**：该库现代化的模块化核心。它包含针对各种并行策略（张量并行 TP、流水线并行 PP、数据并行 DP、上下文并行 CP 和专家并行 EP）高度优化的算子原语。</p>
+</li>
+<li><p>**遗留组件 (<code>megatron/legacy/</code>)**：为了向后兼容而保留的旧版单体实现。这包括旧版本的模型并行单元（MPU）和数据集加载器。</p>
+</li>
+<li><p>**训练编排 (<code>megatron/training/</code>)**：将模型、数据和优化器绑定在一起的“粘合剂”。<code>megatron/training/training.py</code> 中的核心预训练函数负责管理初始化、训练循环、验证和检查点保存。</p>
+</li>
+<li><p>**数据管理 (<code>megatron/core/datasets/</code> &amp; <code>megatron/training/datasets/</code>)**：处理复杂的数据加载、多数据集混合（Blending）以及在并行 Rank 之间的高效分片（Sharding）。</p>
+</li>
+<li><p>**检查点 (<code>megatron/training/checkpointing.py</code>)**：管理模型状态的保存与加载，越来越多地利用 <code>megatron/core/dist_checkpointing</code> 来支持分布式环境。</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-2-核心组件与逻辑流"><a href="#2-2-核心组件与逻辑流" class="headerlink" title="2.2 核心组件与逻辑流"></a>2.2 核心组件与逻辑流</h3><h4 id="2-2-1-并行状态管理-megatron-core-parallel-state-py"><a href="#2-2-1-并行状态管理-megatron-core-parallel-state-py" class="headerlink" title="2.2.1 并行状态管理 (megatron/core/parallel_state.py)"></a>2.2.1 并行状态管理 (<code>megatron/core/parallel_state.py</code>)</h4><p>这是 Megatron 分布式执行的“大脑”。它为不同的并行维度（TP, PP, DP, CP, EP）初始化进程组，确保每个 Rank 都能明确其在全球计算中的角色。</p>
+<h4 id="2-2-2-模型提供者模式-Model-Provider-Pattern"><a href="#2-2-2-模型提供者模式-Model-Provider-Pattern" class="headerlink" title="2.2.2 模型提供者模式 (Model Provider Pattern)"></a>2.2.2 模型提供者模式 (Model Provider Pattern)</h4><p>入口脚本定义了一个 <code>model_provider</code> 函数。该函数利用 <code>megatron/core/models/</code>（或 <code>megatron/legacy/model/</code>）中的构建器，根据请求的并行设置构造特定的架构（如 GPT, BERT, T5）。</p>
+<h4 id="2-2-3-训练循环-megatron-training-training-py"><a href="#2-2-3-训练循环-megatron-training-training-py" class="headerlink" title="2.2.3 训练循环 (megatron/training/training.py)"></a>2.2.3 训练循环 (<code>megatron/training/training.py</code>)</h4><ol>
+<li><p><strong>初始化</strong>：设置分布式环境、随机种子和全局变量。</p>
+</li>
+<li><p><strong>模型&#x2F;优化器设置</strong>：调用模型提供者并初始化优化器（通常使用分布式优化器以提高显存效率）。</p>
+</li>
+<li><p><strong>数据迭代器</strong>：构建高效的数据加载器，处理分片和数据混合。</p>
+</li>
+<li><p><strong>训练迭代</strong>：</p>
+<ul>
+<li><p><strong>前向&#x2F;反向传播</strong>：由 <code>megatron/core/pipeline_parallel/schedules.py</code> 处理，负责管理复杂的流水线调度策略（如 <strong>1F1B</strong>）。</p>
+</li>
+<li><p><strong>权重更新</strong>：优化器执行 Step 操作，并处理梯度裁剪与缩放。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>验证&#x2F;评估</strong>：定期在验证集上运行推理。</p>
+</li>
+<li><p><strong>检查点保存</strong>：将模型和优化器状态保存到磁盘。</p>
+</li>
+</ol>
+<hr>
+<h3 id="2-3-支持工具与示例"><a href="#2-3-支持工具与示例" class="headerlink" title="2.3 支持工具与示例"></a>2.3 支持工具与示例</h3><ul>
+<li><p>**<code>tools/</code>**：包含用于数据预处理（<code>preprocess_data.py</code>）、检查点转换和专门性能测试的重要工具。</p>
+</li>
+<li><p>**<code>examples/</code>**：提供参考 Shell 脚本和配置，用于训练 Llama、Mistral 和 GPT-3 等知名模型。</p>
+</li>
+<li><p>**<code>tasks/</code>**：用于微调和评估等下游任务的工具。</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-4-设计哲学总结"><a href="#2-4-设计哲学总结" class="headerlink" title="2.4 设计哲学总结"></a>2.4 设计哲学总结</h3><p>Megatron-LM 将<strong>可扩展性</strong>视为最高优先级。通过将模型定义（Core）与训练运行器（Training）解耦，它允许相同的核心并行原语在不同的模型架构和训练范式中复用，同时在 NVIDIA GPU 集群上保持巅峰性能。</p>
+<h3 id="2-5-并行实现"><a href="#2-5-并行实现" class="headerlink" title="2.5 并行实现"></a>2.5 并行实现</h3><p>Megatron-LM 实现并行的核心思想是将深度学习模型在多个维度上进行拆分，并通过高效的通信原语（Communication<br>  Primitives）保持同步。所有并行策略的协调中心是 megatron&#x2F;core&#x2F;parallel_state.py。</p>
+<p>以下是五种主要并行方式的实现机制：</p>
+<h4 id="1-数据并行-Data-Parallelism-DP"><a href="#1-数据并行-Data-Parallelism-DP" class="headerlink" title="1. 数据并行 (Data Parallelism, DP)"></a>1. 数据并行 (Data Parallelism, DP)</h4><p>这是最基础的并行方式。</p>
+<ul>
+<li>实现：将训练数据切分为 N 份，每个 DP 组内的 GPU 维护一份完整的模型副本（或分片的参数）。</li>
+<li>分布式优化器 (Distributed Optimizer)：为了节省内存，Megatron 通常使用分布式优化器。它不让每个 GPU<br>都存一份完整的优化器状态（如 Adam 的动量），而是将优化器状态和梯度均匀地分片到 DP 组中的所有 GPU<br>上。在更新权重后，通过 all-gather 同步最新的参数。</li>
+</ul>
+<h4 id="2-张量并行-Tensor-Parallelism-TP"><a href="#2-张量并行-Tensor-Parallelism-TP" class="headerlink" title="2. 张量并行 (Tensor Parallelism, TP)"></a>2. 张量并行 (Tensor Parallelism, TP)</h4><p>这是 Megatron 的“看家本领”，通过切分算子内部的矩阵来实现。</p>
+<ul>
+<li>路径：megatron&#x2F;core&#x2F;tensor_parallel&#x2F;</li>
+<li>ColumnParallelLinear：将权重矩阵按列切分。输入数据 X 在所有 GPU 上复制，每个 GPU 计算一部分输出 Y_i &#x3D;<br>X * W_i。</li>
+<li>RowParallelLinear：将权重矩阵按行切分。每个 GPU 接收上一层切分后的输入 X_i，计算 Y_i &#x3D; X_i *<br>W_i，最后通过 all-reduce 操作将结果汇总。</li>
+<li>通信优化：TP 通常局限在单机 8 卡内，利用 NVLink 提供的高带宽。</li>
+</ul>
+<h4 id="3-流水线并行-Pipeline-Parallelism-PP"><a href="#3-流水线并行-Pipeline-Parallelism-PP" class="headerlink" title="3. 流水线并行 (Pipeline Parallelism, PP)"></a>3. 流水线并行 (Pipeline Parallelism, PP)</h4><p>将模型的层（Layers）按顺序切分到不同的 GPU 组（Stages）上。</p>
+<ul>
+<li>路径：megatron&#x2F;core&#x2F;pipeline_parallel&#x2F;</li>
+<li>调度策略 (Schedules)：为了减少“流水线气泡（Bubble）”，Megatron 使用 1F1B (One Forward, One Backward)<br>调度。即在同一个 Stage 上，交替执行微批次（Micro-batch）的前向和后向计算。</li>
+<li>P2P 通信：Stage 之间通过 send 和 recv 操作传递隐藏状态（Hidden States）和梯度。</li>
+</ul>
+<h4 id="4-上下文并行-Context-Parallelism-CP"><a href="#4-上下文并行-Context-Parallelism-CP" class="headerlink" title="4. 上下文并行 (Context Parallelism, CP)"></a>4. 上下文并行 (Context Parallelism, CP)</h4><p>针对超长文本（Long Context）设计的并行。</p>
+<ul>
+<li>实现：将 Sequence（序列）维度进行切分。与 TP 切分特征维度不同，CP 在计算 Attention 时，通过在 CP<br>组内交换 Key&#x2F;Value 数据来完成完整的注意力计算。</li>
+<li>优势：解决了单张显存无法容纳极长序列 Attention 矩阵的问题。</li>
+</ul>
+<h4 id="5-专家并行-Expert-Parallelism-EP"><a href="#5-专家并行-Expert-Parallelism-EP" class="headerlink" title="5. 专家并行 (Expert Parallelism, EP)"></a>5. 专家并行 (Expert Parallelism, EP)</h4><p>专门用于混合专家模型 (Mixture of Experts, MoE)。</p>
+<ul>
+<li>实现：在 MoE 层中，将不同的“专家（Experts）”分布在不同的 GPU 上。</li>
+<li>Router：根据输入 Token 的特征，将其路由到对应的 GPU 专家上。这涉及到复杂的 all-to-all 通信操作，将<br>Token 发送到对应的专家，再将结果收集回来。</li>
+</ul>
+<hr>
+<h4 id="6-总结：并行是如何协调的？"><a href="#6-总结：并行是如何协调的？" class="headerlink" title="6. 总结：并行是如何协调的？"></a>6. 总结：并行是如何协调的？</h4><p>Megatron 通过一个 3D（甚至 5D）并行网格 来管理所有 GPU。</p>
+<ul>
+<li><p>初始化：在启动时，parallel_state.py 会根据用户设置（如 –tensor-model-parallel-size 2<br>–pipeline-model-parallel-size 4）将全局 Rank 划分到不同的正交进程组中。</p>
+</li>
+<li><p>嵌套关系：</p>
+<ul>
+<li><p>最内层：TP（通信最频繁，通常在单机内）。</p>
+</li>
+<li><p>中间层：CP &#x2F; EP。</p>
+</li>
+<li><p>最外层：PP 和 DP（通信频率较低，跨机扩展性好）。</p>
+</li>
+</ul>
+</li>
+<li><p>全局一致性：所有并行组通过 parallel_state 获取自己的 Rank 信息，确保在计算和通信时，每个 GPU<br>都知道自己该处理哪一部分数据和权重。</p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/NVIDIA/Megatron-LM" >NVIDIA&#x2F;Megatron-LM: Ongoing research training transformer models at scale <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/sgl-project/sglang" >sgl-project&#x2F;sglang: SGLang is a high-performance serving framework for large language models and multimodal models. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/366906920" >[细读经典]Megatron论文和代码详细分析(1) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 框架Learning</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2026-02-22 00:37:33</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2026/02/22/框架Learning/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2026/02/22/infra-paper-reading/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">infra paper reading</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/12/02/%E9%83%A8%E5%88%86%E9%87%91%E8%9E%8D%E7%9F%A5%E8%AF%86learning/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">部分金融知识learning</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">框架Learning</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-SGLang%EF%BC%9A%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-text">1. SGLang：高性能大语言模型推理框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84%E7%BB%84%E4%BB%B6"><span class="nav-text">1.1 核心架构组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%AF%B7%E6%B1%82%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">1.2 请求生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%80%A7%E8%83%BD%E5%88%9B%E6%96%B0%E6%80%BB%E7%BB%93"><span class="nav-text">1.3 性能创新总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-RadixCache"><span class="nav-text">1.4 RadixCache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Megatron-LM%EF%BC%9A%E5%A4%A7%E8%A7%84%E6%A8%A1%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%A1%86%E6%9E%B6"><span class="nav-text">2. Megatron-LM：大规模语言模型训练框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E9%AB%98%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A6%82%E8%A7%88"><span class="nav-text">2.1 高层架构概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E4%B8%8E%E9%80%BB%E8%BE%91%E6%B5%81"><span class="nav-text">2.2 核心组件与逻辑流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E6%94%AF%E6%8C%81%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.3 支持工具与示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%E6%80%BB%E7%BB%93"><span class="nav-text">2.4 设计哲学总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E5%B9%B6%E8%A1%8C%E5%AE%9E%E7%8E%B0"><span class="nav-text">2.5 并行实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

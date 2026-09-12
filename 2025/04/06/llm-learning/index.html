@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/04/06/llm-learning/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. LoRA主要参考 Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="llm learning">
+<meta property="og:url" content="http://example.com/2025/04/06/llm-learning/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. LoRA主要参考 Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg">
+<meta property="article:published_time" content="2025-04-06T09:07:30.000Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.195Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            llm learning -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">llm learning</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv5</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-04-06 17:07:30</span>
+        <span class="mobile">2025-04-06 17:07</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-LoRA"><a href="#1-LoRA" class="headerlink" title="1. LoRA"></a>1. LoRA</h2><p>主要参考</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN" >Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-YI LEE）2024生成式人工智能导论课程的完整中文镜像作业。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/16.%20%E7%94%A8%20LoRA%20%E5%BE%AE%E8%B0%83%20Stable%20Diffusion%EF%BC%9A%E6%8B%86%E5%BC%80%E7%82%BC%E4%B8%B9%E7%82%89%EF%BC%8C%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%20AI%20%E7%BB%98%E7%94%BB.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;16. 用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="1-1-安装必要包"><a href="#1-1-安装必要包" class="headerlink" title="1.1 安装必要包"></a>1.1 安装必要包</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install torch torchvision transformers diffusers peft Pillow tqdm pyyaml accelerate</span><br><span class="line">pip3 install torch==2.4.1 torchvision torchaudio -f https://mirrors.aliyun.com/pytorch-wheels/cu121/</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-2-设置huggingface镜像"><a href="#1-2-设置huggingface镜像" class="headerlink" title="1.2 设置huggingface镜像"></a>1.2 设置huggingface镜像</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> HF_ENDPOINT=https://hf-mirror.com</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&quot;HF_ENDPOINT&quot;</span>] = <span class="string">&quot;https://hf-mirror.com/&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-3-代码梳理"><a href="#1-3-代码梳理" class="headerlink" title="1.3 代码梳理"></a>1.3 代码梳理</h3><h4 id="1-3-1-加载模型"><a href="#1-3-1-加载模型" class="headerlink" title="1.3.1 加载模型"></a>1.3.1 加载模型</h4><ol>
+<li><p>加载噪声调度器：<code>noise_scheduler = DDPMScheduler.from_pretrained</code></p>
+</li>
+<li><p>加载 Tokenizer：<code>tokenizer = CLIPTokenizer.from_pretrained</code></p>
+</li>
+<li><p>加载 CLIP 文本编码器：<code>text_encoder = CLIPTextModel.from_pretrained</code></p>
+</li>
+<li><p>加载 VAE 模型：<code>vae = AutoencoderKL.from_pretrained</code></p>
+</li>
+<li><p>加载 UNet 模型：<code>unet = UNet2DConditionModel.from_pretrained</code></p>
+</li>
+<li><p>转换为LoRA模型：<code>get_peft_model(text_encoder, lora_config)</code>或<code>PeftModel.from_pretrained(text_encoder, ...)</code></p>
+</li>
+<li><p>获取可训练LoRA参数：<code>text_encoder.print_trainable_parameters()</code></p>
+</li>
+<li><p>冻结不需要训练模型的参数：<code>vae.requires_grad_(False)</code></p>
+</li>
+</ol>
+<h4 id="1-3-2-准备数据"><a href="#1-3-2-准备数据" class="headerlink" title="1.3.2 准备数据"></a>1.3.2 准备数据</h4><ol>
+<li><p>自己定义数据类：<code>Text2ImageDataset</code>（定义<code>__init__</code>、<code>__getitem__</code>、<code>__len__</code>方法）</p>
+</li>
+<li><p>设定数据集预处理方法：<code>transforms.Compose</code></p>
+</li>
+<li><p>加载数据集加载方法：<code>torch.utils.data.DataLoader</code>与<code>collate_fn</code></p>
+</li>
+</ol>
+<h4 id="1-3-3-准备学习器"><a href="#1-3-3-准备学习器" class="headerlink" title="1.3.3 准备学习器"></a>1.3.3 准备学习器</h4><p><code>prepare_optimizer</code>使用AdamW学习器</p>
+<h4 id="1-3-4-准备学习率调节器"><a href="#1-3-4-准备学习率调节器" class="headerlink" title="1.3.4 准备学习率调节器"></a>1.3.4 准备学习率调节器</h4><p><code>get_scheduler</code></p>
+<h4 id="1-3-5-切入训练模式"><a href="#1-3-5-切入训练模式" class="headerlink" title="1.3.5 切入训练模式"></a>1.3.5 切入训练模式</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unet.train()</span><br><span class="line">text_encoder.train()</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="1-3-6-计算损失"><a href="#1-3-6-计算损失" class="headerlink" title="1.3.6 计算损失"></a>1.3.6 计算损失</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取原图像向量</span></span><br><span class="line"><span class="comment">## 编码图像为潜在表示（latent）</span></span><br><span class="line">latents = vae.encode(batch[<span class="string">&quot;pixel_values&quot;</span>].to(DEVICE, dtype=args.weight_dtype)).latent_dist.sample()</span><br><span class="line">latents = latents * vae.config.scaling_factor  <span class="comment">## 根据 VAE 的缩放因子调整潜在空间</span></span><br><span class="line"><span class="comment">## 加入噪声</span></span><br><span class="line">noise = torch.randn_like(latents)  <span class="comment"># 生成与潜在表示相同形状的随机噪声</span></span><br><span class="line">timesteps = torch.randint(<span class="number">0</span>, noise_scheduler.config.num_train_timesteps, (latents.shape[<span class="number">0</span>],), device=DEVICE).long()</span><br><span class="line">noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)</span><br><span class="line"><span class="comment">## 获取文本编码</span></span><br><span class="line">encoder_hidden_states = text_encoder(batch[<span class="string">&quot;input_ids&quot;</span>].to(DEVICE))[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">## 预测噪声</span></span><br><span class="line">model_pred = unet(noisy_latents, timesteps, encoder_hidden_states)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">## 计算损失</span></span><br><span class="line">loss = F.mse_loss(model_pred.<span class="built_in">float</span>(), target.<span class="built_in">float</span>(), reduction=<span class="string">&quot;mean&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="1-3-7-反向传播"><a href="#1-3-7-反向传播" class="headerlink" title="1.3.7 反向传播"></a>1.3.7 反向传播</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loss.backward()</span><br><span class="line">optimizer.step()</span><br><span class="line">lr_scheduler.step()</span><br></pre></td></tr></table></figure></div>
+
+<p>其中，loss给可以调整的参数加上loss标记，做反向传播；optimizer根据学习率与计算方式将梯度应用到当前的参数上；lr_scheduler更新学习率</p>
+<h4 id="1-3-8-推理"><a href="#1-3-8-推理" class="headerlink" title="1.3.8 推理"></a>1.3.8 推理</h4><ol>
+<li><p>切换为评估模式：<code>text_encoder.eval()</code></p>
+</li>
+<li><p>创建SD执行流：<code>DiffusionPipeline.from_pretrained</code></p>
+</li>
+<li><p>加载文本：<code>load_validation_prompts</code></p>
+</li>
+<li><p>创建初始图像：采用随机数<code>torch.Generator</code></p>
+</li>
+<li><p>推理</p>
+</li>
+</ol>
+<h2 id="2-Beam-Search"><a href="#2-Beam-Search" class="headerlink" title="2. Beam Search"></a>2. Beam Search</h2><p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/460733009" >图文、代码详解BeamSearch - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>产生预测的方式：全部搜索（不可能）、贪心（不一定全局最优）、多路（束搜索）</p>
+<h2 id="3-采样"><a href="#3-采样" class="headerlink" title="3. 采样"></a>3. 采样</h2><p>top-k：排序后直接取前k个</p>
+<p>top-p：排序后取大于p的</p>
+<h2 id="4-DPO微调"><a href="#4-DPO微调" class="headerlink" title="4. DPO微调"></a>4. DPO微调</h2><p>可以同时对正向和反向的文本进行编码，并根据两者计算loss</p>
+<h2 id="5-量化"><a href="#5-量化" class="headerlink" title="5. 量化"></a>5. 量化</h2><ol>
+<li><p>对称量化</p>
+</li>
+<li><p>非对称量化</p>
+</li>
+</ol>
+<p>区别在于量化值区间是否限制了量化前后零点对应</p>
+<h2 id="6-token与embedding"><a href="#6-token与embedding" class="headerlink" title="6. token与embedding"></a>6. token与embedding</h2><ol>
+<li><p>token：用于将文本映射成序列号</p>
+</li>
+<li><p>embedding：用于丰富token含义</p>
+</li>
+</ol>
+<h2 id="7-Transformer"><a href="#7-Transformer" class="headerlink" title="7. Transformer"></a>7. Transformer</h2><ul>
+<li><p>Mask: KV Cache因为mask才可以进行。因为mask的缘故，使得计算只需要求和前面的即可。</p>
+</li>
+<li><p>多级：更多层次地提取特征，相关性只是第一层通过注意力机制提取的特征。每级最终会经过FFN进一步归纳提取特征。</p>
+<ul>
+<li><p>为什么多级不会损失位置信息？提前在embedding时候将位置信息拼接到后面了</p>
+</li>
+<li><p>RoPE：旋转位置编码，引入的位置信息包含更多的相对位置信息</p>
+</li>
+</ul>
+</li>
+<li><p>计算权重：最终的经过FFN后的特征，再通过简单的线性层即可映射到词表空间，每个元素都是概率。通过搜索即可得到最大概率对应的词 。</p>
+</li>
+<li><p>多头注意力：将输入经过embedding之后的切成多份。</p>
+</li>
+<li><p>交叉注意力：Q与KV来自不同的样本，此时类似transformer经典的encode-decode架构</p>
+</li>
+<li><p>Multi-Head Latent Attention (MLA)：通过低秩联合压缩技术，减少 K 和 V 矩阵的存储和计算开销</p>
+<ul>
+<li><p>对 K 和 V 矩阵进行低秩联合压缩</p>
+</li>
+<li><p>对查询矩阵 Q 进行低秩压缩</p>
+</li>
+<li><p>修改注意力计算方式</p>
+</li>
+</ul>
+</li>
+<li><p>CacheBlend</p>
+<ul>
+<li><p>目标</p>
+<ul>
+<li>提前缓存KV Cache</li>
+</ul>
+</li>
+<li><p>困难</p>
+<ul>
+<li><p>KV Cache中携带位置信息</p>
+</li>
+<li><p>交叉注意力</p>
+</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li><p>使用RoPE，将绝对的位置信息改为通过矩阵旋转即可得到的位置信息 </p>
+</li>
+<li><p>观察到交叉注意力比较稀疏，因此只选取一些计算</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://img2024.cnblogs.com/blog/1850883/202503/1850883-20250329150518961-375532481.jpg"
+                      alt="1850883-20250329150518961-375532481"
+                ></p>
+</li>
+</ul>
+<h2 id="8-存储结合"><a href="#8-存储结合" class="headerlink" title="8. 存储结合"></a>8. 存储结合</h2><h3 id="8-1-LMCache"><a href="#8-1-LMCache" class="headerlink" title="8.1 LMCache"></a>8.1 LMCache</h3><p>可以直接从源码安装</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -e .</span><br></pre></td></tr></table></figure></div>
+
+<p>例子都要求有GPU</p>
+<h3 id="8-2-llmperf"><a href="#8-2-llmperf" class="headerlink" title="8.2 llmperf"></a>8.2 llmperf</h3><p>直接通过源码安装</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -e .</span><br></pre></td></tr></table></figure></div>
+
+<p>测试llm，可以指定地址</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">export HF_ENDPOINT=&quot;https://hf-mirror.com&quot;</span><br><span class="line">export OPENAI_API_KEY=secret_abcdefg</span><br><span class="line">export OPENAI_API_BASE=&quot;https://api.endpoints.anyscale.com/v1&quot;</span><br><span class="line"></span><br><span class="line">python token_benchmark_ray.py \</span><br><span class="line">--model &quot;meta-llama/Llama-2-7b-chat-hf&quot; \</span><br><span class="line">--mean-input-tokens 550 \</span><br><span class="line">--stddev-input-tokens 150 \</span><br><span class="line">--mean-output-tokens 150 \</span><br><span class="line">--stddev-output-tokens 10 \</span><br><span class="line">--max-num-completed-requests 2 \</span><br><span class="line">--timeout 600 \</span><br><span class="line">--num-concurrent-requests 1 \</span><br><span class="line">--results-dir &quot;result_outputs&quot; \</span><br><span class="line">--llm-api openai \</span><br><span class="line">--additional-sampling-params &#x27;&#123;&#125;&#x27;</span><br></pre></td></tr></table></figure></div>
+
+<p>测试结果：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">\Results for token benchmark for gpt-4o queried with the openai api.</span><br><span class="line"></span><br><span class="line">inter_token_latency_s</span><br><span class="line">    p25 = 0.02136684221360152</span><br><span class="line">    p50 = 0.02494121372332496</span><br><span class="line">    p75 = 0.0285155852330484</span><br><span class="line">    p90 = 0.030660208138882462</span><br><span class="line">    p95 = 0.03137508244082715</span><br><span class="line">    p99 = 0.0319469818823829</span><br><span class="line">    mean = 0.02494121372332496</span><br><span class="line">    min = 0.01779247070387808</span><br><span class="line">    max = 0.03208995674277184</span><br><span class="line">    stddev = 0.010109849332021768</span><br><span class="line">ttft_s</span><br><span class="line">    p25 = 1.0939928072330076</span><br><span class="line">    p50 = 1.111728697491344</span><br><span class="line">    p75 = 1.1294645877496805</span><br><span class="line">    p90 = 1.1401061219046824</span><br><span class="line">    p95 = 1.1436532999563496</span><br><span class="line">    p99 = 1.1464910423976835</span><br><span class="line">    mean = 1.111728697491344</span><br><span class="line">    min = 1.0762569169746712</span><br><span class="line">    max = 1.147200478008017</span><br><span class="line">    stddev = 0.050164673088200495</span><br><span class="line">end_to_end_latency_s</span><br><span class="line">    p25 = 3.1619555402430706</span><br><span class="line">    p50 = 3.7565545674879104</span><br><span class="line">    p75 = 4.35115359473275</span><br><span class="line">    p90 = 4.707913011079654</span><br><span class="line">    p95 = 4.826832816528622</span><br><span class="line">    p99 = 4.921968660887797</span><br><span class="line">    mean = 3.7565545674879104</span><br><span class="line">    min = 2.5673565129982308</span><br><span class="line">    max = 4.94575262197759</span><br><span class="line">    stddev = 1.6817800170070039</span><br><span class="line">request_output_throughput_token_per_s</span><br><span class="line">    p25 = 43.90441006830381</span><br><span class="line">    p50 = 51.211761238901175</span><br><span class="line">    p75 = 58.51911240949853</span><br><span class="line">    p90 = 62.90352311185695</span><br><span class="line">    p95 = 64.36499334597642</span><br><span class="line">    p99 = 65.53416953327199</span><br><span class="line">    mean = 51.211761238901175</span><br><span class="line">    min = 36.597058897706454</span><br><span class="line">    max = 65.82646358009589</span><br><span class="line">    stddev = 20.668310260963395</span><br><span class="line">number_input_tokens</span><br><span class="line">    p25 = 548.75</span><br><span class="line">    p50 = 559.5</span><br><span class="line">    p75 = 570.25</span><br><span class="line">    p90 = 576.7</span><br><span class="line">    p95 = 578.85</span><br><span class="line">    p99 = 580.57</span><br><span class="line">    mean = 559.5</span><br><span class="line">    min = 538</span><br><span class="line">    max = 581</span><br><span class="line">    stddev = 30.405591591021544</span><br><span class="line">number_output_tokens</span><br><span class="line">    p25 = 172.0</span><br><span class="line">    p50 = 175.0</span><br><span class="line">    p75 = 178.0</span><br><span class="line">    p90 = 179.8</span><br><span class="line">    p95 = 180.4</span><br><span class="line">    p99 = 180.88</span><br><span class="line">    mean = 175.0</span><br><span class="line">    min = 169</span><br><span class="line">    max = 181</span><br><span class="line">    stddev = 8.48528137423857</span><br><span class="line">Number Of Errored Requests: 0</span><br><span class="line">Overall Output Throughput: 43.19723004741316</span><br><span class="line">Number Of Completed Requests: 2</span><br><span class="line">Completed Requests Per Minute: 14.810478873398797</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="8-3-部署配置要求"><a href="#8-3-部署配置要求" class="headerlink" title="8.3 部署配置要求"></a>8.3 部署配置要求</h3><h4 id="8-3-1-vllm"><a href="#8-3-1-vllm" class="headerlink" title="8.3.1 vllm"></a>8.3.1 vllm</h4><ul>
+<li><p>算力大于7，从这里查看：<a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus" >CUDA GPU Compute Capability | NVIDIA Developer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>小于7可以魔改：<a class="link"   target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm/issues/963" >Support for compute capability &lt;7.0 · Issue #963 · vllm-project&#x2F;vllm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>部分算子需要大于8</p>
+</li>
+</ul>
+<h4 id="8-3-2-lmcache"><a href="#8-3-2-lmcache" class="headerlink" title="8.3.2 lmcache"></a>8.3.2 lmcache</h4><ul>
+<li><p>Cuda 10.0 或更高版本</p>
+<ul>
+<li><p>先从这里获取显卡与驱动版本的对应：<a class="link"   target="_blank" rel="noopener" href="https://www.nvidia.cn/geforce/drivers/" >NVIDIA GeForce 驱动程序 - N 卡驱动 | NVIDIA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>然后从这里获取驱动版本与CUDA对应：<a class="link"   target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" >1. CUDA 12.9 Release Notes — Release Notes 12.9 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="9-超长文本"><a href="#9-超长文本" class="headerlink" title="9. 超长文本"></a>9. 超长文本</h2><h3 id="9-1-位置编码"><a href="#9-1-位置编码" class="headerlink" title="9.1 位置编码"></a>9.1 位置编码</h3><p><a class="link"   target="_blank" rel="noopener" href="https://mcp.csdn.net/6837f4be606a8318e85ab2b0.html" >【位置编码速通】从ROPE到Yarn：通用公式解析长文本大模型的位置编码！_知识图谱_拥抱AGI-MCP技术社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li><p>RoPE</p>
+</li>
+<li><p>Position Interpolation (PI)：均匀拉伸的位置插值，也叫线性内插</p>
+</li>
+<li><p>NTK-Aware Interpolation：非均匀频率缩放，介于直接外推和线性内插之间的平滑方法</p>
+</li>
+<li><p>Dynamic Scaling：动态适配插值比例， NTK-Aware Interpolation升级版</p>
+</li>
+<li><p>NTK-by-parts Interpolation：基于波长局部分段插值</p>
+</li>
+<li><p>Yarn</p>
+</li>
+</ul>
+<h3 id="9-2-分割"><a href="#9-2-分割" class="headerlink" title="9.2 分割"></a>9.2 分割</h3><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/BIT_666/article/details/138184623" >LLM - 长文本总结处理方案_当文档的长度过长时,llm怎样处理-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li><p>Map Reduce</p>
+</li>
+<li><p>Refine</p>
+</li>
+<li><p>Map Rerank</p>
+</li>
+<li><p>Binary Map</p>
+</li>
+</ul>
+<h3 id="9-3-RAG"><a href="#9-3-RAG" class="headerlink" title="9.3 RAG"></a>9.3 RAG</h3><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/taoqick/article/details/145579511" >LLM大模型对超长文本处理的技术方案汇总（NBCE、Unlimiformer）_超长文档+大模型-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li><p><strong>InfLLM：每次生成下一个token的时，Initial token和一个窗口内的token，Evicted token会分块，检索一部分token出来。（选取块中最具有特征的几个token）</strong></p>
+<ul>
+<li><p><strong>猜测：选取的token可以事先计算？具有特征是否可以使用当下注意力最高的token</strong></p>
+</li>
+<li><p>是否可以与位置编码融合？也就是说选取的token采用RoPE等方式计算：可能用处不大</p>
+</li>
+</ul>
+</li>
+<li><p>NBCE：对长文本进行分段，对每段上文进行独立编码，在输出层对每一个Step预测token的概率矩阵进行融合</p>
+<ul>
+<li>猜测：可能损失块之间的位置信息</li>
+</ul>
+</li>
+<li><p>PCW：基本同NBCE</p>
+</li>
+<li><p>MemLong：类似RAG，只给大模型传递索引</p>
+</li>
+<li><p>Unlimiformer：将注意力计算外包给一个k-最近邻（kNN）索引来实现</p>
+</li>
+<li><p>AutoCompress：长文本上下文压缩成紧凑的摘要向量，这些向量随后可以作为软提示（soft prompts）供模型使用。</p>
+</li>
+</ul>
+<h2 id="10-算子"><a href="#10-算子" class="headerlink" title="10. 算子"></a>10. 算子</h2><p>算子是Pytorch等框架与底层如cuda或openvino交互的方式</p>
+<h3 id="10-1-添加C-实现"><a href="#10-1-添加C-实现" class="headerlink" title="10.1 添加C++实现"></a>10.1 添加C++实现</h3><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">at::Tensor <span class="title">mymuladd_cpu</span><span class="params">(at::Tensor a, <span class="type">const</span> at::Tensor&amp; b, <span class="type">double</span> c)</span> </span>&#123;</span><br><span class="line">  <span class="built_in">TORCH_CHECK</span>(a.<span class="built_in">sizes</span>() == b.<span class="built_in">sizes</span>());</span><br><span class="line">  <span class="built_in">TORCH_CHECK</span>(a.<span class="built_in">dtype</span>() == at::kFloat);</span><br><span class="line">  <span class="built_in">TORCH_CHECK</span>(b.<span class="built_in">dtype</span>() == at::kFloat);</span><br><span class="line">  <span class="built_in">TORCH_INTERNAL_ASSERT</span>(a.<span class="built_in">device</span>().<span class="built_in">type</span>() == at::DeviceType::CPU);</span><br><span class="line">  <span class="built_in">TORCH_INTERNAL_ASSERT</span>(b.<span class="built_in">device</span>().<span class="built_in">type</span>() == at::DeviceType::CPU);</span><br><span class="line">  at::Tensor a_contig = a.<span class="built_in">contiguous</span>();</span><br><span class="line">  at::Tensor b_contig = b.<span class="built_in">contiguous</span>();</span><br><span class="line">  at::Tensor result = torch::<span class="built_in">empty</span>(a_contig.<span class="built_in">sizes</span>(), a_contig.<span class="built_in">options</span>());</span><br><span class="line">  <span class="type">const</span> <span class="type">float</span>* a_ptr = a_contig.<span class="built_in">data_ptr</span>&lt;<span class="type">float</span>&gt;();</span><br><span class="line">  <span class="type">const</span> <span class="type">float</span>* b_ptr = b_contig.<span class="built_in">data_ptr</span>&lt;<span class="type">float</span>&gt;();</span><br><span class="line">  <span class="type">float</span>* result_ptr = result.<span class="built_in">data_ptr</span>&lt;<span class="type">float</span>&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int64_t</span> i = <span class="number">0</span>; i &lt; result.<span class="built_in">numel</span>(); i++) &#123;</span><br><span class="line">    result_ptr[i] = a_ptr[i] * b_ptr[i] + c;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>以下是softmax实现：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">torch::Tensor <span class="title">softmax_impl</span><span class="params">(torch::Tensor input, <span class="type">int64_t</span> dim)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> max_val = input.<span class="built_in">amax</span>(dim, <span class="literal">true</span>);       <span class="comment">// 沿维度求最大值</span></span><br><span class="line">    <span class="keyword">auto</span> shifted = input - max_val;             <span class="comment">// 减去最大值</span></span><br><span class="line">    <span class="keyword">auto</span> exp_output = torch::<span class="built_in">exp</span>(shifted);      <span class="comment">// 指数化</span></span><br><span class="line">    <span class="keyword">auto</span> sum_exp = exp_output.<span class="built_in">sum</span>(dim, <span class="literal">true</span>);   <span class="comment">// 计算分母</span></span><br><span class="line">    <span class="keyword">return</span> exp_output / sum_exp;                <span class="comment">// 归一化</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="10-2-注册算子"><a href="#10-2-注册算子" class="headerlink" title="10.2 注册算子"></a>10.2 注册算子</h3><p>声明</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TORCH_LIBRARY(extension_cpp, m) &#123;</span><br><span class="line">   // Note that <span class="string">&quot;float&quot;</span> <span class="keyword">in</span> the schema corresponds to the C++ double <span class="built_in">type</span></span><br><span class="line">   // <span class="keyword">and</span> the Python <span class="built_in">float</span> <span class="built_in">type</span>.</span><br><span class="line">   m.<span class="keyword">def</span>(<span class="string">&quot;mymuladd(Tensor a, Tensor b, float c) -&gt; Tensor&quot;</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>定义</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TORCH_LIBRARY_IMPL(extension_cpp, CPU, m) &#123;</span><br><span class="line">  m.impl(<span class="string">&quot;mymuladd&quot;</span>, &amp;mymuladd_cpu);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>为算子添加 <code>torch.compile</code> 支持</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Important: the C++ custom operator definitions should be loaded first</span></span><br><span class="line"><span class="comment"># before calling ``torch.library`` APIs that add registrations for the</span></span><br><span class="line"><span class="comment"># C++ custom operator(s). The following import loads our</span></span><br><span class="line"><span class="comment"># C++ custom operator definitions.</span></span><br><span class="line"><span class="comment"># Note that if you are striving for Python agnosticism, you should use</span></span><br><span class="line"><span class="comment"># the ``load_library(...)`` API call instead. See the next section for</span></span><br><span class="line"><span class="comment"># more details.</span></span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> _C</span><br><span class="line"></span><br><span class="line"><span class="meta">@torch.library.register_fake(<span class="params"><span class="string">&quot;extension_cpp::mymuladd&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">a, b, c</span>):</span><br><span class="line">    torch._check(a.shape == b.shape)</span><br><span class="line">    torch._check(a.dtype == torch.<span class="built_in">float</span>)</span><br><span class="line">    torch._check(b.dtype == torch.<span class="built_in">float</span>)</span><br><span class="line">    torch._check(a.device == b.device)</span><br><span class="line">    <span class="keyword">return</span> torch.empty_like(a)</span><br></pre></td></tr></table></figure></div>
+
+<p>此外，也可以使用pybind方式注册算子。</p>
+<h3 id="10-3-添加训练支持"><a href="#10-3-添加训练支持" class="headerlink" title="10.3 添加训练支持"></a>10.3 添加训练支持</h3><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_backward</span>(<span class="params">ctx, grad</span>):</span><br><span class="line">    a, b = ctx.saved_tensors</span><br><span class="line">    grad_a, grad_b = <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> ctx.needs_input_grad[<span class="number">0</span>]:</span><br><span class="line">        grad_a = grad * b</span><br><span class="line">    <span class="keyword">if</span> ctx.needs_input_grad[<span class="number">1</span>]:</span><br><span class="line">        grad_b = grad * a</span><br><span class="line">    <span class="keyword">return</span> grad_a, grad_b, <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_setup_context</span>(<span class="params">ctx, inputs, output</span>):</span><br><span class="line">    a, b, c = inputs</span><br><span class="line">    saved_a, saved_b = <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> ctx.needs_input_grad[<span class="number">0</span>]:</span><br><span class="line">        saved_b = b</span><br><span class="line">    <span class="keyword">if</span> ctx.needs_input_grad[<span class="number">1</span>]:</span><br><span class="line">        saved_a = a</span><br><span class="line">    ctx.save_for_backward(saved_a, saved_b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># This code adds training support for the operator. You must provide us</span></span><br><span class="line"><span class="comment"># the backward formula for the operator and a `setup_context` function</span></span><br><span class="line"><span class="comment"># to save values to be used in the backward.</span></span><br><span class="line">torch.library.register_autograd(</span><br><span class="line">    <span class="string">&quot;extension_cpp::mymuladd&quot;</span>, _backward, setup_context=_setup_context)</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42426841/article/details/142670977" >用 LoRA 微调 Stable Diffusion：拆开炼丹炉，动手实现你的第一次 AI 绘画_lora微调stable diffusion-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/2301_78285120/article/details/145434580" >使用 Lora进行微调DeepSeek大模型_deepseek lora-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/tloen/alpaca-lora" >tloen&#x2F;alpaca-lora: Instruct-tune LLaMA on consumer hardware <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/666000885" >大模型轻量级微调（LoRA）：训练速度、显存占用分析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN" >Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN: 这是一份入门AI&#x2F;LLM大模型的逐步指南，包含教程和演示代码，带你从API走进本地大模型部署和微调，代码文件会提供Kaggle或Colab在线版本，即便没有显卡也可以进行学习。项目中还开设了一个小型的代码游乐场🎡，你可以尝试在里面实验一些有意思的AI脚本。同时，包含李宏毅 (HUNG-YI LEE）2024生成式人工智能导论课程的完整中文镜像作业。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_47748259/article/details/135502977" >Stable Diffusion（SD）核心基础知识——（文生图、图生图）_sd模型-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/663712983?s_r=0" >如何快速下载huggingface模型——全方法总结 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/lanlinjnc/article/details/136709225" >huggingface-cli下载数据（含国内镜像源方法）_huggingface-cli download-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/445009191" >理解Pytorch的loss.backward()和optimizer.step() - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_48958956/article/details/137292748" >OSError: Can‘t load tokenizer for ‘bert-base-chinese‘_oserror: can’t load tokenizer for ‘bert-base-chine-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26005193497" >ComfyUI：Stable Diffusion 及 LoRA、VAE 、ControlNet模型解析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/679772356" >AIGC-Stable Diffusion之VAE - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/17.%20%E6%B5%85%E8%B0%88%20RTN%20%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%EF%BC%9A%E9%9D%9E%E5%AF%B9%E7%A7%B0%20vs%20%E5%AF%B9%E7%A7%B0.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;17. 浅谈 RTN 模型量化：非对称 vs 对称.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/g.%20%E5%B5%8C%E5%85%A5%E5%B1%82%20nn.Embedding()%20%E8%AF%A6%E8%A7%A3%E5%92%8C%E8%A6%81%E7%82%B9%E6%8F%90%E9%86%92%EF%BC%88PyTorch%EF%BC%89.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;g. 嵌入层 nn.Embedding() 详解和要点提醒（PyTorch）.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/18.%20%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0%E5%8F%8A%20GGUF%20%26%20GGML%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E8%A7%A3%E6%9E%90.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;18. 模型量化技术概述及 GGUF &amp; GGML 文件格式解析.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/547087460" >对称量化 VS 非对称量化 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Hoper-J/AI-Guide-and-Demos-zh_CN/blob/master/Guide/11.%20DPO%20%E5%BE%AE%E8%B0%83%E7%A4%BA%E4%BE%8B%EF%BC%9A%E6%A0%B9%E6%8D%AE%E4%BA%BA%E7%B1%BB%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96%20LLM%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B.md" >AI-Guide-and-Demos-zh_CN&#x2F;Guide&#x2F;11. DPO 微调示例：根据人类偏好优化 LLM 大语言模型.md at master · Hoper-J&#x2F;AI-Guide-and-Demos-zh_CN <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/rossiXYZ/p/18799503" >探秘Transformer系列之（20）— KV Cache - 罗西的思考 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://martinlwx.github.io/zh-cn/llm-inference-optimization-kv-cache/" >LLM 推理加速 - KV Cache - MartinLwx’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/414084879?source_id=1005" >注意力机制到底在做什么，Q&#x2F;K&#x2F;V怎么来的？一文读懂Attention注意力机制 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/109983672" >拆 Transformer 系列二：Multi- Head Attention 机制详解 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/2401_85328934/article/details/141635998" >神经网络算法 - 一文搞懂 Softmax 函数-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/338817680" >Transformer模型详解（图解最完整版） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/zgpeace/article/details/126635650" >翻译: 详细图解Transformer多头自注意力机制 Attention Is All You Need-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/653658936" >(80 条消息) 为什么加速LLM推断有KV Cache而没有Q Cache？ - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/662498827" >大模型推理加速：看图学KV Cache - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/414084879?source_id=1005" >注意力机制到底在做什么，Q&#x2F;K&#x2F;V怎么来的？一文读懂Attention注意力机制 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/357868650" >(80 条消息) Transformer中的Attention机制，注意力分布概率是如何求得的？ - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://leinux.netlify.app/2025/04/07/transformer" >Transformer 架构 « Leinux <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/bd/art/647109286" >十分钟读懂旋转编码（RoPE） <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/15153745590" >Multi-Head Latent Attention (MLA) 详细介绍（来自Deepseek V3的回答） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/166608727" >举个例子讲下transformer的输入输出细节及其他 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/685853516#:~:text=%E5%A6%82%E4%B8%8A%E5%9B%BE%E6%89%80%E7%A4%BA%EF%BC%8C%20kv%20cache%E6%98%AFattention%E8%AE%A1%E7%AE%97%E4%B8%AD%E7%9A%84%E5%85%A8%E9%87%8Fkv%20%E7%BC%93%E5%AD%98%EF%BC%8C%E4%B8%BB%E8%A6%81%E4%BD%9C%E7%94%A8%E5%9C%A8decode%E9%98%B6%E6%AE%B5%EF%BC%8C%E7%9B%AE%E7%9A%84%E6%98%AF%E5%B0%86%E8%BE%93%E5%85%A5Q%E4%BC%98%E5%8C%96%E6%88%90%E8%BE%93%E5%85%A5q%E3%80%82%20%E6%88%91%E4%BB%AC%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%EF%BC%8C%20%E5%81%87%E8%AE%BE%E9%80%9A%E8%BF%87decode%E9%98%B6%E6%AE%B5%E9%80%9A%E8%BF%87%E8%87%AA%E5%9B%9E%E5%BD%92%E7%94%9F%E6%88%90%E2%80%98%20Apples,are%20a%20boring%20fruit%E2%80%99%E8%BF%99%E5%8F%A5%E8%AF%9D%EF%BC%8C%E5%BD%93%E7%94%9F%E6%88%90%E5%88%B0%E2%80%98fruit%E2%80%99%E8%BF%99%E4%B8%AA%E8%AF%8D%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89KV%20cache%EF%BC%8C%E8%BE%93%E5%85%A5%E4%B8%BAQ%EF%BC%88%E2%80%98Apples%20are%20a%20boring%E2%80%99%EF%BC%89%EF%BC%8C%E8%BF%9B%E8%A1%8Cattention%E8%AE%A1%E7%AE%97%E3%80%82" >大模型百倍推理加速之KV cache篇 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/7781800255" >详解 CacheBlend：RAG 场景 KV 复用，打破前缀相同的限制 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.lmcache.ai/" >Welcome to LMCache! | LMCache <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.lmcache.ai/getting_started/installation.html" >Installation | LMCache <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/ray-project/llmperf" >ray-project&#x2F;llmperf: LLMPerf is a library for validating and benchmarking LLMs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/m0_51371693/article/details/144268469" >【踩坑】pip安装依赖卡在Installing build dependencies …-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.lmcache.ai/getting_started/quickstart/offload_kv_cache.html" >Example: Offload KV cache to CPU | LMCache <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm/issues/963" >Support for compute capability &lt;7.0 · Issue #963 · vllm-project&#x2F;vllm <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" >1. CUDA 12.9 Release Notes — Release Notes 12.9 documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.51cto.com/u_16213611/10480090" >各 GPU 支持的 CUDA 版本 gpu cuda支持列表_mob64ca13ff28f1的技术博客_51CTO博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.nvidia.cn/geforce/drivers/" >NVIDIA GeForce 驱动程序 - N 卡驱动 | NVIDIA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus" >CUDA GPU Compute Capability | NVIDIA Developer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-legacy-gpus" >Legacy CUDA GPU Compute Capability | NVIDIA Developer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://mcp.csdn.net/6837f4be606a8318e85ab2b0.html" >【位置编码速通】从ROPE到Yarn：通用公式解析长文本大模型的位置编码！_知识图谱_拥抱AGI-MCP技术社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2396348" >清华NLP组发布InfLLM：无需额外训练，「1024K超长上下文」100%召回！-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/574166920" >PyTorch源码学习系列 - 3. 算子 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/column/c_1556947351318720512" >PyTorch源码学习 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://pytorch.ac.cn/tutorials/advanced/cpp_custom_ops.html#cpp-custom-ops-tutorial" >自定义 C++ 和 CUDA 算子 — PyTorch 教程 2.7.0+cu126 文档 - PyTorch 深度学习库 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://pytorch.ac.cn/tutorials/advanced/python_custom_ops.html#python-custom-ops-tutorial" >自定义 Python 算子 — PyTorch 教程 2.7.0+cu126 文档 - PyTorch 深度学习库 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://pytorch.ac.cn/tutorials/advanced/custom_ops_landing_page.html" >PyTorch 自定义算子 — PyTorch 教程 2.7.0+cu126 文档 - PyTorch 深度学习库 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/huangshuang/p/13179494.html" >深入浅出PyTorch（算子篇） - A君来了 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42722197/article/details/134432550" >PyTorch 源码解读之 ：揭秘 C++&#x2F;CUDA 算子实现和调用全流程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/158643792" >PyTorch扩展自定义PyThon&#x2F;C++(CUDA)算子的若干方法总结 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/666671956" >pytorch自定义算子实现详解及反向传播梯度推导 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://aicoding.csdn.net/684019aa606a8318e85b519c.html" >【pytorch扩展】CUDA自定义pytorch算子（简单demo入手）_pytorch_木盏-AI编程社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45878768/article/details/128244587" >pytorch自定义算子并导出onnx计算图详细代码教程_pytorch输出模型的算子图结构-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/zhongzhaoxie/p/16692999.html" >Pytorch算子扩展详细例程（前向+反向） - BrianX - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1344423" >【pytorch】解决pytorch:Torch not compiled with CUDA enabled-阿里云开发者社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/moyong1572/article/details/119438286" >错误Torch not compiled with CUDA enabled解决方法附CUDA安装教程及Pytorch安装教程-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/cyy0789/article/details/131137525" >GPU版本pytorch（Cuda12.1）清华源快速安装一步一步教！小白教学~_pytorch清华源-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.infini-ai.com/posts/download-pytorch-from-mirror.html" >使用国内镜像加速安装 PyTorch | 无问芯穹文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> llm learning</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-04-06 17:07:30</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/06/llm-learning/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2025/04/12/3fs-learning/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">3fs learning</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/04/01/vllm-reading/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">vllm reading</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">llm learning</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LoRA"><span class="nav-text">1. LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E5%8C%85"><span class="nav-text">1.1 安装必要包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%AE%BE%E7%BD%AEhuggingface%E9%95%9C%E5%83%8F"><span class="nav-text">1.2 设置huggingface镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%A3%E7%A0%81%E6%A2%B3%E7%90%86"><span class="nav-text">1.3 代码梳理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Beam-Search"><span class="nav-text">2. Beam Search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%87%87%E6%A0%B7"><span class="nav-text">3. 采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-DPO%E5%BE%AE%E8%B0%83"><span class="nav-text">4. DPO微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%87%8F%E5%8C%96"><span class="nav-text">5. 量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-token%E4%B8%8Eembedding"><span class="nav-text">6. token与embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Transformer"><span class="nav-text">7. Transformer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%AD%98%E5%82%A8%E7%BB%93%E5%90%88"><span class="nav-text">8. 存储结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-LMCache"><span class="nav-text">8.1 LMCache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-llmperf"><span class="nav-text">8.2 llmperf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E8%A6%81%E6%B1%82"><span class="nav-text">8.3 部署配置要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E8%B6%85%E9%95%BF%E6%96%87%E6%9C%AC"><span class="nav-text">9. 超长文本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81"><span class="nav-text">9.1 位置编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-%E5%88%86%E5%89%B2"><span class="nav-text">9.2 分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-3-RAG"><span class="nav-text">9.3 RAG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E7%AE%97%E5%AD%90"><span class="nav-text">10. 算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E6%B7%BB%E5%8A%A0C-%E5%AE%9E%E7%8E%B0"><span class="nav-text">10.1 添加C++实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E6%B3%A8%E5%86%8C%E7%AE%97%E5%AD%90"><span class="nav-text">10.2 注册算子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-%E6%B7%BB%E5%8A%A0%E8%AE%AD%E7%BB%83%E6%94%AF%E6%8C%81"><span class="nav-text">10.3 添加训练支持</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

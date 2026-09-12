@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/面试重点.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. 笔试题3321. 计算子数组的 x-sum II - 力扣（LeetCode）  codeforces-go&#x2F;leetcode&#x2F;SOLUTIONS.md at master · EndlessCheng&#x2F;codeforces-go  1.1 分类1.1.1 数组矩阵题A方向 双指针  滑动窗口  单调栈&#x2F;队列  考虑递减单调    B方向 动规  C优">
+<meta property="og:type" content="website">
+<meta property="og:title" content="刷题总结">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E9%9D%A2%E8%AF%95%E9%87%8D%E7%82%B9.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 笔试题3321. 计算子数组的 x-sum II - 力扣（LeetCode）  codeforces-go&#x2F;leetcode&#x2F;SOLUTIONS.md at master · EndlessCheng&#x2F;codeforces-go  1.1 分类1.1.1 数组矩阵题A方向 双指针  滑动窗口  单调栈&#x2F;队列  考虑递减单调    B方向 动规  C优">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-11-03T12:33:00.000Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.203Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            刷题总结 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h2 id="1-笔试题"><a href="#1-笔试题" class="headerlink" title="1. 笔试题"></a>1. 笔试题</h2><p><a class="link"   target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-x-sum-of-all-k-long-subarrays-ii/solutions/2948867/liang-ge-you-xu-ji-he-wei-hu-qian-x-da-p-2rcz/" >3321. 计算子数组的 x-sum II - 力扣（LeetCode） <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/SOLUTIONS.md" >codeforces-go&#x2F;leetcode&#x2F;SOLUTIONS.md at master · EndlessCheng&#x2F;codeforces-go <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="1-1-分类"><a href="#1-1-分类" class="headerlink" title="1.1 分类"></a>1.1 分类</h3><h4 id="1-1-1-数组矩阵题"><a href="#1-1-1-数组矩阵题" class="headerlink" title="1.1.1 数组矩阵题"></a>1.1.1 数组矩阵题</h4><h5 id="A方向"><a href="#A方向" class="headerlink" title="A方向"></a>A方向</h5><ul>
+<li><p>双指针</p>
+</li>
+<li><p>滑动窗口</p>
+</li>
+<li><p>单调栈&#x2F;队列</p>
+<ul>
+<li>考虑递减单调</li>
+</ul>
+</li>
+</ul>
+<h5 id="B方向"><a href="#B方向" class="headerlink" title="B方向"></a>B方向</h5><ul>
+<li>动规</li>
+</ul>
+<h5 id="C优化"><a href="#C优化" class="headerlink" title="C优化"></a>C优化</h5><ul>
+<li><p>堆</p>
+<ul>
+<li>只要有最大最小值，就可以考虑用堆</li>
+</ul>
+</li>
+<li><p>对顶堆</p>
+<ul>
+<li>考虑把一次删除或者增加变为（从堆中删除，更改数值，再放回去）</li>
+</ul>
+</li>
+<li><p>省一次遍历技巧</p>
+<ul>
+<li><p>差分数组</p>
+</li>
+<li><p>前缀和</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="D题型"><a href="#D题型" class="headerlink" title="D题型"></a>D题型</h5><ul>
+<li><p>以锚点切入，递归搜索</p>
+<ul>
+<li><p>搜索时传入状态</p>
+</li>
+<li><p>用同一个数组&#x2F;矩阵的不同bit记录状态是否搜索过</p>
+</li>
+</ul>
+</li>
+<li><p>线段树&#x2F;树状数组</p>
+</li>
+</ul>
+<h4 id="1-1-2-排序题"><a href="#1-1-2-排序题" class="headerlink" title="1.1.2 排序题"></a>1.1.2 排序题</h4><ul>
+<li><p>原地哈希</p>
+<ul>
+<li>交换</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-1-3-图-x2F-树题"><a href="#1-1-3-图-x2F-树题" class="headerlink" title="1.1.3 图&#x2F;树题"></a>1.1.3 图&#x2F;树题</h4><ul>
+<li><p>dijikstra</p>
+</li>
+<li><p>中序遍历二叉树</p>
+</li>
+<li><p>dfs</p>
+</li>
+</ul>
+<h3 id="1-2-手撕"><a href="#1-2-手撕" class="headerlink" title="1.2 手撕"></a>1.2 手撕</h3><h4 id="1-2-1-手写线程池-Thread-Pool"><a href="#1-2-1-手写线程池-Thread-Pool" class="headerlink" title="1.2.1 手写线程池 (Thread Pool)"></a>1.2.1 手写线程池 (Thread Pool)</h4><ul>
+<li><p>必须支持 std::future 获取返回值（考察 std::package_task 和 std::bind）。</p>
+</li>
+<li><p>必须优雅退出（Graceful Shutdown）。</p>
+</li>
+<li><p>加分项：支持“任务优先级”，支持“任务窃取 (Work Stealing)”（类似 Go runtime 调度）。</p>
+</li>
+<li><p>如何正确处理 condition_variable 的虚假唤醒？你的任务队列锁竞争严重吗？</p>
+</li>
+</ul>
+<h4 id="1-2-2-实现一个无锁队列-Lock-free-Queue"><a href="#1-2-2-实现一个无锁队列-Lock-free-Queue" class="headerlink" title="1.2.2 实现一个无锁队列 (Lock-free Queue)"></a>1.2.2 实现一个无锁队列 (Lock-free Queue)</h4><ul>
+<li><p>单生产者单消费者 (SPSC) 或多生产者多消费者 (MPMC)。</p>
+</li>
+<li><p>使用 std::atomic，理解 CAS (compare_exchange_weak)，解决 ABA 问题（虽然用指针通常不用管，但要能说出来），以及 Memory Order 的正确使用（Acquire&#x2F;Release）。</p>
+</li>
+</ul>
+<h4 id="1-2-3-延迟任务调度器-Delayed-Scheduler-x2F-Timer-Wheel"><a href="#1-2-3-延迟任务调度器-Delayed-Scheduler-x2F-Timer-Wheel" class="headerlink" title="1.2.3 延迟任务调度器 (Delayed Scheduler &#x2F; Timer Wheel)"></a>1.2.3 延迟任务调度器 (Delayed Scheduler &#x2F; Timer Wheel)</h4><ul>
+<li><p>基础版：最小堆 (Priority Queue) + 一个后台线程不断 sleep&#x2F;wait。</p>
+</li>
+<li><p>进阶版：时间轮 (Hashed and Hierarchical Timing Wheels)。这是 Linux 内核和 Netty 都在用的算法，AI 训练中的超时检测非常需要这个。</p>
+<ul>
+<li>分级时间轮盘</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-2-4-读写锁-RWLock-的写优先实现"><a href="#1-2-4-读写锁-RWLock-的写优先实现" class="headerlink" title="1.2.4 读写锁 (RWLock) 的写优先实现"></a>1.2.4 读写锁 (RWLock) 的写优先实现</h4><ul>
+<li>注意写出 Write-Preferred 的逻辑，防止写饥饿。</li>
+</ul>
+<h4 id="1-2-5-多维背包问题-x2F-Bin-Packing-变种"><a href="#1-2-5-多维背包问题-x2F-Bin-Packing-变种" class="headerlink" title="1.2.5 多维背包问题 &#x2F; Bin Packing 变种"></a>1.2.5 多维背包问题 &#x2F; Bin Packing 变种</h4><ul>
+<li><p>给定 N 个任务，每个任务需要 [CPU, Mem, GPU] 三种资源，给定 M 个节点，每个节点资源有限。求最少需要多少节点，或者能否装下。</p>
+</li>
+<li><p>这是一个 NP-Hard 问题，不要求最优解，要求启发式算法。</p>
+</li>
+<li><p>First Fit &#x2F; Best Fit &#x2F; Worst Fit 的实现。</p>
+</li>
+<li><p>点积排序 (Dot Product)：AI 调度常用技巧，向量夹角越小，资源互补性越好（例如一个任务吃 CPU，一个吃 Mem，它俩这就很互补）。</p>
+</li>
+</ul>
+<h4 id="1-2-6-带有亲和性-Affinity-的任务调度"><a href="#1-2-6-带有亲和性-Affinity-的任务调度" class="headerlink" title="1.2.6 带有亲和性 (Affinity) 的任务调度"></a>1.2.6 带有亲和性 (Affinity) 的任务调度</h4><ul>
+<li><p>任务 A 和任务 B 必须调度到同一台机器（Affinity），或者不能在同一台机器（Anti-Affinity）。</p>
+</li>
+<li><p>回溯法 (Backtracking) 或 并查集 (Union Find) 预处理分组。</p>
+</li>
+</ul>
+<h4 id="1-2-7-能够满足-Gang-Scheduling-全家桶调度-的资源查找"><a href="#1-2-7-能够满足-Gang-Scheduling-全家桶调度-的资源查找" class="headerlink" title="1.2.7 能够满足 Gang Scheduling (全家桶调度) 的资源查找"></a>1.2.7 能够满足 Gang Scheduling (全家桶调度) 的资源查找</h4><ul>
+<li><p>大模型训练需要 100 个 GPU 同时就绪才能跑。只要有 1 个不满足，这 100 个都不能占坑。</p>
+</li>
+<li><p>实现 try_allocate(num_gpus)，要求原子性地成功或失败。</p>
+</li>
+</ul>
+<h4 id="1-2-8-拓扑排序-Topological-Sort-环检测"><a href="#1-2-8-拓扑排序-Topological-Sort-环检测" class="headerlink" title="1.2.8 拓扑排序 (Topological Sort) + 环检测"></a>1.2.8 拓扑排序 (Topological Sort) + 环检测</h4><ul>
+<li><p>对应 LeetCode：210. 课程表 II</p>
+</li>
+<li><p>场景：检测任务依赖中是否有死锁（环）。</p>
+</li>
+<li><p>要求并行度分析：给定 DAG，假设有无限资源，跑完所有任务的最短时间是多少？（其实就是求关键路径 Critical Path）。</p>
+</li>
+<li><p>如果只有 K 个 worker，跑完的时间是多少？（这是经典的 Job Shop Scheduling 问题，通常用贪心或模拟）。</p>
+</li>
+</ul>
+<h4 id="1-2-9-死锁检测-Deadlock-Detection"><a href="#1-2-9-死锁检测-Deadlock-Detection" class="headerlink" title="1.2.9 死锁检测 (Deadlock Detection)"></a>1.2.9 死锁检测 (Deadlock Detection)</h4><ul>
+<li><p>场景：模拟操作系统资源分配图。</p>
+</li>
+<li><p>解法：构建资源分配图（RAG），使用 DFS 寻找环。</p>
+</li>
+</ul>
+<h4 id="1-2-10-LRU-Cache-x2F-LFU-Cache"><a href="#1-2-10-LRU-Cache-x2F-LFU-Cache" class="headerlink" title="1.2.10 LRU Cache &#x2F; LFU Cache"></a>1.2.10 LRU Cache &#x2F; LFU Cache</h4><ul>
+<li><p>对应 LeetCode：146. LRU 缓存</p>
+</li>
+<li><p>要求：O(1) 实现。</p>
+</li>
+<li><p>Scheduler 关联：vLLM 中的 Block Manager 或 PagedAttention 的页表置换算法核心就是 LRU 的变种。</p>
+</li>
+</ul>
+<h4 id="1-2-11-接雨水-Trapping-Rain-Water-x2F-天际线问题-The-Skyline-Problem"><a href="#1-2-11-接雨水-Trapping-Rain-Water-x2F-天际线问题-The-Skyline-Problem" class="headerlink" title="1.2.11 接雨水 (Trapping Rain Water) &#x2F; 天际线问题 (The Skyline Problem)"></a>1.2.11 接雨水 (Trapping Rain Water) &#x2F; 天际线问题 (The Skyline Problem)</h4><ul>
+<li><p>对应 LeetCode：42. 接雨水, 218. 天际线问题</p>
+</li>
+<li><p>关联：天际线问题非常像时间轴上的资源占用情况合并。</p>
+</li>
+</ul>
+<h4 id="1-2-12-寻找两个正序数组的中位数"><a href="#1-2-12-寻找两个正序数组的中位数" class="headerlink" title="1.2.12 寻找两个正序数组的中位数"></a>1.2.12 寻找两个正序数组的中位数</h4><ul>
+<li><p>对应 LeetCode：4. 寻找两个正序数组的中位数</p>
+</li>
+<li><p>考点：二分查找的极致应用。</p>
+</li>
+</ul>
+<h4 id="1-2-13-实现一个内存池-Memory-Pool"><a href="#1-2-13-实现一个内存池-Memory-Pool" class="headerlink" title="1.2.13 实现一个内存池 (Memory Pool)"></a>1.2.13 实现一个内存池 (Memory Pool)</h4><ul>
+<li>侵入式链表 (Intrusive List)</li>
+<li>内存对齐 (Memory Alignment)</li>
+<li>Placement New 与 Explicit Destructor</li>
+<li>Thread Local Memory Pool</li>
+<li>Slab Allocator</li>
+</ul>
+<h2 id="2-面试概率题"><a href="#2-面试概率题" class="headerlink" title="2. 面试概率题"></a>2. 面试概率题</h2><h3 id="2-1-分类"><a href="#2-1-分类" class="headerlink" title="2.1 分类"></a>2.1 分类</h3><h2 id="3-面试架构"><a href="#3-面试架构" class="headerlink" title="3. 面试架构"></a>3. 面试架构</h2><h3 id="3-1-性能"><a href="#3-1-性能" class="headerlink" title="3.1 性能"></a>3.1 性能</h3><h4 id="3-1-1-用户层"><a href="#3-1-1-用户层" class="headerlink" title="3.1.1 用户层"></a>3.1.1 用户层</h4><p>参考ACID部分</p>
+<h4 id="3-1-2-内核层"><a href="#3-1-2-内核层" class="headerlink" title="3.1.2 内核层"></a>3.1.2 内核层</h4><ol>
+<li><p>基于完全绕过内核的优化</p>
+<ol>
+<li>dpdk，spdk</li>
+</ol>
+</li>
+<li><p>基于部分绕过内核的优化</p>
+<ol>
+<li>3fs中的fuse，TCP滑动窗口</li>
+</ol>
+</li>
+<li><p>基于脱离传统内核栈的优化</p>
+<ol>
+<li>RDMA</li>
+</ol>
+</li>
+</ol>
+<h4 id="3-1-3-硬件层"><a href="#3-1-3-硬件层" class="headerlink" title="3.1.3 硬件层"></a>3.1.3 硬件层</h4><ol>
+<li>GPU系列<ol>
+<li>tensor core</li>
+</ol>
+</li>
+<li>FPGA系列</li>
+<li>NPU系列<ol>
+<li>专用硬件</li>
+</ol>
+</li>
+</ol>
+<h3 id="3-2-ACID"><a href="#3-2-ACID" class="headerlink" title="3.2 ACID"></a>3.2 ACID</h3><h4 id="3-2-1-A-原子性"><a href="#3-2-1-A-原子性" class="headerlink" title="3.2.1 A 原子性"></a>3.2.1 A 原子性</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li><p>原子指令，cas</p>
+</li>
+<li><p>内存序</p>
+<ul>
+<li><p>编译期乱序</p>
+</li>
+<li><p>运行时乱序</p>
+</li>
+<li><p>CPU乱序</p>
+<ol>
+<li><p>内存序由本身CPU内存架构与缓存一致性共同保证</p>
+<ol>
+<li><p>CPU内存架构</p>
+<ol>
+<li><p>x86：TSO模型，本身最终一致性（不保证STORELOAD），可以通过LOCKREAD和MFENCE保证顺序一致性</p>
+</li>
+<li><p>ARM：乱序，通过DSB指令同步保证顺序一致性</p>
+</li>
+</ol>
+</li>
+<li><p>缓存一致性</p>
+<ol>
+<li><p>x86是由于存在store buffer，所以不能保证STORELOAD</p>
+</li>
+<li><p>arm存在store buffer和Load buffer，并且load buffer可以乱序</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>C++一致性（不支持线性一致性）</p>
+<ol>
+<li><p>顺序一致性</p>
+</li>
+<li><p>获取释放一致性（3个）</p>
+</li>
+<li><p>松散一致性</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>缓存一致性，MESI F</p>
+</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>日志，回滚</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li><p>不同架构的CAS</p>
+</li>
+<li><p>不同架构的缓存一致性</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-2-2-C-一致性"><a href="#3-2-2-C-一致性" class="headerlink" title="3.2.2 C 一致性"></a>3.2.2 C 一致性</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li>最终一致性，顺序一致性，线性一致性</li>
+<li>缓存一致性</li>
+<li>编译时指令重排、运行时指令重排、流水线指令重排</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>2PC，TCC，paxos，raft</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li>缓存一致性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-2-3-I-隔离"><a href="#3-2-3-I-隔离" class="headerlink" title="3.2.3 I 隔离"></a>3.2.3 I 隔离</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li><p>prefetch, expect, unreachable, assume_aligned</p>
+</li>
+<li><p>alignas</p>
+</li>
+<li><p>各种大小，optional&lt;bool&gt;，shared_ptr，unique_ptr</p>
+</li>
+<li><p>向量化优化、ICC编译器优化（SIMD指令，AVX。作为对比，GPU使用SIMT与tensor core）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件</p>
+<ul>
+<li>绑定核心、运行时隔离，锁频率</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-2-4-D-持久化"><a href="#3-2-4-D-持久化" class="headerlink" title="3.2.4 D 持久化"></a>3.2.4 D 持久化</h4><ul>
+<li><p>软件</p>
+<ul>
+<li><p>知识</p>
+<ul>
+<li>ceph，pv，pnfs</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-3-C"><a href="#3-3-C" class="headerlink" title="3.3 C++"></a>3.3 C++</h3><h4 id="3-3-1-四种语言"><a href="#3-3-1-四种语言" class="headerlink" title="3.3.1 四种语言"></a>3.3.1 四种语言</h4><p>C with class+STL+模板+RAII所有权</p>
+<h4 id="3-3-2-其他"><a href="#3-3-2-其他" class="headerlink" title="3.3.2 其他"></a>3.3.2 其他</h4><ol>
+<li><p>deleter函数，用于智能指针析构时候调用</p>
+</li>
+<li><p>auto decltype(auto) template declval</p>
+</li>
+<li><p>左右值</p>
+</li>
+<li><p>RVO&#x2F;NRVO&#x2F;URVO</p>
+</li>
+<li><p>CRTP：inline i-cache</p>
+</li>
+<li><p>weak ptr&#x2F;shared ptr</p>
+</li>
+<li><p>原子变量无锁编程</p>
+</li>
+<li><p>模板编程</p>
+</li>
+<li><p>dual abi</p>
+</li>
+<li><p>线程池</p>
+</li>
+<li><p>暗坑：</p>
+<ol>
+<li><p>std::vector 在扩容时，默认会尝试使用 Move（移动），但前提是你的类的移动构造函数必须被标记为 noexcept。如果没有标记 noexcept（且该类支持拷贝），vector 就会退而求其次，强制调用 Copy（拷贝）构造函数。解决方法：必须给move加noexcept</p>
+</li>
+<li><p>画蛇添足的 return std::move(local_var);（RVO 阻断）</p>
+</li>
+<li><p>对 const 对象使用 std::move，会悄无声息地变成 Copy</p>
+</li>
+<li><p>虚函数遇上默认参数（“精神分裂”的调用）</p>
+</li>
+<li><p>范围 for 循环里的“生命周期刺客”（Dangling Reference）</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="3-4-调度"><a href="#3-4-调度" class="headerlink" title="3.4 调度"></a>3.4 调度</h3><h4 id="3-4-1-简历调度分类"><a href="#3-4-1-简历调度分类" class="headerlink" title="3.4.1 简历调度分类"></a>3.4.1 简历调度分类</h4><h5 id="3-4-1-1-系统方面"><a href="#3-4-1-1-系统方面" class="headerlink" title="3.4.1.1 系统方面"></a>3.4.1.1 系统方面</h5><ol>
+<li><p>VLLM</p>
+<ul>
+<li>不同队列（waiting&#x2F;swapped&#x2F;running）-&gt;统一合并，通过函数决定调度哪个</li>
+<li>不需要max length&#x2F;prefix reuse&#x2F;beam search research</li>
+</ul>
+</li>
+<li><p>Vermeer</p>
+<ul>
+<li>OOP 设计</li>
+</ul>
+</li>
+<li><p>Volcano</p>
+<ul>
+<li>帮派调度</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-1-2-应用方面"><a href="#3-4-1-2-应用方面" class="headerlink" title="3.4.1.2 应用方面"></a>3.4.1.2 应用方面</h5><ol>
+<li><p>ProductionLineScheduler</p>
+</li>
+<li><p>湖杉调度器</p>
+</li>
+<li><p>Ray</p>
+<ul>
+<li>TP&#x2F;PP&#x2F;DP&#x2F;ZeRo并行（参考CS336）</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-1-3-资源调度"><a href="#3-4-1-3-资源调度" class="headerlink" title="3.4.1.3 资源调度"></a>3.4.1.3 资源调度</h5><ol>
+<li>LMCache<ul>
+<li>dist_connector</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-4-2-调度分类"><a href="#3-4-2-调度分类" class="headerlink" title="3.4.2 调度分类"></a>3.4.2 调度分类</h4><h5 id="3-4-2-1-主次调度器"><a href="#3-4-2-1-主次调度器" class="headerlink" title="3.4.2.1 主次调度器"></a>3.4.2.1 主次调度器</h5><ol>
+<li><p>主调度器</p>
+<ul>
+<li>负责全局资源分配</li>
+</ul>
+</li>
+<li><p>次调度器</p>
+<ul>
+<li>负责节点内资源分配</li>
+<li>工作窃取</li>
+<li>小任务并行</li>
+<li>重调度</li>
+<li>任务融合</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-2-2-调度对象"><a href="#3-4-2-2-调度对象" class="headerlink" title="3.4.2.2 调度对象"></a>3.4.2.2 调度对象</h5><ol>
+<li><p>调度资源</p>
+<ul>
+<li>CPU&#x2F;GPU&#x2F;内存&#x2F;带宽</li>
+<li>LMCache</li>
+</ul>
+</li>
+<li><p>调度任务</p>
+<ul>
+<li>任务优先级</li>
+<li>任务依赖关系</li>
+<li>任务类型</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-2-3-调度目标函数"><a href="#3-4-2-3-调度目标函数" class="headerlink" title="3.4.2.3 调度目标函数"></a>3.4.2.3 调度目标函数</h5><ol>
+<li><p>应用层指标</p>
+</li>
+<li><p>系统层指标</p>
+</li>
+</ol>
+<h4 id="3-4-3-AI相关"><a href="#3-4-3-AI相关" class="headerlink" title="3.4.3 AI相关"></a>3.4.3 AI相关</h4><h5 id="3-4-3-1-调度特性"><a href="#3-4-3-1-调度特性" class="headerlink" title="3.4.3.1 调度特性"></a>3.4.3.1 调度特性</h5><ol>
+<li>资源<ul>
+<li>GPU&#x2F;TPU&#x2F;NPU</li>
+<li>大内存</li>
+<li>高带宽（NVLink&#x2F;PCIe）</li>
+</ul>
+</li>
+<li>算法<ul>
+<li>公平性<ul>
+<li>3D 装箱</li>
+<li>防止饿死或损失，采用预先看，满足SLO</li>
+</ul>
+</li>
+<li>原子性<ul>
+<li>帮派调度</li>
+</ul>
+</li>
+<li>弹性<ul>
+<li>任务重调度</li>
+<li>任务融合</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他<ul>
+<li>资源补足<ul>
+<li>动态扩缩容</li>
+<li>资源预留</li>
+<li>重调度</li>
+<li>Checkpoint 恢复</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-3-2-vLLM"><a href="#3-4-3-2-vLLM" class="headerlink" title="3.4.3.2 vLLM"></a>3.4.3.2 vLLM</h5><ol>
+<li>PagedAttention<ul>
+<li>目的：减少显存占用<ul>
+<li>共享显存</li>
+<li>非连续显存</li>
+<li>抢占</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Continuous Batching<ul>
+<li>目的：提高吞吐量<ul>
+<li>动态批处理</li>
+<li>请求合并</li>
+<li>异步执行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Memory Management<ul>
+<li>目的：优化内存使用<ul>
+<li>dist_connector</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h5 id="3-4-3-3-并行"><a href="#3-4-3-3-并行" class="headerlink" title="3.4.3.3 并行"></a>3.4.3.3 并行</h5><p>参考CS336</p>
+<ol>
+<li><p>计算</p>
+<ul>
+<li>内存<ul>
+<li>$$M_1 &#x3D; activ + grad + optimizer + param<br> \ &#x3D; (data \times layer \times dim)<br> \ + param + param + param $$</li>
+<li>$M &#x3D; M_1 \times Size_{FP}$</li>
+<li>$param &#x3D; dim \times dim \times layer + dim$</li>
+</ul>
+</li>
+<li>算力<ul>
+<li>$$FLOPS &#x3D; F + B \<br> &#x3D; 2 \times data \times param + 4 \times data \times param$$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>分配</p>
+</li>
+</ol>
+<p>先计算总显存消耗（大约是总模型参数数目乘以8GB），然后根据同一个rack中GPU数量决定TP数量，根据显存消耗除以同一个rack中显存总数决定PP数量，最后根据总rack数目决定DP数量</p>
+<ol start="3">
+<li>ZeRo<ol>
+<li>优化器状态切片</li>
+<li>优化器状态+梯度切片</li>
+<li>优化器状态+梯度+参数切片（TP）</li>
+</ol>
+</li>
+</ol>
+<h5 id="3-4-3-4-基础知识"><a href="#3-4-3-4-基础知识" class="headerlink" title="3.4.3.4 基础知识"></a>3.4.3.4 基础知识</h5><ol>
+<li>rag&#x2F;agent&#x2F;volcano&#x2F;ray&#x2F;k8s</li>
+<li>pytorch&#x2F;rope&#x2F;moe&#x2F;TP&#x2F;DP&#x2F;PP&#x2F;CP&#x2F;EP&#x2F;ZeRo</li>
+<li>vllm&#x2F;lmcache&#x2F;cutile&#x2F;triton&#x2F;cublas&#x2F;cutlass&#x2F;nccl</li>
+<li>其他<ol>
+<li>temperature为0为什么还有随机性？<ol>
+<li>batch计算时调度随机，而浮点有非结合性</li>
+<li>MOE网络启用的专家不同</li>
+<li>异构硬件导致</li>
+<li>tie-breaking，完全相同时选择可能有随机性</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h5 id="3-4-3-5-自我介绍"><a href="#3-4-3-5-自我介绍" class="headerlink" title="3.4.3.5 自我介绍"></a>3.4.3.5 自我介绍</h5><ol>
+<li>基本信息</li>
+<li>调度经验<ol>
+<li>应用调度</li>
+<li>框架调度</li>
+<li>系统调度</li>
+</ol>
+</li>
+<li>系统能力</li>
+</ol>
+<h3 id="3-5-互联网"><a href="#3-5-互联网" class="headerlink" title="3.5 互联网"></a>3.5 互联网</h3><h4 id="3-5-1-k8s调度"><a href="#3-5-1-k8s调度" class="headerlink" title="3.5.1 k8s调度"></a>3.5.1 k8s调度</h4><ol>
+<li><p>karmada集群间调度器，类似k8s集群调度器</p>
+</li>
+<li><p>k8s集群调度器</p>
+<ol>
+<li><p>Prepare【本身indexer存在一层cache】【这里会每次新建一个Snapshot cache，通过Incremental Update方式】</p>
+<ol>
+<li><p>所有未调度的 Pod 都在这里排队。队列分为：</p>
+<ul>
+<li><p><strong>ActiveQ:</strong> 等待调度的 Pod。</p>
+</li>
+<li><p><strong>BackoffQ:</strong> 调度失败过，等待重试的 Pod（指数退避）。</p>
+</li>
+<li><p><strong>UnschedulableQ:</strong> 暂时无法调度的 Pod（例如资源不足），直到集群状态发生变化（如新增了 Node）才会被移回 ActiveQ。</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>filter</p>
+<ol>
+<li><p>prefilter</p>
+<ol>
+<li><p>快速失败，提前计算pod依赖的其他pod的信息</p>
+</li>
+<li><p>可以用来写gang scheduling</p>
+</li>
+</ol>
+</li>
+<li><p>filter</p>
+<ol>
+<li>过滤可用的node</li>
+</ol>
+</li>
+<li><p>postfilter</p>
+<ol>
+<li>如果没有可用的，那么执行抢占，标记pod（Nominate），重新放入队列（抢占具有速率限制和容量限制，调度也有指数退避）</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>score</p>
+<ol>
+<li><p>prescore</p>
+<ol>
+<li>计算每个节点的一些预知信息，例如是否有镜像</li>
+</ol>
+</li>
+<li><p>score</p>
+<ol>
+<li>打分</li>
+</ol>
+</li>
+<li><p>postscore</p>
+<ol>
+<li>归一化</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>Reserve【存在一层cache】</p>
+<ol>
+<li><p>如果紧接着处理 Pod B（毫秒级差距），Pod B 去查 Scheduler Cache 时，看到的 Node 1 已经是<strong>扣除</strong>过资源的状态了。<strong>这就解决了连续调度的资源冲突问题。</strong></p>
+</li>
+<li><p>如果后续阶段失败，必须触发 <strong>Unreserve</strong> 插件把资源加回去。</p>
+</li>
+</ol>
+</li>
+<li><p>Permit</p>
+<ol>
+<li>可以实现组调度，但是不如prefilter来的快</li>
+</ol>
+</li>
+<li><p>Binding</p>
+<ol>
+<li><p>PreBind</p>
+<ol>
+<li>挂载网络等</li>
+</ol>
+</li>
+<li><p>Bind（apiserver写入binding对象）</p>
+</li>
+<li><p>PostBind</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>单个节点调度器</p>
+<ol>
+<li><p>混布</p>
+</li>
+<li><p>绑核</p>
+</li>
+<li><p>核隔离</p>
+</li>
+<li><p>cache line</p>
+</li>
+<li><p>内存隔离</p>
+</li>
+</ol>
+</li>
+<li><p>二级调度器</p>
+<ol>
+<li><p>pod通过schedulerName指定</p>
+</li>
+<li><p>注册一个KubeSchedulerConfiguration，里面配置使用的步骤（score等）</p>
+</li>
+</ol>
+</li>
+<li><p>Descheduler</p>
+<ol>
+<li>定期任务，可以解决资源碎片化，打散pod不均匀，亲和性滞后，拓扑分布倾斜等问题</li>
+</ol>
+</li>
+<li><p>Autoscaling</p>
+<ol>
+<li><p>为 CRD 实现 <code>/scale</code> 子资源并对接原生 HPA</p>
+</li>
+<li><p>基于业务指标的自定义伸缩（Custom&#x2F;External Metrics API）prometheus</p>
+</li>
+<li><p>开发专属的 Autoscaler Controller（缩容到 0 (Scale-to-Zero)）</p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="3-5-2-k8s架构"><a href="#3-5-2-k8s架构" class="headerlink" title="3.5.2 k8s架构"></a>3.5.2 k8s架构</h4><ol>
+<li><p>流程</p>
+<ol>
+<li><p>准入</p>
+<ol>
+<li><p>提交</p>
+</li>
+<li><p>认证与鉴权 (AuthN &amp; AuthZ)</p>
+</li>
+<li><p>准入控制</p>
+</li>
+<li><p>持久化</p>
+</li>
+</ol>
+</li>
+<li><p>Controller</p>
+<ol>
+<li>编排</li>
+</ol>
+</li>
+<li><p>调度</p>
+</li>
+<li><p>Kubelet</p>
+<ol>
+<li><p>Kubelet 监听&#x2F;准入检查</p>
+</li>
+<li><p>同步循环 (SyncLoop)</p>
+<ol>
+<li><p>卷挂载CSI</p>
+</li>
+<li><p>拉镜像CRI</p>
+</li>
+<li><p>pause容器CNI</p>
+</li>
+<li><p>业务容器</p>
+</li>
+<li><p>探针检查</p>
+</li>
+</ol>
+</li>
+<li><p>上报</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>网络</p>
+<ol>
+<li><p>Envoy负责L7</p>
+</li>
+<li><p>Cilium：运作在 Layer 3 &#x2F; Layer 4，负责高性能</p>
+</li>
+<li><p>Kube-OVN：运作在 Layer 2 &amp; Layer 3，负责解析底层IP</p>
+</li>
+</ol>
+</li>
+<li><p>组件</p>
+<ol>
+<li><p>Informer</p>
+<ol>
+<li><p><strong>Reflector</strong> 监听 API Server，拿到变更。</p>
+</li>
+<li><p>变更进入 <strong>DeltaFIFO</strong>。（scheduler有多个）</p>
+</li>
+<li><p><strong>Informer</strong> 从队列取出变更。</p>
+<ol>
+<li><strong>Resync 机制</strong> Informer 有一个 <code>ResyncPeriod</code> 配置。这<strong>不是</strong>重新去 API Server 拉数据，而是定期将 Indexer 缓存中的数据重新“播放”一遍，触发 <code>OnUpdate</code> 事件。这不仅是为了兜底（防止由于逻辑错误导致状态丢失），也是为了给控制器通过 Level-Triggered（水平触发）逻辑进行自我修复的机会。</li>
+</ol>
+</li>
+<li><p>更新本地缓存 <strong>Indexer</strong>。</p>
+</li>
+<li><p>触发用户注册的 <strong>OnAdd&#x2F;OnUpdate&#x2F;OnDelete</strong> 回调函数。</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="3-5-3-语言"><a href="#3-5-3-语言" class="headerlink" title="3.5.3 语言"></a>3.5.3 语言</h4><p>go GMP抢占，移交，窃取，锁放饿死</p>
+<p>GC三色，逃逸，混合写</p>
+<h4 id="3-5-4-系统"><a href="#3-5-4-系统" class="headerlink" title="3.5.4 系统"></a>3.5.4 系统</h4><ul>
+<li><p>cgroups</p>
+</li>
+<li><p>namespace</p>
+</li>
+</ul>
+<h3 id="3-6-量化"><a href="#3-6-量化" class="headerlink" title="3.6 量化"></a>3.6 量化</h3><h4 id="3-6-1-基础知识"><a href="#3-6-1-基础知识" class="headerlink" title="3.6.1 基础知识"></a>3.6.1 基础知识</h4><h5 id="3-6-1-1-信息表示"><a href="#3-6-1-1-信息表示" class="headerlink" title="3.6.1.1 信息表示"></a>3.6.1.1 信息表示</h5><p>浮点数表示</p>
+<h5 id="3-6-1-2-异常控制"><a href="#3-6-1-2-异常控制" class="headerlink" title="3.6.1.2 异常控制"></a>3.6.1.2 异常控制</h5><p>中断、陷阱、故障、终止</p>
+<p>信号处理以及printf为什么不行</p>
+<h5 id="3-6-1-3-系统级IO"><a href="#3-6-1-3-系统级IO" class="headerlink" title="3.6.1.3 系统级IO"></a>3.6.1.3 系统级IO</h5><p>fork以及clone原理，execve，vfork</p>
+<p>进程间通信，管道消息队列，信号量共享内存</p>
+<p>socket信号eventff</p>
+<p>malloc: <a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/2030627026592321813?share_code=124wOVBMnen4C&utm_psn=2032439206111392502" >glibc malloc &#x2F; free 机制解析：一次分配从用户代码走到内核的全程 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h4 id="3-6-2-架构编程"><a href="#3-6-2-架构编程" class="headerlink" title="3.6.2 架构编程"></a>3.6.2 架构编程</h4><h5 id="3-6-2-1-核心"><a href="#3-6-2-1-核心" class="headerlink" title="3.6.2.1 核心"></a>3.6.2.1 核心</h5><p>隔离+绑核+schedule_fifo99+sced_rt_runtime_us+避免编译器优化</p>
+<h5 id="3-6-2-2-内存"><a href="#3-6-2-2-内存" class="headerlink" title="3.6.2.2 内存"></a>3.6.2.2 内存</h5><p>cache+tlb</p>
+<p>cr3+mmu+iommu:os+pin(mlock)+一方修改缓存失效+共享虚拟页表</p>
+<p>每个页表内部有权限位dirty位等</p>
+<p>pagefault是先访问vma，这里触发主要的segv，然后调用handler检查。检查时候尝试分配内存（应对mmap共享内存与匿名页或hole未分配情况），或者加载页到内存中（应对swap情况），如果不足调用oom killer。在任何一个步骤下都可能产生并发错误。</p>
+<h5 id="3-6-2-3-网络存储"><a href="#3-6-2-3-网络存储" class="headerlink" title="3.6.2.3 网络存储"></a>3.6.2.3 网络存储</h5><p>dpdk+spdk相比mmap+sendfile 1. 用户态切换，因为dpdk一直在用户态 2. 不断轮询，而不是中断，省去中断延迟开销</p>
+<p>OpenOnload：类似dpdk，但是提供更完整的协议栈，并且不batch</p>
+<p>ef_vi：相比于dpdk+spdk为了提升吞吐量使用batch的方式，ef_vi降低了延迟，因为其不提供batch</p>
+<p>reactor&#x2F;proactor</p>
+<h3 id="3-7-系统设计"><a href="#3-7-系统设计" class="headerlink" title="3.7 系统设计"></a>3.7 系统设计</h3><h4 id="3-7-1-阶段"><a href="#3-7-1-阶段" class="headerlink" title="3.7.1 阶段"></a>3.7.1 阶段</h4><p>RESHARED</p>
+<p>要求-&gt;API-&gt;估计（带宽&#x2F;存储）-&gt;High Level Design（CDN&#x2F;网线设计&#x2F;集群）-&gt;细节-&gt;评估-&gt;组件细节</p>
+<h4 id="3-7-2-计算"><a href="#3-7-2-计算" class="headerlink" title="3.7.2 计算"></a>3.7.2 计算</h4><table>
+<thead>
+<tr>
+<th><strong>Component</strong></th>
+<th><strong>Time (Nanoseconds)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1 cache reference</td>
+<td>0.9</td>
+</tr>
+<tr>
+<td>L2 cache reference</td>
+<td>2.8</td>
+</tr>
+<tr>
+<td>L3 cache reference</td>
+<td>12.9</td>
+</tr>
+<tr>
+<td>Main memory reference</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Compress 1 KB with Snzip</td>
+<td>3,000 (3 microseconds)</td>
+</tr>
+<tr>
+<td>Read 1 MB sequentially from memory</td>
+<td>9,000 (9 microseconds)</td>
+</tr>
+<tr>
+<td>Read 1 MB sequentially from SSD</td>
+<td>200,000 (200 microseconds)</td>
+</tr>
+<tr>
+<td>Round trip within the same data center</td>
+<td>500,000 (500 microseconds)</td>
+</tr>
+<tr>
+<td>Read 1 MB sequentially from the SSD with a speed ~1 GB&#x2F;sec SSD</td>
+<td>1,000,000 (1 milliseconds)</td>
+</tr>
+<tr>
+<td>Disk seek</td>
+<td>4,000,000 (4 milliseconds)</td>
+</tr>
+<tr>
+<td>Read 1 MB sequentially from disk</td>
+<td>2,000,000 (2 milliseconds)</td>
+</tr>
+<tr>
+<td>Send packet SF—&gt;NYC</td>
+<td>71,000,000 (71 milliseconds)</td>
+</tr>
+</tbody></table>
+<p>前端到达：10us</p>
+<p>前端处理：1us</p>
+<p>cpu：0.5us+1us+0.5us</p>
+<p>返回：1us</p>
+<p>$Concurrency &#x3D; Throughput*Lantency$</p>
+<p>$Threads &#x3D; N_{cpu}<em>N_{利用}</em>(1+\frac{N}{C})$</p>
+<h4 id="3-7-3-组件"><a href="#3-7-3-组件" class="headerlink" title="3.7.3 组件"></a>3.7.3 组件</h4><p>前端-&gt;CDN&#x2F;负载均衡-&gt;消息队列-&gt;分析系统&#x2F;索引系统-&gt;缓存&#x2F;存储</p>
+<p>UDP-&gt;CPU-&gt;对齐&#x2F;原子操作-&gt;共享内存RING BUFFER-&gt;dpdk&#x2F;spdk(时间优化50us-&gt;1us)-&gt;哈希&#x2F;布隆过滤器-&gt;绑核</p>
+<p>防止LOOK AHEAD</p>
+<h4 id="3-7-4-非功能性需求"><a href="#3-7-4-非功能性需求" class="headerlink" title="3.7.4 非功能性需求"></a>3.7.4 非功能性需求</h4><p>SPARCS</p>
+<p>扩展性、性能、可用性、可靠性、一致性、安全性</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="1-为什么使用epoll而不是iouring"><a href="#1-为什么使用epoll而不是iouring" class="headerlink" title="1. 为什么使用epoll而不是iouring"></a>1. 为什么使用epoll而不是iouring</h4><ol>
+<li><p>iouring必须提前指定大小</p>
+</li>
+<li><p>batch比较小时，epoll性能更好</p>
+</li>
+<li><p>iouring有安全问题</p>
+</li>
+</ol>
+<h3 id="2-ASan"><a href="#2-ASan" class="headerlink" title="2. ASan"></a>2. ASan</h3>
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

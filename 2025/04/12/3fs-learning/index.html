@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/04/12/3fs-learning/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. 设计1.1 架构1.1.1 客户端1.1.1.1 简介 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3fs learning">
+<meta property="og:url" content="http://example.com/2025/04/12/3fs-learning/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 设计1.1 架构1.1.1 客户端1.1.1.1 简介 fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）  Native client（USRBIO）  File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。  数据通路走native client：自己开发的library动态库  每个 USRBIO 实例使用一个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-fe5d3f294916ce8b6d95f630208702c6_1440w.jpg">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/676be3fe09ec4dc39d134b1b3258a449~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=1fXFqtu0nC%252B83%252BkQdGLvq2M%252BbC4%253D">
+<meta property="og:image" content="https://picx.zhimg.com/v2-0edac3d23a41091586120e2a134a0085_r.jpg">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/77283e57bfb84be9ae9611f74328f826~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=ekheeig3LqLy%252B4Rg242n4whhekQ%253D">
+<meta property="og:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/d3dca3319c754407887928192a51d4cc~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=0L6CZpl8cucfnltA7m6AdLSmrWM%253D">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/img_convert/920d724b3c8d9ea4f8817ba33034ac48.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/img_convert/ebf6aa6c45ecde9695479a3a346e10e9.png">
+<meta property="og:image" content="https://pica.zhimg.com/v2-524abb99eba02c545caf5b093bfc9b3e_1440w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-8c4145ee4528ae85fe7a887af2068bc5_1440w.jpg">
+<meta property="article:published_time" content="2025-04-12T07:16:42.000Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.187Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I=">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            3fs learning -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">3fs learning</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv5</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-04-12 15:16:42</span>
+        <span class="mobile">2025-04-12 15:16</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-设计"><a href="#1-设计" class="headerlink" title="1. 设计"></a>1. 设计</h2><h3 id="1-1-架构"><a href="#1-1-架构" class="headerlink" title="1.1 架构"></a>1.1 架构</h3><h4 id="1-1-1-客户端"><a href="#1-1-1-客户端" class="headerlink" title="1.1.1 客户端"></a>1.1.1 客户端</h4><h5 id="1-1-1-1-简介"><a href="#1-1-1-1-简介" class="headerlink" title="1.1.1.1 简介"></a>1.1.1.1 简介</h5><ul>
+<li><p>fuse（需要多次内核态和用户态拷贝，多线程锁抢占性能不佳）</p>
+</li>
+<li><p>Native client（USRBIO）</p>
+<ul>
+<li><p>File metadata 仍然走fuse daemon流程（例如open&#x2F;close&#x2F;stat）。</p>
+</li>
+<li><p>数据通路走native client：自己开发的library动态库</p>
+</li>
+<li><p>每个 USRBIO 实例使用一个 Iov 文件和一个 Ior 文件</p>
+<ul>
+<li>Iov 文件用来作为读写数据的 buffer<ul>
+<li>用户提前规划好需要使用的总容量</li>
+<li>文件创建之后 FUSE Daemon 将该其注册成 RDMA memory buffer，进而实现整个链路的零拷贝（进而加上与服务端的零拷贝）</li>
+</ul>
+</li>
+<li>Ior 文件用来实现 IoRing<ul>
+<li>用户提前规划好并发度</li>
+<li>在整个文件上抽象出了提交队列和完成队列，具体布局参考上图</li>
+<li>文件的尾部是提交完成队列的信号量，FUSE Daemon 在处理完 IO 后通过这个信号量通知到用户进程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>一个挂载点的所有 USRBIO 共享 3 个 submit sem 文件</p>
+<ul>
+<li><p>这三个文件作为 IO 提交事件的信号量（submit sem），每一个文件代表一个优先级</p>
+</li>
+<li><p>一旦某个 USRBIO 实例有 IO 需要提交，会通过该信号量通知到 FUSE Daemon</p>
+</li>
+</ul>
+</li>
+<li><p>所有的共享内存文件在挂载点 3fs-virt&#x2F;iovs&#x2F; 目录下均建有 symlink，指向 &#x2F;dev&#x2F;shm 下的对应文件。</p>
+<ul>
+<li>shm通过mmap创建，但是没有DMA技术，因此依旧与文件类型相似，需要经过page cache</li>
+</ul>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/b4d1cbdb672b4071af9cf41f075f76d4~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=nBpSLrgkmhdfJ6tLa0MjZnP+38I="
+                      alt="picture.image"
+                ></p>
+</li>
+</ul>
+<h5 id="1-1-1-2-扩展"><a href="#1-1-1-2-扩展" class="headerlink" title="1.1.1.2 扩展"></a>1.1.1.2 扩展</h5><p><strong>DMA</strong></p>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>普通文件mmap</th>
+<th>DMA设备mmap</th>
+<th>匿名页mmap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>共享媒介</strong></td>
+<td>磁盘文件</td>
+<td>物理DMA缓冲区</td>
+<td>物理内存页</td>
+</tr>
+<tr>
+<td><strong>持久性</strong></td>
+<td>持久化到磁盘</td>
+<td>进程运行期间</td>
+<td>进程运行期间</td>
+</tr>
+<tr>
+<td><strong>亲缘关系</strong></td>
+<td>任意进程</td>
+<td>任意进程</td>
+<td>主要是父子进程</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>磁盘I&#x2F;O速度</td>
+<td>内存总线速度</td>
+<td>内存总线速度</td>
+</tr>
+<tr>
+<td><strong>同步机制</strong></td>
+<td>文件锁、信号量</td>
+<td>自定义驱动同步</td>
+<td>进程间同步原语</td>
+</tr>
+</tbody></table>
+<p>以下是一个使用DMA（直接内存访问）技术的C++代码示例，展示了如何在内存和I&#x2F;O设备之间进行DMA传输：</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// DMA缓冲区结构</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DMABuffer</span> &#123;</span><br><span class="line">    <span class="type">void</span>* virtAddr;    <span class="comment">// 虚拟地址（CPU可访问）</span></span><br><span class="line">    <span class="type">dma_addr_t</span> physAddr; <span class="comment">// 物理地址（设备可访问）</span></span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟DMA控制器类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DMAController</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> dmaFd;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">DMAController</span>() : <span class="built_in">dmaFd</span>(<span class="number">-1</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化DMA控制器</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">initialize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 在实际系统中，这里会打开DMA设备文件</span></span><br><span class="line">        dmaFd = <span class="built_in">open</span>(<span class="string">&quot;/dev/dma_device&quot;</span>, O_RDWR);</span><br><span class="line">        <span class="keyword">return</span> dmaFd &gt;= <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 分配DMA缓冲区</span></span><br><span class="line">    <span class="function">DMABuffer <span class="title">allocateBuffer</span><span class="params">(<span class="type">size_t</span> size)</span> </span>&#123;</span><br><span class="line">        DMABuffer buffer;</span><br><span class="line">        buffer.size = size;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分配物理连续的内存（在实际系统中可能需要特殊分配器）</span></span><br><span class="line">        buffer.virtAddr = <span class="built_in">mmap</span>(<span class="literal">NULL</span>, size, PROT_READ | PROT_WRITE,</span><br><span class="line">                              MAP_SHARED | MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (buffer.virtAddr == MAP_FAILED) &#123;</span><br><span class="line">            buffer.virtAddr = <span class="literal">nullptr</span>;</span><br><span class="line">            buffer.physAddr = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> buffer;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在实际系统中，这里需要获取物理地址</span></span><br><span class="line">        <span class="comment">// 这通常通过ioctl调用或其他内核接口实现</span></span><br><span class="line">        buffer.physAddr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">dma_addr_t</span>&gt;(buffer.virtAddr);</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;分配DMA缓冲区: 虚拟地址=&quot;</span> &lt;&lt; buffer.virtAddr </span><br><span class="line">                  &lt;&lt; <span class="string">&quot;, 物理地址=&quot;</span> &lt;&lt; std::hex &lt;&lt; buffer.physAddr &lt;&lt; std::dec</span><br><span class="line">                  &lt;&lt; <span class="string">&quot;, 大小=&quot;</span> &lt;&lt; size &lt;&lt; <span class="string">&quot;字节&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> buffer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 启动DMA传输</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">startTransfer</span><span class="params">(<span class="type">dma_addr_t</span> src, <span class="type">dma_addr_t</span> dst, <span class="type">size_t</span> size, <span class="type">bool</span> toDevice)</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;启动DMA传输: &quot;</span> </span><br><span class="line">                  &lt;&lt; (toDevice ? <span class="string">&quot;内存→设备&quot;</span> : <span class="string">&quot;设备→内存&quot;</span>)</span><br><span class="line">                  &lt;&lt; <span class="string">&quot;, 大小=&quot;</span> &lt;&lt; size &lt;&lt; <span class="string">&quot;字节&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在实际系统中，这里会配置DMA控制器寄存器</span></span><br><span class="line">        <span class="comment">// 设置源地址、目标地址、传输大小等</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟DMA传输延迟</span></span><br><span class="line">        <span class="built_in">usleep</span>(<span class="number">1000</span>); <span class="comment">// 1ms延迟</span></span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;DMA传输完成&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 释放DMA缓冲区</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">freeBuffer</span><span class="params">(DMABuffer&amp; buffer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (buffer.virtAddr) &#123;</span><br><span class="line">            <span class="built_in">munmap</span>(buffer.virtAddr, buffer.size);</span><br><span class="line">            buffer.virtAddr = <span class="literal">nullptr</span>;</span><br><span class="line">            buffer.physAddr = <span class="number">0</span>;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;释放DMA缓冲区&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">DMAController</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (dmaFd &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">close</span>(dmaFd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例使用类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DMAExample</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    DMAController dma;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">runExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 初始化DMA控制器</span></span><br><span class="line">        <span class="keyword">if</span> (!dma.<span class="built_in">initialize</span>()) &#123;</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;DMA控制器初始化失败&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">const</span> <span class="type">size_t</span> BUFFER_SIZE = <span class="number">4096</span>; <span class="comment">// 4KB缓冲区</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分配源缓冲区和目标缓冲区</span></span><br><span class="line">        DMABuffer srcBuffer = dma.<span class="built_in">allocateBuffer</span>(BUFFER_SIZE);</span><br><span class="line">        DMABuffer dstBuffer = dma.<span class="built_in">allocateBuffer</span>(BUFFER_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!srcBuffer.virtAddr || !dstBuffer.virtAddr) &#123;</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;缓冲区分配失败&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在源缓冲区中准备数据</span></span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* testData = <span class="string">&quot;Hello, DMA Transfer!&quot;</span>;</span><br><span class="line">        <span class="built_in">strncpy</span>(<span class="built_in">static_cast</span>&lt;<span class="type">char</span>*&gt;(srcBuffer.virtAddr), testData, BUFFER_SIZE);</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;源数据: &quot;</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">char</span>*&gt;(srcBuffer.virtAddr) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行内存到内存的DMA传输</span></span><br><span class="line">        <span class="keyword">if</span> (dma.<span class="built_in">startTransfer</span>(srcBuffer.physAddr, dstBuffer.physAddr, </span><br><span class="line">                             <span class="built_in">strlen</span>(testData) + <span class="number">1</span>, <span class="literal">false</span>)) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在实际系统中，这里需要等待DMA完成中断或轮询状态</span></span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;目标数据: &quot;</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">char</span>*&gt;(dstBuffer.virtAddr) &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行内存到设备的DMA传输（模拟）</span></span><br><span class="line">        dma.<span class="built_in">startTransfer</span>(srcBuffer.physAddr, <span class="number">0x1000</span>, BUFFER_SIZE, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行设备到内存的DMA传输（模拟）</span></span><br><span class="line">        dma.<span class="built_in">startTransfer</span>(<span class="number">0x2000</span>, dstBuffer.physAddr, BUFFER_SIZE, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 清理资源</span></span><br><span class="line">        dma.<span class="built_in">freeBuffer</span>(srcBuffer);</span><br><span class="line">        dma.<span class="built_in">freeBuffer</span>(dstBuffer);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类型定义（在实际系统中通常由内核头文件提供）</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">unsigned</span> <span class="type">long</span> <span class="type">dma_addr_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;=== DMA技术演示 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    DMAExample example;</span><br><span class="line">    example.<span class="built_in">runExample</span>();</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;=== 演示结束 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>这个代码示例演示了DMA技术的几个关键方面：</p>
+<ol>
+<li><strong>DMA缓冲区管理</strong>：分配和释放用于DMA传输的物理连续内存</li>
+<li><strong>传输控制</strong>：启动内存到设备、设备到内存的DMA传输</li>
+<li><strong>地址管理</strong>：处理虚拟地址和物理地址的转换</li>
+</ol>
+<p><strong>实际系统中的注意事项</strong>：</p>
+<ol>
+<li><p>在真实系统中，DMA操作通常需要：</p>
+<ul>
+<li>内核驱动支持</li>
+<li>物理地址的正确获取（通过DMA API）</li>
+<li>缓存一致性处理（<code>dma_sync_*</code>函数）</li>
+<li>中断处理完成通知</li>
+</ul>
+</li>
+<li><p>Linux内核中的实际DMA API包括：</p>
+<ul>
+<li><code>dma_alloc_coherent()</code> - 分配DMA一致性内存</li>
+<li><code>dma_map_single()</code> - 映射单个缓冲区用于DMA</li>
+<li><code>dma_unmap_single()</code> - 取消映射</li>
+</ul>
+</li>
+<li><p>编译时需要链接相关库，在实际嵌入式系统中可能需要交叉编译。</p>
+</li>
+</ol>
+<h4 id="1-1-2-服务端"><a href="#1-1-2-服务端" class="headerlink" title="1.1.2 服务端"></a>1.1.2 服务端</h4><ul>
+<li><p>cluster manager：集群状态管理，使用例如etcd等保证，实际使用<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=254486149&content_type=Article&match_order=1&q=FoundationDB&zhida_source=entity" >FoundationDB <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+</li>
+<li><p>meta service：使用FoundationDB存储元数据。</p>
+</li>
+<li><p>storage service：利用<strong>Chain Replication with Apportioned Queries</strong>保证一致性。</p>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic1.zhimg.com/v2-fe5d3f294916ce8b6d95f630208702c6_1440w.jpg"
+                      alt="v2-fe5d3f294916ce8b6d95f630208702c6_1440w"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/676be3fe09ec4dc39d134b1b3258a449~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=1fXFqtu0nC%252B83%252BkQdGLvq2M%252BbC4%253D"
+                      alt="picture.image"
+                ></p>
+<h3 id="1-2-无缓存（针对大模型场景随机读设计，缓存失效）"><a href="#1-2-无缓存（针对大模型场景随机读设计，缓存失效）" class="headerlink" title="1.2 无缓存（针对大模型场景随机读设计，缓存失效）"></a>1.2 无缓存（针对大模型场景随机读设计，缓存失效）</h3><p>在存储系统发展的早期，DRAM 缓存加 HDD 是主流方案，缓存设计弥补了硬件性能的巨大差距。随着 SSD 的引入，DRAM+SSD 的组合成为优化热点数据的利器。然而，全闪存时代的到来让复杂的缓存机制逐渐成为瓶颈。NVMe SSD 的超高性能，使得 DRAM 缓存在某些场景下反而拖慢了系统效率。</p>
+<h3 id="1-3-链式-CRAQ"><a href="#1-3-链式-CRAQ" class="headerlink" title="1.3 链式(CRAQ)"></a>1.3 链式(<a class="link"   target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=254415613&content_type=Article&match_order=1&q=CRAQ&zhida_source=entity" >CRAQ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</h3><h4 id="1-3-1-具体操作流程"><a href="#1-3-1-具体操作流程" class="headerlink" title="1.3.1 具体操作流程"></a>1.3.1 具体操作流程</h4><p>CARQ标准实现写操作流程：</p>
+<ol>
+<li>客户端把请求发给chain中的head target.</li>
+<li>head target本地执行完写请求后，把请求转发给 second target， second target同样先完成本地写操作后转发tail target.</li>
+<li>tail target 写成功后，会返回ack给前一个target，同样的ack最后返回给head target.</li>
+<li>head target返回给client，应答客户端成功。</li>
+</ol>
+<p><strong>3FS的的具体写操作</strong></p>
+<ol>
+<li><a class="link"   href="https://link.zhihu.com/?target=http://1.storage/" >storage <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> service接收到write request后，需要检查request带的chain的版本是否是本地最新的版本。如果不是，拒绝该write请求。</li>
+<li>写操作：target service数据通过RDMA Read操作实现，也就说是通过pull的方式拉取的。</li>
+<li><strong>不支持对同一个chunk的并发操作</strong>。在head target实现对同一个chunk的并发操作的串行访问：当数据写入到target的memory buffer中时，会对该chunk加lock锁住。</li>
+<li>每个storage service节点上可能存在同一个chunk的两个版本：committed version和 pending version. 版本号都是单调增加的：pending version &#x3D; committed version + 1</li>
+<li>在tail target，如果写操作成功，更新commited version为最新的pending version，并返回给前一个（predecessor） target</li>
+<li>当每个target收到后面（successor）target的成功的ack返回消息，committed version就会变为最新的pending version，并把ack信息继续返回给predecessor target，本地的chunk lock会被释放。</li>
+<li>head target会做同样的操作：修改commited version，释放chunk lock，返回客户端写操作成功的ack消息。</li>
+</ol>
+<p><strong>3FS读操作</strong></p>
+<p>3FS的读操作可以发送给任意一个chunk副本：</p>
+<ol>
+<li><p>当storage service收到读请求，检查如果对应的data chunk只有一个committed version，就把该版本的数据直接返回给client</p>
+<ol>
+<li><p>NodeX 检查本地 commitVer 和 updateVer 是否相等；</p>
+<ul>
+<li>步骤 2.1：如果不等，说明有其它 flying 的写请求，通知 Client 重试；</li>
+<li>步骤 2.2：如果相等，则从本地 chunk 读取数据，并通过 RDMA 写给 Client；</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>和原始的CRAQ不同，3FS的实现并没有去tail target上去查询确认版本信息</strong>。而是提供了两个选项：</p>
+<ol>
+<li><p>直接返回给客户端一个special status code，用户等一段时间后去重试。</p>
+</li>
+<li><p>客户端对数据一致性要求不敏感，可以直接返回pending version版本的数据给客户端。</p>
+</li>
+</ol>
+</li>
+</ol>
+<p><strong>错误处理</strong></p>
+<p>如果chain中的target故障，就把该target从chain中删除，然后请求重试。</p>
+<p>3FS系统中的具体处理方法是把故障的target添加到chain链的末尾并标记为offline状态。</p>
+<h4 id="1-3-2-优化"><a href="#1-3-2-优化" class="headerlink" title="1.3.2 优化"></a>1.3.2 优化</h4><ul>
+<li><p><strong>写操作顺序确认（Write-All）</strong>：虽然写操作需沿链顺序传播到所有节点，但RDMA的特性显著优化了这一过程：</p>
+<ul>
+<li><p><strong>RDMA的单边操作（One-Sided）</strong>：节点间通过RDMA直接写入下一节点的内存，无需目标节点CPU介入，降低写延迟。</p>
+</li>
+<li><p><strong>流水线化传输</strong>：链中节点可并行处理RDMA写入请求，利用高带宽网络实现高效流水线，减少整体写时延。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>读操作完全卸载</strong>：由于读请求由任意节点直接通过RDMA响应，主机的CPU无需处理网络协议栈，释放计算资源用于其他任务（如元数据管理或写协调）。</p>
+</li>
+<li><p><strong>批量处理与高效同步</strong>：RDMA支持大规模并发数据传输，CRAQ的版本控制机制（如元数据一致性标记）可快速同步，避免传统网络协议中的ACK风暴。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://picx.zhimg.com/v2-0edac3d23a41091586120e2a134a0085_r.jpg"
+                      alt="v2-0edac3d23a41091586120e2a134a0085_r"
+                ></p>
+</li>
+</ul>
+<h3 id="1-3-小文件以及布局"><a href="#1-3-小文件以及布局" class="headerlink" title="1.3 小文件以及布局"></a>1.3 小文件以及布局</h3><ul>
+<li><h4 id="FFRecord"><a href="#FFRecord" class="headerlink" title="FFRecord"></a>FFRecord</h4></li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/77283e57bfb84be9ae9611f74328f826~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=ekheeig3LqLy%252B4Rg242n4whhekQ%253D"
+                      alt="picture.image"
+                ></p>
+<ul>
+<li><strong>布局</strong><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://p6-volc-community-sign.byteimg.com/tos-cn-i-tlddhu82om/d3dca3319c754407887928192a51d4cc~tplv-tlddhu82om-image.image?=&amp;rk3s=8031ce6d&amp;x-expires=1744533051&amp;x-signature=0L6CZpl8cucfnltA7m6AdLSmrWM%253D"
+                      alt="picture.image"
+                ></li>
+</ul>
+<h3 id="1-4-数据恢复"><a href="#1-4-数据恢复" class="headerlink" title="1.4 数据恢复"></a>1.4 数据恢复</h3><p>存储服务崩溃、重启、介质故障，对应的存储 Target 不参与数据写操作，会被移动到 chain 的末尾。</p>
+<ol>
+<li>数据恢复流程</li>
+</ol>
+<ul>
+<li>步骤 1：Local Node 向 Remote Node 发起 meta 获取，Remote Node 读取本地 meta；</li>
+<li>步骤 2：Remote Node 向 Local Node 返回元数据信息，Local Node 比对数据差异；</li>
+<li>步骤 3：若数据有差异，Local Node 读取本地 chunk 数据到内存；</li>
+<li>步骤 4：Remote Node 单边读取 Local Node chunk 内存数据；</li>
+<li>步骤 5：Remote Node 申请新 chunk，并把数据写入新 chunk。</li>
+</ul>
+<ol start="2">
+<li>Sync Data 原则：</li>
+</ol>
+<ul>
+<li>如果 chunk Local Node 存在 Remote Node 不存在，需要同步；</li>
+<li>如果 Remote Node 存在 Local Node不存在，需要删除；</li>
+<li>如果 Local Node 的 chain version 大于Remote Node，需要同步；</li>
+<li>如果 Local Node 和Remote Node chain version 一样大，但是 commit version 不同，需要同步；</li>
+<li>其他情况，包括完全相同的数据，或者正在写入的请求数据，不需要同步。</li>
+</ul>
+<h3 id="1-5-3FS-如何优化-KV-Cache？"><a href="#1-5-3FS-如何优化-KV-Cache？" class="headerlink" title="1.5 3FS 如何优化 KV Cache？"></a>1.5 <strong>3FS 如何优化 KV Cache？</strong></h3><ol>
+<li><p><strong>存储容量扩展性</strong>（分离式架构核心价值）</p>
+<ul>
+<li><p>通过存储计算分离，3FS 可将 KV Cache 存储在专用存储节点池而非 GPU 显存&#x2F;DRAM 中</p>
+</li>
+<li><p>单节点可支持 TB 级缓存容量（DRAM 方案通常&lt;1TB），允许部署千亿参数模型</p>
+</li>
+<li><p>典型案例：单个 A100 GPU 显存仅 80GB，而 3FS 集群可线性扩展至 PB 级</p>
+</li>
+</ul>
+</li>
+<li><p><strong>高吞吐访问</strong>（RDMA + Direct I&#x2F;O 的组合优势）</p>
+<ul>
+<li><p>RDMA 网络提供 100Gbps+ 带宽和 μs 级延迟，相比 TCP&#x2F;IP 网络延迟降低 10 倍</p>
+</li>
+<li><p>Direct I&#x2F;O 绕过内核缓存，使 4KB 随机读取延迟稳定在 20μs 以内（传统方案受内核调度影响可能达 100μs+）</p>
+</li>
+<li><p>实测数据：在 8 节点集群中实现 800GB&#x2F;s 聚合带宽，满足千卡集群的 KV 读取需求</p>
+</li>
+</ul>
+</li>
+<li><p><strong>一致性保障</strong>（CRAQ 协议的独特价值）</p>
+<ul>
+<li><p>链式复制确保所有存储节点数据强一致，避免多副本场景下的数据版本冲突</p>
+</li>
+<li><p>写操作通过链式提交（Node1→Node2→…→NodeN），读操作可从任意副本读取最新已提交数据</p>
+</li>
+<li><p>对比实验：在 10% 写负载下，CRAQ 的读取吞吐比 Raft 高 3.2 倍</p>
+</li>
+<li><p>和原始的CRAQ不同，3FS的实现并没有去tail target上去查询确认版本信息。而是提供了两个选项：</p>
+<ol>
+<li><p>直接返回给客户端一个special status code，用户等一段时间后去重试。</p>
+</li>
+<li><p>客户端对数据一致性要求不敏感，可以直接返回pending version版本的数据给客户端。</p>
+</li>
+</ol>
+</li>
+<li><p>利用RDMA，解除CPU占用</p>
+</li>
+</ul>
+</li>
+<li><p><strong>小文件</strong></p>
+<ul>
+<li><p>FFRecord</p>
+<ul>
+<li>避免大量的小文件，所有的样本数据在一个或多个大文件里</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>其他优化</strong></p>
+<ul>
+<li>数据读取模式适配：任何任务从3FS上读取数据，要尽可能让64个存储服务节点能同时读取数据，进而降低单存储节点的带宽需求。我们把块大小缩小到 512KB，并且增加了一个文件分布到的服务器数目的控制，最终成功解决了这个问题。</li>
+<li>流量分类控制：infiniband，进行分类，将流量打满</li>
+<li>客户端内存优化：减少用户态内核态拷贝</li>
+</ul>
+</li>
+</ol>
+<h3 id="1-6-3FS-KV接口"><a href="#1-6-3FS-KV接口" class="headerlink" title="1.6 3FS-KV接口"></a>1.6 3FS-KV接口</h3><h4 id="1-6-1-概览"><a href="#1-6-1-概览" class="headerlink" title="1.6.1 概览"></a>1.6.1 概览</h4><ul>
+<li><p>接入vllm</p>
+</li>
+<li><p>类似kv，通过USRBIO接口</p>
+</li>
+<li><p>kvcache index（meta data）放在内存中</p>
+<ul>
+<li><p>周期性更新，但是不需要保证最新，因为可以通过计算获取</p>
+</li>
+<li><p>也要持久化</p>
+</li>
+</ul>
+</li>
+<li><p>kvcache data放在3FS中，通过USRBIO访问</p>
+</li>
+<li><p>官方文档<a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/src/lib/api/UsrbIo.md" >3FS&#x2F;src&#x2F;lib&#x2F;api&#x2F;UsrbIo.md at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+</ul>
+<p>架构图可以参考<a class="link"   target="_blank" rel="noopener" href="https://developer.volcengine.com/articles/7480397583173877797" >DeepSeek 3FS 架构分析和思考（上篇） - 文章 - 开发者社区 - 火山引擎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>特点：</p>
+<ul>
+<li><p>只对data负责，metadata优先存放在内存中</p>
+</li>
+<li><p>允许多进程并发提交任务，但是只有3fs自己才可以写入cqe（因此cqe的sem是设计在进程空间内部的，sqe的sem可以通过文件获取）</p>
+</li>
+<li><p>用户预先指定ring buffer大小</p>
+</li>
+<li><p>sqe和cqe中只有指针，通过共享内存来减少fuse进程与用户进程数据拷贝</p>
+</li>
+</ul>
+<h4 id="1-6-2-入口"><a href="#1-6-2-入口" class="headerlink" title="1.6.2 入口"></a>1.6.2 入口</h4><ul>
+<li><p>python接口：hf3fs_fuse&#x2F;io.py</p>
+</li>
+<li><p>USRBIO原本接口：src&#x2F;lib&#x2F;api&#x2F;hf3fs_usrbio.h</p>
+</li>
+</ul>
+<p>提供iov和ior接口，但是其中Hf3fsIorHandle被置为void*</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/img_convert/920d724b3c8d9ea4f8817ba33034ac48.png"
+                      alt="图片"
+                ></p>
+<h4 id="1-6-3-数据结构设计"><a href="#1-6-3-数据结构设计" class="headerlink" title="1.6.3 数据结构设计"></a>1.6.3 数据结构设计</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/img_convert/ebf6aa6c45ecde9695479a3a346e10e9.png"
+                      alt="图片"
+                ></p>
+<p>IoRing实现位置：<a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/0fd4d9b308f0d7632c6566a881d0fc9ee0584708/src/fuse/IoRing.h" >3FS&#x2F;src&#x2F;fuse&#x2F;IoRing.h at 0fd4d9b308f0d7632c6566a881d0fc9ee0584708 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>允许并发提交，不允许并发准备（初始化）</p>
+<h4 id="1-6-4-流程"><a href="#1-6-4-流程" class="headerlink" title="1.6.4 流程"></a>1.6.4 流程</h4><p>例子：<a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/0fd4d9b308f0d7632c6566a881d0fc9ee0584708/src/lib/api/UsrbIo.md" >3FS&#x2F;src&#x2F;lib&#x2F;api&#x2F;UsrbIo.md at 0fd4d9b308f0d7632c6566a881d0fc9ee0584708 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ol>
+<li><p>调用hf3fs_iovcreate&#x2F;hf3fs_iovopen&#x2F;hf3fs_iovwrap来初始化iov区域</p>
+</li>
+<li><p>-&gt;调用hf3fs_iovcreate_general初始化iov区域，取决于是否是numa分配的</p>
+</li>
+<li><p>调用hf3fs_iorcreate创建ior</p>
+</li>
+<li><p>-&gt;调用hf3fs_iorwrap包装Hf3fsIorHandle</p>
+</li>
+<li><p>-&gt;调用IoRing初始化buffer，其中通过ringMarkerSize()对齐，然后前四个分别是sqe的头尾和cqe的头尾。然后根据传入的size初始化后面size大小的sqe和cqe的entries。然后初始化cqe的sem</p>
+</li>
+<li><p>-&gt;调用cqeSem初始化Hf3fsIorHandle中的submit_sem，submit_sem将从文件中读取，因此其为共享的</p>
+</li>
+<li><p>调用hf3fs_reg_fd将mount文件传递给3fs</p>
+</li>
+<li><p>调用hf3fs_prep_io将数据指针拷贝到sqe中（ring.addSqe()）</p>
+</li>
+<li><p>调用hf3fs_submit_ios提交io请求（通过submit_sem通知3fs提交）</p>
+</li>
+<li><p>调用hf3fs_wait_for_ios等待处理完成（循环等待，一旦完成就拷贝，并调用hf3fs_submit_ios通知3fs更新cqe中的available slots</p>
+</li>
+</ol>
+<p>实现中使用了协程，参考<a class="link"   target="_blank" rel="noopener" href="https://sf-zhou.github.io/coroutine/folly_coro_cancellation.html" >Folly Coroutines Cancellation 的实现 | SF-Zhou’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="2-思考"><a href="#2-思考" class="headerlink" title="2. 思考"></a>2. 思考</h2><h3 id="2-1-分层kv-cache"><a href="#2-1-分层kv-cache" class="headerlink" title="2.1 分层kv-cache"></a>2.1 分层kv-cache</h3><p>3FS提供kv-cache的来源，本地nvme作为kv-cache的缓存，一级位于显存中。使用类似vllm的方式加载或分配kv-cache。</p>
+<h3 id="2-2-向量索引"><a href="#2-2-向量索引" class="headerlink" title="2.2 向量索引"></a>2.2 向量索引</h3><p>使用向量数据库索引，根据索引拉取3FS的kvcache。</p>
+<h4 id="2-2-1-基于树的索引"><a href="#2-2-1-基于树的索引" class="headerlink" title="2.2.1 基于树的索引"></a>2.2.1 基于树的索引</h4><ul>
+<li><p><strong>KD-Tree (K-Dimensional Tree)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：递归地将数据空间沿坐标轴分割成超矩形区域，构建二叉树。</p>
+</li>
+<li><p><strong>优点</strong>：适合低维数据（维度 &lt; 20），支持精确搜索。</p>
+</li>
+<li><p><strong>缺点</strong>：高维数据性能急剧下降（“维度灾难”）。</p>
+</li>
+<li><p><strong>应用场景</strong>：小规模低维数据集（如地理坐标搜索）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Ball Tree</strong></p>
+<ul>
+<li><p><strong>原理</strong>：将数据划分为嵌套的超球体，减少距离计算次数。</p>
+</li>
+<li><p><strong>优点</strong>：相比 KD-Tree，在高维数据中表现更好。</p>
+</li>
+<li><p><strong>缺点</strong>：构建和查询成本较高，适合中等维度。</p>
+</li>
+<li><p><strong>应用场景</strong>：中等维度数据（如特征向量分类）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Annoy (Approximate Nearest Neighbors Oh Yeah)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：通过随机投影构建多棵树，利用投票机制提升搜索效率。</p>
+</li>
+<li><p><strong>优点</strong>：内存占用低，支持并行查询。</p>
+</li>
+<li><p><strong>缺点</strong>：需要调参（树的数量、搜索节点数）。</p>
+</li>
+<li><p><strong>应用场景</strong>：中等规模高维数据（如 Spotify 音乐推荐）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-2-基于哈希的索引"><a href="#2-2-2-基于哈希的索引" class="headerlink" title="2.2.2 基于哈希的索引"></a>2.2.2 基于哈希的索引</h4><p><strong>LSH (Locality-Sensitive Hashing)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：通过哈希函数将相似向量映射到相同桶中，牺牲精度换速度。</p>
+</li>
+<li><p><strong>优点</strong>：查询速度快，适合超大规模数据。</p>
+</li>
+<li><p><strong>缺点</strong>：参数敏感，召回率较低。</p>
+</li>
+<li><p><strong>变体</strong>：Multi-probe LSH（提升召回率）。</p>
+</li>
+<li><p><strong>应用场景</strong>：海量数据快速粗筛（如去重、预过滤）。</p>
+</li>
+</ul>
+<h4 id="2-2-3-基于图的索引"><a href="#2-2-3-基于图的索引" class="headerlink" title="2.2.3 基于图的索引"></a>2.2.3 基于图的索引</h4><ul>
+<li><p><strong>HNSW (Hierarchical Navigable Small World)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：构建多层图结构，上层为稀疏图用于快速导航，下层为稠密图用于精细搜索。</p>
+</li>
+<li><p><strong>优点</strong>：高召回率、低延迟，支持动态更新。</p>
+</li>
+<li><p><strong>缺点</strong>：内存占用较高。</p>
+</li>
+<li><p><strong>应用场景</strong>：高性能实时搜索（如 Milvus、Elasticsearch）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>NSW (Navigable Small World)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：单层图结构，通过贪心算法逐步逼近目标节点。</p>
+</li>
+<li><p><strong>优点</strong>：实现简单，适合中小规模数据。</p>
+</li>
+<li><p><strong>缺点</strong>：性能随数据量增长下降明显。</p>
+</li>
+<li><p><strong>应用场景</strong>：小规模实时搜索。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-4-基于量化的索引"><a href="#2-2-4-基于量化的索引" class="headerlink" title="2.2.4 基于量化的索引"></a>2.2.4 基于量化的索引</h4><ul>
+<li><p><strong>PQ (Product Quantization)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：将高维向量切分为子向量，分别量化并构建码本，用笛卡尔积压缩向量。</p>
+</li>
+<li><p><strong>优点</strong>：大幅减少内存占用，适合超大规模数据。</p>
+</li>
+<li><p><strong>缺点</strong>：量化误差可能影响精度。</p>
+</li>
+<li><p><strong>应用场景</strong>：大规模图像检索（如 Facebook Faiss）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>IVF (Inverted File Index)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：先聚类（如 K-Means），再对每个簇构建倒排索引，搜索时仅遍历最近簇。</p>
+</li>
+<li><p><strong>优点</strong>：结合聚类加速，适合非均匀分布数据。</p>
+</li>
+<li><p><strong>缺点</strong>：聚类质量影响性能。</p>
+</li>
+<li><p><strong>变体</strong>：IVF-PQ（结合量化进一步压缩）。</p>
+</li>
+<li><p><strong>应用场景</strong>：大规模相似性搜索（如 Faiss 的 IVF 系列）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-3-5-混合与优化方案"><a href="#2-3-5-混合与优化方案" class="headerlink" title="2.3.5 混合与优化方案"></a>2.3.5 混合与优化方案</h4><ul>
+<li><p><strong>SCANN (Scalable Nearest Neighbors)</strong></p>
+<ul>
+<li><p><strong>原理</strong>：结合树、哈希和量化，动态选择最优搜索路径。</p>
+</li>
+<li><p><strong>优点</strong>：平衡速度与精度，适合超大规模数据。</p>
+</li>
+<li><p><strong>应用场景</strong>：Google 的大规模向量检索。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>DiskANN</strong></p>
+<ul>
+<li><p><strong>原理</strong>：结合图索引与磁盘存储优化，减少内存依赖。</p>
+</li>
+<li><p><strong>优点</strong>：支持内存受限场景。</p>
+</li>
+<li><p><strong>应用场景</strong>：十亿级数据检索（如微软 Bing 搜索）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-milvus"><a href="#2-3-milvus" class="headerlink" title="2.3 milvus"></a>2.3 milvus</h3><ul>
+<li><p>利用其他数据库、消息中间件、向量算法库构建向量数据库</p>
+</li>
+<li><p>提供分片能力：分shard（自动）、partition（通过键值分区）、segment（最小粒度）</p>
+</li>
+<li><p>逻辑：</p>
+<ul>
+<li><p>slow path：先放入DataNode存储，然后离线转入IndexNode构建索引，构建结束之后转入QueryNode提供查询服务</p>
+</li>
+<li><p>fast path：直接转入QueryNode提供查询服务</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pica.zhimg.com/v2-524abb99eba02c545caf5b093bfc9b3e_1440w.jpg"
+                      alt="v2-524abb99eba02c545caf5b093bfc9b3e_1440w"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://pic4.zhimg.com/v2-8c4145ee4528ae85fe7a887af2068bc5_1440w.jpg"
+                      alt="v2-8c4145ee4528ae85fe7a887af2068bc5_1440w"
+                ></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS" >deepseek-ai&#x2F;3FS: A high-performance distributed file system designed to address the challenges of AI training and inference workloads. <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/docs/design_notes.md" >3FS&#x2F;docs&#x2F;design_notes.md at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/621480049" >一文快速入门 ClickHouse - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://sf-zhou.github.io/coroutine/folly_coro_cancellation.html" >Folly Coroutines Cancellation 的实现 | SF-Zhou’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs/" >幻方力量 | 高速文件系统 3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26964619693" >Deepseek开源第五炮：3FS文件系统详解 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27355706799" >DeepSeek 3FS：端到端无缓存的存储新范式 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26982661774" >DeepSeek Fire-Flyer File System(3FS) - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2501140" >DeepSeek开源周 Day05：从3FS盘点分布式文件存储系统-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27317616324" >DeepSeek：3FS系统介绍 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.volcengine.com/articles/7480397583173877797" >DeepSeek 3FS 架构分析和思考（上篇） - 文章 - 开发者社区 - 火山引擎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/wsqyz/article/details/145938239" >DeepSeek文件系统3FS设计文档-中文翻译-解读_deepseek 3fs 设计文档-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zilliz.com.cn/blog/How-to-choose-the-most-suitable-vector-index-in-RAG-construction" >RAG搭建中，如何选择最合适的向量索引？ - Zilliz 向量数据库 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://community.transwarp.cn/article/900" >向量数据库（三）向量数据库的底层架构及HNSW等索引算法讲解 - 星环开发者社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27399676042" >1W2000字 一文读懂向量数据库：原理、索引技术与选型指南 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42586468/article/details/140368129" >LLM-向量数据库中的索引算法总结_向量数据库索引-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/652730120" >向量数据库（第 3 部分）：并非所有索引都是一样的 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Z4400840/article/details/144964802" >草履虫都看得懂的向量数据库教程，一文就够了_向量数据库使用-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/473617910" >前所未有的 Milvus 源码架构解析 - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://milvus.io/docs/zh/data_processing.md" >数据处理 | Milvus 文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/lsb2002/article/details/132222947" >为AI而生的数据库：Milvus详解及实战_向量数据库 milvus-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://milvus.io/docs/zh/quickstart.md" >快速入门 | Milvus 文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2338267" >云原生向量数据库Milvus知识大全，看完这篇就够了[基本概念、系统架构、主要组件、应用场景]-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/fenglingguitar/article/details/142486888" >Milvus - 架构设计详解-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://developer.baidu.com/article/detail.html?id=3448663" >Milvus向量数据库全面解析：架构、原理与实践指南-百度开发者中心 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.milvus-io.com/reference/architecture/architecture_overview" >Milvus 架构概述 – Milvus向量库中文文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/ffrecord/" >FFRecord | 高性能训练数据格式 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs-4/" >3FS优化 03 | 数据读取模式适配 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs-3/" >3FS优化 03 | 网络配置管理 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.high-flyer.cn/blog/3fs-2/" >3FS优化 02 | 客户端内存使用优化 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/issues/109" >How does KVCache Client works on 3FS? · Issue #109 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26958884790" >陈巍：DeepSeek 开源Day（5）3FS&amp;smallpond深入分析（收录于：DeepSeek技术详解系列） - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/src/lib/rs/hf3fs-usrbio-sys/src/lib.rs" >3FS&#x2F;src&#x2F;lib&#x2F;rs&#x2F;hf3fs-usrbio-sys&#x2F;src&#x2F;lib.rs at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jiqizhixin.com/articles/2025-04-18-8" >3FS系列（三）：从源码到实测：3FS USRBIO静态库的编译与性能体验 ｜ 机器之心 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/main/src/lib/api/UsrbIo.md" >3FS&#x2F;src&#x2F;lib&#x2F;api&#x2F;UsrbIo.md at main · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/DB_GPT/article/details/146369430" >DeepSeek 3FS解读与源码分析（5）：客户端解读_usrbio-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/0fd4d9b308f0d7632c6566a881d0fc9ee0584708/hf3fs_fuse/io.py" >3FS&#x2F;hf3fs_fuse&#x2F;io.py at 0fd4d9b308f0d7632c6566a881d0fc9ee0584708 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/0fd4d9b308f0d7632c6566a881d0fc9ee0584708/src/lib/api/hf3fs_usrbio.h" >3FS&#x2F;src&#x2F;lib&#x2F;api&#x2F;hf3fs_usrbio.h at 0fd4d9b308f0d7632c6566a881d0fc9ee0584708 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/0fd4d9b308f0d7632c6566a881d0fc9ee0584708/src/fuse/IoRing.h" >3FS&#x2F;src&#x2F;fuse&#x2F;IoRing.h at 0fd4d9b308f0d7632c6566a881d0fc9ee0584708 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/3FS/blob/0fd4d9b308f0d7632c6566a881d0fc9ee0584708/src/lib/api/UsrbIo.cc" >3FS&#x2F;src&#x2F;lib&#x2F;api&#x2F;UsrbIo.cc at 0fd4d9b308f0d7632c6566a881d0fc9ee0584708 · deepseek-ai&#x2F;3FS <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://sf-zhou.github.io/" >SF-Zhou’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://sf-zhou.github.io/coroutine/folly_coro_cancellation.html" >Folly Coroutines Cancellation 的实现 | SF-Zhou’s Blog <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.163.com/dy/article/JR9UGNNB05563UC5.html#:~:text=3FS%20%E4%BD%BF%E7%94%A8%20hf3fs_iov%20%E7%BB%93%E6%9E%84%E6%9D%A5%E4%BF%9D%E5%AD%98%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E5%A4%A7%E5%B0%8F%E3%80%81%E5%9C%B0%E5%9D%80%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7%EF%BC%8C%E5%B9%B6%E9%80%9A%E8%BF%87%20IoRing%20%E6%9C%BA%E5%88%B6%E5%9C%A8%E4%B8%A4%E4%B8%AA%E8%BF%9B%E7%A8%8B%E4%B9%8B%E9%97%B4%E8%BF%9B%E8%A1%8C%E9%AB%98%E6%95%88%E9%80%9A%E4%BF%A1%E3%80%82,%E8%BF%99%E7%A7%8D%E8%AE%BE%E8%AE%A1%E4%BD%BF%E5%BE%97%E6%95%B0%E6%8D%AE%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E5%9C%A8%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%97%B4%E4%BC%A0%E9%80%92%EF%BC%8C%E6%97%A0%E9%9C%80%E7%BB%8F%E8%BF%87%E9%A2%9D%E5%A4%96%E7%9A%84%E6%8B%B7%E8%B4%9D%E6%93%8D%E4%BD%9C%EF%BC%8C%E4%BB%8E%E8%80%8C%E6%98%BE%E8%91%97%E6%8F%90%E5%8D%87%E4%BA%86%E6%80%A7%E8%83%BD%E3%80%82%20%E5%BD%93%E7%94%A8%E6%88%B7%E8%B0%83%E7%94%A8%E6%8E%A5%E5%8F%A3%E5%88%9B%E5%BB%BA%20hf3fs_iov%20%E6%97%B6%EF%BC%8C%E7%B3%BB%E7%BB%9F%E4%BC%9A%E5%9C%A8%20%2Fdev%2Fshm%20%E4%B8%8A%E5%88%86%E9%85%8D%E4%B8%80%E5%9D%97%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%EF%BC%8C%E5%B9%B6%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%8C%87%E5%90%91%E8%AF%A5%E5%86%85%E5%AD%98%E7%9A%84%E8%BD%AF%E9%93%BE%E6%8E%A5%E3%80%82" >AI训练存储方案选谁？DeepSeek 3FS与JuiceFS的全面对比|调用|磁盘|拷贝|元数据|ai训练|inode|命令提示符_网易订阅 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 3fs learning</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2025-04-12 15:16:42</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2025/04/12/3fs-learning/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2025/04/24/dynamo-learning/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">dynamo learning</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2025/04/06/llm-learning/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">llm learning</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">3fs learning</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%97%A0%E7%BC%93%E5%AD%98%EF%BC%88%E9%92%88%E5%AF%B9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9C%BA%E6%99%AF%E9%9A%8F%E6%9C%BA%E8%AF%BB%E8%AE%BE%E8%AE%A1%EF%BC%8C%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-text">1.2 无缓存（针对大模型场景随机读设计，缓存失效）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%93%BE%E5%BC%8F-CRAQ"><span class="nav-text">1.3 链式(CRAQ )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%8F%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%B8%83%E5%B1%80"><span class="nav-text">1.3 小文件以及布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-text">1.4 数据恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-3FS-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-KV-Cache%EF%BC%9F"><span class="nav-text">1.5 3FS 如何优化 KV Cache？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-3FS-KV%E6%8E%A5%E5%8F%A3"><span class="nav-text">1.6 3FS-KV接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83"><span class="nav-text">2. 思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%86%E5%B1%82kv-cache"><span class="nav-text">2.1 分层kv-cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-text">2.2 向量索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-milvus"><span class="nav-text">2.3 milvus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

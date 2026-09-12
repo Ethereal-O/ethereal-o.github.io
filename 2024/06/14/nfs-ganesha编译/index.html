@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/06/14/nfs-ganesha编译/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="1. 编译123456789101112131415git clone https:&#x2F;&#x2F;github.com&#x2F;nfs-ganesha&#x2F;nfs-ganesha.gitcd nfs-ganeshagit submodule update --initgit checkout V5-stablemkdir buildcd buildsudo apt install -y krb5-user libpam">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nfs-ganesha编译">
+<meta property="og:url" content="http://example.com/2024/06/14/nfs-ganesha%E7%BC%96%E8%AF%91/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 编译123456789101112131415git clone https:&#x2F;&#x2F;github.com&#x2F;nfs-ganesha&#x2F;nfs-ganesha.gitcd nfs-ganeshagit submodule update --initgit checkout V5-stablemkdir buildcd buildsudo apt install -y krb5-user libpam">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-06-14T14:13:36.000Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.195Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            nfs-ganesha编译 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            
+            
+                <div class="article-title">
+                    <h1 class="article-title-regular">nfs-ganesha编译</h1>
+                </div>
+            
+                
+            
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/favicon.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Ethereal</span>
+                            
+                                <span class="author-label">Lv5</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-06-14 22:13:36</span>
+        <span class="mobile">2024-06-14 22:13</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content markdown-body">
+                <h2 id="1-编译"><a href="#1-编译" class="headerlink" title="1. 编译"></a>1. 编译</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/nfs-ganesha/nfs-ganesha.git</span><br><span class="line">cd nfs-ganesha</span><br><span class="line">git submodule update --init</span><br><span class="line">git checkout V5-stable</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">sudo apt install -y krb5-user libpam-krb5 libpam-ccreds libkrb5-dev</span><br><span class="line">sudo apt install libcephfs-dev</span><br><span class="line">sudo apt install libacl1-dev</span><br><span class="line">sudo apt install liburcu-dev</span><br><span class="line">sudo apt install gcc git cmake autoconf libtool bison flex</span><br><span class="line">sudo apt-get install uuid-dev</span><br><span class="line">sudo apt-get install librgw-dev</span><br><span class="line">cmake -DUSE_ACL_MAPPING=ON -DUSE_FSAL_RGW=ON -DUSE_FSAL_CEPH=ON ../src/</span><br><span class="line">make &amp; make install</span><br></pre></td></tr></table></figure></div>
+
+<p>其中，<code>-DUSE_ACL_MAPPING=ON</code>使得<code>nfs-ganesha</code>可以读取到正确的<code>ACL</code>，否则会报错。<code>-DUSE_FSAL_RGW=ON -DUSE_FSAL_CEPH=ON</code>开启使用<code>ceph</code>。</p>
+<p>此外，针对OpenEuler，其命令为</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/nfs-ganesha/nfs-ganesha.git</span><br><span class="line">cd nfs-ganesha</span><br><span class="line">git submodule update --init</span><br><span class="line">git checkout V5-stable</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">dnf install -y krb5-workstation pam_krb5 krb5-devel</span><br><span class="line">dnf install libacl-devel userspace-rcu-devel libnsl2-devel</span><br><span class="line">dnf install gcc g++ git cmake autoconf libtool bison flex</span><br><span class="line">dnf install libuuid-devel make</span><br><span class="line">cmake -DUSE_ACL_MAPPING=ON ../src/ # 这里也可按照上述使用-DUSE_FSAL_RGW=ON -DUSE_FSAL_CEPH=ON</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="2-服务启动"><a href="#2-服务启动" class="headerlink" title="2. 服务启动"></a>2. 服务启动</h2><p>如果使用docker，那么必须以<code>--privileged</code>模式运行</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --privileged -v /root/Softwares:/root/Softwares --name openeuler -d hub.oepkgs.net/openeuler/openeuler:latest /bin/bash -c &quot;tail -f /dev/null&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>检查服务名称是否正确</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">mv</span> nfs-ganesha-lock.service.el7 nfs-ganesha-lock.service</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">mv</span> nfs-ganesha.service.el7 nfs-ganesha.service</span></span><br></pre></td></tr></table></figure></div>
+
+<p>安装kerberos</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install krb5-kdc krb5-admin-server</span><br><span class="line">sudo systemctl restart krb5-admin-server</span><br></pre></td></tr></table></figure></div>
+
+<p>针对OpenEuler为</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo dnf install krb5-server krb5-workstation krb5-libs</span><br><span class="line">sudo systemctl restart kadmin</span><br></pre></td></tr></table></figure></div>
+
+<p>新建realm</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kdb5_util create</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">krb5_newrealm</span></span><br></pre></td></tr></table></figure></div>
+
+<p>记下当前的REALM，例如<code>EXAMPLE.COM</code></p>
+<p>确认host存在</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/krb5.conf</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看对应REALM的域名，然后在/etc/hosts中添加，ip可以通过ifconfig获得</span></span><br></pre></td></tr></table></figure></div>
+
+<p>新建<code>nfs-ganesha</code>需要的key</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local</span><br><span class="line">add_principal nfs/hostname # 输入密码</span><br><span class="line">list_principals</span><br><span class="line">quit</span><br><span class="line">ktutil</span><br><span class="line">ktutil:  addent -password -p nfs/hostname@EXAMPLE.COM -k 1 -e aes256-cts-hmac-sha1-96</span><br><span class="line">Password for nfs/hostname@EXAMPLE.COM:  # 输入principal的密码</span><br><span class="line">ktutil:  wkt /etc/krb5.keytab</span><br><span class="line">ktutil:  quit</span><br><span class="line">sudo klist -k /etc/krb5.keytab</span><br><span class="line">kinit -k -t /etc/krb5.keytab nfs/hostname@EXAMPLE.COM</span><br></pre></td></tr></table></figure></div>
+
+<p>安装rpcbind</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install rpcbind</span><br></pre></td></tr></table></figure></div>
+
+<p>针对OpenEuler为</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo dnf install rpcbind</span><br><span class="line">systemctl status rpcbind</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">rpcbind</span></span><br></pre></td></tr></table></figure></div>
+
+<p>编写文件</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ganesha/ganesha.conf</span><br></pre></td></tr></table></figure></div>
+
+<p>文件内容如下</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">EXPORT</span><br><span class="line">&#123;</span><br><span class="line">        # Export Id (mandatory, each EXPORT must have a unique Export_Id)</span><br><span class="line">        Export_Id = 12345;</span><br><span class="line"></span><br><span class="line">        # Exported path (mandatory)</span><br><span class="line">        Path = /etc;</span><br><span class="line"></span><br><span class="line">        # Pseudo Path (required for NFSv4 or if mount_path_pseudo = true)</span><br><span class="line">        Pseudo = /etc;</span><br><span class="line"></span><br><span class="line">        # Restrict the protocols that may use this export.  This cannot allow</span><br><span class="line">        # access that is denied in NFS_CORE_PARAM.</span><br><span class="line">        Protocols = 3,4;</span><br><span class="line"></span><br><span class="line">        # Access type for clients.  Default is None, so some access must be</span><br><span class="line">        # given. It can be here, in the EXPORT_DEFAULTS, or in a CLIENT block</span><br><span class="line">        Access_Type = RW;</span><br><span class="line"></span><br><span class="line">        # Whether to squash various users.</span><br><span class="line">        Squash = root_squash;</span><br><span class="line"></span><br><span class="line">        # Allowed security types for this export</span><br><span class="line">        Sectype = sys,krb5,krb5i,krb5p;</span><br><span class="line"></span><br><span class="line">        # Exporting FSAL</span><br><span class="line">        FSAL &#123;</span><br><span class="line">                Name = VFS;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>启动<code>nfs-ganesha</code></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl start nfs-ganesha</span><br></pre></td></tr></table></figure></div>
+
+<p>针对docker容器内程序，直接启动</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /run/ganesha</span><br><span class="line">mkdir -p /var/log/ganesha</span><br><span class="line">mkdir -p /var/lib/nfs/ganesha</span><br><span class="line">./ganesha.nfsd -L /var/log/ganesha.log -f /etc/ganesha/ganesha.conf</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-测试"><a href="#3-测试" class="headerlink" title="3. 测试"></a>3. 测试</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo showmount -e hostname</span><br><span class="line">sudo mount -v -t nfs4 ethereal-vm:/etc /home/ethereal/Documents/tmp</span><br><span class="line">sudo umount /home/ethereal/Documents/tmp</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="4-其他"><a href="#4-其他" class="headerlink" title="4. 其他"></a>4. 其他</h2><p>查看日志</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -u nfs-ganesha --since &quot;2024-06-21 10:35:00&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>kerberos相关：</p>
+<p>新建Realm</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">krb5_newrealm</span><br></pre></td></tr></table></figure></div>
+
+<p>新建数据库</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kdb5_util create -s -r HADOOP.COM</span><br></pre></td></tr></table></figure></div>
+
+<p>新建principal</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local</span><br><span class="line">add_principal nfs/hostname # 输入密码</span><br><span class="line">list_principals</span><br><span class="line">quit</span><br></pre></td></tr></table></figure></div>
+
+<p>查看principal</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local</span><br><span class="line">list_principals</span><br><span class="line">quit</span><br></pre></td></tr></table></figure></div>
+
+<p>新建条目</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ktutil:  addent -password -p nfs/hostname@REALM -k 1 -e aes256-cts-hmac-sha1-96</span><br></pre></td></tr></table></figure></div>
+
+<p>写入到数据库条目表</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ktutil:  wkt /etc/krb5.keytab</span><br></pre></td></tr></table></figure></div>
+
+<p>列出数据库条目表中内容</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo klist -k /etc/krb5.keytab</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="5-配置kerberos鉴权"><a href="#5-配置kerberos鉴权" class="headerlink" title="5. 配置kerberos鉴权"></a>5. 配置kerberos鉴权</h2><h3 id="5-1-kerberos服务端"><a href="#5-1-kerberos服务端" class="headerlink" title="5.1 kerberos服务端"></a>5.1 kerberos服务端</h3><ol>
+<li>安装</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install krb5-server krb5-workstation </span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li>编辑 &#x2F;etc&#x2F;krb5.conf 文件， 取消注释所有行，并替换kdc, admin server的设置，这里用default realm EXAMPLE.COM , 最后配置文件如下：</li>
+</ol>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">logging</span>]</span><br><span class="line"> <span class="string">default</span> <span class="string">=</span> <span class="string">FILE:/var/log/krb5libs.log</span></span><br><span class="line"> <span class="string">kdc</span> <span class="string">=</span> <span class="string">FILE:/var/log/krb5kdc.log</span></span><br><span class="line"> <span class="string">admin_server</span> <span class="string">=</span> <span class="string">FILE:/var/log/kadmind.log</span></span><br><span class="line"></span><br><span class="line">[<span class="string">libdefaults</span>]</span><br><span class="line"> <span class="string">dns_lookup_realm</span> <span class="string">=</span> <span class="literal">false</span></span><br><span class="line"> <span class="string">ticket_lifetime</span> <span class="string">=</span> <span class="string">24h</span></span><br><span class="line"> <span class="string">renew_lifetime</span> <span class="string">=</span> <span class="string">7d</span></span><br><span class="line"> <span class="string">forwardable</span> <span class="string">=</span> <span class="literal">true</span></span><br><span class="line"> <span class="string">rdns</span> <span class="string">=</span> <span class="string">falsei</span></span><br><span class="line"> <span class="string">default_realm</span> <span class="string">=</span> <span class="string">EXAMPLE.COM</span></span><br><span class="line"> <span class="string">default_ccache_name</span> <span class="string">=</span> <span class="string">KEYRING:persistent:%&#123;uid&#125;</span></span><br><span class="line"></span><br><span class="line">[<span class="string">realms</span>]</span><br><span class="line"> <span class="string">EXAMPLE.COM</span> <span class="string">=</span> &#123;</span><br><span class="line">  <span class="string">kdc</span> <span class="string">=</span> <span class="string">remote.example.com</span></span><br><span class="line">  <span class="string">admin_server</span> <span class="string">=</span> <span class="string">remote.example.com</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">[<span class="string">domain_realm</span>]</span><br><span class="line"> <span class="string">.example.com</span> <span class="string">=</span> <span class="string">EXAMPLE.COM</span></span><br><span class="line"> <span class="string">example.com</span> <span class="string">=</span> <span class="string">EXAMPLE.COM</span></span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li>修改 &#x2F;etc&#x2F;hosts 文件</li>
+</ol>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">192.168</span><span class="number">.57</span><span class="number">.3</span> <span class="string">server.example.com</span> <span class="string">remote</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.57</span><span class="number">.2</span> <span class="string">remote.example.com</span> <span class="string">server</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.57</span><span class="number">.204</span> <span class="string">client.example.com</span> <span class="string">client</span></span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li><p>修改 &#x2F;var&#x2F;kerberos&#x2F;krb5kdc&#x2F;kdc.conf 文件<br>由于我们使用default realm 所以<strong>无需修改此文件</strong>，若用另外的realm，需替换此文件中的EXAMPLE.COM</p>
+</li>
+<li><p>运行命令以下命令创建**<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/tencentdb-catalog?from_column=20065&from=20065"><strong>数据库</strong></a>，并按照提示设置数据库密码</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@remote ~]# kdb5_util create  -s</span><br><span class="line">Loading random data</span><br><span class="line">Initializing database &#x27;/var/kerberos/krb5kdc/principal&#x27; for realm &#x27;EXAMPLE.COM&#x27;,</span><br><span class="line">master key name &#x27;K/M@EXAMPLE.COM&#x27;</span><br><span class="line">You will be prompted for the database Master Password.</span><br><span class="line">It is important that you NOT FORGET this password.</span><br><span class="line">Enter KDC database master key:</span><br></pre></td></tr></table></figure></div>
+
+<ol start="6">
+<li><strong>启动kerberos</strong></li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start krb5kdc kadmin </span><br><span class="line">systemctl enable krb5kdc kadmin </span><br></pre></td></tr></table></figure></div>
+
+<ol start="7">
+<li><strong>运行kadmin.local 来管理kdc 并添加nfs server 和 client的 主机信息</strong></li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@remote ~]# kadmin.local</span><br><span class="line">Authenticating as principal root/admin@EXAMPLE.COM with password.</span><br><span class="line">kadmin.local:  addprinc -randkey host/server.example.com</span><br><span class="line">WARNING: no policy specified for host/server.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;host/server.example.com@EXAMPLE.COM&quot; created.</span><br><span class="line">kadmin.local:  addprinc -randkey host/client.example.com</span><br><span class="line">WARNING: no policy specified for host/client.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;host/client.example.com@EXAMPLE.COM&quot; created.</span><br></pre></td></tr></table></figure></div>
+
+<ol start="8">
+<li><strong>添加nfs server 和 client的 nfs 服务主机和客户端</strong></li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  addprinc -randkey nfs/server.example.com</span><br><span class="line">WARNING: no policy specified for nfs/server.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;nfs/server.example.com@EXAMPLE.COM&quot; created.</span><br><span class="line">kadmin.local:  addprinc -randkey nfs/client.example.com</span><br><span class="line">WARNING: no policy specified for nfs/client.example.com@EXAMPLE.COM; defaulting to no policy</span><br><span class="line">Principal &quot;nfs/client.example.com@EXAMPLE.COM&quot; created.</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  listprincs</span><br><span class="line">K/M@EXAMPLE.COM</span><br><span class="line">host/client.example.com@EXAMPLE.COM</span><br><span class="line">host/server.example.com@EXAMPLE.COM</span><br><span class="line">kadmin/admin@EXAMPLE.COM</span><br><span class="line">kadmin/changepw@EXAMPLE.COM</span><br><span class="line">kadmin/server.example.com@EXAMPLE.COM</span><br><span class="line">krbtgt/EXAMPLE.COM@EXAMPLE.COM</span><br><span class="line">nfs/client.example.com@EXAMPLE.COM</span><br><span class="line">nfs/server.example.com@EXAMPLE.COM</span><br><span class="line">[root@remote ~]#</span><br></pre></td></tr></table></figure></div>
+
+<ol start="9">
+<li>生成密钥</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  ktadd -k /tmp/server.keytab nfs/server.example.com</span><br><span class="line">[以下省略输出]</span><br><span class="line">kadmin.local:  ktadd -k /tmp/client.keytab nfs/client.example.com</span><br><span class="line">[以下省略输出]</span><br><span class="line">kadmin.local:  quit</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="5-2-nfs服务端"><a href="#5-2-nfs服务端" class="headerlink" title="5.2 nfs服务端"></a>5.2 nfs服务端</h3><ol>
+<li><p>配置host</p>
+</li>
+<li><p>复制文件</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp remote:/etc/krb5.conf /etc/krb5.conf   </span><br><span class="line">scp remote:/tmp/server.keytab /etc/krb5.keytab </span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li>导出文件路径</li>
+</ol>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">EXPORT</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment"># Export Id (mandatory, each EXPORT must have a unique Export_Id)</span></span><br><span class="line">        <span class="string">Export_Id</span> <span class="string">=</span> <span class="number">12345</span><span class="string">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Exported path (mandatory)</span></span><br><span class="line">        <span class="string">Path</span> <span class="string">=</span> <span class="string">/etc/nfs;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Pseudo Path (required for NFSv4 or if mount_path_pseudo = true)</span></span><br><span class="line">        <span class="string">Pseudo</span> <span class="string">=</span> <span class="string">/etc/nfs;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Restrict the protocols that may use this export.  This cannot allow</span></span><br><span class="line">        <span class="comment"># access that is denied in NFS_CORE_PARAM.</span></span><br><span class="line">        <span class="string">Protocols</span> <span class="string">=</span> <span class="number">3</span>,<span class="number">4</span><span class="string">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Access type for clients.  Default is None, so some access must be</span></span><br><span class="line">        <span class="comment"># given. It can be here, in the EXPORT_DEFAULTS, or in a CLIENT block</span></span><br><span class="line">        <span class="string">Access_Type</span> <span class="string">=</span> <span class="string">RW;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Whether to squash various users.</span></span><br><span class="line">        <span class="string">Squash</span> <span class="string">=</span> <span class="string">no_root_squash;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Allowed security types for this export</span></span><br><span class="line">        <span class="string">Sectype</span> <span class="string">=</span> <span class="string">sys</span>,<span class="string">krb5</span>,<span class="string">krb5i</span>,<span class="string">krb5p;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Exporting FSAL</span></span><br><span class="line">        <span class="string">FSAL</span> &#123;</span><br><span class="line">                <span class="string">Name</span> <span class="string">=</span> <span class="string">VFS;</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">NFS_KRB5</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">PrincipalName</span> <span class="string">=</span> <span class="string">nfs</span> <span class="string">;</span></span><br><span class="line">   <span class="string">KeytabPath</span> <span class="string">=</span> <span class="string">/etc/krb5.keytab</span> <span class="string">;</span></span><br><span class="line">   <span class="string">Active_krb5</span> <span class="string">=</span> <span class="literal">YES</span> <span class="string">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>初始化</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo kinit -k -t /etc/krb5.keytab nfs/openeuler-vm-2203@EXAMPLE.COM</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="5-3-客户端配置"><a href="#5-3-客户端配置" class="headerlink" title="5.3 客户端配置"></a>5.3 客户端配置</h3><ol>
+<li><p>配置host</p>
+</li>
+<li><p>复制文件<br>  scp remote:&#x2F;etc&#x2F;krb5.conf &#x2F;etc&#x2F;krb5.conf<br>  scp remote:&#x2F;tmp&#x2F;server.keytab &#x2F;etc&#x2F;krb5.keytab </p>
+</li>
+<li><p>挂载</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mount -v -t nfs4 -o sec=krb5 openeuler-vm-2203:/etc/nfs /mnt/tmp</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>初始化<br> sudo kinit -k -t &#x2F;etc&#x2F;krb5.keytab nfs&#x2F;<a class="link"   href="mailto:&#111;&#112;&#101;&#110;&#101;&#117;&#108;&#101;&#x72;&#45;&#118;&#x6d;&#x2d;&#50;&#x32;&#x30;&#51;&#64;&#x45;&#x58;&#65;&#x4d;&#80;&#x4c;&#69;&#46;&#67;&#79;&#x4d;" >&#111;&#112;&#101;&#110;&#101;&#117;&#108;&#101;&#x72;&#45;&#118;&#x6d;&#x2d;&#50;&#x32;&#x30;&#51;&#64;&#x45;&#x58;&#65;&#x4d;&#80;&#x4c;&#69;&#46;&#67;&#79;&#x4d; <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ol>
+<h2 id="6-系统测试"><a href="#6-系统测试" class="headerlink" title="6. 系统测试"></a>6. 系统测试</h2><h3 id="6-1-使用文件测试工具测试"><a href="#6-1-使用文件测试工具测试" class="headerlink" title="6.1 使用文件测试工具测试"></a>6.1 使用文件测试工具测试</h3><h3 id="6-2-使用kdevops-x2F-pynfs测试"><a href="#6-2-使用kdevops-x2F-pynfs测试" class="headerlink" title="6.2 使用kdevops&#x2F;pynfs测试"></a>6.2 使用<a class="link"   target="_blank" rel="noopener" href="https://github.com/linux-kdevops/kdevops" >kdevops <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x2F;<a class="link"   target="_blank" rel="noopener" href="https://github.com/dang/pynfs/tree/master" >pynfs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>测试</h3><p>pynfs中含有使用python编写的测试pnfs的测试脚本，因此可以直接用来测试。</p>
+<ol>
+<li><p>安装anaconda</p>
+</li>
+<li><p>使用python2.7</p>
+</li>
+<li><p>执行构建</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python setup.py build</span><br><span class="line">python setup.py install</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>在<strong>原路径</strong>中运行</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python ./testserver.py localhost:/etc/nfs pnfs</span><br></pre></td></tr></table></figure></div>
+
+<ol start="5">
+<li>需要注意的是服务器必须使用MDS（ceph），保证存在flag为EXCHGID4_FLAG_USE_PNFS_MDS。否则报错为：</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CSID7    st_current_stateid.testOpenLayoutGet                     : FAILURE</span><br><span class="line">           NameError: global name &#x27;fail&#x27; is not defined</span><br></pre></td></tr></table></figure></div>
+
+<p>位置为devkernel&#x2F;pynfs&#x2F;nfs4.1&#x2F;nfs4client.py中的new_pnfs_client_session。</p>
+<p>服务端返回此标识位置为src&#x2F;Protocols&#x2F;NFS&#x2F;nfs4_op_exchange_id.c中的nfs4_op_exchange_id中的</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if ((arg_EXCHANGE_ID4-&gt;eia_flags &amp; EXCHGID4_FLAG_MASK_PNFS) == 0) &#123;</span><br><span class="line">    if (nfs_param.nfsv4_param.pnfs_mds)</span><br><span class="line">        server_pnfs_flags |= EXCHGID4_FLAG_USE_PNFS_MDS;</span><br><span class="line">    else</span><br><span class="line">        server_pnfs_flags |= EXCHGID4_FLAG_USE_NON_PNFS;</span><br><span class="line">    if (nfs_param.nfsv4_param.pnfs_ds)</span><br><span class="line">        server_pnfs_flags |= EXCHGID4_FLAG_USE_PNFS_DS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>当设置参数后将启用此标识，参数解析位于src&#x2F;support&#x2F;nfs_read_conf.c</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.blk_desc.name = <span class="string">&quot;NFSv4&quot;</span>,</span><br><span class="line">.blk_desc.type = CONFIG_BLOCK,</span><br><span class="line">.blk_desc.flags = CONFIG_UNIQUE,  <span class="comment">/* too risky to have more */</span></span><br><span class="line">.blk_desc.u.blk.init = noop_conf_init,</span><br><span class="line">.blk_desc.u.blk.params = version4_params,</span><br></pre></td></tr></table></figure></div>
+
+<p>因此只需要在&#x2F;etc&#x2F;ganesha&#x2F;ganesha.conf中添加</p>
+<div class="highlight-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">NFSv4</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">PNFS_MDS</span> <span class="string">=</span> <span class="literal">YES</span> <span class="string">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>重启nfs-ganesha服务后，发现即可正确使用pnfs。</p>
+<p>但是，pynfs要求必须使用BLOCK布局，位置在devkernel&#x2F;pynfs&#x2F;nfs4.1&#x2F;server41tests&#x2F;st_getdevicelist.py</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blocksize = get_blocksize(sess, use_obj(env.opts.path))</span><br></pre></td></tr></table></figure></div>
+
+<p>否则返回，对应服务端代码位于src&#x2F;FSAL&#x2F;FSAL_GLUSTER&#x2F;mds.c中的handle_ops_pnfs与pnfs_layout_get。</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GETLAYOUT1 st_getdevicelist.testGetLayout                         : FAILURE</span><br><span class="line">           layout_type does not contain BLOCK</span><br><span class="line">LAYOUTCOMMIT1 st_getdevicelist.testLayoutCommit                   : FAILURE</span><br><span class="line">           layout_type does not contain BLOCK</span><br></pre></td></tr></table></figure></div>
+
+<p>将get_blocksize注释掉后显示</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GETLAYOUT1 st_getdevicelist.testGetLayout                         : FAILURE</span><br><span class="line">           OP_LAYOUTGET should return NFS4_OK, instead got</span><br><span class="line">           NFS4ERR_LAYOUTUNAVAILABLE</span><br></pre></td></tr></table></figure></div>
+
+<p>对应服务端代码位置在src&#x2F;FSAL&#x2F;default_methods.c，其中def_handle_ops变量定义了函数指针。</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> nfsstat4 <span class="title function_">layoutget</span><span class="params">(<span class="keyword">struct</span> fsal_obj_handle *obj_hdl,</span></span><br><span class="line"><span class="params">              XDR *loc_body,</span></span><br><span class="line"><span class="params">              <span class="type">const</span> <span class="keyword">struct</span> fsal_layoutget_arg *arg,</span></span><br><span class="line"><span class="params">              <span class="keyword">struct</span> fsal_layoutget_res *res)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> NFS4ERR_LAYOUTUNAVAILABLE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>标准文件系统不支持此操作，但是CEPH等支持。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/Hearz/article/details/120840448" >nfs-ganesha(用户态NFS)编译、安装和使用_nfs-ganesha 编译-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xwd127429/article/details/106047036" >Ubuntu1804安装MIT Kerberos_ubuntu kerberos-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha" >GitHub - nfs-ganesha&#x2F;nfs-ganesha: NFS-Ganesha is an NFSv3,v4,v4.1 fileserver that runs in user mode on most UNIX&#x2F;Linux systems <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/ceph/ceph/blob/main/doc/cephfs/nfs.rst" >ceph&#x2F;doc&#x2F;cephfs&#x2F;nfs.rst at main · ceph&#x2F;ceph · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/blob/V5-stable/src/COMPILING_HOWTO.txt" >nfs-ganesha&#x2F;src&#x2F;COMPILING_HOWTO.txt at V5-stable · nfs-ganesha&#x2F;nfs-ganesha · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/issues/882" >Make Error when Linking C shared library libganesha_nfsd.so · Issue #882 · nfs-ganesha&#x2F;nfs-ganesha · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/RPCSEC_GSS" >RPCSEC_GSS · nfs-ganesha&#x2F;nfs-ganesha Wiki · GitHub <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://bbs.csdn.net/topics/380063565" >【求助kerberos配置】Cannot contact any KDC for realm ‘EXAMPLE.COM’ -CSDN社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.51cto.com/u_13259/11788457" >nfs 连接用户名 nfs密码认证指定用户_kekenai的技术博客_51CTO博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266491528" >一文搞定Kerberos - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/tongh/p/13493316.html" >Kerberos认证原理及基于Kerberos认证的NFS文件共享 - 佟晖 - 博客园 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/nfs-ganesha/nfs-ganesha/wiki/RPCSEC_GSS" >RPCSEC_GSS · nfs-ganesha&#x2F;nfs-ganesha Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1815069" >centos7 部署kerberos实现nfs用户密码认证挂载-腾讯云开发者社区-腾讯云 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/mlwise/article/details/108966354" >Kerberos常用命令用法_addprinc-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://serverfault.com/questions/605210/kerberized-nfs4-mounts-error-no-credentials-found-for-connection-to-server" >ubuntu - Kerberized nfs4 mounts ERROR: No credentials found for connection to server - Server Fault <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://askoverflow.dev/server/question/605210/kerberized-nfs4-mounts-error-no-credentials-found-for-connection-to-server/" >Kerberized nfs4 挂载错误：找不到连接到服务器的凭据 - server <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/snail_bing/article/details/118081091" >kerberos使用详解_krb5-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://bbs.csdn.net/topics/380063565" >【求助kerberos配置】Cannot contact any KDC for realm ‘EXAMPLE.COM’ -CSDN社区 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/linux-kdevops/kdevops" >linux-kdevops&#x2F;kdevops: kdevops main repository: Generalized devops infrastructure for Linux kernel development <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/linux-kdevops/kdevops/blob/main/docs/nfs.md" >kdevops&#x2F;docs&#x2F;nfs.md at main · linux-kdevops&#x2F;kdevops <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-devel-from-github-with-pip" >Installing Ansible — Ansible Community Documentation <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/502931250" >(80 条消息) ansible执行命令的时候报错msg”: “Missing sudo password 有知道的吗？ - 知乎 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/yujia_666/article/details/107986930" >ansible踩坑指南_missing sudo password-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/xuxin8911/article/details/80038153" >virt-install找不到default网络_没有网络与名称 ‘default’ 映射-CSDN博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/dang/pynfs/tree/master" >dang&#x2F;pynfs: Clone of git:&#x2F;&#x2F;git.linux-nfs.org&#x2F;projects&#x2F;bfields&#x2F;pynfs.git <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://patchwork.kernel.org/project/linux-nfs/patch/20250122-master-v1-1-3c6c66a66fe5@kernel.org/" >[pynfs] Move to xdrlib3 - Patchwork <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://chenxiaosong.com/courses/nfs/pnfs.html" >Parallel NFS (pNFS) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> nfs-ganesha编译</li>
+        <li><strong>Author:</strong> Ethereal</li>
+        <li><strong>Created at:</strong> 2024-06-14 22:13:36</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://ethereal-o.github.io/2024/06/14/nfs-ganesha编译/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+                </div>
+            
+
+            
+
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                            rel="prev"
+                            href="/2024/07/02/k8s%E4%BD%BF%E7%94%A8csi/"
+                            >
+                                <span class="left arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">k8s使用csi</span>
+                                    <span class="post-nav-item">Prev posts</span>
+                                </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                            rel="next"
+                            href="/2024/05/19/%E7%BB%84raid/"
+                            >
+                                <span class="title flex-center">
+                                    <span class="post-nav-title-item">组raid</span>
+                                    <span class="post-nav-item">Next posts</span>
+                                </span>
+                                <span class="right arrow-icon flex-center">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+
+            
+                <div class="comment-container">
+                    <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-pjax>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">nfs-ganesha编译</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91"><span class="nav-text">1. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8"><span class="nav-text">2. 服务启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E8%AF%95"><span class="nav-text">3. 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%B6%E4%BB%96"><span class="nav-text">4. 其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%85%8D%E7%BD%AEkerberos%E9%89%B4%E6%9D%83"><span class="nav-text">5. 配置kerberos鉴权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-kerberos%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.1 kerberos服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-nfs%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">5.2 nfs服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3 客户端配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E7%B3%BB%E7%BB%9F%E6%B5%8B%E8%AF%95"><span class="nav-text">6. 系统测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E6%B5%8B%E8%AF%95"><span class="nav-text">6.1 使用文件测试工具测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E4%BD%BF%E7%94%A8kdevops-x2F-pynfs%E6%B5%8B%E8%AF%95"><span class="nav-text">6.2 使用kdevops &#x2F;pynfs 测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
+
+    </div>
+</div>
+            </div>
+        
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
