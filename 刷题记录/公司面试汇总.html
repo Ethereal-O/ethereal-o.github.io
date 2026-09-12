@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-09-02T13:39:40.505Z">
+<meta property="article:modified_time" content="2026-09-12T08:12:07.536Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -3423,6 +3423,100 @@
 </li>
 </ul>
 <h3 id="44-2-代码题"><a href="#44-2-代码题" class="headerlink" title="44.2 代码题"></a>44.2 代码题</h3><p>链表k宽度翻转，每k个形成一个chunk，以chunk粒度翻转，chunk内部顺序不变。</p>
+<h2 id="45-百度三面"><a href="#45-百度三面" class="headerlink" title="45. 百度三面"></a>45. 百度三面</h2><h3 id="45-1-答得不好的问题以及标准答案"><a href="#45-1-答得不好的问题以及标准答案" class="headerlink" title="45.1 答得不好的问题以及标准答案"></a>45.1 答得不好的问题以及标准答案</h3><p><strong>1. 现代 vLLM 对 Swap 及调度问题的最新解决策略</strong></p>
+<ul>
+<li><p><strong>候选人表现：</strong> 候选人停留在 v0.1.1 的旧版本认知，认为较新版本仍未解决 Swap 队列导致的问题，对当前 vLLM 的演进缺乏了解。</p>
+</li>
+<li><p><strong>标准答案与解析：</strong> 较新版本的 vLLM 通过引入 <strong>Chunked Prefill（分块预填充）</strong> 和更完善的 <strong>Continuous Batching（连续批处理）</strong> 机制，实现了迭代级别的调度。结合 PagedAttention 动态分配显存，能极大减少因显存碎片化导致的 Swap 换入换出频率。此外，通过按 token 分块计算，可以有效避免长文本导致的显存瞬间 OOM 和强制 Swap。</p>
+</li>
+</ul>
+<p><strong>2. Radix Tree（基数树）在 KV Cache 中的作用</strong></p>
+<ul>
+<li><p><strong>候选人表现：</strong> 候选人对该概念较模糊，仅推测其用于推断数据层级以决定重算策略来增加命中率，未能准确点出核心机制。</p>
+</li>
+<li><p><strong>标准答案与解析：</strong> Radix Tree 主要用于实现 <strong>KV Cache 的前缀缓存（Prefix Caching）</strong>（这是 SGLang 及新版 vLLM 中的核心特性）。它通过将请求的 token 序列映射到基数树中，能够精确匹配并复用不同请求间相同的前缀（如 System Prompt 或多轮对话历史）。这一机制大幅减少了重复计算，极大降低了 TTFT（首字延迟）并提升了系统吞吐。</p>
+</li>
+</ul>
+<p><strong>3. 前沿大模型的结构与并行优化策略（如 Llama 3、DeepSeek）</strong></p>
+<ul>
+<li><p><strong>候选人表现：</strong> 候选人坦言对最新模型（如 Llama 3.1&#x2F;3.2、DeepSeek 的架构）不了解，表示自己主要熟悉早期的注意力机制配置。</p>
+</li>
+<li><p><strong>标准答案与解析：</strong> <strong>Llama 3 系列</strong> 广泛采用 GQA（Grouped-Query Attention）以大幅缩减 KV Cache 的显存占用。<strong>DeepSeek 系列</strong> 则引入了 MLA（Multi-head Latent Attention）实现 KV Cache 的极度压缩，并结合 MoE（混合专家模型）架构进行稀疏计算。在底层算子和调度上，这些新架构要求针对 MoE 的专家负载均衡（Load Balancing）以及 All-to-All 通信做深度的并行与网络拓扑优化。</p>
+</li>
+</ul>
+<p><strong>4. TMA（Tensor Memory Accelerator）特性的深度理解及性能瓶颈归因</strong></p>
+<ul>
+<li><p><strong>候选人表现：</strong> 候选人尝试过 TMA 但未见显著提升，将其简单归因为 GDR 已经将数据拷贝至 HBM，且认为 TMA 本身也会做一层从 HBM 到 SM 的拷贝操作，分析稍显单薄。</p>
+</li>
+<li><p><strong>标准答案与解析：</strong> TMA 是 Hopper&#x2F;Blackwell 架构引入的<strong>异步硬件拷贝引擎</strong>。其核心优势在于能完全接管 Global Memory 到 Shared Memory 的多维张量数据搬运，从而<strong>释放了 SM（流式多处理器）的计算核心、寄存器和指令发射带宽</strong>。使用 TMA 未见收益的原因通常不在于 HBM 拷贝位置，而多是因为：1) 算子本身已经是 Memory Bound（访存受限），显存带宽已达上限；2) 异步流水线（Pipeline）未充分实现 overlap 以掩盖访存延迟；3) Block 尺寸和 Warp 配置未能打满 TMA 引擎的并发吞吐上限。</p>
+</li>
+</ul>
+<h2 id="46-思勰一面"><a href="#46-思勰一面" class="headerlink" title="46. 思勰一面"></a>46. 思勰一面</h2><h3 id="46-1-答得不好的问题以及标准答案"><a href="#46-1-答得不好的问题以及标准答案" class="headerlink" title="46.1 答得不好的问题以及标准答案"></a>46.1 答得不好的问题以及标准答案</h3><p><strong>1. Lock Guard (RAII) 实现逻辑失误</strong></p>
+<ul>
+<li><p><strong>答得不好的点</strong>：在手写自定义自旋锁的 <code>LockGuard</code> 时，候选人在析构函数中错误地调用了被封装对象的析构函数（<code>~T()</code>），而非解锁方法（<code>unlock()</code>）。此外，最初的版本在构造函数中没有主动调用加锁，需要用户手动调用，违背了 RAII 的初衷。候选人也坦诚由于过度依赖 AI 辅助编程，对拷贝构造和移动构造的细节产生了生疏。</p>
+</li>
+<li><p><strong>标准答案</strong>：标准的 <code>LockGuard</code> 应当在构造函数中接收互斥锁的引用并立即调用其 <code>.lock()</code> 方法，在析构函数中调用 <code>.unlock()</code> 方法。为了避免同一把锁被异常释放，必须显式删除拷贝构造函数和拷贝赋值操作符（<code>LockGuard(const LockGuard&amp;) = delete;</code>）。可以直接复用 <code>std::lock_guard&lt;SpinLock&gt; guard(lock);</code>，前提是自定义的锁类实现了标准的 <code>lock()</code> 和 <code>unlock()</code> 成员函数。</p>
+</li>
+</ul>
+<p><strong>2. 冷路径（低频代码）的硬件性能级无锁采样</strong></p>
+<ul>
+<li><p><strong>答得不好的点</strong>：第二面中，面试官追问如何在不引入系统调用开销的前提下，精准获取一段极低频执行代码（冷路径）的 Cache 命中率等硬件性能指标。候选人认为获取这类数据必须依赖系统调用，没有提供在用户态直接读取的方法。</p>
+</li>
+<li><p><strong>标准答案</strong>：对于极其敏感的性能测量，系统调用（如直接调用内核态的 <code>perf</code>）本身会破坏 Cache 和指令流水线。标准做法是：</p>
+</li>
+</ul>
+<ol>
+<li><p>测量精准耗时：使用 x86 内联汇编指令 <code>RDTSC</code> 或 <code>RDTSCP</code> 直接读取 CPU 的时间戳计数器（TSC），开销极低。</p>
+</li>
+<li><p>测量硬件事件（Cache Miss）：利用 Linux 的 <code>perf_event_open</code> 在初始化阶段打开硬件性能计数器（PMC），然后通过 <code>mmap</code> 将包含计数器值的文件描述符映射到用户态内存。在冷路径的前后，程序可以直接从这段用户态内存中读取硬件计数器，实现真正的“零系统调用（Zero-syscall）”开销采样。</p>
+</li>
+</ol>
+<p><strong>3. 原子变量（std::atomic）的默认初始化行为</strong></p>
+<ul>
+<li><p><strong>答得不好的点</strong>：面试官询问 <code>std::atomic&lt;bool&gt;</code> 在未显式赋值初始化时的默认值，候选人猜测编译器（如 GCC&#x2F;Clang）默认会做补零操作使其为 <code>false</code>。</p>
+</li>
+<li><p><strong>标准答案</strong>：这个行为取决于 C++ 标准的版本。在 C++20 之前，<code>std::atomic</code> 的默认构造函数<strong>不进行初始化</strong>（Trivial default constructor），局部原子变量的初始值是未定义的垃圾值（与普通 <code>bool</code> 局部变量相同）。直到 C++20，标准才强制要求 <code>std::atomic</code> 的默认构造函数执行零初始化（Zero-initialization，即默认为 false 或 0）。</p>
+</li>
+</ul>
+<p><strong>4. 持久化无锁队列的并发争用瓶颈</strong></p>
+<ul>
+<li><p><strong>答得不好的点</strong>：在手写基于版本号（Version）和 CAS 的环形数组 MPSC（多生产者单消费者）队列时，候选人自己也意识到这种实现在多生产者高并发时性能不佳，且可能存在某个生产者被“饿死”的问题，但未能给出具体的优化替代方案。</p>
+</li>
+<li><p><strong>标准答案</strong>：多生产者在同一个槽位（Slot）频繁执行 CAS 操作会导致严重的 Cache Line 伪共享和缓存一致性风暴（Cache Ping-pong）。更优的系统设计是避免多生产者直接争用：</p>
+<ul>
+<li><strong>Thread-Local SPSC 聚合</strong>：为每个生产者线程分配独立的 SPSC（单生产者单消费者）无锁环形队列。消费者负责轮询拉取所有 SPSC 队列的数据。这彻底消除了多生产者之间的 CAS 竞争。</li>
+<li><strong>无锁链表（Wait-free Enqueue）</strong>：使用基于 <code>std::atomic::exchange</code> 操作的单向链表结构。生产者仅需一条原子的 <code>exchange</code> 指令即可将新节点接入链表尾部，实现无等待（Wait-free）入队，开销远低于在环形数组中循环执行 CAS。</li>
+</ul>
+</li>
+</ul>
+<h2 id="47-诚奇二面"><a href="#47-诚奇二面" class="headerlink" title="47. 诚奇二面"></a>47. 诚奇二面</h2><h2 id="47-1-答得不好的问题以及标准答案"><a href="#47-1-答得不好的问题以及标准答案" class="headerlink" title="47.1 答得不好的问题以及标准答案"></a>47.1 答得不好的问题以及标准答案</h2><p><strong>1. 项目表达与业务场景抽象能力</strong></p>
+<ul>
+<li><p><strong>未答好之处</strong>：候选人在介绍最自豪的机器学习存储引擎项目时，直接陷入了“跳过Cache”、“随机读”、“KV映射”等底层技术细节，未能首先交代系统受众与业务价值。导致面试官多次打断，反复追问“这个东西是干嘛用的”、“假如我是研究员我该怎么用”。</p>
+</li>
+<li><p><strong>标准答案（更优解）</strong>：采用Top-Down（自顶向下）的表达框架。首先定义业务场景与接口边界：这是一个服务于大模型推理（如获取KV Cache）的底层存储系统；研究员只需传入文件名（Key），系统即可直接返回装载好数据的内存指针。在明确输入输出后，再展开介绍为了解决“海量小文件并发随机读”而设计的两层路由映射与SPDK优化方案。</p>
+</li>
+</ul>
+<p><strong>2. GPU在交易系统中的应用认知</strong></p>
+<ul>
+<li><p><strong>未答好之处</strong>：候选人认为GPU的IO延迟过高，因此交易系统（对延迟极度敏感）的整体链路和模型推理基本只能在CPU上运行，GPU仅适用于吞吐量要求高的场景。</p>
+</li>
+<li><p><strong>标准答案（面试官视角的行业现状）</strong>：对于包含大量深度学习&#x2F;机器学习预测模型的现代算法交易系统，GPU的综合延迟优势远超CPU。在计算密集型场景下，即便算上Host与Device之间的内存拷贝开销，GPU完成整体推断仅需10<del>15毫秒，而CPU可能需要耗费150</del>200毫秒。过去交易系统少用GPU的根本原因并非延迟，而是交易所机房极严的功率限制（单机柜仅4400瓦）。如今服务器迁出交易所机房，功率解禁，利用GPU进行因子计算和模型推断已完全可行且极具优势。</p>
+</li>
+</ul>
+<p><strong>3. GPU硬件故障排查认知</strong></p>
+<ul>
+<li><p><strong>未答好之处</strong>：候选人提到之前遇到过GPU算错结果的离谱现象，仅笼统归结为“可能是卡不太好”或“某块芯片坏了”。</p>
+</li>
+<li><p><strong>标准答案</strong>：面试官直接点出了问题的核心——是否具备<strong>ECC（错误纠正码）</strong>。在生产环境中，若使用的是未配备ECC内存的消费级显卡或劣质卡，显存中的数据可能会发生静默翻转，导致输入一致但输出结果不同的计算错误。</p>
+</li>
+</ul>
+<p><strong>4. 对现代研发模式的理解</strong></p>
+<ul>
+<li><p><strong>未答好之处</strong>：候选人询问公司是否采用传统的“一行行敲代码”的研发模式。</p>
+</li>
+<li><p><strong>标准答案</strong>：工程师的核心精力不应停留在最枯燥的底层代码编写上，而应聚焦于场景梳理、系统解耦设计以及完善的验证与测试。借助AI Agent等框架辅助生成底层代码，保持系统的简洁性（Simplicity），从而在极端市场行情下能够快速推理并安全调整系统行为。</p>
+</li>
+</ul>
 
             
         </div>
