@@ -26,7 +26,7 @@
 <meta property="og:description" content="预编译首先编译一次oh完整镜像，细节可以参考OpenHarmony编译环境搭建 （兼容至4.0-Master和主干分支） - 文章 OpenHarmony开发者论坛  编译结束后在out&#x2F;rk3568&#x2F;packages&#x2F;phone&#x2F;images下得到所有的镜像，包括如下镜像： 12boot_linux.img  config.cfg      MiniLoaderAll.bin  ramdisk.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-08T08:31:09.000Z">
-<meta property="article:modified_time" content="2024-05-08T09:41:50.202Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.191Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-05-08 17:41:50</span>
-            <span class="mobile">2024-05-08 17:41</span>
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -469,7 +469,7 @@
         <li><strong>Created at:</strong> 2024-05-08 16:31:09</li>
         
             <li>
-                <strong>Updated at:</strong> 2024-05-08 17:41:50
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
             </li>
         
         <li>
@@ -528,46 +528,42 @@
 
             
                 <div class="comment-container">
-                    <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fa-solid fa-comments"></i>&nbsp;Comments
-    </div>
-    
+                    if (hexo-config('comment.enable') == true && hexo-config('comment.system') != "") {
+  if (hexo-config('comment.system') == "waline") {
+    @require "./waline.styl"
 
-        
-            
- 
-    <div id="waline"></div>
-    <script type="module"  data-pjax>
-        import { init } from 'https://evan.beee.top/js/waline.mjs';
+  } else if (hexo-config('comment.system') == "gitalk") {
+    @require "./gitalk.styl"
 
-        function loadWaline() {
-            init({
-                el: '#waline',
-                serverURL: 'https://example.example.com',
-                lang: 'zh-CN',
-                dark: 'body[class~="dark-mode"]',
-                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
-            });
-        }
+  } else if (hexo-config('comment.system') == "twikoo") {
+    @require "./twikoo.styl"
+  }
+}
 
-        if ('true') {
-            const loadWalineTimeout = setTimeout(() => {
-                loadWaline();
-                clearTimeout(loadWalineTimeout);
-            }, 1000);
-        } else {
-            window.addEventListener('DOMContentLoaded', loadWaline);
-        }
-        
-    </script>
+.comments-container
+  display inline-block
+  margin-top $spacing-unit
+  width 100%
 
+  #comment-anchor
+    width 100%
+    height 10px
 
+  .comment-area-title
+    width 100%
+    margin 10px 0
+    font-size 1.38rem
+    color var(--default-text-color)
+    font-family 'Noto Sans', 'Noto Sans SC', sans-serif
+    font-weight bold
 
-        
-    
-</div>
+    i
+      color var(--default-text-color)
+
+    +redefine-tablet()
+      margin 5px 0
+      font-size 1.2rem
+
 
                 </div>
             

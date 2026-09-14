@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 下载使用clash-for-linux: 1git clone git@github.com:wnlen&#x2F;clash-for-linux.git  2. 修改配置取消下载config：修改start.sh，注释掉以下几行： 123456789101112#curl -o &#x2F;dev&#x2F;null -s -m 10 --connect-timeout 10 -w %&amp;#123;http_code&amp;#">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-01T16:52:18.000Z">
-<meta property="article:modified_time" content="2025-06-01T17:04:50.185Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.191Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-06-02 01:04:50</span>
-            <span class="mobile">2025-06-02 01:04</span>
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -452,7 +452,7 @@
         <li><strong>Created at:</strong> 2025-06-02 00:52:18</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-06-02 01:04:50
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
             </li>
         
         <li>
@@ -511,46 +511,42 @@
 
             
                 <div class="comment-container">
-                    <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fa-solid fa-comments"></i>&nbsp;Comments
-    </div>
-    
+                    if (hexo-config('comment.enable') == true && hexo-config('comment.system') != "") {
+  if (hexo-config('comment.system') == "waline") {
+    @require "./waline.styl"
 
-        
-            
- 
-    <div id="waline"></div>
-    <script type="module"  data-pjax>
-        import { init } from 'https://evan.beee.top/js/waline.mjs';
+  } else if (hexo-config('comment.system') == "gitalk") {
+    @require "./gitalk.styl"
 
-        function loadWaline() {
-            init({
-                el: '#waline',
-                serverURL: 'https://example.example.com',
-                lang: 'zh-CN',
-                dark: 'body[class~="dark-mode"]',
-                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
-            });
-        }
+  } else if (hexo-config('comment.system') == "twikoo") {
+    @require "./twikoo.styl"
+  }
+}
 
-        if ('true') {
-            const loadWalineTimeout = setTimeout(() => {
-                loadWaline();
-                clearTimeout(loadWalineTimeout);
-            }, 1000);
-        } else {
-            window.addEventListener('DOMContentLoaded', loadWaline);
-        }
-        
-    </script>
+.comments-container
+  display inline-block
+  margin-top $spacing-unit
+  width 100%
 
+  #comment-anchor
+    width 100%
+    height 10px
 
+  .comment-area-title
+    width 100%
+    margin 10px 0
+    font-size 1.38rem
+    color var(--default-text-color)
+    font-family 'Noto Sans', 'Noto Sans SC', sans-serif
+    font-weight bold
 
-        
-    
-</div>
+    i
+      color var(--default-text-color)
+
+    +redefine-tablet()
+      margin 5px 0
+      font-size 1.2rem
+
 
                 </div>
             

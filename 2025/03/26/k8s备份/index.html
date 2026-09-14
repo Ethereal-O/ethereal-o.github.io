@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. 安装etcd客户端1apt install etcd-client  2. 创建备份1234567mkdir .&#x2F;etcd-backupETCDCTL_API&#x3D;3 etcdctl --endpoints&#x3D;https:&#x2F;&#x2F;127.0.0.1:2379 \                      --cacert&#x3D;&#x2F;etc&#x2F;kubernetes&#x2F;pki&#x2F;etcd&#x2F;ca.crt \">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-26T08:09:53.000Z">
-<meta property="article:modified_time" content="2025-11-08T16:59:05.844Z">
+<meta property="article:modified_time" content="2026-09-12T15:27:02.195Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -393,8 +393,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-09 00:59:05</span>
-            <span class="mobile">2025-11-09 00:59</span>
+            <span class="desktop">2026-09-12 23:27:02</span>
+            <span class="mobile">2026-09-12 23:27</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -506,7 +506,7 @@
         <li><strong>Created at:</strong> 2025-03-26 16:09:53</li>
         
             <li>
-                <strong>Updated at:</strong> 2025-11-09 00:59:05
+                <strong>Updated at:</strong> 2026-09-12 23:27:02
             </li>
         
         <li>
@@ -565,46 +565,42 @@
 
             
                 <div class="comment-container">
-                    <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fa-solid fa-comments"></i>&nbsp;Comments
-    </div>
-    
+                    if (hexo-config('comment.enable') == true && hexo-config('comment.system') != "") {
+  if (hexo-config('comment.system') == "waline") {
+    @require "./waline.styl"
 
-        
-            
- 
-    <div id="waline"></div>
-    <script type="module"  data-pjax>
-        import { init } from 'https://evan.beee.top/js/waline.mjs';
+  } else if (hexo-config('comment.system') == "gitalk") {
+    @require "./gitalk.styl"
 
-        function loadWaline() {
-            init({
-                el: '#waline',
-                serverURL: 'https://example.example.com',
-                lang: 'zh-CN',
-                dark: 'body[class~="dark-mode"]',
-                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
-            });
-        }
+  } else if (hexo-config('comment.system') == "twikoo") {
+    @require "./twikoo.styl"
+  }
+}
 
-        if ('true') {
-            const loadWalineTimeout = setTimeout(() => {
-                loadWaline();
-                clearTimeout(loadWalineTimeout);
-            }, 1000);
-        } else {
-            window.addEventListener('DOMContentLoaded', loadWaline);
-        }
-        
-    </script>
+.comments-container
+  display inline-block
+  margin-top $spacing-unit
+  width 100%
 
+  #comment-anchor
+    width 100%
+    height 10px
 
+  .comment-area-title
+    width 100%
+    margin 10px 0
+    font-size 1.38rem
+    color var(--default-text-color)
+    font-family 'Noto Sans', 'Noto Sans SC', sans-serif
+    font-weight bold
 
-        
-    
-</div>
+    i
+      color var(--default-text-color)
+
+    +redefine-tablet()
+      margin 5px 0
+      font-size 1.2rem
+
 
                 </div>
             
