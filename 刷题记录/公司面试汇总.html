@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-09-14T15:41:47.607Z">
+<meta property="article:modified_time" content="2026-09-20T14:19:00.537Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -3546,6 +3546,105 @@
 <li><p>内存释放（Free）：释放时，不仅要归还内存块，还要通过指针的位异或运算（XOR）快速计算出其“伙伴”块的物理地址。如果“伙伴”也是空闲状态，则将两者合并成一个更大的块，并递归向上合并。候选人在面试中试图用哈希表（Map）记录分配长度并在释放时去Set里查找合并，这种方式不仅带来了额外的内存开销，且红黑树&#x2F;哈希表操作的速度完全达不到底层内存分配器所需的纳秒级极致要求。</p>
 </li>
 </ul>
+<h2 id="49-Akuna笔试"><a href="#49-Akuna笔试" class="headerlink" title="49. Akuna笔试"></a>49. Akuna笔试</h2><h3 id="49-1-基础题"><a href="#49-1-基础题" class="headerlink" title="49.1 基础题"></a>49.1 基础题</h3><h4 id="49-1-1-SOLID原则"><a href="#49-1-1-SOLID原则" class="headerlink" title="49.1.1 SOLID原则"></a>49.1.1 SOLID原则</h4><p><strong>SOLID</strong> 原则是面向对象编程和软件设计的五大基本原则，旨在让代码更易于维护、扩展和解耦。它的五个字母分别代表：</p>
+<ul>
+<li><p><strong>S - 单一职责原则 (Single Responsibility)</strong><br>一个类或模块应该有且只有一个被修改的理由。<br><strong>大白话</strong>：一个类只负责干好一件事。</p>
+</li>
+<li><p><strong>O - 开闭原则 (Open-Closed)</strong><br>软件实体应该对扩展开放，对修改封闭。<br><strong>大白话</strong>：增加新功能时，应该通过增加新代码来实现，而不是去修改原来的老代码。不要一旦新增新功能，就必须写if-else。</p>
+</li>
+<li><p><strong>L - 里氏替换原则 (Liskov Substitution)</strong><br>子类对象必须能够替换掉所有的父类对象，而不影响程序的正确性。<br><strong>大白话</strong>：子类可以扩展父类的功能，但不能改变父类原有的行为逻辑。</p>
+</li>
+<li><p><strong>I - 接口隔离原则 (Interface Segregation)</strong><br>客户端不应该被迫依赖它不需要的接口。<br><strong>大白话</strong>：接口要尽量拆得小而精，不要搞一个包含各种无关方法的大接口。</p>
+</li>
+<li><p><strong>D - 依赖倒置原则 (Dependency Inversion)</strong><br>高层模块不应该依赖低层模块，二者都应该依赖抽象（接口）。<br><strong>大白话</strong>：面向接口编程，不要直接依赖具体的实现类。</p>
+</li>
+</ul>
+<h3 id="49-2-编程题"><a href="#49-2-编程题" class="headerlink" title="49.2 编程题"></a>49.2 编程题</h3><h4 id="49-2-1-考试题"><a href="#49-2-1-考试题" class="headerlink" title="49.2.1 考试题"></a>49.2.1 考试题</h4><p><strong>背景：</strong> 有 n 名学生在同一个房间内参加考试。每名学生的考试时间由一个时间区间 <code>[start[i], end[i]]</code> 表示（0 &lt;&#x3D; i &lt; n）。当房间内同时存在的学生人数大于等于 k 时，就必须有一名监考员在场；否则不需要监考员。</p>
+<p><strong>查询要求：</strong> 现有 q 个查询，每个查询给出一个时间区间 <code>[q_start[i], q_end[i]]</code>。对于每个查询，你需要计算在该时间区间内，监考员必须在场的总时长（即房间内学生人数 &gt;&#x3D; k 的总时间）。</p>
+<p><strong>函数输入与输出：</strong> 函数 <code>minTime</code> 接收以下参数并返回一个包含 q 个整数的数组作为答案：</p>
+<ul>
+<li><p><code>start[n]</code>：所有学生的考试开始时间。</p>
+</li>
+<li><p><code>end[n]</code>：所有学生的考试结束时间，满足 <code>start[i] &lt;= end[i]</code>。</p>
+</li>
+<li><p><code>q_start[q]</code>：查询的开始时间。</p>
+</li>
+<li><p><code>q_end[q]</code>：查询的结束时间。</p>
+</li>
+<li><p><code>k</code>：触发需要监考员的最少学生人数。</p>
+</li>
+</ul>
+<p><strong>解答思路（扫描线 + 离散化前缀和 + 二分查找）</strong></p>
+<p>这道题的核心是<strong>静态区间查询</strong>。由于不需要动态修改学生的考试时间，最通用的高效解法是先通过扫描线算出所有需要监考的“有效时间段”，再利用前缀和与二分查找来快速回答每一次查询。</p>
+<p><strong>第一步：事件离散化与排序（扫描线）</strong></p>
+<ol>
+<li><p>将每个学生的考试区间 <code>[start, end]</code> 拆分为两个独立的事件：一个是进入考场，即在 <code>start</code> 时刻人数 +1；另一个是离开考场，即在 <code>end</code> 时刻人数 -1。</p>
+</li>
+<li><p>将这 2n 个事件放在一个列表中，并严格按照时间先后顺序进行排序。如果时间点相同，应当先处理离开事件（-1）再处理进入事件（+1），以防在边界时刻发生错误的人数叠加。</p>
+</li>
+</ol>
+<p><strong>第二步：计算“有效时间段”</strong></p>
+<ol>
+<li><p>遍历排序后的事件列表，使用一个计数器变量实时维护当前房间内的总学生人数。</p>
+</li>
+<li><p>随着时间点的推进，如果某两个相邻事件点之间的时间段内，当前计数器的人数 &gt;&#x3D; k，则说明这段时间是需要监考的。</p>
+</li>
+<li><p>提取所有关键时间节点（去除重复的时间点），并记录每两个相邻去重时间节点之间的区间是否为“有效监考时间”。</p>
+</li>
+</ol>
+<p><strong>第三步：构建前缀和数组</strong></p>
+<ol>
+<li><p>为了在 O(1) 的时间内得知任意节点之前的总监考时间，我们需要构建一个前缀和数组。</p>
+</li>
+<li><p>创建一个时间点数组 <code>times</code> 存储所有去重后的关键事件时间。</p>
+</li>
+<li><p>创建一个前缀和数组 <code>prefix</code>，其中 <code>prefix[i]</code> 表示从最初时间 <code>times[0]</code> 一直到 <code>times[i]</code>，累积的总监考时长。构建时，如果 <code>times[i-1]</code> 到 <code>times[i]</code> 期间人数 &gt;&#x3D; k，就把这段差值累加进 <code>prefix</code> 中。</p>
+</li>
+</ol>
+<p><strong>第四步：通过二分查找回答查询</strong></p>
+<p>对于任意一个查询区间 <code>[q_start, q_end]</code>，我们可以将其转化为计算前缀和的差值：<code>计算函数 f(t) = 从时间 0 到时间 t 的总监考时长</code>，那么答案就是 <code>f(q_end) - f(q_start)</code>。</p>
+<p>计算 <code>f(t)</code> 的逻辑如下：</p>
+<ol>
+<li><p>利用二分查找，在 <code>times</code> 数组中找到小于等于目标时间 <code>t</code> 的最大关键时间点，记为 <code>times[idx]</code>。</p>
+</li>
+<li><p>此时，从 0 到 <code>times[idx]</code> 的有效时间可以直接通过 <code>prefix[idx]</code> 拿到。</p>
+</li>
+<li><p>接着判断从 <code>times[idx]</code> 到下一个关键时间点 <code>times[idx+1]</code> 的这段区间内人数是否 &gt;&#x3D; k。如果是，则还要加上零头部分的时间差，即 <code>t - times[idx]</code>。</p>
+</li>
+<li><p>两者相加即可得到准确的 <code>f(t)</code>，从而在 O(log n) 的时间复杂度内回答单个查询。</p>
+</li>
+</ol>
+<h4 id="49-2-2-题目：将整数的二进制表示化为零的最少操作次数（力扣1611）"><a href="#49-2-2-题目：将整数的二进制表示化为零的最少操作次数（力扣1611）" class="headerlink" title="49.2.2 题目：将整数的二进制表示化为零的最少操作次数（力扣1611）"></a>49.2.2 题目：将整数的二进制表示化为零的最少操作次数（力扣1611）</h4><p><strong>题目描述</strong> 给定一个整数 $n$，将其二进制表示看作一个从左到右索引的字符或数字序列。你需要通过以下两种特定操作，将该二进制序列完全转换为零：</p>
+<ol>
+<li><p>改变第 $i$ 位的数字，当且仅当第 $i+1$ 位为 1，且从 $i+2$ 位到最右侧的最后一位全为 0。</p>
+</li>
+<li><p>可以无条件地改变最右侧（最低位）的数字。</p>
+</li>
+</ol>
+<p>计算并返回完成此任务所需的最少操作次数。</p>
+<p><strong>示例</strong> 输入：$n &#x3D; 4$ 解释：4 的二进制表示为 100。转换步骤如下：100 $\rightarrow$ 101 $\rightarrow$ 111 $\rightarrow$ 110 $\rightarrow$ 010 $\rightarrow$ 011 $\rightarrow$ 001 $\rightarrow$ 000。输出：7<br><strong>解答思路</strong></p>
+<p><strong>核心本质分析</strong> 题目中限制的两种改变二进制位的规则，实际上是对格雷码（Gray Code）序列相邻项转换规则的精确描述。格雷码是一种特殊的二进制编码方式，其最主要的特征是：序列中相邻的两个数值，其二进制表示中有且仅有一位不同。</p>
+<p>题目要求将一个整数按照上述规则变为 0，这相当于我们在格雷码序列中，从当前数值所在的位置一步步退回到起点（即 0 所在的位置）。因此，<strong>求最少操作次数，本质上就是求给定整数 $n$ 在格雷码序列中的十进制索引值</strong>（即解码格雷码）。</p>
+<p><strong>数学推导与转换</strong></p>
+<ol>
+<li><p><strong>编码规则：</strong> 通常，将一个普通的二进制整数 $x$ 转换为格雷码 $n$ 的公式是利用按位异或运算：$n &#x3D; x \oplus (x \gg 1)$。</p>
+</li>
+<li><p><strong>解码规则（本题求解目标）：</strong> 本题已知的是表现为格雷码形式的 $n$，我们需要反求出它对应的原始索引值 $x$。</p>
+</li>
+<li><p>根据异或运算的性质（相同为 0，不同为 1，且满足交换律和结合律），我们可以逆推：</p>
+</li>
+</ol>
+<ul>
+<li><p>原始数字 $x$ 的最高位与格雷码 $n$ 的最高位完全相同。</p>
+</li>
+<li><p>原始数字 $x$ 的第 $k$ 位，等于格雷码 $n$ 从最高位一直到第 $k$ 位所有数字依次异或的结果。</p>
+</li>
+</ul>
+<ol start="4">
+<li><strong>计算逻辑：</strong> 只需要初始化一个结果变量记录总步数，然后将当前的数字 $n$ 不断进行逻辑右移，每次右移后都将结果变量与 $n$ 进行异或操作，直到 $n$ 衰减为 0。最终得到的结果变量的值，就是返回原点所需的最少步数。</li>
+</ol>
+<p><strong>代码</strong></p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BinaryManipulation</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">minimumOperations</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> operations = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 将数字不断右移并与累加结果进行异或</span></span><br><span class="line">        <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            operations ^= n;</span><br><span class="line">            n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> operations;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    BinaryManipulation solver;</span><br><span class="line">    std::cout &lt;&lt; solver.<span class="built_in">minimumOperations</span>(<span class="number">4</span>) &lt;&lt; std::endl; <span class="comment">// 输出: 7</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
             
         </div>

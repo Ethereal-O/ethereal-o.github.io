@@ -13,20 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2025/05/21/hugegraph-vermeer-reading/"/>
+    <link rel="canonical" href="http://example.com/刷题记录/架构设计/02-raf-全局单链加锁.html"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="1. vermeer代码理解1.1 架构1.1.1 MasterKey responsibilities:  Job submission and management  Task distribution across worker nodes  Worker node health monitoring  Result collection and aggregation  Client co">
-<meta property="og:type" content="article">
-<meta property="og:title" content="hugegraph-vermeer reading">
-<meta property="og:url" content="http://example.com/2025/05/21/hugegraph-vermeer-reading/index.html">
+        <meta name="description" content="单文件。文件由一条全局 MetaUnit 链和大量数据页交错组成。writer 攒批后构造一个大 MetaUnit，抢全局锁 → 推进全局偏移量 → 写 MetaUnit → 释放锁，随后并行写数据页。 本文对未指定部分的假设（需确认）：页为定长（示例取 64KB），大记录跨页用 FIRST&#x2F;MIDDLE&#x2F;LAST 标志切片；锁为跨进程互斥（F_OFD_SETLK 或 shm">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAF 日志格式（方案 B）—— 全局单链 + 互斥 MetaUnit">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/02-raf-%E5%85%A8%E5%B1%80%E5%8D%95%E9%93%BE%E5%8A%A0%E9%94%81.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. vermeer代码理解1.1 架构1.1.1 MasterKey responsibilities:  Job submission and management  Task distribution across worker nodes  Worker node health monitoring  Result collection and aggregation  Client co">
+<meta property="og:description" content="单文件。文件由一条全局 MetaUnit 链和大量数据页交错组成。writer 攒批后构造一个大 MetaUnit，抢全局锁 → 推进全局偏移量 → 写 MetaUnit → 释放锁，随后并行写数据页。 本文对未指定部分的假设（需确认）：页为定长（示例取 64KB），大记录跨页用 FIRST&#x2F;MIDDLE&#x2F;LAST 标志切片；锁为跨进程互斥（F_OFD_SETLK 或 shm">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-05-21T08:41:41.000Z">
-<meta property="article:modified_time" content="2026-09-12T15:27:02.195Z">
+<meta property="article:published_time" content="2026-09-20T15:21:58.000Z">
+<meta property="article:modified_time" content="2026-09-20T15:21:58.868Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -40,7 +40,7 @@
     
     <title>
         
-            hugegraph-vermeer reading -
+            RAF 日志格式（方案 B）—— 全局单链 + 互斥 MetaUnit -
         
         Ethereal&#39;s Blog
     </title>
@@ -358,272 +358,186 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="post-page-container">
-        <div class="article-content-container">
-
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
             
-            
-                <div class="article-title">
-                    <h1 class="article-title-regular">hugegraph-vermeer reading</h1>
-                </div>
-            
-                
-            
+                <p>单文件。文件由<strong>一条全局 MetaUnit 链</strong>和<strong>大量数据页</strong>交错组成。<br>writer 攒批后构造一个大 MetaUnit，抢全局锁 → 推进全局偏移量 → 写 MetaUnit → 释放锁，随后并行写数据页。</p>
+<p><strong>本文对未指定部分的假设</strong>（需确认）：页为定长（示例取 64KB），大记录跨页用 FIRST&#x2F;MIDDLE&#x2F;LAST 标志切片；锁为跨进程互斥（<code>F_OFD_SETLK</code> 或 shm robust mutex）。</p>
+<hr>
+<h2 id="1-API-语义与文件格式"><a href="#1-API-语义与文件格式" class="headerlink" title="1. API 语义与文件格式"></a>1. API 语义与文件格式</h2><h3 id="API-契约"><a href="#API-契约" class="headerlink" title="API 契约"></a>API 契约</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">u64   <span class="title function_">append</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *buf, <span class="type">size_t</span> len)</span>;   <span class="comment">// 阻塞，返回即持久</span></span><br><span class="line"><span class="type">void</span>  <span class="title function_">read</span><span class="params">(u64 index, <span class="type">void</span> *out, <span class="type">size_t</span> *len)</span>;</span><br><span class="line">iter  <span class="title function_">iterate</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure></div>
 
-            
-                <div class="article-header">
-                    <div class="avatar">
-                        <img src="/images/favicon.svg">
-                    </div>
-                    <div class="info">
-                        <div class="author">
-                            <span class="name">Ethereal</span>
-                            
-                                <span class="author-label">Lv5</span>
-                            
-                        </div>
-                        <div class="meta-info">
-                            <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-05-21 16:41:41</span>
-        <span class="mobile">2025-05-21 16:41</span>
-        <span class="hover-info">Created</span>
-    </span>
-    
-        <span class="article-date article-meta-item">
-            <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-09-12 23:27:02</span>
-            <span class="mobile">2026-09-12 23:27</span>
-            <span class="hover-info">Updated</span>
-        </span>
-    
+<p><strong><code>append</code> 的返回即代表已持久化。</strong> 没有单独的 <code>sync()</code> &#x2F; <code>flush()</code> —— 返回本身就是持久点。<br>数据未落盘之前该调用<strong>必须阻塞</strong>。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>不变式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A1</strong></td>
+<td><code>append</code> 返回 index ⟹ 该记录已持久；崩溃重启后必定能通过该 index 读到</td>
+</tr>
+<tr>
+<td><strong>A2</strong></td>
+<td><code>append</code> 未返回（阻塞中崩溃）⟹ 无任何承诺，该记录通常丢失</td>
+</tr>
+<tr>
+<td><strong>A3</strong></td>
+<td><code>append</code> 返回错误 ⟹ 该记录是否可见<strong>未定义</strong>；调用方应视为失败，重试需自带幂等键</td>
+</tr>
+<tr>
+<td><strong>A4</strong></td>
+<td>调用期间 <code>buf</code> 必须保持有效且不被修改 —— 实现为零拷贝，IO 直接引用调用方内存</td>
+</tr>
+<tr>
+<td><strong>A5</strong></td>
+<td>调用<strong>不可取消、不可超时返回</strong>；一旦进入队列就必须等到终局</td>
+</tr>
+<tr>
+<td><strong>A6</strong></td>
+<td>顺序：所有已持久记录有唯一的<strong>全局顺序</strong>，迭代即按该顺序返回；并发 <code>append</code> 之间谁在前由抢锁决定，未定义</td>
+</tr>
+<tr>
+<td><strong>A7</strong></td>
+<td>迭代是 <strong>at-least-once</strong>：可能读到数据完好但 <code>append</code> 从未成功返回的记录，上层需自带幂等键去重</td>
+</tr>
+</tbody></table>
+<p><strong>吞吐的直接后果：</strong> 因为 <code>append</code> 阻塞，单个调用线程的吞吐上限 &#x3D; <code>1 / 端到端延迟</code>。<br>要打满设备必须有足够多的并发调用方（线程 &#x2F; 进程），由实现侧攒批摊销 IO 成本。<br>这条契约也决定了下面格式设计的核心取向：<strong>一切结构都服务于「已 ack 的数据绝不可丢」</strong>。</p>
+<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">off 0        SuperBlock        4KB，创建时写一次，此后永不修改</span><br><span class="line">off 4K       Meta#0            全局链的第一个 MetaUnit，位置固定</span><br><span class="line">之后          自由区            MetaUnit 与 Page 交错，由全局偏移量顺序分配</span><br><span class="line"></span><br><span class="line">Meta#0 ──► Meta#1 ──► Meta#2 ──► Meta#3 ──► ...     唯一一条链</span><br><span class="line">   │          │  └─ next_offset ─┘</span><br><span class="line">   └─ Entry[] └─ Entry[] ──► Page ──► Page ──► Page</span><br></pre></td></tr></table></figure></div>
 
-    
-    
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SuperBlock  &#123; magic; nonce; page_size; meta_unit_size; sector_size; &#125;</span><br><span class="line"></span><br><span class="line">MetaUnit    &#123; magic; nonce; unit_seq;</span><br><span class="line">              next_offset;         <span class="comment">// 下一个 MetaUnit 的位置，写本单元前于锁内预留</span></span><br><span class="line">              entry_count;</span><br><span class="line">              header_crc; body_crc;</span><br><span class="line">              Entry entries[]; &#125;</span><br><span class="line"></span><br><span class="line">Entry       &#123; u64 first_page;   u32 page_count;</span><br><span class="line">              u32 data_len;     u32 data_crc;  u32 rec_count; &#125;</span><br><span class="line"></span><br><span class="line">Page        纯 payload，无 header、无 magic、无 crc。</span><br><span class="line">            页内 [varint len][payload] 紧密排列；跨页记录带 FIRST/MID/LAST 标志</span><br><span class="line"></span><br><span class="line">index       (page_no, offset_in_page)  打包成一个 u64</span><br></pre></td></tr></table></figure></div>
 
-    
-    
-    
-    
-        <span class="article-pv article-meta-item">
-            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
-        </span>
-    
-</div>
-
-                        </div>
-                    </div>
-                </div>
-            
-
-            <div class="article-content markdown-body">
-                <h2 id="1-vermeer代码理解"><a href="#1-vermeer代码理解" class="headerlink" title="1. vermeer代码理解"></a>1. vermeer代码理解</h2><h3 id="1-1-架构"><a href="#1-1-架构" class="headerlink" title="1.1 架构"></a>1.1 架构</h3><h4 id="1-1-1-Master"><a href="#1-1-1-Master" class="headerlink" title="1.1.1 Master"></a>1.1.1 Master</h4><p>Key responsibilities:</p>
-<ul>
-<li><p>Job submission and management</p>
-</li>
-<li><p><strong>Task distribution across worker nodes</strong></p>
-</li>
-<li><p>Worker node health monitoring</p>
-</li>
-<li><p><strong>Result collection and aggregation</strong></p>
-</li>
-<li><p><strong>Client communication</strong></p>
-</li>
+<h3 id="三条格式铁律"><a href="#三条格式铁律" class="headerlink" title="三条格式铁律"></a>三条格式铁律</h3><ul>
+<li><strong>F1 数据页零元数据。</strong> 校验与长度全部在 MetaUnit 的 Entry 里，页内不留任何头部。</li>
+<li><strong>F2 页按扇区对齐分配。</strong> 扇区是写入的最小单位，两个进程共享扇区必然互相覆盖；页<strong>内部</strong>完全不对齐。</li>
+<li><strong>F3 永不回写任何字节。</strong> 写 MetaUnit#N 之前，在锁内先把 #N+1 的位置预留掉，链始终向前声明。</li>
 </ul>
-<h4 id="1-1-2-worker"><a href="#1-1-2-worker" class="headerlink" title="1.1.2 worker"></a>1.1.2 worker</h4><p>Key responsibilities:</p>
-<ul>
-<li>Loading graph data from specified sources</li>
-<li>Executing assigned graph algorithms</li>
-<li>Processing graph partitions in memory</li>
-<li>Reporting computation results back to the master</li>
-<li>Handling custom algorithm extensions</li>
+<hr>
+<h2 id="2-写入与读取流程"><a href="#2-写入与读取流程" class="headerlink" title="2. 写入与读取流程"></a>2. 写入与读取流程</h2><h3 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. writer 攒批，打包数据页内容，算 data_crc，构造 MetaUnit</span><br><span class="line">2. 【加锁】</span><br><span class="line">3. off_meta  = cursor; cursor += meta_unit_size</span><br><span class="line">   off_pages = cursor; cursor += page_bytes</span><br><span class="line">   next_off  = cursor; cursor += meta_unit_size      ← 预留下一个 MetaUnit</span><br><span class="line">4. 写 MetaUnit（FUA），**等到 CQE 回来**</span><br><span class="line">5. 【解锁】</span><br><span class="line">6. 并行写数据页（锁外，FUA），等持久</span><br><span class="line">7. 两者都持久 → ack，返回 index</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p><strong>不变式 L1：锁必须持有到 MetaUnit 持久，不能在提交后就释放。</strong><br>否则两个 MetaUnit 同时在飞，后者先落盘、前者没落，链上出现无法到达的孤儿单元 —— 其中已 ack 的记录将永久丢失。<br>锁”持有到持久”正是本方案正确性的来源：它自动保证了链的前缀持久性。</p>
+</blockquote>
+<blockquote>
+<p><strong>不变式 L2：ack ⟺ meta 与 data 均持久。</strong> 崩溃时仍在队列、在锁外排队或在飞的记录一律丢失 —— 它们从未 ack。</p>
+</blockquote>
+<blockquote>
+<p><strong>可做的优化：</strong> 第 3 步里数据页的分配可以移到锁外（单独的原子 <code>fetch_add</code>），第 6 步的数据写与第 4 步的 meta 写<strong>并发发出</strong>。延迟从 <code>2 × IO</code> 降到 <code>1 × IO</code>，锁的持有时间不变。</p>
+</blockquote>
+<h3 id="读取与恢复"><a href="#读取与恢复" class="headerlink" title="读取与恢复"></a>读取与恢复</h3><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>点读</strong></td>
+<td>index → 读对应页 → 验 <code>data_crc</code> → 跳到页内偏移。一次 IO。</td>
+</tr>
+<tr>
+<td><strong>迭代</strong></td>
+<td>走链 → 每个 Entry 读其页区间 → 页内 varint walk。<strong>顺序即全局写入顺序。</strong></td>
+</tr>
+<tr>
+<td><strong>恢复</strong></td>
+<td>读 SuperBlock → 从 Meta#0 沿 <code>next_offset</code> 走，<strong>见第一个无效 MetaUnit 即停</strong>（链不可能有洞）→ 逐 Entry 验数据 crc，不过即为从未 ack，跳过 → <code>cursor = 已知最大 offset + 安全边距</code>。</td>
+</tr>
+</tbody></table>
+<p>恢复<strong>从不扫描数据区</strong>：不需要 magic 搜索、resync 启发式或误判概率论证。</p>
+<h3 id="共享状态"><a href="#共享状态" class="headerlink" title="共享状态"></a>共享状态</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">全局锁        跨进程互斥，持有到 meta 持久</span><br><span class="line">cursor        受锁保护，不需要原子操作；崩溃后可由走链重建</span><br><span class="line"></span><br><span class="line">无 slot 表、无共享数据缓冲区、无跨进程 leader、无拷贝。</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="3-好处与坏处"><a href="#3-好处与坏处" class="headerlink" title="3. 好处与坏处"></a>3. 好处与坏处</h2><h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
+<li><strong>全局写入顺序天然成立。</strong> 迭代是一条链的线性遍历，顺序就是真实写入顺序，不需要逻辑时间戳或读侧归并。</li>
+<li><strong>恢复是最简形态</strong>：走一条链，见坏即停。不扫数据区，不需要跨过空洞。</li>
+<li><strong>锁自动保证链的前缀持久</strong>，不会出现孤儿 MetaUnit，也不需要”按链序释放 ack”的记账逻辑。</li>
+<li><strong>文件级元数据只有 SuperBlock</strong>：没有 slot 表、没有槽位耗尽、不必为槽位滚动 segment。</li>
+<li><code>cursor</code> 在锁保护下，<strong>连原子操作都不需要</strong>，也不依赖共享内存存活。</li>
+<li>永不回写 ⟹ 已 ack 的数据不可能被任何后续写破坏。</li>
 </ul>
-<h3 id="1-2-执行流程"><a href="#1-2-执行流程" class="headerlink" title="1.2 执行流程"></a>1.2 执行流程</h3><h4 id="1-2-1-初始化"><a href="#1-2-1-初始化" class="headerlink" title="1.2.1 初始化"></a>1.2.1 初始化</h4><h5 id="1-2-1-1-master初始化"><a href="#1-2-1-1-master初始化" class="headerlink" title="1.2.1.1 master初始化"></a>1.2.1.1 master初始化</h5><p>Main(apps&#x2F;master&#x2F;master_main.go)-&gt;SetRouters（设置对客户端的http服务）</p>
-<p>Main(apps&#x2F;master&#x2F;master_main.go)-&gt;services.ServiceMaster.Init()-&gt;Init(apps&#x2F;master&#x2F;services&#x2F;service.go)-&gt;初始化各种组件</p>
-<h5 id="1-2-1-2-worker初始化"><a href="#1-2-1-2-worker初始化" class="headerlink" title="1.2.1.2 worker初始化"></a>1.2.1.2 worker初始化</h5><p>Main(apps&#x2F;worker&#x2F;worker_main.go)-&gt;Init(apps&#x2F;worker&#x2F;service.go)-&gt;SayHelloMaster(apps&#x2F;master&#x2F;bl&#x2F;grpc_handlers.go)</p>
-<h4 id="1-2-2-下发任务"><a href="#1-2-2-下发任务" class="headerlink" title="1.2.2 下发任务"></a>1.2.2 下发任务</h4><h5 id="1-2-2-1-master下发任务"><a href="#1-2-2-1-master下发任务" class="headerlink" title="1.2.2.1 master下发任务"></a>1.2.2.1 master下发任务</h5><p>POST(apps&#x2F;master&#x2F;services&#x2F;http_tasks.go)（客户端触发提交）-&gt;CreateTaskInfo()&#x2F;QueueExecuteTasks(apps&#x2F;master&#x2F;bl&#x2F;task_bl.go)-&gt;QueueTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;[PushTask(apps&#x2F;master&#x2F;schedules&#x2F;space_queue.go)-&gt;PushTask(apps&#x2F;master&#x2F;schedules&#x2F;task_queue.go)]&#x2F;[dispatch(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;doDispatch(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;HeadTasks()&#x2F;startChan-&gt;唤醒waitingTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;（这里通过workerMgr.ApplyGroup拿到wroker代理）handleStartTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;startWaitingTask(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)-&gt;StartTask(apps&#x2F;master&#x2F;bl&#x2F;task_starter.go)-&gt;StartComputeTask(apps&#x2F;master&#x2F;bl&#x2F;task_starter.go)-&gt;AsyncCompute(apps&#x2F;master&#x2F;bl&#x2F;grpc_handlers.go)-&gt;Send()]</p>
-<h5 id="1-2-2-2-worker接受任务"><a href="#1-2-2-2-worker接受任务" class="headerlink" title="1.2.2.2 worker接受任务"></a>1.2.2.2 worker接受任务</h5><p>Main(apps&#x2F;worker&#x2F;worker_main.go)-&gt;Run(apps&#x2F;worker&#x2F;service.go)-&gt;HandleComputeTask(apps&#x2F;worker&#x2F;grpc_handlers.go)-&gt;StartCompute(apps&#x2F;worker&#x2F;compute_bl.go)-&gt;ComputeTaskStatus()</p>
-<h4 id="1-2-3-Space与Graph"><a href="#1-2-3-Space与Graph" class="headerlink" title="1.2.3 Space与Graph"></a>1.2.3 Space与Graph</h4><h5 id="1-2-3-1-Space"><a href="#1-2-3-1-Space" class="headerlink" title="1.2.3.1 Space"></a>1.2.3.1 Space</h5><p>概念：指的是Client用于创建Graph的空间。Space由Client指定，进一步通过Token方式传入，可以通过TokenFactory创建。用法详见（client&#x2F;client.go）。</p>
-<h5 id="1-2-3-2-Graph"><a href="#1-2-3-2-Graph" class="headerlink" title="1.2.3.2 Graph"></a>1.2.3.2 Graph</h5><p>概念：指的是Client在自己Space中创建的工作流。</p>
-<h5 id="1-2-3-3-Worker"><a href="#1-2-3-3-Worker" class="headerlink" title="1.2.3.3 Worker"></a>1.2.3.3 Worker</h5><p>概念：指的是实际可以处理任务的节点。</p>
-<h5 id="1-2-3-4-WorkerGroup"><a href="#1-2-3-4-WorkerGroup" class="headerlink" title="1.2.3.4 WorkerGroup"></a>1.2.3.4 WorkerGroup</h5><p>概念：一组Worker，是调度的最小粒度。</p>
-<h5 id="1-2-3-5-流程"><a href="#1-2-3-5-流程" class="headerlink" title="1.2.3.5 流程"></a>1.2.3.5 流程</h5><ol>
-<li><p>Client指定Space，通过Token传入。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
-</li>
-<li><p>Client向Master创建Space（目前只能通过Admin创建）。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
-</li>
-<li><p>Client向Master创建Graph（目前只能通过Admin创建），从当前Client的Token中获取Space，在该Space中创建。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
-</li>
-<li><p>Client向Master请求将Worker分配到WorkerGroup。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
-</li>
-<li><p>Client向Master请求将WorkerGroup分配到Space或Graph。(apps&#x2F;master&#x2F;services&#x2F;http_admin.go)</p>
-</li>
-<li><p>客户端下发任务。(apps&#x2F;master&#x2F;services&#x2F;http_tasks.go)通过<code>CreateTaskInfo</code>创建Task，其中包含Task所属的Space和Graph。</p>
-</li>
-<li><p>调度器从队列中拿出任务。(apps&#x2F;master&#x2F;bl&#x2F;scheduler_bl.go)</p>
-</li>
-<li><p>试图分配agent(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
-<ol>
-<li><p>加载graph：getAgent(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)-&gt;getAgentFromWorker(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
-</li>
-<li><p>开始计算：getAgent(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)-&gt;getAgentFromGraph(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)-&gt;(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
-</li>
-</ol>
-</li>
-<li><p>AssignTask(apps&#x2F;master&#x2F;schedules&#x2F;broker.go)</p>
-</li>
-</ol>
-<h5 id="1-2-3-6-当初始化时确定Group"><a href="#1-2-3-6-当初始化时确定Group" class="headerlink" title="1.2.3.6 当初始化时确定Group"></a>1.2.3.6 当初始化时确定Group</h5><p>思考：首先group信息从worker配置加载，因此必须从worker向master传递。而worker启动时会向master发送sayHello消息，因此必须在这里多传入group信息（需要注意空值采用<code>$</code>）</p>
-<ol>
-<li><p>更改SayHello(apps&#x2F;worker&#x2F;service.go+apps&#x2F;protos&#x2F;master_grpc.pb.go)</p>
-</li>
-<li><p>master收到消息后会进行以下步骤：</p>
-<ol>
-<li><p>检查等待重名的worker离开（自动清理）</p>
-</li>
-<li><p>**创建新的worker(CreateWorker)**：在此处，会尝试从对象存储中加载worker，填入group信息。因此需要考虑冲突的情况。（目前认为对象存储中的信息优先级高于默认的worker传入的信息）</p>
-</li>
-<li><p>添加worker(AddWorker)。注意，这里addWorker，已经能够根据worker中的group信息，自动添加group（通过workersByName，而之后查询group内的worker也只是遍历(apps&#x2F;master&#x2F;workers&#x2F;worker_manager.go)）。因此只需要在此处之前分配group信息即可。</p>
-</li>
-<li><p>初始化worker</p>
-</li>
-<li><p>恢复graph</p>
-</li>
-</ol>
-</li>
-</ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a class="link"   target="_blank" rel="noopener" href="https://deepwiki.com/hugegraph/hugegraph-vermeer/1.2-key-features" >Key Features | hugegraph&#x2F;hugegraph-vermeer | DeepWiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://hugegraph.apache.org/cn/docs/quickstart/hugegraph-vermeer/" >HugeGraph-Vermeer Quick Start | HugeGraph <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://deepwiki.com/hugegraph/hugegraph-vermeer/1.1-architecture" >Architecture | hugegraph&#x2F;hugegraph-vermeer | DeepWiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h3 id="坏处"><a href="#坏处" class="headerlink" title="坏处"></a>坏处</h3><ul>
+<li><strong>锁跨 IO 持有 ⟹ meta 的队列深度恒为 1。</strong> 全局 meta 吞吐上限 &#x3D; <code>1 / IO延迟</code> ≈ 2 万次&#x2F;秒。</li>
+<li><strong>尾延迟 &#x3D; 进程数 × meta IO 延迟。</strong> 64 进程 × 50µs ≈ 3.2 ms。</li>
+<li><strong>延迟与吞吐被锁绑死。</strong> 想降延迟就得缩小批次，缩小批次就加剧锁争用 —— 两头不可兼得。这是本方案最本质的限制。</li>
+<li><strong>一个进程慢或卡住，所有 writer 一起等。</strong> 持锁进程崩溃需要锁能自动释放（<code>F_OFD_SETLK</code> 可以，普通 mutex 需要 robust 语义）。</li>
+<li><strong>持锁者崩溃后的 <code>next_offset</code> 重写竞态：</strong> 它预留的下一个 MetaUnit 位置必须由后继者写入，而死进程可能仍有在飞的 IO 指向那里。单链下无法靠”换个位置”规避，只能加宽限期。</li>
+<li><strong>低负载写放大：</strong> 只有几条记录也要写出一个完整的 MetaUnit。</li>
+<li><strong>为全局顺序付了全局锁的代价。</strong> 如果记录之间本就独立，这笔开销是白花的。</li>
+<li>meta 先于 data 的串行顺序会让延迟翻倍（可按 §2 的优化改为并发）。</li>
+</ul>
+<hr>
+<h2 id="4-与「每进程独立链」方案的对比"><a href="#4-与「每进程独立链」方案的对比" class="headerlink" title="4. 与「每进程独立链」方案的对比"></a>4. 与「每进程独立链」方案的对比</h2><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>B：全局单链 + 锁</strong></th>
+<th><strong>A：每进程独立链</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全局写入顺序</td>
+<td>天然具备</td>
+<td>无，需逻辑时间戳 + 读侧归并</td>
+</tr>
+<tr>
+<td>meta 并发度</td>
+<td>QD &#x3D; 1</td>
+<td>不受限</td>
+</tr>
+<tr>
+<td>尾延迟</td>
+<td>进程数 × IO</td>
+<td>1 × IO</td>
+</tr>
+<tr>
+<td>文件级元数据</td>
+<td>仅 SuperBlock</td>
+<td>额外 Slot 表，且会耗尽</td>
+</tr>
+<tr>
+<td>链的前缀持久</td>
+<td>锁自动保证</td>
+<td>需进程内按链序释放 ack</td>
+</tr>
+<tr>
+<td>慢进程的影响</td>
+<td>阻塞所有人</td>
+<td>只影响自己</td>
+</tr>
+<tr>
+<td>恢复</td>
+<td>走 1 条链</td>
+<td>并行走 N 条链</td>
+</tr>
+<tr>
+<td>崩溃后的位置重写竞态</td>
+<td>存在，需宽限期</td>
+<td>换新槽位即可规避</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td><strong>更低</strong></td>
+<td>更高</td>
+</tr>
+</tbody></table>
+<h3 id="选型建议"><a href="#选型建议" class="headerlink" title="选型建议"></a>选型建议</h3><ul>
+<li><strong>需要全局写入顺序</strong> → 选 B。锁买到的就是这个，其余都是代价。</li>
+<li><strong>记录彼此独立</strong> → 选 A。B 的锁是纯损失。</li>
+<li><strong>两者都要</strong> → 折中方案：全局锁只保护「排序 + 分配」（纳秒级，不跨 IO），MetaUnit 内容推进共享 ring，由一个 leader 批量写出。保留全局顺序，同时把 meta 的 QD 从 1 放开。代价是引入共享缓冲区和一次拷贝（每条 Entry 约 20B，可忽略），以及 leader 的故障转移。</li>
+</ul>
+<hr>
+<p>待定参数：<code>page_size</code> · <code>meta_unit_size</code> · 攒批触发阈值 · 安全边距 · 持锁者崩溃后的宽限期</p>
 
-            </div>
-
-            
-                <div class="post-copyright-info">
-                    <div class="article-copyright-info-container">
-    <ul>
-        <li><strong>Title:</strong> hugegraph-vermeer reading</li>
-        <li><strong>Author:</strong> Ethereal</li>
-        <li><strong>Created at:</strong> 2025-05-21 16:41:41</li>
-        
-            <li>
-                <strong>Updated at:</strong> 2026-09-12 23:27:02
-            </li>
-        
-        <li>
-            <strong>Link:</strong> https://ethereal-o.github.io/2025/05/21/hugegraph-vermeer-reading/
-        </li>
-        <li>
-            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
-        </li>
-    </ul>
-</div>
-
-                </div>
-            
-
-            
-
-            
-
-            
-                <div class="article-nav">
-                    
-                        <div class="article-prev">
-                            <a class="prev"
-                            rel="prev"
-                            href="/2025/05/29/univpn/"
-                            >
-                                <span class="left arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </span>
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">univpn</span>
-                                    <span class="post-nav-item">Prev posts</span>
-                                </span>
-                            </a>
-                        </div>
-                    
-                    
-                        <div class="article-next">
-                            <a class="next"
-                            rel="next"
-                            href="/2025/05/19/incubator-hugegraph-ai%E8%B4%A1%E7%8C%AE/"
-                            >
-                                <span class="title flex-center">
-                                    <span class="post-nav-title-item">incubator-hugegraph-ai贡献</span>
-                                    <span class="post-nav-item">Next posts</span>
-                                </span>
-                                <span class="right arrow-icon flex-center">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </span>
-                            </a>
-                        </div>
-                    
-                </div>
-            
-
-
-            
-                <div class="comment-container">
-                    <div class="comments-container">
-    <div id="comment-anchor"></div>
-    <div class="comment-area-title">
-        <i class="fa-solid fa-comments"></i>&nbsp;Comments
-    </div>
-    
-
-        
-            
- 
-    <div id="waline"></div>
-    <script type="module"  data-pjax>
-        import { init } from 'https://evan.beee.top/js/waline.mjs';
-
-        function loadWaline() {
-            init({
-                el: '#waline',
-                serverURL: 'https://example.example.com',
-                lang: 'zh-CN',
-                dark: 'body[class~="dark-mode"]',
-                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
-            });
-        }
-
-        if ('true') {
-            const loadWalineTimeout = setTimeout(() => {
-                loadWaline();
-                clearTimeout(loadWalineTimeout);
-            }, 1000);
-        } else {
-            window.addEventListener('DOMContentLoaded', loadWaline);
-        }
-        
-    </script>
-
-
-
-        
-    
-</div>
-
-                </div>
             
         </div>
-
-        
-            <div class="toc-content-container">
-                <div class="post-toc-wrap">
-    <div class="post-toc">
-        <div class="toc-title">On this page</div>
-        <div class="page-title">hugegraph-vermeer reading</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-vermeer%E4%BB%A3%E7%A0%81%E7%90%86%E8%A7%A3"><span class="nav-text">1. vermeer代码理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">1.2 执行流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol>
-
-    </div>
-</div>
-            </div>
-        
+        <div class="page-template-comments">
+            
+        </div>
     </div>
 </div>
 
@@ -699,27 +613,6 @@
         </div>
     </div>
 
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="article-tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="right-bottom-tools page-aside-toggle">
-                <i class="fa-regular fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-            <li class="go-comment">
-                <i class="fa-regular fa-comments"></i>
-            </li>
-        
-    </ul>
-</div>
-
-        </div>
     
 
     <div class="right-side-tools-container">
@@ -831,16 +724,6 @@
 
 
 <div class="post-scripts pjax">
-    
-        
-<script src="/js/tools/tocToggle.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
-<script src="/js/layouts/toc.js"></script>
-
-<script src="/js/plugins/tabs.js"></script>
-
     
 </div>
 

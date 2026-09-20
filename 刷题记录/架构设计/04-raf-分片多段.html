@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/架构设计/04-raf-分片多段.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="目录形态、多段文件、按 shard 分片，每 shard 单一 I&#x2F;O owner。崩溃可恢复，支持保留与回收。  并发模型：多进程 · 每进程多线程；独占粒度 &#x3D; shard，不是 store 记录长度：几 B ~ 1 MB 持久化：O_DIRECT + FUA + 前缀顺序 ack（不使用 fdatasync 作为提交屏障）   相对原始方案的五处改动，全部集中在 §2 与">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAF 存储格式 —— 分片多段方案（优化版）">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/04-raf-%E5%88%86%E7%89%87%E5%A4%9A%E6%AE%B5.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="目录形态、多段文件、按 shard 分片，每 shard 单一 I&#x2F;O owner。崩溃可恢复，支持保留与回收。  并发模型：多进程 · 每进程多线程；独占粒度 &#x3D; shard，不是 store 记录长度：几 B ~ 1 MB 持久化：O_DIRECT + FUA + 前缀顺序 ack（不使用 fdatasync 作为提交屏障）   相对原始方案的五处改动，全部集中在 §2 与">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-20T15:21:58.000Z">
+<meta property="article:modified_time" content="2026-09-20T15:21:58.868Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            RAF 存储格式 —— 分片多段方案（优化版） -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <p>目录形态、多段文件、按 shard 分片，每 shard 单一 I&#x2F;O owner。崩溃可恢复，支持保留与回收。</p>
+<ul>
+<li>并发模型：<strong>多进程 · 每进程多线程</strong>；独占粒度 &#x3D; <strong>shard</strong>，不是 store</li>
+<li>记录长度：几 B ~ 1 MB</li>
+<li>持久化：<strong>O_DIRECT + FUA + 前缀顺序 ack</strong>（不使用 fdatasync 作为提交屏障）</li>
+</ul>
+<blockquote>
+<p>相对原始方案的五处改动，全部集中在 §2 与 §4：<br>① 锁下沉到 shard；② fdatasync → FUA + 前缀 ack；③ <code>committed_end</code> 发布到 shm；<br>④ 小记录去掉 per-record header&#x2F;trailer；⑤ checkpoint 与新建 segment 的原子性补齐。<br>目录布局、Index 自校验、segment 轮转、batch 校验清单这些原设计的核心，一个字没改。</p>
+</blockquote>
+<hr>
+<h2 id="1-API-语义与文件格式"><a href="#1-API-语义与文件格式" class="headerlink" title="1. API 语义与文件格式"></a>1. API 语义与文件格式</h2><h3 id="API-契约"><a href="#API-契约" class="headerlink" title="API 契约"></a>API 契约</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">raf*  <span class="title function_">raf_open</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *dir, shard_mask m)</span>;   <span class="comment">// 抢占 m 中各 shard 的独占写权</span></span><br><span class="line">u64   <span class="title function_">append</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *buf, <span class="type">size_t</span> len)</span>;       <span class="comment">// 阻塞，返回即持久</span></span><br><span class="line"><span class="type">void</span>  <span class="title function_">read</span><span class="params">(u64 index, <span class="type">void</span> *out, <span class="type">size_t</span> *len)</span>;</span><br><span class="line">iter  <span class="title function_">iterate</span><span class="params">(<span class="type">void</span>)</span>;                             <span class="comment">// 基于 Snapshot</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong><code>append</code> 的返回即代表已持久化。</strong> 没有单独的 <code>sync()</code> &#x2F; <code>flush()</code> —— 返回本身就是持久点。<br>数据未落盘之前该调用<strong>必须阻塞</strong>。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>不变式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A0</strong></td>
+<td>独占粒度是 <strong>shard</strong>。<code>raf_open</code> 只取到它能抢到的 shard 的写权；一个 shard 同一时刻至多一个写进程。抢不到不阻塞、不排队</td>
+</tr>
+<tr>
+<td><strong>A1</strong></td>
+<td><code>append</code> 返回 index ⟹ 该记录已持久；崩溃重启后必定能通过该 index 读到</td>
+</tr>
+<tr>
+<td><strong>A2</strong></td>
+<td><code>append</code> 未返回（阻塞中崩溃）⟹ 无任何承诺，该记录通常丢失</td>
+</tr>
+<tr>
+<td><strong>A3</strong></td>
+<td><code>append</code> 返回 IO 类错误 ⟹ 该记录是否可见<strong>未定义</strong>；重试需自带幂等键</td>
+</tr>
+<tr>
+<td><strong>A3’</strong></td>
+<td><code>append</code> 返回 <code>EAGAIN</code>（有界队列已满）⟹ <strong>确定性地未写入</strong>，可安全原样重试。与 A3 必须是两个错误码</td>
+</tr>
+<tr>
+<td><strong>A4</strong></td>
+<td>调用期间 <code>buf</code> 必须保持有效且不被修改 —— 实现为零拷贝，IO 直接引用调用方内存</td>
+</tr>
+<tr>
+<td><strong>A5</strong></td>
+<td>调用<strong>不可取消、不可超时返回</strong>；一旦进入队列就必须等到终局</td>
+</tr>
+<tr>
+<td><strong>A6</strong></td>
+<td>顺序：<strong>同一 shard 内</strong>所有已持久记录有唯一全局顺序，迭代按该顺序返回。<strong>跨 shard 无序</strong> —— 迭代是 shard-major 序，与真实时间无关。需要全局序的上层必须自带逻辑时间戳并在读侧归并</td>
+</tr>
+<tr>
+<td><strong>A7</strong></td>
+<td>迭代是 <strong>at-least-once</strong>：batch 完整落盘但 <code>committed_end</code> 未及发布时崩溃，恢复后该批变为可见，而 <code>append</code> 从未返回。上层需自带幂等键去重</td>
+</tr>
+</tbody></table>
+<p><strong>吞吐的直接后果：</strong> 因为 <code>append</code> 阻塞，单个调用线程的吞吐上限 &#x3D; <code>1 / 端到端延迟</code>。<br>要打满设备必须有足够多的并发调用方，由 I&#x2F;O owner 攒批摊销。<br><strong><code>shard_count</code> 是一个伪装成分区参数的并发参数</strong> —— 见 §3 对它的取值讨论。</p>
+<h3 id="目录布局"><a href="#目录布局" class="headerlink" title="目录布局"></a>目录布局</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">example.raf/</span><br><span class="line">├── STORE                       不可变，创建时写一次</span><br><span class="line">├── shard-0000/</span><br><span class="line">│   ├── LOCK                    ← 独占粒度在这里，不在 store 根</span><br><span class="line">│   ├── seg-&lt;uuid-a&gt;.raf</span><br><span class="line">│   ├── seg-&lt;uuid-b&gt;.raf</span><br><span class="line">│   └── ...</span><br><span class="line">├── shard-0001/</span><br><span class="line">│   ├── LOCK</span><br><span class="line">│   └── seg-&lt;uuid-c&gt;.raf</span><br><span class="line">└── checkpoints/</span><br><span class="line">    └── checkpoint-&lt;generation&gt;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">STORE       &#123; magic; format_version; store_uuid;</span><br><span class="line">              shard_count;             <span class="comment">// 仅供 router 参考，reader 必须枚举 shard-* 目录</span></span><br><span class="line">              checksum_algorithm; format_options; checksum; &#125;</span><br><span class="line"></span><br><span class="line">Index       &#123; store_uuid; shard_id; segment_uuid;</span><br><span class="line">              record_offset; record_length; index_checksum; &#125;</span><br><span class="line">            <span class="comment">// 自校验能力凭证：跨 store 误用、index 自身损坏，都在读之前抓住</span></span><br><span class="line"></span><br><span class="line">SegmentHeader &#123; magic; version; store_uuid; shard_id; segment_uuid;</span><br><span class="line">                predecessor_segment_uuid; segment_sequence;</span><br><span class="line">                checksum_algorithm; header_checksum; &#125;</span><br><span class="line"></span><br><span class="line">BatchHeader   &#123; magic; batch_seq; record_count; batch_bytes; header_crc; &#125;</span><br><span class="line">CommitBlock   &#123; magic; store_uuid; segment_uuid; batch_seq;</span><br><span class="line">                first_offset; batch_bytes; batch_digest; crc; &#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────┐</span><br><span class="line">│ Segment Header          │  4KB</span><br><span class="line">├─────────────────────────┤</span><br><span class="line">│ Batch Header            │</span><br><span class="line">│ Record 0                │   小记录：[varint len][payload]  —— 无 header 无 trailer</span><br><span class="line">│ Record 1                │   大记录：[RecordHeader][payload][trailer]</span><br><span class="line">│ ...                     │</span><br><span class="line">│ Padding                 │   补齐到扇区，使 Commit Block 独占扇区</span><br><span class="line">│ Batch Commit Block      │</span><br><span class="line">├─────────────────────────┤</span><br><span class="line">│ Batch Header            │</span><br><span class="line">│ ...                     │</span><br><span class="line">└─────────────────────────┘</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="记录编码：分两档（改动-④）"><a href="#记录编码：分两档（改动-④）" class="headerlink" title="记录编码：分两档（改动 ④）"></a>记录编码：分两档（改动 ④）</h3><p>原设计每条记录都带 header + trailer，粗估 ~20 B。需求里存在<strong>几字节</strong>的记录，那就是 3-4 倍放大。</p>
+<table>
+<thead>
+<tr>
+<th>档位</th>
+<th>编码</th>
+<th>完整性由谁保证</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>小记录</strong>（&lt; 阈值，如 4 KB）</td>
+<td><code>[varint len][payload]</code>，块内密排</td>
+<td><strong><code>batch_digest</code> 覆盖全批</strong> —— batch 不完整则整批不可见，per-record crc 是重复投保</td>
+</tr>
+<tr>
+<td><strong>大记录</strong>（≥ 阈值）</td>
+<td><code>[RecordHeader][payload][trailer crc]</code></td>
+<td>自身 crc。避免点读时为校验一条 8 MB 记录而必须重算整批 digest</td>
+</tr>
+</tbody></table>
+<p>小记录的点读仍然一次 pread 直达：<code>Index.record_offset</code> 指向 payload 起点，<code>record_length</code> 在 index 里，varint 长度只是给迭代用的。</p>
+<h3 id="提交有效性（原设计的这一节完全正确，原样保留）"><a href="#提交有效性（原设计的这一节完全正确，原样保留）" class="headerlink" title="提交有效性（原设计的这一节完全正确，原样保留）"></a>提交有效性（原设计的这一节完全正确，原样保留）</h3><p>恢复时<strong>不能仅凭「找到了 commit magic」就认为提交成功</strong>。必须同时确认：</p>
+<ol>
+<li>Batch Header 合法（magic + <code>header_crc</code>）</li>
+<li>长度和位置合法（<code>batch_bytes</code> 不越过段尾，<code>first_offset</code> 与前一批衔接）</li>
+<li>所有记录能按长度完整解析，恰好用尽 <code>batch_bytes</code></li>
+<li>Commit Block 的身份与范围一致（<code>store_uuid</code> &#x2F; <code>segment_uuid</code> &#x2F; <code>batch_seq</code> &#x2F; <code>first_offset</code> &#x2F; <code>batch_bytes</code>）</li>
+<li><code>batch_digest</code> 正确</li>
+<li>与前一个有效 batch <strong>连续衔接</strong>（<code>batch_seq</code> 严格 +1）</li>
+</ol>
+<blockquote>
+<p>第 4、5 条是不可省的：data 与 commit block 在设备内部<strong>可以被重排</strong>，<br>「commit block 已持久」推不出「records 已持久」。所有原子性来自 digest，不来自写入顺序。</p>
+</blockquote>
+<hr>
+<h2 id="2-写入与读取流程"><a href="#2-写入与读取流程" class="headerlink" title="2. 写入与读取流程"></a>2. 写入与读取流程</h2><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">多个 writer 调用线程</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">   Shard Router          纯函数：hash(调用方 / 轮转) → 本进程持有写权的 shard 集合</span><br><span class="line">        │       │</span><br><span class="line">        ▼       ▼</span><br><span class="line">  有界 MPSC  有界 MPSC    满则返回 EAGAIN（A3&#x27;），不静默丢</span><br><span class="line">        │       │</span><br><span class="line">        ▼       ▼</span><br><span class="line">   I/O owner  I/O owner   每 shard 一个，独占该 shard 的 LOCK</span><br><span class="line">        │       │</span><br><span class="line">        ▼       ▼</span><br><span class="line">   Segment A  Segment B</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="写入（改动-②：fdatasync-→-FUA-前缀顺序-ack）"><a href="#写入（改动-②：fdatasync-→-FUA-前缀顺序-ack）" class="headerlink" title="写入（改动 ②：fdatasync → FUA + 前缀顺序 ack）"></a>写入（改动 ②：fdatasync → FUA + 前缀顺序 ack）</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 从 append_queue 收集一批请求</span><br><span class="line">2. 为所有 record 分配位置，生成候选 index（I/O owner 本地变量，无原子操作）</span><br><span class="line">3. 编码 Batch Header / Records / Padding / Commit Block，算 batch_digest</span><br><span class="line">   小记录 memcpy 进 batch buffer 密排；大记录直接挂 iovec 零拷贝</span><br><span class="line">4. pwritev 提交，**带 FUA**，不等待，直接回去收割下一批</span><br><span class="line">5. CQE 回来后按 batch_seq **前缀顺序**确认：seq=k 只有在所有 &lt;k 都已持久后才算提交</span><br><span class="line">6. 推进 committed_end（本地 + 发布到 shm）</span><br><span class="line">7. 完成各请求，返回 index</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>为什么换掉 <code>fdatasync</code>：</strong> 它是<strong>屏障</strong>，拿不到两个同时在飞的持久点，单 shard 提交速率被钉死在 <code>1 / fsync延迟</code> ≈ 2 万次&#x2F;秒。于是 <code>shard_count</code> 被迫按吞吐目标选，而 shard 越多每批越小，写放大和 fsync 效率又反过来恶化——两个参数互相对抗。</p>
+<p>换成 FUA 之后，<strong>持久化语义随每个写命令走，不需要全局屏障</strong>，batch k 和 k+1 可以同时在飞。乱序落盘由第 5 步的前缀顺序 ack 兜住：<strong>batch 链的前缀持久性由 ack 规则保证，而不是由提交顺序保证</strong>。孤儿 batch 不可能出现（<code>batch_seq</code> 不连续即判定为链终点），但设备队列被填满了。</p>
+<p>顺带拿回零拷贝：<code>O_DIRECT</code> 不经 page cache，大记录直接从调用方内存 DMA。1 MB 记录省下的 ~100 µs memcpy 已与 IO 同量级。</p>
+<blockquote>
+<p>代价：<code>O_DIRECT</code> 要求 offset &#x2F; 长度 &#x2F; 缓冲区按扇区对齐。段头 4 KB 对齐，每批整体补齐到扇区（<code>Padding</code> 本来就存在），<strong>块内记录仍然字节紧凑</strong> —— 因为一个 shard 只有一个 I&#x2F;O owner，同扇区内的排布由它独家决定，不存在两个写者共享扇区。浪费从「每记录 ≤ 4K」降为「每批 ≤ 4K」。</p>
+</blockquote>
+<h3 id="committed-end-的发布（改动-③）"><a href="#committed-end-的发布（改动-③）" class="headerlink" title="committed_end 的发布（改动 ③）"></a><code>committed_end</code> 的发布（改动 ③）</h3><p>原设计里 <code>committed_end</code> 活在 writer 的进程内存里，跨进程的 reader 拿不到，读路径第 4 步无法执行。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">example.raf/ 下一段 shm：每 shard 一个 &#123; segment_uuid, committed_end, seq &#125; 三元组</span><br><span class="line">写侧：seqlock 递增 → 更新 → 递增          （无锁，纳秒级）</span><br><span class="line">读侧：读 seq → 读值 → 再读 seq，不等则重试</span><br></pre></td></tr></table></figure></div>
+
+<p>shm 不存在或已失效（写进程不在）时，reader 退化为「读最新合法 checkpoint」——<strong>滞后一个 checkpoint 周期，但永不给出不安全的边界</strong>。shm 只是加速，正确性不依赖它。</p>
+<h3 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h3><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>点读</strong></td>
+<td>验 <code>index_checksum</code> → 验 <code>store_uuid</code> → 定位 shard&#x2F;segment → 取 <code>committed_end</code> → 边界检查 → pread → 校验（小记录靠所在 batch 的 digest 在恢复期已验；大记录验自身 crc）→ 返回</td>
+</tr>
+<tr>
+<td><strong>迭代</strong></td>
+<td>取 Snapshot <code>&#123; store_uuid, [shard_id, 有序 segment 列表, 各自 committed_end] &#125;</code> → 遍历 shard → segment → batch → record → 产出 <code>(index, payload)</code></td>
+</tr>
+<tr>
+<td><strong>顺序</strong></td>
+<td>shard 内严格写入序；<strong>跨 shard 无序</strong>（A6）</td>
+</tr>
+</tbody></table>
+<h3 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 逐 shard 抢 LOCK，只恢复抢到的 shard         ← 改动 ①：粒度是 shard</span><br><span class="line">2. 加载最新合法 checkpoint（校验 crc + generation）</span><br><span class="line">3. 从 checkpoint 记录的位置起，验证后续 batch 的**连续合法前缀**（§1 的六条）</span><br><span class="line">4. 处理未提交尾部：不 truncate，原地冻结，该 segment 的 committed_end 就停在这里</span><br><span class="line">5. 同步恢复结果，写出新 generation 的 checkpoint</span><br><span class="line">6. **创建新 segment**（predecessor = 刚冻结的那个，sequence +1），fsync 父目录</span><br><span class="line">7. 恢复服务</span><br></pre></td></tr></table></figure></div>
+
+<p>第 4、6 步合在一起是这个设计最漂亮的地方：<strong>撕裂的尾巴原地冻结、永不追加</strong>，于是既不需要 truncate，也不存在「新写入落到旧 in-flight IO 落点上」的竞态 —— 那块空间再也没有人会写。前面几个方案里的 <code>GAP_BOUND</code> &#x2F; 僵尸 IO 宽限期在这里<strong>整类消失</strong>。</p>
+<h3 id="原子性补齐（改动-⑤）"><a href="#原子性补齐（改动-⑤）" class="headerlink" title="原子性补齐（改动 ⑤）"></a>原子性补齐（改动 ⑤）</h3><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>必须的序列</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>写 checkpoint</td>
+<td>写 <code>checkpoint-&lt;gen+1&gt;.tmp</code> → fsync 文件 → rename → <strong>fsync <code>checkpoints/</code> 目录</strong></td>
+</tr>
+<tr>
+<td>新建 segment</td>
+<td>create + 写 SegmentHeader → fsync 文件 → <strong>fsync <code>shard-NNNN/</code> 目录</strong></td>
+</tr>
+<tr>
+<td>checkpoint GC</td>
+<td>至少保留 2 个 generation；删除旧的之前确认新的已 fsync</td>
+</tr>
+</tbody></table>
+<p>漏掉目录 fsync 的后果是：崩溃后 checkpoint 引用了一个<strong>并不存在</strong>的 segment 文件。</p>
+<hr>
+<h2 id="3-好处与坏处"><a href="#3-好处与坏处" class="headerlink" title="3. 好处与坏处"></a>3. 好处与坏处</h2><h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
+<li><strong>放弃「单文件」约束，换来的东西最多。</strong> 分段之后：空间可回收、可做保留策略、恢复成本 O(尾部) 而非 O(文件长度)、崩溃不再永久泄漏空间。前几个方案的多数痛苦源于死守单文件。</li>
+<li><strong>每 shard 单 I&#x2F;O owner &#x3D; N 份「独占单写者」，靠 router 绑在一起。</strong> shard 内无共享 cursor、无锁、天然有序；shard 间零通信。这是调和「要多写者」与「单写者最简单」的干净解法。</li>
+<li><strong>锁在 shard 粒度 ⟹ 真正支持多进程写。</strong> 各进程持有不相交的 shard 集合，连文件都不共享。</li>
+<li><strong>FUA + 前缀顺序 ack ⟹ 单 shard 也能 QD &gt; 1。</strong> <code>shard_count</code> 可以按 CPU 核数选，不必按吞吐目标选。</li>
+<li><strong><code>committed_end</code> 是一等公民</strong>，「已写入」与「已可见」被拆成两个变量，边界检查是单点可审计的，而不是从 crc 链式推导出来的。</li>
+<li><strong>Index 自校验。</strong> <code>store_uuid</code> + <code>index_checksum</code> 让跨 store 误用和 index 自身损坏在读之前就被抓住；裸 offset 做不到这点。</li>
+<li><strong>撕裂尾部原地冻结 + 新建 segment</strong> ⟹ 不需要 truncate，不需要任何形式的宽限期或在飞 IO 边界推算。</li>
+<li>小记录去掉 per-record header&#x2F;trailer 后，几字节的记录就只占几字节 + varint。</li>
+</ul>
+<h3 id="坏处"><a href="#坏处" class="headerlink" title="坏处"></a>坏处</h3><ul>
+<li><strong>跨 shard 无全局顺序，而且补不回来。</strong> shard 之间没有任何同步点，想要全局序只能上层加逻辑时间戳 + 读侧归并。分片的固有代价。</li>
+<li><strong><code>shard_count</code> 仍是一个难调的参数。</strong> 换掉 fdatasync 后它不再背吞吐 KPI，但仍决定：路由倾斜的严重程度、每批的平均大小、恢复时的并行度、以及文件句柄与内存的占用。选小了单 shard 成为瓶颈，选大了每批太小、写放大上升。</li>
+<li><strong>零件多。</strong> STORE &#x2F; LOCK &#x2F; segment &#x2F; checkpoint &#x2F; shm 五种状态，各有各的原子性要求。任何一处漏 fsync 都是静默损坏，而且只在崩溃后才暴露。实现复杂度低于方案 A，但<strong>可出错的表面积最大</strong>。</li>
+<li><strong><code>O_DIRECT</code> 放弃了 page cache。</strong> 读热点需要自己做缓存层，或对读路径单独开一个 buffered fd（写 O_DIRECT &#x2F; 读 buffered 混用需要注意一致性，通常靠「只读 committed_end 之前的数据」规避）。</li>
+<li><strong>独占性只和劝告锁一样硬。</strong> NFS、容器内不同 mount namespace、同进程重复 open 都能绕过。LOCK 文件里应记 pid + boot_id + 启动时间戳，把误配置变成启动期明确报错。</li>
+<li><strong>at-least-once 跑不掉</strong>（A7）：batch 完整落盘但 <code>committed_end</code> 未发布时崩溃，恢复后该批变为可见而 <code>append</code> 从未返回。</li>
+<li><strong>写进程崩溃后它那组 shard 的接管需要外部决策。</strong> LOCK 由内核自动释放，接管本身很便宜，但「谁来接」「什么时候接」得有 supervisor。接管前那部分 shard 完全不可写。</li>
+<li>每批两次以上的 IO（data + commit block 可合并进一次 pwritev，但段头、checkpoint 是额外 IOPS）。</li>
+</ul>
+<hr>
+<h2 id="4-与前三个方案的对比"><a href="#4-与前三个方案的对比" class="headerlink" title="4. 与前三个方案的对比"></a>4. 与前三个方案的对比</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>A 每进程独立链</th>
+<th>B 全局单链 + 锁</th>
+<th>C 独占单写者</th>
+<th><strong>D 分片多段（本方案）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单文件约束</td>
+<td>遵守</td>
+<td>遵守</td>
+<td>遵守</td>
+<td><strong>放弃（关键决策）</strong></td>
+</tr>
+<tr>
+<td>多进程写</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td><strong>✅（LOCK 在 shard 粒度）</strong></td>
+</tr>
+<tr>
+<td>共享状态</td>
+<td>shm cursor + Slot 表</td>
+<td>跨进程锁 + cursor</td>
+<td>无</td>
+<td><strong>shm 的 committed_end（仅加速，非必需）</strong></td>
+</tr>
+<tr>
+<td>单写单元提交 QD</td>
+<td>&gt; 1</td>
+<td><strong>1</strong></td>
+<td>&gt; 1</td>
+<td><strong>&gt; 1（FUA + 前缀 ack）</strong></td>
+</tr>
+<tr>
+<td>并发度来源</td>
+<td>进程数</td>
+<td>无</td>
+<td>QD</td>
+<td><strong>分片数 × QD</strong></td>
+</tr>
+<tr>
+<td>全局总序</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌（shard 内有序）</td>
+</tr>
+<tr>
+<td>空间回收 &#x2F; 保留策略</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td><strong>✅</strong></td>
+</tr>
+<tr>
+<td>恢复成本</td>
+<td>O(链长)</td>
+<td>O(链长)</td>
+<td>O(ckpt 间隔)</td>
+<td><strong>O(尾部)</strong></td>
+</tr>
+<tr>
+<td>崩溃空间泄漏</td>
+<td>每次泄漏</td>
+<td>每次泄漏</td>
+<td>≤ MAX_INFLIGHT</td>
+<td><strong>无（尾部冻结）</strong></td>
+</tr>
+<tr>
+<td>在飞 IO 落点竞态</td>
+<td>需 GAP_BOUND</td>
+<td>需宽限期</td>
+<td>需 MAX_INFLIGHT</td>
+<td><strong>整类消失</strong></td>
+</tr>
+<tr>
+<td>index 自校验</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td><strong>✅</strong></td>
+</tr>
+<tr>
+<td>小记录开销</td>
+<td>~20 B&#x2F;条</td>
+<td>~20 B&#x2F;条</td>
+<td>~20 B&#x2F;条</td>
+<td><strong>varint（batch digest 兜底）</strong></td>
+</tr>
+<tr>
+<td>可出错表面积</td>
+<td>大</td>
+<td>中</td>
+<td><strong>小</strong></td>
+<td>大（零件最多）</td>
+</tr>
+</tbody></table>
+<h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><ul>
+<li><strong>需要保留策略、空间回收、可运维性</strong> → D。A&#x2F;B&#x2F;C 在单文件里做不了这些，而这恰恰是上线后最要命的部分。</li>
+<li><strong>需要全局总序</strong> → B 或 C。D 的分片把这件事永久排除了。</li>
+<li><strong>极简、写者本来就是一个 daemon</strong> → C。零件最少，可出错表面积最小。</li>
+<li><strong>必须多进程、记录彼此独立、无需保留策略</strong> → A。</li>
+</ul>
+<p><strong>一句话：</strong> D 是「无聊但正确」的那一类，也是生产系统真正长出来的形状。上面五处优化只补了它的两个结构性弱点（fdatasync 屏障、锁粒度太粗）和三个工程缺口（跨进程可见性、小记录放大、原子性），核心设计一个字没动。</p>
+<hr>
+<p>待定参数：<code>shard_count</code> · 小&#x2F;大记录阈值 · 批次触发阈值（字节 &#x2F; 条数 &#x2F; 时间） · segment 轮转尺寸 · checkpoint 周期 · 队列深度上限</p>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

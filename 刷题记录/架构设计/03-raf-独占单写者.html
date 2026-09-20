@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/架构设计/03-raf-独占单写者.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="单文件、同一时刻只允许一个 writer 进程打开（第二个 open 直接报错），崩溃可恢复。写入返回 index，支持按 index 点读与顺序迭代。reader 不受限，可多进程只读并发。  并发模型：单进程 · 多线程；进程级独占由 F_OFD_SETLK &#x2F; flock 保证 记录长度：几 B ~ 1 MB 持久化：O_DIRECT + FUA   本方案的出发点：独占不是”砍掉">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAF 日志格式 —— 独占单写者方案">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/03-raf-%E7%8B%AC%E5%8D%A0%E5%8D%95%E5%86%99%E8%80%85.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="单文件、同一时刻只允许一个 writer 进程打开（第二个 open 直接报错），崩溃可恢复。写入返回 index，支持按 index 点读与顺序迭代。reader 不受限，可多进程只读并发。  并发模型：单进程 · 多线程；进程级独占由 F_OFD_SETLK &#x2F; flock 保证 记录长度：几 B ~ 1 MB 持久化：O_DIRECT + FUA   本方案的出发点：独占不是”砍掉">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-20T15:21:58.000Z">
+<meta property="article:modified_time" content="2026-09-20T15:21:58.868Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            RAF 日志格式 —— 独占单写者方案 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <p>单文件、<strong>同一时刻只允许一个 writer 进程打开</strong>（第二个 open 直接报错），崩溃可恢复。<br>写入返回 index，支持按 index 点读与顺序迭代。reader 不受限，可多进程只读并发。</p>
+<ul>
+<li>并发模型：<strong>单进程 · 多线程</strong>；进程级独占由 <code>F_OFD_SETLK</code> &#x2F; <code>flock</code> 保证</li>
+<li>记录长度：几 B ~ 1 MB</li>
+<li>持久化：O_DIRECT + FUA</li>
+</ul>
+<blockquote>
+<p>本方案的出发点：独占不是”砍掉一个功能”，而是把<strong>整个跨进程协调层删掉</strong>。<br>换来的能力比方案 B 的全局锁能买到的更多 —— 尤其是「全局总序」与「队列深度 &gt; 1」同时成立。</p>
+</blockquote>
+<hr>
+<h2 id="1-API-语义与文件格式"><a href="#1-API-语义与文件格式" class="headerlink" title="1. API 语义与文件格式"></a>1. API 语义与文件格式</h2><h3 id="API-契约"><a href="#API-契约" class="headerlink" title="API 契约"></a>API 契约</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">raf*  <span class="title function_">raf_open</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *path)</span>;            <span class="comment">// 已被占用则返回 EBUSY，不排队不等待</span></span><br><span class="line">u64   <span class="title function_">append</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *buf, <span class="type">size_t</span> len)</span>;   <span class="comment">// 阻塞，返回即持久</span></span><br><span class="line"><span class="type">void</span>  <span class="title function_">read</span><span class="params">(u64 index, <span class="type">void</span> *out, <span class="type">size_t</span> *len)</span>;</span><br><span class="line">iter  <span class="title function_">iterate</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong><code>append</code> 的返回即代表已持久化。</strong> 没有单独的 <code>sync()</code> &#x2F; <code>flush()</code> —— 返回本身就是持久点。<br>数据未落盘之前该调用<strong>必须阻塞</strong>。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>不变式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A0</strong></td>
+<td>同一文件同一时刻至多一个 writer。<code>raf_open</code> 拿不到独占锁即失败，<strong>不阻塞、不排队</strong>，由上层决定重试或退出</td>
+</tr>
+<tr>
+<td><strong>A1</strong></td>
+<td><code>append</code> 返回 index ⟹ 该记录已持久；崩溃重启后必定能通过该 index 读到</td>
+</tr>
+<tr>
+<td><strong>A2</strong></td>
+<td><code>append</code> 未返回（阻塞中崩溃）⟹ 无任何承诺，该记录通常丢失</td>
+</tr>
+<tr>
+<td><strong>A3</strong></td>
+<td><code>append</code> 返回错误 ⟹ 该记录是否可见<strong>未定义</strong>；调用方应视为失败，重试需自带幂等键</td>
+</tr>
+<tr>
+<td><strong>A4</strong></td>
+<td>调用期间 <code>buf</code> 必须保持有效且不被修改 —— 实现为零拷贝，IO 直接引用调用方内存</td>
+</tr>
+<tr>
+<td><strong>A5</strong></td>
+<td>调用<strong>不可取消、不可超时返回</strong>；一旦进入队列就必须等到终局</td>
+</tr>
+<tr>
+<td><strong>A6</strong></td>
+<td>顺序：所有已持久记录有唯一的<strong>全局顺序</strong>，迭代即按该顺序返回；并发 <code>append</code> 之间谁在前由入队顺序决定，未定义</td>
+</tr>
+<tr>
+<td><strong>A7</strong></td>
+<td>迭代是 <strong>at-least-once</strong>：可能读到数据完好但 <code>append</code> 从未成功返回的记录，上层需自带幂等键去重</td>
+</tr>
+</tbody></table>
+<p><strong>吞吐的直接后果：</strong> 因为 <code>append</code> 阻塞，单个调用线程的吞吐上限 &#x3D; <code>1 / 端到端延迟</code>。<br>要打满设备必须有足够多的并发调用<strong>线程</strong>，由实现侧攒批摊销 IO 成本。<br>本方案的全部结构都服务于两句话：<strong>已 ack 的数据绝不可丢</strong>，且<strong>ack 不需要等待队列排空</strong>。</p>
+<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">off 0      SuperBlock       4KB   创建时写一次，此后永不修改</span><br><span class="line">off 4K     Checkpoint[0]    4KB   ┐ 双缓冲轮换，各带 ckpt_seq + crc</span><br><span class="line">off 8K     Checkpoint[1]    4KB   ┘ 恢复时取 crc 合法且 seq 更大者</span><br><span class="line">off 12K    数据区                  MetaUnit 与 DataChunk 交错</span><br><span class="line">                                  **块内字节紧凑，仅每批 flush 尾部补齐 4K**</span><br><span class="line"></span><br><span class="line">Checkpoint ──► MetaUnit ──► MetaUnit ──► MetaUnit ──► ...   唯一一条链</span><br><span class="line">                  │              └─ next_offset ─┘</span><br><span class="line">                  └─ Entry[] ──► DataChunk（文件中任意位置）</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">SuperBlock  &#123; magic; nonce; meta_unit_size; sector_size;</span><br><span class="line">              owner_hint; &#125;      <span class="comment">// pid + boot_id + 启动时间戳，仅用于误配置诊断</span></span><br><span class="line"></span><br><span class="line">MetaUnit    &#123; magic; unit_seq;</span><br><span class="line">              next_offset;       <span class="comment">// 下一个 MetaUnit 的位置，写本单元前预留</span></span><br><span class="line">              first_record_id;   <span class="comment">// 本单元第一条记录的稠密 id</span></span><br><span class="line">              entry_count;</span><br><span class="line">              header_crc; body_crc;</span><br><span class="line">              Entry entries[]; &#125;</span><br><span class="line"></span><br><span class="line">Entry       &#123; u64 data_offset;  u32 data_len;</span><br><span class="line">              u32 data_crc;    u32 rec_count; &#125;        ≈ <span class="number">20</span> B</span><br><span class="line"></span><br><span class="line">DataChunk   纯 payload。无 header、无 magic、无 crc、无对齐。</span><br><span class="line">            [varint len][payload] × rec_count   块内紧密排列</span><br><span class="line"></span><br><span class="line">Checkpoint  &#123; magic; ckpt_seq; last_unit_offset; last_unit_seq;</span><br><span class="line">              last_record_id; high_water; crc; &#125;</span><br><span class="line"></span><br><span class="line">index       (data_offset, offset_in_chunk)  打包成一个 u64</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="格式铁律"><a href="#格式铁律" class="headerlink" title="格式铁律"></a>格式铁律</h3><ul>
+<li><strong>F1 数据区零元数据。</strong> 所有描述信息都在 MetaUnit 里。恢复<strong>从不扫描数据区</strong>，空洞是纯空间泄漏，不影响正确性。</li>
+<li><strong>F2 永不回写任何字节。</strong> 写 MetaUnit#N 前先预留 #N+1 的位置，链始终向前声明，不存在回填指针。</li>
+<li><strong>F3 <code>header_crc</code> 与 <code>body_crc</code> 分开。</strong> body 撕裂时 <code>unit_seq</code> &#x2F; <code>next_offset</code> 仍然可信，可判定”本单元是撕裂的终点”而非乱跳。</li>
+<li><strong>F4 对齐只发生在批次边界。</strong> 单写者意味着同一扇区内的排布由唯一一个进程决定，不存在”两个进程共享扇区互相覆盖”。<br>于是浪费从「每条记录 ≤ 4K」降为「每批 flush ≤ 4K」，攒批后趋近于零 —— 几字节的记录就真的只占几字节。</li>
+</ul>
+<blockquote>
+<p>Checkpoint 是本设计中<strong>唯一</strong>被原地重写的区域，因此做成双缓冲 + crc：<br>任一份撕裂都不影响另一份，恢复永远能拿到一个合法起跳点。</p>
+</blockquote>
+<hr>
+<h2 id="2-写入与读取流程"><a href="#2-写入与读取流程" class="headerlink" title="2. 写入与读取流程"></a>2. 写入与读取流程</h2><h3 id="打开"><a href="#打开" class="headerlink" title="打开"></a>打开</h3><ol>
+<li><code>open</code> + <code>F_OFD_SETLK</code> 取整文件写锁。拿不到 ⟹ 立即 <code>EBUSY</code>（A0）。</li>
+<li>执行恢复（见下），得到 <code>cursor</code> &#x2F; <code>last_unit_seq</code> &#x2F; <code>last_record_id</code>。</li>
+<li>写入 <code>owner_hint</code>。<strong>锁是劝告性的</strong>，这条记录不防恶意，只把”误配置导致的静默损坏”变成启动时的明确报错。</li>
+</ol>
+<h3 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h3><ol>
+<li>写线程把 <code>WriteReq</code>（栈上）push 进本地 MPSC 队列（一次 XCHG），阻塞在 futex。</li>
+<li>leader 摘下一批：小记录 memcpy 进 chunk buffer 密排，<strong>大记录直接挂 iovec 零拷贝</strong>，计算 <code>data_crc</code>。</li>
+<li>本地 <code>cursor</code> 连续切三块：DataChunk、本 MetaUnit、下一个 MetaUnit（预留）。整批尾部补齐 4K。<br><code>cursor</code> 只被 leader 线程访问，<strong>连原子操作都不需要</strong>。</li>
+<li>io_uring 并发提交 DataChunk + MetaUnit，均带 FUA。<strong>不等 CQE，直接回去收割下一批。</strong></li>
+<li>CQE 回来后按 <code>unit_seq</code> <strong>前缀顺序 ack</strong>：<code>seq = k</code> 的唤醒必须等所有 <code>&lt; k</code> 的单元都已持久。</li>
+<li>每 N 个单元或 T 毫秒，轮换写一次 Checkpoint（FUA）。它不在 ack 路径上，慢了只影响恢复时间。</li>
+</ol>
+<blockquote>
+<p><strong>第 4、5 步是本方案的核心。</strong><br>方案 B 为了避免”后一个 MetaUnit 落盘、前一个没落 ⟹ 孤儿单元 ⟹ 已 ack 数据永久丢失”，<br>必须把锁<strong>持有到 MetaUnit 持久</strong>，代价是 meta 的队列深度恒为 1。<br>这里换了个解法：<strong>乱序提交、前缀顺序 ack</strong>。链的前缀持久性由 ack 规则保证，而不是由提交顺序保证。<br>孤儿单元同样不可能出现，但设备队列被填满了。<br>这个做法在多进程下做不到（需要跨进程排序），单写者下它只是一个本地环形缓冲区。</p>
+</blockquote>
+<h3 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h3><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>点读</strong></td>
+<td>index → 一次 pread 取 DataChunk → 验 <code>data_crc</code> → 跳到块内偏移。<strong>一次 IO，零内存索引。</strong></td>
+</tr>
+<tr>
+<td><strong>迭代</strong></td>
+<td>从 Checkpoint 或链头走链 → 每个 Entry 读一块 → 块内 varint walk 逐条产出。顺序即全局顺序。</td>
+</tr>
+<tr>
+<td><strong>reader 并发</strong></td>
+<td>reader 只读，不需要锁。看到的是一个移动的前沿，重新走链即可推进。</td>
+</tr>
+</tbody></table>
+<h3 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h3><ol>
+<li>读两个 Checkpoint，取 crc 合法且 <code>ckpt_seq</code> 更大者。两个都坏 ⟹ 从链头走（退化，正确性不受影响）。</li>
+<li>从 <code>last_unit_offset</code> 顺链前进，直到 <code>header_crc</code> 失败、<code>body_crc</code> 失败或 <code>unit_seq</code> 不连续 —— 那里就是链的终点。</li>
+<li>逐 Entry 验 <code>data_crc</code>，不过即为从未 ack，跳过。</li>
+<li><code>cursor = max(chain_end, checkpoint.high_water) + MAX_INFLIGHT_BYTES</code></li>
+<li>从 <code>last_seq + 1</code> 继续写。</li>
+</ol>
+<p><strong>恢复时间从 O(文件长度) 降为 O(checkpoint 间隔)。</strong> 固定位置的 Checkpoint 之所以安全，正是因为没有并发更新者。</p>
+<h3 id="两个必须讲清的点"><a href="#两个必须讲清的点" class="headerlink" title="两个必须讲清的点"></a>两个必须讲清的点</h3><p><strong>僵尸 IO。</strong> 独占锁在进程死亡时由内核自动释放，但它已经交给块层的写<strong>可能在锁释放之后才落盘</strong>，落点最远到它已分配的 <code>cursor</code>。新写者无从得知那个值，所以 Checkpoint 里额外记 <code>high_water</code>（<strong>已分配</strong>水位，不是已写水位），恢复时按上面的公式跳过一段。</p>
+<p><code>MAX_INFLIGHT_BYTES</code> 是写者自己的在飞上限（如 64 MB），一个<strong>静态常量</strong> —— 不需要任何存活检测。代价是每次崩溃泄漏 ≤ 该常量的空间。这是方案 A 里 GAP_BOUND 的同一个招，但单写者下它是确定的常量，而不是「槽数 × 每进程上限」。</p>
+<p><strong>残留单元不会造成幽灵链。</strong> 上一次崩溃可能在链断点之后留下了看起来合法的 MetaUnit。但 <code>unit_seq</code> 与位置由链严格绑定：若上一轮在偏移 X 写下的 <code>seq = P+1</code> 曾经持久且合法，恢复就会跟进去；恢复停在 X 说明那里的单元本就无效。新写者在 X 重写自己的 <code>P+1</code>，<code>crc</code> + <code>seq</code> 连续性两道检查足以排除更早轮次遗留的、序号更大的越位单元。</p>
+<h3 id="共享状态"><a href="#共享状态" class="headerlink" title="共享状态"></a>共享状态</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">无。</span><br><span class="line"></span><br><span class="line">cursor / unit_seq / record_id 全部是进程内变量。</span><br><span class="line">没有共享内存，没有跨进程锁，没有 slot 表，没有 file_nonce，</span><br><span class="line">没有存活检测，没有 robust mutex，没有 EOWNERDEAD 处理。</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="3-好处与坏处"><a href="#3-好处与坏处" class="headerlink" title="3. 好处与坏处"></a>3. 好处与坏处</h2><h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
+<li><strong>共享状态归零。</strong> 跨进程协调层整体消失：无 shm cursor、无 slot 表与槽位耗尽、无跨进程锁、无死活检测。</li>
+<li><strong>全局总序是白送的。</strong> 单链 + 单分配者，<code>unit_seq</code> 即全局顺序。方案 B 花一把跨进程锁买到的语义，这里是副产品。</li>
+<li><strong>总序与 QD &gt; 1 同时成立。</strong> 前缀顺序 ack 让 meta 可以流水线化，而方案 B 的锁把 meta 的 QD 压死在 1。<strong>这是本方案相对 B 的决定性优势。</strong></li>
+<li><strong>对齐浪费降到每批 ≤ 4K。</strong> 同一扇区不再被多个进程共享，块内可字节紧凑排布。</li>
+<li><strong>恢复是有界的。</strong> 双缓冲 Checkpoint 起跳，不必走完整条链，也从不扫描数据区。</li>
+<li><strong>快路径上连原子操作都没有。</strong> 零拷贝，大记录直接从调用方内存 DMA。</li>
+<li>永不回写（Checkpoint 除外，且双缓冲）⟹ 已 ack 的数据不可能被任何后续写破坏。</li>
+<li>实现复杂度显著低于 A 和 B：没有一样东西是为了跨进程正确性而存在的。</li>
+</ul>
+<h3 id="坏处"><a href="#坏处" class="headerlink" title="坏处"></a>坏处</h3><ul>
+<li><strong>不支持多进程写入 —— 这是最主要的代价，并且它把问题推给了上层。</strong> 只有两条路：<ul>
+<li><strong>专用写入进程 + IPC</strong>：每次 <code>append</code> 要跨进程传数据。走 socket 有一次拷贝 + 两次上下文切换，且「返回即持久」的 ack 要跨进程回传，延迟多一跳。想保持零拷贝就得上 shm 环 + futex —— <strong>那等于把方案 A 的跨进程协调在用户态重新实现了一遍</strong>。1 MB 的大记录尤其难受：shm 环要么预留到浪费，要么退化成拷贝，而 1 MB memcpy ≈ 100 µs，已与 IO 同量级。</li>
+<li><strong>每进程一个文件</strong>：与「单文件」约束直接冲突，出局。</li>
+</ul>
+</li>
+<li><strong>写者是单点。</strong> 它死了全局停写。OFD 锁自动释放使接管本身很便宜（新进程 open 即可），但需要外部 supervisor 做检测与拉起，中间有一段完全不可写的空窗。方案 A 里死一个进程，其他进程毫无感知地继续写。</li>
+<li><strong>CPU 上限收敛到一个进程。</strong> crc32c + 小记录 memcpy + SQE 填充全压在一处。硬件 crc32c ~10–20 GB&#x2F;s、memcpy ~10 GB&#x2F;s，对单盘绰绰有余；但若目标是多盘并发或几十 GB&#x2F;s，单核会先于设备饱和。</li>
+<li><strong>独占性只和劝告锁一样硬。</strong> NFS、容器内不同 mount namespace、以及”同一进程把文件 open 两次”都能绕过。<code>owner_hint</code> 只能把误配置变成明确报错，不能真正阻止。</li>
+<li><strong>引入了唯一的原地重写区域</strong>（Checkpoint）。已用双缓冲 + crc 消除风险，但它确实是格式里唯一不满足「永不回写」的部分。</li>
+<li><strong>每次崩溃泄漏 ≤ <code>MAX_INFLIGHT_BYTES</code>。</strong> 换来的是不需要任何存活检测。</li>
+<li>每次 flush 两个 IO（并发发出，延迟不叠加，但 IOPS 翻倍）。</li>
+<li>at-least-once：迭代可能看到数据完好但从未 ack 的记录，上层需自带幂等键。</li>
+</ul>
+<hr>
+<h2 id="4-三方案横比"><a href="#4-三方案横比" class="headerlink" title="4. 三方案横比"></a>4. 三方案横比</h2><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>A 每进程独立链</strong></th>
+<th><strong>B 全局单链 + 锁</strong></th>
+<th><strong>C 独占单写者</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>多进程写</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>共享状态</td>
+<td>shm cursor + Slot 表</td>
+<td>跨进程锁 + cursor</td>
+<td><strong>无</strong></td>
+</tr>
+<tr>
+<td>元数据队列深度</td>
+<td>&gt; 1</td>
+<td><strong>恒为 1</strong></td>
+<td><strong>&gt; 1</strong></td>
+</tr>
+<tr>
+<td>全局总序</td>
+<td>❌（仅 happens-before 单调）</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>尾延迟</td>
+<td>1 × IO</td>
+<td>进程数 × IO</td>
+<td>1 × IO</td>
+</tr>
+<tr>
+<td>数据对齐浪费</td>
+<td>每记录补到扇区</td>
+<td>每页</td>
+<td><strong>每批 ≤ 4K</strong></td>
+</tr>
+<tr>
+<td>恢复</td>
+<td>并行走 N 条链</td>
+<td>走完整条链</td>
+<td><strong>Checkpoint 起跳，O(间隔)</strong></td>
+</tr>
+<tr>
+<td>链的前缀持久</td>
+<td>进程内按链序 ack</td>
+<td>锁自动保证</td>
+<td>前缀顺序 ack</td>
+</tr>
+<tr>
+<td>慢&#x2F;卡住的写者</td>
+<td>只影响自己</td>
+<td>阻塞所有人</td>
+<td>阻塞所有人（只有它一个）</td>
+</tr>
+<tr>
+<td>单点故障</td>
+<td>无</td>
+<td>无</td>
+<td><strong>有</strong></td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>高</td>
+<td>中</td>
+<td><strong>低</strong></td>
+</tr>
+</tbody></table>
+<h3 id="选型建议"><a href="#选型建议" class="headerlink" title="选型建议"></a>选型建议</h3><ul>
+<li><strong>「多进程写同一个文件」是真需求</strong> → C 只是把复杂度从文件格式挪到了用户态 IPC，并没有消灭它，还附赠一个单点。选 A 或 B。</li>
+<li><strong>需要全局总序，且写者本来就是一个 daemon</strong> → 选 C。它在正确性、性能、实现复杂度三个维度同时优于 A 和 B，没有取舍 —— 尤其是它同时拿到了全局总序和 QD &gt; 1，而 B 为了总序把 QD 压死了。</li>
+<li><strong>需要全局总序，但必须多进程写</strong> → 选 B，或 B 的折中版（锁只保护「排序 + 分配」这段纳秒级临界区，不跨 IO；MetaUnit 内容推进共享 ring 由 leader 批量写出）。</li>
+<li><strong>记录彼此独立、无需总序、必须多进程写</strong> → 选 A。</li>
+</ul>
+<hr>
+<p>待定参数：<code>meta_unit_size</code> · flush 触发阈值 · Checkpoint 间隔（N 个单元 &#x2F; T 毫秒） · <code>MAX_INFLIGHT_BYTES</code></p>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
