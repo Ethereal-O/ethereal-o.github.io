@@ -26,7 +26,7 @@
 <meta property="og:description" content="目录形态、多段文件、按 shard 分片，每 shard 单一 I&#x2F;O owner。崩溃可恢复，支持保留与回收。  并发模型：多进程 · 每进程多线程；独占粒度 &#x3D; shard，不是 store 记录长度：几 B ~ 1 MB 持久化：O_DIRECT + FUA + 前缀顺序 ack（不使用 fdatasync 作为提交屏障）   相对原始方案的五处改动，全部集中在 §2 与">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-20T15:21:58.000Z">
-<meta property="article:modified_time" content="2026-09-20T15:21:58.868Z">
+<meta property="article:modified_time" content="2026-09-21T15:48:59.488Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     

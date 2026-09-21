@@ -26,7 +26,7 @@
 <meta property="og:description" content="单文件。文件由一条全局 MetaUnit 链和大量数据页交错组成。writer 攒批后构造一个大 MetaUnit，抢全局锁 → 推进全局偏移量 → 写 MetaUnit → 释放锁，随后并行写数据页。 本文对未指定部分的假设（需确认）：页为定长（示例取 64KB），大记录跨页用 FIRST&#x2F;MIDDLE&#x2F;LAST 标志切片；锁为跨进程互斥（F_OFD_SETLK 或 shm">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-20T15:21:58.000Z">
-<meta property="article:modified_time" content="2026-09-20T15:21:58.868Z">
+<meta property="article:modified_time" content="2026-09-21T15:48:59.487Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
