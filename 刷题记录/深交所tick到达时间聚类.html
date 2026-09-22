@@ -26,7 +26,7 @@
 <meta property="og:description" content="0. 问题深交所的行情快照是 3 秒一个周期 推送的。交易所内部有多台前置机&#x2F;编码机，每台机器负责一批股票：同一台机器上的股票，快照会在同一个时间点被打包发出，在同一条链路上到达我们的网卡。于是有一个可观测的现象：  同机器的股票，tick 到达时刻非常接近，而且是「一起抖」的——机器忙一点，这一批股票全部晚到；机器闲一点，这一批全部早到。  反过来，只要能把这种「一起抖」量化出来，就能">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-12T13:30:00.000Z">
-<meta property="article:modified_time" content="2026-09-22T08:16:56.819Z">
+<meta property="article:modified_time" content="2026-09-22T08:18:44.634Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -2629,17 +2629,27 @@
 <blockquote>
 <p>按”交易所时间在 3s 网格里的余数”分档，余数不等于主档的那些行，就是钟打的。</p>
 </blockquote>
-<p>余数是数据里明摆着的量，不用估周期、不会漂、更不会一拍删两行。<br>这就是现在的默认口径 <code>--hb-mode ms</code>：</p>
-<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[heartbeat] 按交易所时间在网格里的余数分档（前几档）:</span><br><span class="line">    余数     0.000ms     2745018 行（89.72%）   1500 只票  每票间隔中位     3.00s</span><br><span class="line">    余数   480.000ms      314104 行（10.27%）   1500 只票  每票间隔中位    30.00s   &lt;- 像钟</span><br><span class="line">[heartbeat] 判据: 余数 != 主档 0ms -&gt; 标掉 314104/3059122 行（10.27%）</span><br><span class="line">    一个周期里有 10 格，钟那一档理论上占 10.0% —— 量级对得上</span><br></pre></td></tr></table></figure></div>
-
-<p>三个读数自己就把结论闭合了：</p>
+<p>余数是数据里明摆着的量，不用估周期、不会漂、更不会一拍删两行。</p>
+<h3 id="35-2d2-两个修正：逐票认、从开盘后认"><a href="#35-2d2-两个修正：逐票认、从开盘后认" class="headerlink" title="35.2d2 两个修正：逐票认、从开盘后认"></a>35.2d2 两个修正：逐票认、从开盘后认</h3><p>第一版 ms 口径是<strong>全局</strong>取一个主档余数的，错在两处：</p>
+<p><strong>一、每只票的钟相位不一样。</strong> 它们不是同一个钟的同一拍，各有各的毫秒位。<br>全局取一个主档，等于拿 A 票的相位去判 B 票 —— 相位不同的票会被整片误判。<br>所以改成<strong>逐票</strong>统计：每只票在参考窗口里自己算主档余数，自己认自己的钟。</p>
+<p><strong>二、盘前不能拿来认。</strong> 盘前是每分钟一次全量推送，节奏和盘中完全不同，<br>毫秒位也不一定守 3s 网格，拿它去认主档会认歪。所以：</p>
 <ul>
-<li><strong>每票间隔中位</strong>：主档 ≈ 3s，钟那档 ≈ 30s。这一列直接验明了哪档是钟，<br><code>&lt;- 像钟</code> 的标记就是按它打的；</li>
-<li><strong>占比</strong>：一个周期里有 10 格，钟那档理论上占 1&#x2F;10。量级对不上就是主档选错了；</li>
-<li>自动选档时如果要删的比例超过 <code>--hb-max-share</code>（默认 35%），<br>脚本<strong>不动手</strong>，让你看着上面那张表用 <code>--hb-ms</code> 手动指定删哪几档 ——<br>比例过大通常意味着 3s 快照本身的毫秒位就不齐，那这个判据不适用。</li>
+<li>参考窗口默认只取盘中（<code>--hb-from</code> &#x2F; <code>--hb-to</code>，默认 09:30~15:00）；</li>
+<li><strong>锚点</strong> &#x3D; 窗口里这只票第一条像钟的行，<strong>只从锚点往后删</strong>，<br>盘前那一段原样留着 —— 那段的相位对不对我们并不知道，不知道就不动。</li>
 </ul>
+<p>逐票的判法：</p>
+<ol>
+<li>窗口内统计这只票的余数，出现最多的那个 &#x3D; 它的 3s 档（快照钉在网格点上，很锐）；</li>
+<li>余数不等于主档的行就是候选；</li>
+<li><strong>这一档的相邻间隔中位数必须 ≈ 周期</strong> —— 对不上就判这只票”没找到钟”，<br>一行都不删，单独列出来。宁可留着也不瞎删；</li>
+<li>锚点取窗口里第一条候选，从它往后删。</li>
+</ol>
+<p>钟如果是 <code>sleep(30)</code>，余数会随时间缓慢漂移（每拍多睡几毫秒），<br>但 3s 快照的余数<strong>始终钉在网格点上</strong> —— 所以”不等于主档”这个判据对漂免疫，<br>这是它比按节拍走的那三版更结实的地方。</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[heartbeat] 口径 ms；时间戳的中位间隔 3s，网格 3s，参考窗口 09:30:00~15:00:00</span><br><span class="line">[heartbeat] 逐票认钟：1487/1500 只票找到了钟，共标掉 314104/3059122 行（10.27%）</span><br><span class="line">    钟那一档的间隔: 中位 30.06s 最小 30.02s 最大 30.11s（应该都贴着 30s）</span><br><span class="line">    每只票删掉 中位 733 条；锚点毫秒位有 1204 种取值（例 [12.0, 41.0, 58.0]ms …）</span><br><span class="line">        —— 各票的钟相位确实不一样，所以只能逐票认</span><br><span class="line">    没找到钟的 13 只票，原因: &#123;&#x27;非主档那档不像钟&#x27;: 9, &#x27;窗口内行太少&#x27;: 4&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>“每只票删掉 中位 733 条”这个数要和拍数对齐</strong> —— 上一版的 1236 就是在这儿露馅的。<br>「锚点毫秒位有多少种取值」则直接回答了”各票的钟是不是同一个”：<br>取值多就说明相位各不相同，全局口径必然认歪。</p>
+<p>自动选档时如果要删的比例超过 <code>--hb-max-share</code>（默认 35%），脚本<strong>不动手</strong> ——<br>比例过大通常意味着 3s 快照本身的毫秒位就不齐，这个判据不适用，<br>这时候用 <code>--hb-ms</code> 手动指定余数。</p>
 <p>还有一个附带的信号：如果时间戳的<strong>中位间隔明显小于 3s</strong>，<br>就说明确实有一批时间戳不落在网格点上 —— 钟的存在本身就被证明了，<br>脚本会把这句话打出来。</p>
-<p>（前三种口径都留着：<code>track</code> 是”按节拍猜但每拍只删一行”，<br><code>after</code> 是”宁可多删”，<code>nearest</code> 是最早那版。毫秒位对不上这个前提不成立时才用它们。）</p>
 <h3 id="35-2e-删掉的行要能翻出来看"><a href="#35-2e-删掉的行要能翻出来看" class="headerlink" title="35.2e 删掉的行要能翻出来看"></a>35.2e 删掉的行要能翻出来看</h3><p>不管用哪种口径，删掉的行都会写成一个 csv（<code>--hb-dump</code>，<br>默认是 out-dir 下的 <code>heartbeat_dropped.csv</code>），每行带上：</p>
 <p><code>symbol, batch, exch_time, ts, arrive_time, latency_us, rem_ms, prev_gap_s</code></p>
 <p><code>exch_time</code> 是交易所时间的<strong>完整时分秒毫秒</strong>，<code>rem_ms</code> 是它在网格里的余数，<br><code>prev_gap_s</code> 是这只票上一条被删的行到这条的间隔。<br>翻一眼就知道删对没有：<code>rem_ms</code> 该是同一个非主档的值，<code>prev_gap_s</code> 该稳定在 30s。</p>
@@ -2672,7 +2682,7 @@
 <li><strong>p99 和最大值</strong>分开看：中位 0、最大很大，是午休&#x2F;停牌这种空拍，加容差解决；<br>如果是 p99 就已经很大，那是周期给错了；</li>
 <li><strong>删掉的条数 vs 理论拍数</strong>：接近说明钟全天都在；明显偏少说明中间有大段缺口<br>（午休本来就该少 180 拍），偏多是不可能的 —— 一拍最多删一行。</li>
 </ul>
-<h3 id="35-5-用法"><a href="#35-5-用法" class="headerlink" title="35.5 用法"></a>35.5 用法</h3><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认：按毫秒位分档，删掉的行写到 output/hb/heartbeat_dropped.csv</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --out-dir output/hb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 表里看清楚了就手动指定删哪几档余数（毫秒）</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-ms 480 --hb-dump /tmp/hb.csv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还有零星残留：先把命中窗口各放宽一个网格步长</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-back 6000000 --hb-fwd 6000000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还剩就退到宁可多删的口径（代价是一拍删两行）</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-mode after --hb-slack 6000000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 跳过午休那些空拍（容差 200ms），钟有漂移就再加 --hb-drift</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-tol 200000 --hb-drift</span><br></pre></td></tr></table></figure></div>
+<h3 id="35-5-用法"><a href="#35-5-用法" class="headerlink" title="35.5 用法"></a>35.5 用法</h3><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认：按毫秒位分档，删掉的行写到 output/hb/heartbeat_dropped.csv</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --out-dir output/hb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 参考窗口换一段（默认 09:30~15:00，盘前不拿来认钟）</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-from 13:00:00 --hb-to 14:57:00</span><br><span class="line"></span><br><span class="line"><span class="comment"># 诊断看清楚了就手动指定删哪几档余数（毫秒）</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-ms 480 --hb-dump /tmp/hb.csv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还有零星残留：先把命中窗口各放宽一个网格步长</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-back 6000000 --hb-fwd 6000000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还剩就退到宁可多删的口径（代价是一拍删两行）</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-mode after --hb-slack 6000000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 跳过午休那些空拍（容差 200ms），钟有漂移就再加 --hb-drift</span></span><br><span class="line">python3 tick_corr.py ticks.csv --drop-heartbeat --hb-tol 200000 --hb-drift</span><br></pre></td></tr></table></figure></div>
 
 <p>先用不带 <code>--drop-heartbeat</code> 的跑一遍、再带上跑一遍，比较 §34 的组内逆序率：<br>如果心跳确实在污染分组，删掉之后逆序率应该<strong>明显下降</strong>。这比”看着像删干净了”<br>可信得多 —— 它是一个能证伪的读数。</p>
 <h2 id="36-发送顺序不一定是代码序"><a href="#36-发送顺序不一定是代码序" class="headerlink" title="36. 发送顺序不一定是代码序"></a>36. 发送顺序不一定是代码序</h2><h3 id="36-1-一个一直没验证过的前提"><a href="#36-1-一个一直没验证过的前提" class="headerlink" title="36.1 一个一直没验证过的前提"></a>36.1 一个一直没验证过的前提</h3><p>前面所有脚本判断”乱序”的口径都是<strong>股票代码变小</strong>：<code>np.diff(idx) &lt; 0</code>，<br>其中 <code>idx</code> 是这只票在代码序里的位置。这等于默认了一件事 ——<br>交易所是按代码从小到大挨个发的。</p>
