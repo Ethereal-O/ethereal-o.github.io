@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/架构设计/06-raf-fio前置测量.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="在动手实现 RAF 格式之前，先把设计里那些「我认为设备会这样表现」的假设测出来。 前面五份设计文档（每进程独立链 &#x2F; 全局单链加锁 &#x2F; 独占单写者 &#x2F; 分片多段 &#x2F; 单写者段目录分流）里的每一个关键取舍，背后都压着一条关于设备行为的假设。这些假设如果是错的，对应的取舍就是错的。所以这里的测试不是泛泛地跑个分，而是一项对应一条论断。    测试 对应的设计论">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAF 格式设计 —— fio 前置测量">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/06-raf-fio%E5%89%8D%E7%BD%AE%E6%B5%8B%E9%87%8F.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在动手实现 RAF 格式之前，先把设计里那些「我认为设备会这样表现」的假设测出来。 前面五份设计文档（每进程独立链 &#x2F; 全局单链加锁 &#x2F; 独占单写者 &#x2F; 分片多段 &#x2F; 单写者段目录分流）里的每一个关键取舍，背后都压着一条关于设备行为的假设。这些假设如果是错的，对应的取舍就是错的。所以这里的测试不是泛泛地跑个分，而是一项对应一条论断。    测试 对应的设计论">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-22T13:24:26.000Z">
+<meta property="article:modified_time" content="2026-09-22T13:24:26.713Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            RAF 格式设计 —— fio 前置测量 -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <p>在动手实现 RAF 格式之前，先把设计里那些「我认为设备会这样表现」的假设测出来。</p>
+<p>前面五份设计文档（每进程独立链 &#x2F; 全局单链加锁 &#x2F; 独占单写者 &#x2F; 分片多段 &#x2F; 单写者段目录分流）<br>里的每一个关键取舍，背后都压着一条关于设备行为的假设。<strong>这些假设如果是错的，对应的取舍就是错的。</strong><br>所以这里的测试不是泛泛地跑个分，而是一项对应一条论断。</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th>对应的设计论断</th>
+<th>假设被推翻的话</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>T1</strong> 持久化机制 × 队列深度</td>
+<td><code>fdatasync</code> 是屏障，单流提交速率被钉死在 <code>1/延迟</code>；<code>O_DIRECT + O_DSYNC</code>（NVMe 上是 FUA）让队列深度真正打开</td>
+<td>分片多段方案就不必换掉 fsync，方案 B 的全局锁也没那么糟</td>
+</tr>
+<tr>
+<td><strong>T2</strong> 批大小扫描</td>
+<td>攒批能把每条记录分摊的 IO 成本压下来，但过了拐点只换带宽不换延迟</td>
+<td>batch 触发阈值与 segment 轮转尺寸要重选</td>
+</tr>
+<tr>
+<td><strong>T3</strong> 重尾下的队头阻塞</td>
+<td>小记录混在大记录后面，延迟被大记录支配</td>
+<td>方案 E 的「按大小分流」不值得引入，<code>size_threshold</code> 这个不可变参数可以省掉</td>
+</tr>
+<tr>
+<td><strong>T4</strong> 单流 1 个 IO vs 双流 2 个 IO</td>
+<td>两个 IO 并发提交且各带 FUA ⟹ <strong>延迟不叠加</strong>，代价只是 IOPS 翻倍</td>
+<td>方案 E 的元数据&#x2F;数据分文件要退回分片多段那种「一次连续 pwritev 写完整批」</td>
+</tr>
+<tr>
+<td><strong>T5</strong> 对齐代价</td>
+<td>跨扇区的非对齐写要付 RMW 代价，所以「块内紧凑、只在批次边界补齐」是划算的</td>
+<td>对齐的优先级可下调（但<strong>跨进程共享扇区会互相覆盖</strong>是正确性问题，与本测试无关，任何情况下不能放松）</td>
+</tr>
+</tbody></table>
+<p>外加一项 <strong>T0 环境探测</strong>，它不产出性能数字，只是把设计依赖的前提记录在案：<br>块设备的 <code>logical/physical_block_size</code>、<code>write_cache</code>、<code>fua</code>，以及 NVMe 的 <code>AWUPF</code> &#x2F; <code>NAWUPF</code><br>（「4K 单扇区写是否原子」这条依赖它；<strong>读不到就必须假设不原子</strong>）。</p>
+<h2 id="两个必须先说清的边界"><a href="#两个必须先说清的边界" class="headerlink" title="两个必须先说清的边界"></a>两个必须先说清的边界</h2><p><strong>一、fio 只能测到队头阻塞的一半。</strong></p>
+<p>T3 测的是<strong>设备&#x2F;队列层</strong>的干扰：一个 1 MB 的 IO 在队列里挡住 4K 的 IO。<br>但设计文档里更要命的是<strong>批层</strong>那一半 —— 同一个 batch 里的小记录必须等本批最大记录落盘才能 ack，<br>这是构造决定的，不需要也无法用 fio 证明。所以 T3 测出来的倍数是「按大小分流」收益的<strong>下界</strong>，不是全部。</p>
+<p><strong>二、文件模式的绝对值不能当设备能力看。</strong></p>
+<p>脚本默认在指定目录下建测试文件，文件系统会引入额外的元数据开销与分配行为，<br>绝对值必然低于裸盘。<strong>用于横向对比（T1 各机制之间、T5 各对齐方式之间）足够</strong>，<br>用于「这块盘能跑多少」则不行 —— 那要用 <code>--dev</code> 裸盘模式，而它会销毁设备上的全部数据。<br>脚本对此做了两道保护：必须显式加 <code>--i-am-sure</code>，且会拒绝任何已挂载的设备。</p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文件模式（默认，安全）</span></span><br><span class="line">./raf-fio-bench.sh --<span class="built_in">dir</span> /data/raftest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 裸盘模式（销毁该设备全部数据）</span></span><br><span class="line">./raf-fio-bench.sh --dev /dev/nvme0n1 --i-am-sure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成 markdown 报告</span></span><br><span class="line">python3 raf-fio-report.py ./raf-fio-results-20260922-101500 &gt; report.md</span><br></pre></td></tr></table></figure></div>
+
+<p>默认每项测试预热 5 秒、稳态 15 秒，全套约 20 分钟。<br>依赖：<code>fio</code>（必需）、<code>nvme-cli</code>（可选，缺了只是跳过 T0 的原子写探测）。</p>
+<h2 id="怎么读结果"><a href="#怎么读结果" class="headerlink" title="怎么读结果"></a>怎么读结果</h2><p>报告会自动算几个判定用的比值，重点看这几个：</p>
+<ul>
+<li><strong>T1 的「QD 1 → 64 放大倍数」。</strong> 若 <code>O_DSYNC</code> 组随队列深度增长而 <code>fdatasync</code> 组基本持平，<br>论断成立。若两组都不涨，先回头看 T0 里的 <code>fua</code> 和 <code>write_cache</code> ——<br>设备没有 volatile write cache 时 FUA 会退化成普通写，这项测试就失去意义了。</li>
+<li><strong>T2 的「带宽增益」列。</strong> 找它掉到 1.1 以下的那一档，那就是 batch 触发阈值的上界：<br>再往上攒批只增延迟、不增吞吐。</li>
+<li><strong>T3 的「小 IO p99 被拖慢倍数」。</strong> 记住它是下界。</li>
+<li><strong>T4 的「拆分后数据流 p99 变化」。</strong> 小于 1.3 则「延迟不叠加」成立，方案 E 的代价确实只是 IOPS。</li>
+</ul>
+<h2 id="raf-fio-bench-sh"><a href="#raf-fio-bench-sh" class="headerlink" title="raf-fio-bench.sh"></a>raf-fio-bench.sh</h2><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># raf-fio-bench.sh —— RAF 格式设计的前置设备测量</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 这些测试不是泛泛的「跑个分」，每一项都对应设计文档里的一个具体论断。</span></span><br><span class="line"><span class="comment"># 跑完之后用 raf-fio-report.py 生成 markdown 报告。</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   ./raf-fio-bench.sh --dir /data/raftest              # 文件模式（安全，默认）</span></span><br><span class="line"><span class="comment">#   ./raf-fio-bench.sh --dev /dev/nvme0n1 --i-am-sure   # 裸盘模式（销毁数据！）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="built_in">set</span> -euo pipefail</span><br><span class="line"></span><br><span class="line">RUNTIME=15</span><br><span class="line">RAMP=5</span><br><span class="line">FILESIZE=4G</span><br><span class="line">TARGET_DIR=<span class="string">&quot;&quot;</span></span><br><span class="line">TARGET_DEV=<span class="string">&quot;&quot;</span></span><br><span class="line">CONFIRM=<span class="string">&quot;&quot;</span></span><br><span class="line">OUTDIR=<span class="string">&quot;./raf-fio-results-<span class="subst">$(date +%Y%m%d-%H%M%S)</span>&quot;</span></span><br><span class="line">ENGINE=<span class="string">&quot;io_uring&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">die</span></span>() &#123; <span class="built_in">echo</span> <span class="string">&quot;错误: $*&quot;</span> &gt;&amp;2; <span class="built_in">exit</span> 1; &#125;</span><br><span class="line"><span class="function"><span class="title">note</span></span>() &#123; <span class="built_in">echo</span> <span class="string">&quot;[*] $*&quot;</span> &gt;&amp;2; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">usage</span></span>() &#123;</span><br><span class="line">    sed -n <span class="string">&#x27;2,12p&#x27;</span> <span class="string">&quot;<span class="variable">$0</span>&quot;</span> | sed <span class="string">&#x27;s/^# \?//&#x27;</span></span><br><span class="line">    <span class="built_in">cat</span> &lt;&lt;<span class="string">&#x27;USAGE&#x27;</span></span><br><span class="line"></span><br><span class="line">选项:</span><br><span class="line">  --<span class="built_in">dir</span> PATH        在该目录下建测试文件（推荐；不会破坏已有数据）</span><br><span class="line">  --dev /dev/xxx    直接对裸块设备测试，必须同时给 --i-am-sure</span><br><span class="line">  --i-am-sure       确认裸盘模式会销毁该设备上的全部数据</span><br><span class="line">  --runtime SEC     每项测试的稳态时长，默认 15</span><br><span class="line">  --ramp SEC        每项测试的预热时长（不计入统计），默认 5</span><br><span class="line">  --size SZ         文件模式下的测试文件大小，默认 4G</span><br><span class="line">  --engine NAME     ioengine，默认 io_uring，可退回 libaio / psync</span><br><span class="line">  --out DIR         结果输出目录</span><br><span class="line">USAGE</span><br><span class="line">    <span class="built_in">exit</span> 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [[ <span class="variable">$#</span> -gt 0 ]]; <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">        --<span class="built_in">dir</span>)        TARGET_DIR=<span class="string">&quot;<span class="variable">$2</span>&quot;</span>; <span class="built_in">shift</span> 2 ;;</span><br><span class="line">        --dev)        TARGET_DEV=<span class="string">&quot;<span class="variable">$2</span>&quot;</span>; <span class="built_in">shift</span> 2 ;;</span><br><span class="line">        --i-am-sure)  CONFIRM=<span class="string">&quot;yes&quot;</span>; <span class="built_in">shift</span> ;;</span><br><span class="line">        --runtime)    RUNTIME=<span class="string">&quot;<span class="variable">$2</span>&quot;</span>; <span class="built_in">shift</span> 2 ;;</span><br><span class="line">        --ramp)       RAMP=<span class="string">&quot;<span class="variable">$2</span>&quot;</span>; <span class="built_in">shift</span> 2 ;;</span><br><span class="line">        --size)       FILESIZE=<span class="string">&quot;<span class="variable">$2</span>&quot;</span>; <span class="built_in">shift</span> 2 ;;</span><br><span class="line">        --engine)     ENGINE=<span class="string">&quot;<span class="variable">$2</span>&quot;</span>; <span class="built_in">shift</span> 2 ;;</span><br><span class="line">        --out)        OUTDIR=<span class="string">&quot;<span class="variable">$2</span>&quot;</span>; <span class="built_in">shift</span> 2 ;;</span><br><span class="line">        -h|--<span class="built_in">help</span>)    usage ;;</span><br><span class="line">        *)            die <span class="string">&quot;未知参数: <span class="variable">$1</span>&quot;</span> ;;</span><br><span class="line">    <span class="keyword">esac</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">command</span> -v fio &gt;/dev/null || die <span class="string">&quot;未安装 fio（apt install fio / yum install fio）&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------- 目标解析 ----------</span></span><br><span class="line"><span class="keyword">if</span> [[ -n <span class="string">&quot;<span class="variable">$TARGET_DEV</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">    [[ <span class="string">&quot;<span class="variable">$CONFIRM</span>&quot;</span> == <span class="string">&quot;yes&quot;</span> ]] || die <span class="string">&quot;裸盘模式会销毁 <span class="variable">$TARGET_DEV</span> 上的全部数据，必须显式加 --i-am-sure&quot;</span></span><br><span class="line">    [[ -b <span class="string">&quot;<span class="variable">$TARGET_DEV</span>&quot;</span> ]]    || die <span class="string">&quot;<span class="variable">$TARGET_DEV</span> 不是块设备&quot;</span></span><br><span class="line">    MOUNTED=$(lsblk -nro MOUNTPOINT <span class="string">&quot;<span class="variable">$TARGET_DEV</span>&quot;</span> 2&gt;/dev/null | grep -v <span class="string">&#x27;^$&#x27;</span> || <span class="literal">true</span>)</span><br><span class="line">    [[ -z <span class="string">&quot;<span class="variable">$MOUNTED</span>&quot;</span> ]] || die <span class="string">&quot;<span class="variable">$TARGET_DEV</span> 或其分区已挂载于: <span class="variable">$MOUNTED</span> —— 拒绝测试&quot;</span></span><br><span class="line">    FIO_TARGET=(--filename=<span class="string">&quot;<span class="variable">$TARGET_DEV</span>&quot;</span>)</span><br><span class="line">    PROBE_DEV=<span class="string">&quot;<span class="variable">$TARGET_DEV</span>&quot;</span></span><br><span class="line">    note <span class="string">&quot;裸盘模式: <span class="variable">$TARGET_DEV</span> （该设备数据将被覆盖）&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    [[ -n <span class="string">&quot;<span class="variable">$TARGET_DIR</span>&quot;</span> ]] || die <span class="string">&quot;必须指定 --dir 或 --dev，见 --help&quot;</span></span><br><span class="line">    <span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$TARGET_DIR</span>&quot;</span></span><br><span class="line">    FIO_TARGET=(--directory=<span class="string">&quot;<span class="variable">$TARGET_DIR</span>&quot;</span> --size=<span class="string">&quot;<span class="variable">$FILESIZE</span>&quot;</span> --filename=raf_bench.dat)</span><br><span class="line">    PROBE_DEV=$(<span class="built_in">df</span> --output=<span class="built_in">source</span> <span class="string">&quot;<span class="variable">$TARGET_DIR</span>&quot;</span> | <span class="built_in">tail</span> -1)</span><br><span class="line">    note <span class="string">&quot;文件模式: <span class="variable">$TARGET_DIR</span>/raf_bench.dat (<span class="variable">$&#123;FILESIZE&#125;</span>)，底层设备 <span class="variable">$PROBE_DEV</span>&quot;</span></span><br><span class="line">    note <span class="string">&quot;注意：文件系统会引入额外的元数据开销，绝对值会低于裸盘。用于横向对比足够。&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$OUTDIR</span>/json&quot;</span> <span class="string">&quot;<span class="variable">$OUTDIR</span>/jobs&quot;</span></span><br><span class="line"></span><br><span class="line">BASE=(</span><br><span class="line">    --ioengine=<span class="string">&quot;<span class="variable">$ENGINE</span>&quot;</span></span><br><span class="line">    --direct=1</span><br><span class="line">    --rw=write                 <span class="comment"># 追加日志是顺序写</span></span><br><span class="line">    --time_based</span><br><span class="line">    --runtime=<span class="string">&quot;<span class="variable">$RUNTIME</span>&quot;</span></span><br><span class="line">    --ramp_time=<span class="string">&quot;<span class="variable">$RAMP</span>&quot;</span></span><br><span class="line">    --norandommap</span><br><span class="line">    --randrepeat=0</span><br><span class="line">    --group_reporting=1</span><br><span class="line">    --output-format=json</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">run</span></span>() &#123;   <span class="comment"># run &lt;名字&gt; &lt;额外参数...&gt;</span></span><br><span class="line">    <span class="built_in">local</span> name=<span class="string">&quot;<span class="variable">$1</span>&quot;</span>; <span class="built_in">shift</span></span><br><span class="line">    note <span class="string">&quot;运行 <span class="variable">$name</span>&quot;</span></span><br><span class="line">    fio <span class="string">&quot;<span class="variable">$&#123;BASE[@]&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$&#123;FIO_TARGET[@]&#125;</span>&quot;</span> --name=<span class="string">&quot;<span class="variable">$name</span>&quot;</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span> \</span><br><span class="line">        --output=<span class="string">&quot;<span class="variable">$OUTDIR</span>/json/<span class="variable">$name</span>.json&quot;</span> &gt;/dev/null</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">runjob</span></span>() &#123; <span class="comment"># runjob &lt;名字&gt; &lt;job文件&gt;</span></span><br><span class="line">    <span class="built_in">local</span> name=<span class="string">&quot;<span class="variable">$1</span>&quot;</span> jf=<span class="string">&quot;<span class="variable">$2</span>&quot;</span></span><br><span class="line">    note <span class="string">&quot;运行 <span class="variable">$name</span> (job file)&quot;</span></span><br><span class="line">    fio <span class="string">&quot;<span class="variable">$jf</span>&quot;</span> --output-format=json --output=<span class="string">&quot;<span class="variable">$OUTDIR</span>/json/<span class="variable">$name</span>.json&quot;</span> &gt;/dev/null</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="comment"># T0  环境探测 —— 不是性能测试，是把设计依赖的前提记录下来</span></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line">note <span class="string">&quot;T0 环境探测&quot;</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;# 环境&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;date: <span class="subst">$(date -Is)</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;kernel: <span class="subst">$(uname -r)</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;fio: <span class="subst">$(fio --version)</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;target: <span class="variable">$&#123;TARGET_DEV:-<span class="variable">$TARGET_DIR</span>&#125;</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;# 块设备队列参数&quot;</span></span><br><span class="line">    SYSDEV=$(<span class="built_in">basename</span> <span class="string">&quot;<span class="subst">$(readlink -f <span class="string">&quot;<span class="variable">$PROBE_DEV</span>&quot;</span>)</span>&quot;</span> | sed <span class="string">&#x27;s/p\?[0-9]*$//&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> logical_block_size physical_block_size write_cache fua nr_requests scheduler rotational max_sectors_kb; <span class="keyword">do</span></span><br><span class="line">        p=<span class="string">&quot;/sys/block/<span class="variable">$SYSDEV</span>/queue/<span class="variable">$f</span>&quot;</span></span><br><span class="line">        [[ -r <span class="string">&quot;<span class="variable">$p</span>&quot;</span> ]] &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$f</span>: <span class="subst">$(cat <span class="string">&quot;<span class="variable">$p</span>&quot;</span>)</span>&quot;</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    <span class="built_in">echo</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;# NVMe 原子写能力（AWUPF / NAWUPF）&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;# 设计里「4K 单扇区写是否原子」这一条依赖它；读不到就必须假设不原子。&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">command</span> -v nvme &gt;/dev/null &amp;&amp; [[ <span class="string">&quot;<span class="variable">$SYSDEV</span>&quot;</span> == nvme* ]]; <span class="keyword">then</span></span><br><span class="line">        nvme id-ctrl <span class="string">&quot;/dev/<span class="variable">$SYSDEV</span>&quot;</span> 2&gt;/dev/null | grep -Ei <span class="string">&#x27;^(awun|awupf|acwu)&#x27;</span> || <span class="built_in">echo</span> <span class="string">&quot;(读取失败)&quot;</span></span><br><span class="line">        nvme id-ns  <span class="string">&quot;/dev/<span class="variable">$SYSDEV</span>&quot;</span> 2&gt;/dev/null | grep -Ei <span class="string">&#x27;^(nawun|nawupf|nacwu|nabo|nabspf)&#x27;</span> || <span class="literal">true</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;(未安装 nvme-cli，或目标不是 NVMe —— 跳过)&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125; &gt; <span class="string">&quot;<span class="variable">$OUTDIR</span>/env.txt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="comment"># T1  持久化机制 × 队列深度       ← 全部设计的核心论断</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 论断：fdatasync 是屏障，拿不到两个同时在飞的持久点，所以</span></span><br><span class="line"><span class="comment">#       「每批一次 fdatasync」的方案单流提交速率被钉死在 1/延迟；</span></span><br><span class="line"><span class="comment">#       而 O_DIRECT + O_DSYNC（落到 NVMe 上是 FUA）让持久化语义</span></span><br><span class="line"><span class="comment">#       随每个写命令走，队列深度可以真正打开。</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 读法：看 dsync 组的 IOPS 是否随 iodepth 增长，fdsync 组是否基本持平。</span></span><br><span class="line"><span class="comment">#       nosync 组不持久，只作为设备上限参照。</span></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="keyword">for</span> qd <span class="keyword">in</span> 1 4 16 64; <span class="keyword">do</span></span><br><span class="line">    run <span class="string">&quot;t1_dsync_qd<span class="variable">$&#123;qd&#125;</span>&quot;</span>  --bs=64k --iodepth=<span class="string">&quot;<span class="variable">$qd</span>&quot;</span> --<span class="built_in">sync</span>=dsync</span><br><span class="line">    run <span class="string">&quot;t1_fdsync_qd<span class="variable">$&#123;qd&#125;</span>&quot;</span> --bs=64k --iodepth=<span class="string">&quot;<span class="variable">$qd</span>&quot;</span> --fdatasync=1</span><br><span class="line">    run <span class="string">&quot;t1_nosync_qd<span class="variable">$&#123;qd&#125;</span>&quot;</span> --bs=64k --iodepth=<span class="string">&quot;<span class="variable">$qd</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="comment"># T2  批大小扫描</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 论断：攒批把每条记录分摊到的 IO 成本压下来，但过了某个点之后</span></span><br><span class="line"><span class="comment">#       只是在换带宽、不再换延迟。这个拐点决定 batch 触发阈值，</span></span><br><span class="line"><span class="comment">#       也决定 segment 的轮转尺寸是否合理。</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 读法：找 IOPS×bs 停止增长的那个 bs，以及 p99 开始明显抬头的那个 bs。</span></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="keyword">for</span> bs <span class="keyword">in</span> 4k 16k 64k 256k 1m; <span class="keyword">do</span></span><br><span class="line">    run <span class="string">&quot;t2_bs_<span class="variable">$&#123;bs&#125;</span>&quot;</span> --bs=<span class="string">&quot;<span class="variable">$bs</span>&quot;</span> --iodepth=16 --<span class="built_in">sync</span>=dsync</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="comment"># T3  重尾分布下的队头阻塞      ← 方案 E「按大小分流」的依据</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 论断：小记录和大记录混在一起时，小记录的延迟被大记录支配。</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 注意边界：fio 只能测到「设备/队列层」的那一半。设计文档里更要命的</span></span><br><span class="line"><span class="comment">#       是「批层」的那一半 —— 同一个 batch 里的小记录必须等本批最大</span></span><br><span class="line"><span class="comment">#       记录落盘才能 ack，那是构造决定的，不需要也无法用 fio 证明。</span></span><br><span class="line"><span class="comment">#       所以这里测出来的差距是分流收益的**下界**。</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 读法：比 t3_small_alone 与 t3_mixed 里 small 作业的 p99 / p999。</span></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line">run <span class="string">&quot;t3_small_alone&quot;</span> --bs=4k  --iodepth=1 --<span class="built_in">sync</span>=dsync</span><br><span class="line">run <span class="string">&quot;t3_large_alone&quot;</span> --bs=1m  --iodepth=1 --<span class="built_in">sync</span>=dsync</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; <span class="string">&quot;<span class="variable">$OUTDIR</span>/jobs/t3_mixed.fio&quot;</span> &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[global]</span></span><br><span class="line"><span class="string">ioengine=$ENGINE</span></span><br><span class="line"><span class="string">direct=1</span></span><br><span class="line"><span class="string">sync=dsync</span></span><br><span class="line"><span class="string">rw=write</span></span><br><span class="line"><span class="string">time_based</span></span><br><span class="line"><span class="string">runtime=$RUNTIME</span></span><br><span class="line"><span class="string">ramp_time=$RAMP</span></span><br><span class="line"><span class="string">group_reporting=0</span></span><br><span class="line"><span class="string">$( [[ -n &quot;$TARGET_DEV&quot; ]] &amp;&amp; echo &quot;filename=$TARGET_DEV&quot; || echo &quot;directory=$TARGET_DIR</span></span><br><span class="line"><span class="string">size=$FILESIZE&quot; )</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[small]</span></span><br><span class="line"><span class="string">bs=4k</span></span><br><span class="line"><span class="string">iodepth=1</span></span><br><span class="line"><span class="string">$( [[ -z &quot;$TARGET_DEV&quot; ]] &amp;&amp; echo &quot;filename=raf_mixed_small.dat&quot; )</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[large]</span></span><br><span class="line"><span class="string">bs=1m</span></span><br><span class="line"><span class="string">iodepth=1</span></span><br><span class="line"><span class="string">$( [[ -z &quot;$TARGET_DEV&quot; ]] &amp;&amp; echo &quot;filename=raf_mixed_large.dat&quot; )</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">runjob <span class="string">&quot;t3_mixed&quot;</span> <span class="string">&quot;<span class="variable">$OUTDIR</span>/jobs/t3_mixed.fio&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="comment"># T4  单流一次 IO  vs  双流两次 IO    ← 方案 E 相对 D 的代价</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 论断：E 把元数据和数据拆成两个文件，每批变成 2 个 IO。因为两个 IO</span></span><br><span class="line"><span class="comment">#       并发提交且都带 FUA，**延迟不叠加**，但 IOPS 翻倍。</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 读法：t4_single 的 p99 与 t4_split 里两个作业的 p99 是否接近；</span></span><br><span class="line"><span class="comment">#       若接近则「延迟不叠加」成立，代价仅是 IOPS。</span></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line">run <span class="string">&quot;t4_single&quot;</span> --bs=64k --iodepth=16 --<span class="built_in">sync</span>=dsync</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; <span class="string">&quot;<span class="variable">$OUTDIR</span>/jobs/t4_split.fio&quot;</span> &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[global]</span></span><br><span class="line"><span class="string">ioengine=$ENGINE</span></span><br><span class="line"><span class="string">direct=1</span></span><br><span class="line"><span class="string">sync=dsync</span></span><br><span class="line"><span class="string">rw=write</span></span><br><span class="line"><span class="string">time_based</span></span><br><span class="line"><span class="string">runtime=$RUNTIME</span></span><br><span class="line"><span class="string">ramp_time=$RAMP</span></span><br><span class="line"><span class="string">iodepth=16</span></span><br><span class="line"><span class="string">group_reporting=0</span></span><br><span class="line"><span class="string">$( [[ -n &quot;$TARGET_DEV&quot; ]] &amp;&amp; echo &quot;filename=$TARGET_DEV&quot; || echo &quot;directory=$TARGET_DIR</span></span><br><span class="line"><span class="string">size=$FILESIZE&quot; )</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[dat]</span></span><br><span class="line"><span class="string">bs=64k</span></span><br><span class="line"><span class="string">$( [[ -z &quot;$TARGET_DEV&quot; ]] &amp;&amp; echo &quot;filename=raf_split_dat.dat&quot; )</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[idx]</span></span><br><span class="line"><span class="string">bs=4k</span></span><br><span class="line"><span class="string">$( [[ -z &quot;$TARGET_DEV&quot; ]] &amp;&amp; echo &quot;filename=raf_split_idx.dat&quot; )</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">runjob <span class="string">&quot;t4_split&quot;</span> <span class="string">&quot;<span class="variable">$OUTDIR</span>/jobs/t4_split.fio&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line"><span class="comment"># T5  对齐代价</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 论断：扇区是写入的最小单位。设计里坚持「块内字节紧凑、只在批次</span></span><br><span class="line"><span class="comment">#       边界补齐」，前提是跨扇区的非对齐写确实要付 RMW 的代价。</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 读法：t5_aligned_4k 与 t5_unaligned_4k5 / t5_offset512 的差距。</span></span><br><span class="line"><span class="comment">#       差距小说明设备/控制器吸收了它，对齐的优先级可以下调；</span></span><br><span class="line"><span class="comment">#       差距大则「每批补齐到扇区」这条铁律是必须的。</span></span><br><span class="line"><span class="comment"># ============================================================</span></span><br><span class="line">run <span class="string">&quot;t5_aligned_4k&quot;</span>    --bs=4k   --iodepth=16 --<span class="built_in">sync</span>=dsync</span><br><span class="line">run <span class="string">&quot;t5_unaligned_4k5&quot;</span> --bs=4608 --iodepth=16 --<span class="built_in">sync</span>=dsync</span><br><span class="line">run <span class="string">&quot;t5_offset512&quot;</span>     --bs=4k   --iodepth=16 --<span class="built_in">sync</span>=dsync --offset=512</span><br><span class="line"></span><br><span class="line">note <span class="string">&quot;完成。结果在 <span class="variable">$OUTDIR</span>&quot;</span></span><br><span class="line">note <span class="string">&quot;生成报告： python3 raf-fio-report.py <span class="variable">$OUTDIR</span> &gt; report.md&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="raf-fio-report-py"><a href="#raf-fio-report-py" class="headerlink" title="raf-fio-report.py"></a>raf-fio-report.py</h2><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;把 raf-fio-bench.sh 的 JSON 结果汇总成 markdown 报告。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    python3 raf-fio-report.py ./raf-fio-results-20260922-101500 &gt; report.md</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load</span>(<span class="params">d</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;返回 name -&gt; [每个 job 的指标]。&quot;&quot;&quot;</span></span><br><span class="line">    out = &#123;&#125;</span><br><span class="line">    jd = os.path.join(d, <span class="string">&quot;json&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isdir(jd):</span><br><span class="line">        sys.exit(<span class="string">f&quot;找不到 <span class="subst">&#123;jd&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> fn <span class="keyword">in</span> <span class="built_in">sorted</span>(os.listdir(jd)):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> fn.endswith(<span class="string">&quot;.json&quot;</span>):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(jd, fn)) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                doc = json.load(f)</span><br><span class="line">            <span class="keyword">except</span> json.JSONDecodeError:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">        rows = []</span><br><span class="line">        <span class="keyword">for</span> job <span class="keyword">in</span> doc.get(<span class="string">&quot;jobs&quot;</span>, []):</span><br><span class="line">            w = job.get(<span class="string">&quot;write&quot;</span>, &#123;&#125;)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> w.get(<span class="string">&quot;io_bytes&quot;</span>):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            clat = w.get(<span class="string">&quot;clat_ns&quot;</span>, &#123;&#125;)</span><br><span class="line">            pct = clat.get(<span class="string">&quot;percentile&quot;</span>, &#123;&#125;) <span class="keyword">or</span> &#123;&#125;</span><br><span class="line">            rows.append(<span class="built_in">dict</span>(</span><br><span class="line">                job=job.get(<span class="string">&quot;jobname&quot;</span>, <span class="string">&quot;?&quot;</span>),</span><br><span class="line">                iops=w.get(<span class="string">&quot;iops&quot;</span>, <span class="number">0.0</span>),</span><br><span class="line">                mibs=w.get(<span class="string">&quot;bw_bytes&quot;</span>, <span class="number">0</span>) / <span class="number">1048576.0</span>,</span><br><span class="line">                avg=clat.get(<span class="string">&quot;mean&quot;</span>, <span class="number">0.0</span>) / <span class="number">1000.0</span>,</span><br><span class="line">                p99=<span class="built_in">float</span>(pct.get(<span class="string">&quot;99.000000&quot;</span>, <span class="number">0</span>)) / <span class="number">1000.0</span>,</span><br><span class="line">                p999=<span class="built_in">float</span>(pct.get(<span class="string">&quot;99.900000&quot;</span>, <span class="number">0</span>)) / <span class="number">1000.0</span>,</span><br><span class="line">            ))</span><br><span class="line">        <span class="keyword">if</span> rows:</span><br><span class="line">            out[fn[:-<span class="number">5</span>]] = rows</span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fmt</span>(<span class="params">v, nd=<span class="number">1</span></span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;v:,.&#123;nd&#125;</span>f&#125;&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">table</span>(<span class="params">rows, head</span>):</span><br><span class="line">    lines = [<span class="string">&quot;| &quot;</span> + <span class="string">&quot; | &quot;</span>.join(head) + <span class="string">&quot; |&quot;</span>,</span><br><span class="line">             <span class="string">&quot;|&quot;</span> + <span class="string">&quot;|&quot;</span>.join([<span class="string">&quot;---&quot;</span>] * <span class="built_in">len</span>(head)) + <span class="string">&quot;|&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> rows:</span><br><span class="line">        lines.append(<span class="string">&quot;| &quot;</span> + <span class="string">&quot; | &quot;</span>.join(r) + <span class="string">&quot; |&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;\n&quot;</span>.join(lines)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">one</span>(<span class="params">res, name</span>):</span><br><span class="line">    r = res.get(name)</span><br><span class="line">    <span class="keyword">return</span> r[<span class="number">0</span>] <span class="keyword">if</span> r <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) != <span class="number">2</span>:</span><br><span class="line">        sys.exit(__doc__)</span><br><span class="line">    d = sys.argv[<span class="number">1</span>]</span><br><span class="line">    res = load(d)</span><br><span class="line">    P = <span class="built_in">print</span></span><br><span class="line"></span><br><span class="line">    P(<span class="string">&quot;## 测试结果&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    envp = os.path.join(d, <span class="string">&quot;env.txt&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(envp):</span><br><span class="line">        P(<span class="string">&quot;### T0 环境&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;```&quot;</span>)</span><br><span class="line">        P(<span class="built_in">open</span>(envp).read().rstrip())</span><br><span class="line">        P(<span class="string">&quot;```&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ---- T1 ----</span></span><br><span class="line">    P(<span class="string">&quot;### T1 持久化机制 × 队列深度&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;`bs=64k`，顺序写。**这是全部设计里最核心的一项测量。**&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    rows = []</span><br><span class="line">    <span class="keyword">for</span> qd <span class="keyword">in</span> (<span class="number">1</span>, <span class="number">4</span>, <span class="number">16</span>, <span class="number">64</span>):</span><br><span class="line">        <span class="keyword">for</span> mode, label <span class="keyword">in</span> ((<span class="string">&quot;dsync&quot;</span>, <span class="string">&quot;O_DSYNC (FUA)&quot;</span>),</span><br><span class="line">                            (<span class="string">&quot;fdsync&quot;</span>, <span class="string">&quot;fdatasync 每批一次&quot;</span>),</span><br><span class="line">                            (<span class="string">&quot;nosync&quot;</span>, <span class="string">&quot;不持久（设备上限参照）&quot;</span>)):</span><br><span class="line">            r = one(res, <span class="string">f&quot;t1_<span class="subst">&#123;mode&#125;</span>_qd<span class="subst">&#123;qd&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> r:</span><br><span class="line">                rows.append([<span class="built_in">str</span>(qd), label, fmt(r[<span class="string">&quot;iops&quot;</span>]), fmt(r[<span class="string">&quot;mibs&quot;</span>]),</span><br><span class="line">                             fmt(r[<span class="string">&quot;avg&quot;</span>]), fmt(r[<span class="string">&quot;p99&quot;</span>])])</span><br><span class="line">    <span class="keyword">if</span> rows:</span><br><span class="line">        P(table(rows, [<span class="string">&quot;iodepth&quot;</span>, <span class="string">&quot;机制&quot;</span>, <span class="string">&quot;IOPS&quot;</span>, <span class="string">&quot;MiB/s&quot;</span>, <span class="string">&quot;avg µs&quot;</span>, <span class="string">&quot;p99 µs&quot;</span>]))</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">        a = one(res, <span class="string">&quot;t1_dsync_qd1&quot;</span>)</span><br><span class="line">        b = one(res, <span class="string">&quot;t1_dsync_qd64&quot;</span>)</span><br><span class="line">        c = one(res, <span class="string">&quot;t1_fdsync_qd1&quot;</span>)</span><br><span class="line">        e = one(res, <span class="string">&quot;t1_fdsync_qd64&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> a <span class="keyword">and</span> b <span class="keyword">and</span> c <span class="keyword">and</span> e:</span><br><span class="line">            sd = b[<span class="string">&quot;iops&quot;</span>] / a[<span class="string">&quot;iops&quot;</span>] <span class="keyword">if</span> a[<span class="string">&quot;iops&quot;</span>] <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">            sf = e[<span class="string">&quot;iops&quot;</span>] / c[<span class="string">&quot;iops&quot;</span>] <span class="keyword">if</span> c[<span class="string">&quot;iops&quot;</span>] <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">            P(<span class="string">f&quot;**QD 1 → 64 的放大倍数：O_DSYNC ×<span class="subst">&#123;sd:<span class="number">.2</span>f&#125;</span>，fdatasync ×<span class="subst">&#123;sf:<span class="number">.2</span>f&#125;</span>。**&quot;</span>)</span><br><span class="line">            P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> sd &gt;= <span class="number">2</span> * <span class="built_in">max</span>(sf, <span class="number">0.01</span>):</span><br><span class="line">                P(<span class="string">&quot;&gt; 论断成立：`fdatasync` 是屏障，加队列深度换不来吞吐；&quot;</span></span><br><span class="line">                  <span class="string">&quot;FUA 让持久化随每个写命令走，队列深度真正打开。&quot;</span></span><br><span class="line">                  <span class="string">&quot;**「每批一次 fsync」的方案单流提交速率被钉死，只能靠加分片换吞吐。**&quot;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                P(<span class="string">&quot;&gt; ⚠ 论断在本机**不成立或不明显**。可能原因：&quot;</span></span><br><span class="line">                  <span class="string">&quot;设备无 volatile write cache（FUA 退化为普通写）、&quot;</span></span><br><span class="line">                  <span class="string">&quot;文件系统把 O_DSYNC 也变成了屏障、&quot;</span></span><br><span class="line">                  <span class="string">&quot;或 ioengine 不支持真正的异步提交。先看 T0 的 `fua` / `write_cache`。&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ---- T2 ----</span></span><br><span class="line">    P(<span class="string">&quot;### T2 批大小扫描&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;`iodepth=16`，`O_DSYNC`。决定攒批阈值与分流阈值。&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    rows = []</span><br><span class="line">    prev = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">for</span> bs <span class="keyword">in</span> (<span class="string">&quot;4k&quot;</span>, <span class="string">&quot;16k&quot;</span>, <span class="string">&quot;64k&quot;</span>, <span class="string">&quot;256k&quot;</span>, <span class="string">&quot;1m&quot;</span>):</span><br><span class="line">        r = one(res, <span class="string">f&quot;t2_bs_<span class="subst">&#123;bs&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> r:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        gain = <span class="string">&quot;—&quot;</span> <span class="keyword">if</span> prev <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> <span class="string">f&quot;×<span class="subst">&#123;r[<span class="string">&#x27;mibs&#x27;</span>] / prev:<span class="number">.2</span>f&#125;</span>&quot;</span> <span class="keyword">if</span> prev <span class="keyword">else</span> <span class="string">&quot;—&quot;</span></span><br><span class="line">        prev = r[<span class="string">&quot;mibs&quot;</span>]</span><br><span class="line">        rows.append([bs, fmt(r[<span class="string">&quot;iops&quot;</span>]), fmt(r[<span class="string">&quot;mibs&quot;</span>]), gain,</span><br><span class="line">                     fmt(r[<span class="string">&quot;avg&quot;</span>]), fmt(r[<span class="string">&quot;p99&quot;</span>])])</span><br><span class="line">    <span class="keyword">if</span> rows:</span><br><span class="line">        P(table(rows, [<span class="string">&quot;bs&quot;</span>, <span class="string">&quot;IOPS&quot;</span>, <span class="string">&quot;MiB/s&quot;</span>, <span class="string">&quot;带宽增益&quot;</span>, <span class="string">&quot;avg µs&quot;</span>, <span class="string">&quot;p99 µs&quot;</span>]))</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&gt; 找「带宽增益」掉到 1.1 以下的那一档：再往上攒批只增延迟、不增吞吐，&quot;</span></span><br><span class="line">          <span class="string">&quot;那就是 batch 触发阈值的上界。&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ---- T3 ----</span></span><br><span class="line">    P(<span class="string">&quot;### T3 重尾分布下的队头阻塞&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    sa = one(res, <span class="string">&quot;t3_small_alone&quot;</span>)</span><br><span class="line">    la = one(res, <span class="string">&quot;t3_large_alone&quot;</span>)</span><br><span class="line">    mixed = res.get(<span class="string">&quot;t3_mixed&quot;</span>, [])</span><br><span class="line">    ms = <span class="built_in">next</span>((r <span class="keyword">for</span> r <span class="keyword">in</span> mixed <span class="keyword">if</span> r[<span class="string">&quot;job&quot;</span>] == <span class="string">&quot;small&quot;</span>), <span class="literal">None</span>)</span><br><span class="line">    ml = <span class="built_in">next</span>((r <span class="keyword">for</span> r <span class="keyword">in</span> mixed <span class="keyword">if</span> r[<span class="string">&quot;job&quot;</span>] == <span class="string">&quot;large&quot;</span>), <span class="literal">None</span>)</span><br><span class="line">    rows = []</span><br><span class="line">    <span class="keyword">for</span> label, r <span class="keyword">in</span> ((<span class="string">&quot;4k 单独跑&quot;</span>, sa), (<span class="string">&quot;4k 与 1M 混跑&quot;</span>, ms),</span><br><span class="line">                     (<span class="string">&quot;1M 单独跑&quot;</span>, la), (<span class="string">&quot;1M 与 4k 混跑&quot;</span>, ml)):</span><br><span class="line">        <span class="keyword">if</span> r:</span><br><span class="line">            rows.append([label, fmt(r[<span class="string">&quot;iops&quot;</span>]), fmt(r[<span class="string">&quot;avg&quot;</span>]),</span><br><span class="line">                         fmt(r[<span class="string">&quot;p99&quot;</span>]), fmt(r[<span class="string">&quot;p999&quot;</span>])])</span><br><span class="line">    <span class="keyword">if</span> rows:</span><br><span class="line">        P(table(rows, [<span class="string">&quot;场景&quot;</span>, <span class="string">&quot;IOPS&quot;</span>, <span class="string">&quot;avg µs&quot;</span>, <span class="string">&quot;p99 µs&quot;</span>, <span class="string">&quot;p99.9 µs&quot;</span>]))</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> sa <span class="keyword">and</span> ms <span class="keyword">and</span> sa[<span class="string">&quot;p99&quot;</span>]:</span><br><span class="line">        P(<span class="string">f&quot;**小 IO 的 p99 被大 IO 拖慢 ×<span class="subst">&#123;ms[<span class="string">&#x27;p99&#x27;</span>] / sa[<span class="string">&#x27;p99&#x27;</span>]:<span class="number">.2</span>f&#125;</span>。**&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&gt; 这只是队头阻塞的**设备层**那一半。更要命的是**批层**那一半：&quot;</span></span><br><span class="line">      <span class="string">&quot;同一个 batch 里的小记录必须等本批最大记录落盘才能 ack，&quot;</span></span><br><span class="line">      <span class="string">&quot;那是构造决定的，不需要也无法用 fio 证明。&quot;</span></span><br><span class="line">      <span class="string">&quot;所以上面这个倍数是「按大小分流」收益的**下界**。&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ---- T4 ----</span></span><br><span class="line">    P(<span class="string">&quot;### T4 单流一次 IO vs 双流两次 IO&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;方案 E 把元数据和数据拆成两个文件，每批从 1 个 IO 变成 2 个。&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    s = one(res, <span class="string">&quot;t4_single&quot;</span>)</span><br><span class="line">    split = res.get(<span class="string">&quot;t4_split&quot;</span>, [])</span><br><span class="line">    rows = []</span><br><span class="line">    <span class="keyword">if</span> s:</span><br><span class="line">        rows.append([<span class="string">&quot;单流 64k&quot;</span>, fmt(s[<span class="string">&quot;iops&quot;</span>]), fmt(s[<span class="string">&quot;mibs&quot;</span>]),</span><br><span class="line">                     fmt(s[<span class="string">&quot;avg&quot;</span>]), fmt(s[<span class="string">&quot;p99&quot;</span>])])</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> split:</span><br><span class="line">        rows.append([<span class="string">f&quot;双流 <span class="subst">&#123;r[<span class="string">&#x27;job&#x27;</span>]&#125;</span>&quot;</span>, fmt(r[<span class="string">&quot;iops&quot;</span>]), fmt(r[<span class="string">&quot;mibs&quot;</span>]),</span><br><span class="line">                     fmt(r[<span class="string">&quot;avg&quot;</span>]), fmt(r[<span class="string">&quot;p99&quot;</span>])])</span><br><span class="line">    <span class="keyword">if</span> rows:</span><br><span class="line">        P(table(rows, [<span class="string">&quot;场景&quot;</span>, <span class="string">&quot;IOPS&quot;</span>, <span class="string">&quot;MiB/s&quot;</span>, <span class="string">&quot;avg µs&quot;</span>, <span class="string">&quot;p99 µs&quot;</span>]))</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    sd = <span class="built_in">next</span>((r <span class="keyword">for</span> r <span class="keyword">in</span> split <span class="keyword">if</span> r[<span class="string">&quot;job&quot;</span>] == <span class="string">&quot;dat&quot;</span>), <span class="literal">None</span>)</span><br><span class="line">    <span class="keyword">if</span> s <span class="keyword">and</span> sd <span class="keyword">and</span> s[<span class="string">&quot;p99&quot;</span>]:</span><br><span class="line">        ratio = sd[<span class="string">&quot;p99&quot;</span>] / s[<span class="string">&quot;p99&quot;</span>]</span><br><span class="line">        P(<span class="string">f&quot;**拆分后数据流的 p99 变化 ×<span class="subst">&#123;ratio:<span class="number">.2</span>f&#125;</span>。**&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> ratio &lt; <span class="number">1.3</span>:</span><br><span class="line">            P(<span class="string">&quot;&gt; 「延迟不叠加、代价只是 IOPS」成立。两个 IO 并发提交且各自带 FUA，&quot;</span></span><br><span class="line">              <span class="string">&quot;总延迟仍是一次 IO 的量级。&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            P(<span class="string">&quot;&gt; ⚠ 延迟出现了明显叠加。若设备 IOPS 已接近饱和，&quot;</span></span><br><span class="line">              <span class="string">&quot;方案 E 的元数据/数据分离代价就不再可忽略，&quot;</span></span><br><span class="line">              <span class="string">&quot;应考虑退回分片多段方案那种「一次连续 pwritev 写完整批」的布局。&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ---- T5 ----</span></span><br><span class="line">    P(<span class="string">&quot;### T5 对齐代价&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    rows = []</span><br><span class="line">    <span class="keyword">for</span> name, label <span class="keyword">in</span> ((<span class="string">&quot;t5_aligned_4k&quot;</span>, <span class="string">&quot;4K 对齐&quot;</span>),</span><br><span class="line">                        (<span class="string">&quot;t5_unaligned_4k5&quot;</span>, <span class="string">&quot;4608B（跨 4K 边界）&quot;</span>),</span><br><span class="line">                        (<span class="string">&quot;t5_offset512&quot;</span>, <span class="string">&quot;4K 大小但起点偏移 512B&quot;</span>)):</span><br><span class="line">        r = one(res, name)</span><br><span class="line">        <span class="keyword">if</span> r:</span><br><span class="line">            rows.append([label, fmt(r[<span class="string">&quot;iops&quot;</span>]), fmt(r[<span class="string">&quot;mibs&quot;</span>]),</span><br><span class="line">                         fmt(r[<span class="string">&quot;avg&quot;</span>]), fmt(r[<span class="string">&quot;p99&quot;</span>])])</span><br><span class="line">    <span class="keyword">if</span> rows:</span><br><span class="line">        P(table(rows, [<span class="string">&quot;场景&quot;</span>, <span class="string">&quot;IOPS&quot;</span>, <span class="string">&quot;MiB/s&quot;</span>, <span class="string">&quot;avg µs&quot;</span>, <span class="string">&quot;p99 µs&quot;</span>]))</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    al = one(res, <span class="string">&quot;t5_aligned_4k&quot;</span>)</span><br><span class="line">    of = one(res, <span class="string">&quot;t5_offset512&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> al <span class="keyword">and</span> of <span class="keyword">and</span> of[<span class="string">&quot;mibs&quot;</span>]:</span><br><span class="line">        P(<span class="string">f&quot;**非对齐起点的带宽是对齐的 <span class="subst">&#123;al[<span class="string">&#x27;mibs&#x27;</span>] / of[<span class="string">&#x27;mibs&#x27;</span>]:<span class="number">.2</span>f&#125;</span> 倍（越大代价越高）。**&quot;</span>)</span><br><span class="line">        P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&gt; 差距大 ⟹「每批补齐到扇区边界」这条铁律必须保留；&quot;</span></span><br><span class="line">      <span class="string">&quot;差距小 ⟹ 设备/控制器吸收了 RMW，对齐的优先级可以下调，&quot;</span></span><br><span class="line">      <span class="string">&quot;但**跨进程共享扇区会互相覆盖**这条是正确性问题，与性能无关，任何情况下都不能放松。&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    P(<span class="string">&quot;---&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;### 这些数字要回答的设计问题&quot;</span>)</span><br><span class="line">    P(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    P(table([</span><br><span class="line">        [<span class="string">&quot;T1&quot;</span>, <span class="string">&quot;提交机制该用 fsync 还是 FUA&quot;</span>, <span class="string">&quot;决定单流提交速率是否被钉死在 1/延迟&quot;</span>],</span><br><span class="line">        [<span class="string">&quot;T2&quot;</span>, <span class="string">&quot;攒批攒到多大&quot;</span>, <span class="string">&quot;batch 触发阈值、segment 轮转尺寸&quot;</span>],</span><br><span class="line">        [<span class="string">&quot;T3&quot;</span>, <span class="string">&quot;要不要按记录大小分流&quot;</span>, <span class="string">&quot;方案 E 的 `size_threshold` 是否值得引入&quot;</span>],</span><br><span class="line">        [<span class="string">&quot;T4&quot;</span>, <span class="string">&quot;元数据与数据能否分文件&quot;</span>, <span class="string">&quot;方案 E 相对分片多段方案的净代价&quot;</span>],</span><br><span class="line">        [<span class="string">&quot;T5&quot;</span>, <span class="string">&quot;对齐策略&quot;</span>, <span class="string">&quot;「块内紧凑、批次边界补齐」是否划算&quot;</span>],</span><br><span class="line">    ], [<span class="string">&quot;测试&quot;</span>, <span class="string">&quot;回答什么&quot;</span>, <span class="string">&quot;影响哪个参数&quot;</span>]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="还没测、但同样决定设计的东西"><a href="#还没测、但同样决定设计的东西" class="headerlink" title="还没测、但同样决定设计的东西"></a>还没测、但同样决定设计的东西</h2><p>fio 测不到的部分，需要另写微基准：</p>
+<ul>
+<li><strong>单核 crc32c 与 memcpy 上限。</strong> 方案 C&#x2F;E 把编码全压在一个进程上，这两条决定单写者的 CPU 天花板。<br>硬件 crc32c 约 10–20 GB&#x2F;s、memcpy 约 10 GB&#x2F;s，1 MB 记录的一次 memcpy 就是约 100 µs<br>—— 已与 IO 同量级，这正是大记录必须零拷贝的原因。</li>
+<li><strong>撕裂写的真实行为。</strong> 只有断电测试才能验证「单扇区写是否原子」，T0 只能读出设备<strong>自己声明</strong>的 <code>AWUPF</code>。<br>声明与实际不符的设备是存在的 —— 所以全部五个设计都不依赖硬件原子性，<br>而是靠 crc 提供<strong>语义上</strong>的全或无。这项测试的结果不会改变设计，只会改变对设备的信任程度。</li>
+<li><strong><code>io_uring</code> SQE 填充开销与批量提交的实际摊销。</strong> 设计里「约 100 ns 量级」的假设需要实测确认。</li>
+</ul>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
