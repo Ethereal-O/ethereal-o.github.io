@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/jq/代码/hgi/docs/scenario_test_report.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="HGI 场景测试报告测试日期：2026-10-04整理日期：2026-10-05 1. 摘要本轮测试主要比较没有投机探索的 Baseline 与当前 Speculate 实现，而不是只验证功能能否运行。 排除短事实题的随机猜值样本和无 token 的确定性故障注入后，两组各包含 13 次正式提交：    指标 Baseline Speculate 变化    Enter 到完整回答累计 143.3">
+<meta property="og:type" content="website">
+<meta property="og:title" content="hgi&#x2F;docs&#x2F;SCENARIO_TEST_REPORT.md">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/jq/%E4%BB%A3%E7%A0%81/hgi/docs/SCENARIO_TEST_REPORT.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="HGI 场景测试报告测试日期：2026-10-04整理日期：2026-10-05 1. 摘要本轮测试主要比较没有投机探索的 Baseline 与当前 Speculate 实现，而不是只验证功能能否运行。 排除短事实题的随机猜值样本和无 token 的确定性故障注入后，两组各包含 13 次正式提交：    指标 Baseline Speculate 变化    Enter 到完整回答累计 143.3">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-07T14:03:30.225Z">
+<meta property="article:modified_time" content="2026-10-07T14:03:30.225Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            hgi/docs/SCENARIO_TEST_REPORT.md -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h1 id="HGI-场景测试报告"><a href="#HGI-场景测试报告" class="headerlink" title="HGI 场景测试报告"></a>HGI 场景测试报告</h1><p>测试日期：2026-10-04<br>整理日期：2026-10-05</p>
+<h2 id="1-摘要"><a href="#1-摘要" class="headerlink" title="1. 摘要"></a>1. 摘要</h2><p>本轮测试主要比较没有投机探索的 Baseline 与当前 Speculate 实现，而不是只验证功能能否运行。</p>
+<p>排除短事实题的随机猜值样本和无 token 的确定性故障注入后，两组各包含 13 次正式提交：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th align="right">Baseline</th>
+<th align="right">Speculate</th>
+<th align="right">变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Enter 到完整回答累计</td>
+<td align="right">143.355 s</td>
+<td align="right">107.892 s</td>
+<td align="right"><strong>-24.7%</strong></td>
+</tr>
+<tr>
+<td>可观测 tokens</td>
+<td align="right">23,863</td>
+<td align="right">26,388</td>
+<td align="right">+10.6%</td>
+</tr>
+<tr>
+<td>可观测成本</td>
+<td align="right"><code>$0.00858</code></td>
+<td align="right"><code>$0.00954</code></td>
+<td align="right">+11.2%</td>
+</tr>
+</tbody></table>
+<p>当前 Speculate 可以概括为：用约 11% 的可观测成本增长，换取约 25% 的 Enter 后等待时间下降。它不适合全局开启，最有价值的场景是连续调试、意图反转、外部修改后的追问和跨主题追问。</p>
+<h2 id="2-测试设计"><a href="#2-测试设计" class="headerlink" title="2. 测试设计"></a>2. 测试设计</h2><h3 id="2-1-对照组"><a href="#2-1-对照组" class="headerlink" title="2.1 对照组"></a>2.1 对照组</h3><ul>
+<li><strong>Baseline</strong>：不启动 Explorer，<code>artifact_limit=0</code>，近似没有投机探索和 Artifact 注入的原始执行路径。</li>
+<li><strong>Speculate</strong>：使用同一请求和内容相同的独立工作区，在提交前给予 Explorer 固定探索窗口。</li>
+<li>标准探索窗口为 6 秒；模拟快速提交的短请求使用 1 秒窗口。</li>
+<li>主性能指标是 Enter 到完整回答的延迟，提交前探索窗口不计入该指标。</li>
+</ul>
+<h3 id="2-2-运行配置"><a href="#2-2-运行配置" class="headerlink" title="2.2 运行配置"></a>2.2 运行配置</h3><ul>
+<li>模型：<code>gpt-5.6-luna</code></li>
+<li>Reasoning effort：<code>low</code></li>
+<li>单次最大输出：1,200 tokens</li>
+<li>Python：项目 <code>.venv</code>，基于 Conda <code>Python311</code></li>
+<li>写权限：只有连续调试场景允许在隔离工作区写入，其余真实场景均为 <code>deny</code></li>
+<li>工作区：每个变体使用独立生成的微型 monorepo，避免缓存和修改互相污染</li>
+</ul>
+<p>合成仓库包含：认证缺陷与测试、本地缓存、共享配置、API 和 Worker 消费者、40 个无关服务目录，以及一个 900 行大文件。</p>
+<h3 id="2-3-成本口径"><a href="#2-3-成本口径" class="headerlink" title="2.3 成本口径"></a>2.3 成本口径</h3><p>按以下标准单价估算：</p>
+<ul>
+<li>Input：<code>$0.20 / 1M tokens</code></li>
+<li>Cached input：<code>$0.02 / 1M tokens</code></li>
+<li>Output：<code>$1.20 / 1M tokens</code></li>
+</ul>
+<p>只统计 provider 返回 usage 的请求。Speculate 组有 15 次被取消的 Explorer 没有最终 usage，因此本文中的 Speculate 成本是可观测下界。</p>
+<h2 id="3-A-x2F-B-结果"><a href="#3-A-x2F-B-结果" class="headerlink" title="3. A&#x2F;B 结果"></a>3. A&#x2F;B 结果</h2><p>下表百分比均为 <code>Speculate 相对 Baseline</code>，负数表示减少。只有两组答案都满足质量检查时，性能差异才作为有效结果。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th align="right">Baseline Enter</th>
+<th align="right">Speculate Enter</th>
+<th align="right">延迟</th>
+<th align="right">Tokens</th>
+<th align="right">成本</th>
+<th>质量结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>连续调试，两轮合计</td>
+<td align="right">25.056 s</td>
+<td align="right">18.673 s</td>
+<td align="right"><strong>-25.5%</strong></td>
+<td align="right">+11.1%</td>
+<td align="right">+11.9%</td>
+<td>均正确定位、修改并通过测试</td>
+</tr>
+<tr>
+<td>同文件、不同意图，两轮</td>
+<td align="right">18.719 s</td>
+<td align="right">17.624 s</td>
+<td align="right">-5.8%</td>
+<td align="right">-11.1%</td>
+<td align="right">+1.3%</td>
+<td>安全与性能回答均正确</td>
+</tr>
+<tr>
+<td>运行中意图反转</td>
+<td align="right">21.812 s</td>
+<td align="right">16.247 s</td>
+<td align="right"><strong>-25.5%</strong></td>
+<td align="right">-6.3%</td>
+<td align="right"><strong>-13.6%</strong></td>
+<td>均遵循最终本地缓存意图</td>
+</tr>
+<tr>
+<td>Monorepo 跨包链路</td>
+<td align="right">16.772 s</td>
+<td align="right">14.460 s</td>
+<td align="right">-13.8%</td>
+<td align="right">+33.5%</td>
+<td align="right">+25.1%</td>
+<td>均找到两个消费者</td>
+</tr>
+<tr>
+<td>大文件窄查询</td>
+<td align="right">5.315 s</td>
+<td align="right">3.486 s</td>
+<td align="right"><strong>-34.4%</strong></td>
+<td align="right">+11.9%</td>
+<td align="right">+42.0%</td>
+<td>均命中第 778 行</td>
+</tr>
+<tr>
+<td>外部修改后再分析，两轮</td>
+<td align="right">10.071 s</td>
+<td align="right">3.940 s</td>
+<td align="right"><strong>-60.9%</strong></td>
+<td align="right">+8.0%</td>
+<td align="right">+6.4%</td>
+<td>均读取到修改后的实现</td>
+</tr>
+<tr>
+<td>跨主题追问，两轮</td>
+<td align="right">15.655 s</td>
+<td align="right">5.702 s</td>
+<td align="right"><strong>-63.6%</strong></td>
+<td align="right">+96.6%</td>
+<td align="right">+85.7%</td>
+<td>均正确；Speculate Artifact 增至 2 份</td>
+</tr>
+<tr>
+<td>一句话答案</td>
+<td align="right">4.036 s</td>
+<td align="right">2.093 s</td>
+<td align="right"><strong>-48.1%</strong></td>
+<td align="right">+36.4%</td>
+<td align="right">+31.3%</td>
+<td>均正确</td>
+</tr>
+<tr>
+<td>详细答案</td>
+<td align="right">25.919 s</td>
+<td align="right">25.667 s</td>
+<td align="right">-1.0%</td>
+<td align="right"><strong>-24.7%</strong></td>
+<td align="right">-4.4%</td>
+<td>均正确</td>
+</tr>
+</tbody></table>
+<p>全量 15 次正式提交口径下，Enter 延迟降低 24.3%，token 增加 10.4%，可观测成本增加 11.1%。Baseline 完成 37 次模型调用；Speculate 完成 23 次 Committed 调用和 12 次 Explorer 调用，另取消 15 次 Explorer。投机探索减少了正式阶段调用，但增加了总 provider 请求数。</p>
+<h2 id="4-场景分析"><a href="#4-场景分析" class="headerlink" title="4. 场景分析"></a>4. 场景分析</h2><h3 id="4-1-连续调试"><a href="#4-1-连续调试" class="headerlink" title="4.1 连续调试"></a>4.1 连续调试</h3><p>两组均先定位 <code>validate_token</code> 使用 <code>startswith</code> 导致的前缀误判，再修改为精确比较并运行针对性测试。Speculate 将两轮 Enter 延迟降低 25.5%，代价是 token 和成本各增加约 11%。这是较符合预期的延迟换成本场景。</p>
+<h3 id="4-2-意图变化"><a href="#4-2-意图变化" class="headerlink" title="4.2 意图变化"></a>4.2 意图变化</h3><p>同文件从安全分析切换到性能分析时，Speculate 仅快 5.8%，不足以排除单轮网络波动。运行中的目标从 Redis 方案反转为本地缓存分析时，旧 Explorer 被取消，新 Explorer 启动，最终延迟、token 和成本同时下降；这是本轮唯一三项指标均明显改善的真实场景。</p>
+<h3 id="4-3-大仓库与大输出"><a href="#4-3-大仓库与大输出" class="headerlink" title="4.3 大仓库与大输出"></a>4.3 大仓库与大输出</h3><p>Monorepo 跨包分析的 Enter 延迟下降 13.8%，但成本增加 25.1%。大文件使用窄查询时延迟下降 34.4%，成本增加 42%。另一次功能边界测试强制先宽读 400 行，16K 工具上下文预算在约第 81 行截断，模型无法回答第 778 行的问题；改用 <code>grep</code> 窄查询后可以正确回答。</p>
+<p>这说明硬预算能限制最坏成本，但预算耗尽后完全关闭工具会牺牲恢复能力。生产实现应预留一次只允许 <code>grep</code> 或窄范围 <code>read_file</code> 的恢复轮次。</p>
+<h3 id="4-4-缓存复用与修改"><a href="#4-4-缓存复用与修改" class="headerlink" title="4.4 缓存复用与修改"></a>4.4 缓存复用与修改</h3><p>外部修改后的第二轮分析中，Speculate 延迟降低 60.9%，且没有复用旧实现。确定性测试也确认文件哈希变化后旧 Evidence 的可复用条目降为 0，并产生 stale unresolved。</p>
+<p>跨主题追问获得最大延迟收益，但 token 和成本接近翻倍。第二轮缓存命中后 Artifact 从 1 份增长到 2 份，新 Artifact 还混入了仅来自宽泛文件清单的无关 <code>large_module.py</code> 路径。当前缓存仍缺少 evidence 级去重和 glob Evidence 质量过滤。</p>
+<h3 id="4-5-输出长度"><a href="#4-5-输出长度" class="headerlink" title="4.5 输出长度"></a>4.5 输出长度</h3><p>一句话答案的 Enter 延迟下降 48.1%，但成本增加 31.3%。详细回答只快 1%，说明最终长文本生成几乎完全掩盖投机探索收益。已要求详细输出的请求不适合默认投机，控制最终 output tokens 比提前探索更有效。</p>
+<h2 id="5-短请求异常"><a href="#5-短请求异常" class="headerlink" title="5. 短请求异常"></a>5. 短请求异常</h2><p><code>DEFAULT_TTL</code> 数值问题连续运行 5 组。Explorer 在 1 秒窗口内均未产生 Artifact，Committed 也没有调用读取工具，而是直接生成数值：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th align="right">Baseline</th>
+<th align="right">Speculate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>正确次数</td>
+<td align="right">4&#x2F;5</td>
+<td align="right">2&#x2F;5</td>
+</tr>
+<tr>
+<td>Enter 延迟中位数</td>
+<td align="right">3.406 s</td>
+<td align="right">1.993 s</td>
+</tr>
+</tbody></table>
+<p>Speculate 中位延迟低约 41.5%，但正确率不可接受，不能视为有效性能收益。错误不是由 Artifact 污染造成的，两组都存在未读取文件而直接猜值的问题。对可精确读取的事实题，应要求 Committed 至少执行一次窄 <code>grep</code> 或 <code>read_file</code>，并跳过 Explorer。</p>
+<h2 id="6-功能边界"><a href="#6-功能边界" class="headerlink" title="6. 功能边界"></a>6. 功能边界</h2><p>除性能 A&#x2F;B 外，还验证了以下控制和降级行为：</p>
+<ul>
+<li>连续修改后针对性测试通过，受影响 Artifact 同步失效并可后台刷新。</li>
+<li>运行中意图反转会取消旧 Explorer，并为新目标建立探索任务。</li>
+<li>外部文件修改会通过内容哈希使旧 Evidence 失效。</li>
+<li>Judge、Summary 和 Explorer 连续故障时，Committed Agent 仍能完成降级提交。</li>
+<li>16K Committed 工具上下文预算会截断宽读结果，并提示模型缩小查询。</li>
+<li>短请求提交时仍在运行的 Judge 或 Explorer 能被取消，不阻塞正式提交。</li>
+</ul>
+<h2 id="7-结论与策略"><a href="#7-结论与策略" class="headerlink" title="7. 结论与策略"></a>7. 结论与策略</h2><p>Speculation 不应作为全局默认开关，而应由请求特征和已有状态选择性启用：</p>
+<table>
+<thead>
+<tr>
+<th>请求类型</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>连续调试、近期追问、修改后再分析</td>
+<td>开启</td>
+</tr>
+<tr>
+<td>意图已较稳定且需要多文件读取</td>
+<td>开启，但限制 Explorer 调用数</td>
+</tr>
+<tr>
+<td>跨主题共享证据</td>
+<td>有条件开启，先修复 Evidence 去重</td>
+</tr>
+<tr>
+<td>短事实题</td>
+<td>关闭，直接执行窄读取</td>
+</tr>
+<tr>
+<td>明确要求详细长报告</td>
+<td>关闭或降低探索预算</td>
+</tr>
+<tr>
+<td>成本优先的 Monorepo &#x2F; 大文件分析</td>
+<td>默认关闭，按延迟目标手动开启</td>
+</tr>
+</tbody></table>
+<p>后续优化优先级：</p>
+<ol>
+<li>为精确事实题增加强制验证策略，禁止无证据直接生成数值。</li>
+<li>按 <code>(path, content_hash, claim)</code> 合并 Evidence，过滤只有文件名的 glob 证据。</li>
+<li>用已完成 Explorer 调用数或已获得 Evidence 数量控制投机预算，而不是只依赖固定时间窗口。</li>
+<li>工具预算耗尽前保留一次窄查询恢复机会。</li>
+<li>连续运行 10-20 轮并报告 P50&#x2F;P95，同时从 provider 账单校准取消请求的真实成本。</li>
+</ol>
+<h2 id="8-复现与验证"><a href="#8-复现与验证" class="headerlink" title="8. 复现与验证"></a>8. 复现与验证</h2><p>性能 A&#x2F;B：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.venv/bin/python benchmarks/speculation_ab.py \</span><br><span class="line">  --model gpt-5.6-luna \</span><br><span class="line">  --reasoning-effort low \</span><br><span class="line">  --max-output-tokens 1200 \</span><br><span class="line">  --window-seconds 6</span><br></pre></td></tr></table></figure></div>
+
+<p>功能边界矩阵：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.venv/bin/python benchmarks/scenario_matrix.py \</span><br><span class="line">  --model gpt-5.6-luna \</span><br><span class="line">  --reasoning-effort low \</span><br><span class="line">  --max-output-tokens 1200</span><br></pre></td></tr></table></figure></div>
+
+<p>代码库验证状态：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">47 passed</span><br><span class="line">No broken requirements found.</span><br><span class="line">compileall passed</span><br><span class="line">git diff --check passed</span><br></pre></td></tr></table></figure></div>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

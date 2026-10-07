@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/jq/代码/raf/docs/testing.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="What the suite tests, and what each test is forThere are two. raf_core_test is 24 tests in one file, under two seconds,holding the properties raf would be broken without –tests&#x2F;core&#x2F;README.md says wha">
+<meta property="og:type" content="website">
+<meta property="og:title" content="raf&#x2F;docs&#x2F;testing.md">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/jq/%E4%BB%A3%E7%A0%81/raf/docs/testing.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="What the suite tests, and what each test is forThere are two. raf_core_test is 24 tests in one file, under two seconds,holding the properties raf would be broken without –tests&#x2F;core&#x2F;README.md says wha">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:modified_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            raf/docs/testing.md -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h1 id="What-the-suite-tests-and-what-each-test-is-for"><a href="#What-the-suite-tests-and-what-each-test-is-for" class="headerlink" title="What the suite tests, and what each test is for"></a>What the suite tests, and what each test is for</h1><p>There are two. <code>raf_core_test</code> is 24 tests in one file, under two seconds,<br>holding the properties raf would be broken without –<br><code>tests/core/README.md</code> says what it leaves out and shows which deliberate<br>breakages it does and does not catch. <code>raf_test</code>, described below, is the<br>whole thing: 164 tests, and the one to run before shipping.</p>
+<p>164 tests in 14 files, one binary (<code>raf_test</code>) – 173 when the io_uring<br>backend is built in, because the IO-layer tests run once per backend. Every<br>one of them is deterministic: payloads are a pure function of <code>(writer, sequence, size)</code> and<br>every rendezvous between threads or processes is a <code>std::latch</code> or a pipe, so<br>a failure reproduces. Nothing sleeps and nothing is random.</p>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cmake -B build -DRAF_BUILD_TESTS=ON &amp;&amp; cmake --build build -j</span><br><span class="line">./build/raf_test                        <span class="comment"># all of it, ~20 s</span></span><br><span class="line">./build/raf_test --gtest_filter=<span class="string">&#x27;DirectRead.*&#x27;</span></span><br><span class="line">RAF_TEST_LOG=error ./build/raf_test     <span class="comment"># damage reports are muted by default</span></span><br><span class="line">RAF_STRESS_SCALE=8 ./build/raf_test     <span class="comment"># longer soak</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># the io_uring backend, against a liburing in a local prefix</span></span><br><span class="line">PKG_CONFIG_PATH=/opt/liburing/lib/pkgconfig \</span><br><span class="line">  cmake -B build-uring -DRAF_BUILD_TESTS=ON -DRAF_URING=ON &amp;&amp; \</span><br><span class="line">  cmake --build build-uring -j &amp;&amp; ./build-uring/raf_test</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="The-fourteen-files"><a href="#The-fourteen-files" class="headerlink" title="The fourteen files"></a>The fourteen files</h2><table>
+<thead>
+<tr>
+<th>file</th>
+<th>layer under test</th>
+<th>n</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>test_api.cpp</code></td>
+<td><code>include/raf/raf.h</code> — the public contract</td>
+<td>21</td>
+</tr>
+<tr>
+<td><code>test_iteration.cpp</code></td>
+<td><code>RecordReader::readNext</code> ordering and visibility</td>
+<td>11</td>
+</tr>
+<tr>
+<td><code>test_boundary.cpp</code></td>
+<td>sizes and limits at both ends</td>
+<td>23</td>
+</tr>
+<tr>
+<td><code>test_errors.cpp</code></td>
+<td>refused opens, failed writes, damage on disk</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>test_faults.cpp</code></td>
+<td>injected failures, through <code>tests/fault_backend.h</code></td>
+<td>7</td>
+</tr>
+<tr>
+<td><code>test_concurrency.cpp</code></td>
+<td>threads</td>
+<td>9</td>
+</tr>
+<tr>
+<td><code>test_multiprocess.cpp</code></td>
+<td>processes, and <code>flock</code> between them</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>test_recovery.cpp</code></td>
+<td>what survives a process that dies</td>
+<td>9</td>
+</tr>
+<tr>
+<td><code>test_stress.cpp</code></td>
+<td>the same properties, run wide</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>test_segment.cpp</code></td>
+<td><code>src/store/segment.cpp</code> — format and scan</td>
+<td>25</td>
+</tr>
+<tr>
+<td><code>test_direct.cpp</code></td>
+<td>the O_DIRECT read path and <code>ReadWindow</code></td>
+<td>13</td>
+</tr>
+<tr>
+<td><code>test_format.cpp</code></td>
+<td><code>src/store/format.h</code> — layout and checksums</td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>test_crc32c.cpp</code></td>
+<td><code>src/common/crc32c.cpp</code></td>
+<td>9</td>
+</tr>
+<tr>
+<td><code>test_backend.cpp</code></td>
+<td><code>src/io/posix_backend.cpp</code>, <code>uring_backend.cpp</code></td>
+<td>9 × backends</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="test-api-cpp-—-the-public-contract"><a href="#test-api-cpp-—-the-public-contract" class="headerlink" title="test_api.cpp — the public contract"></a><code>test_api.cpp</code> — the public contract</h2><p>What the calls return, what they promise, and what they do when used out of<br>order. Against <code>RecordWriter</code> &#x2F; <code>RecordReader</code> in <code>include/raf/raf.h</code>.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>function</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>AWriterCreatesTheArchive</code></td>
+<td><code>RecordWriter::RecordWriter</code></td>
+<td>constructing creates the directory and one segment</td>
+</tr>
+<tr>
+<td><code>AppendReturnsAnIndexThatReadsBack</code></td>
+<td><code>append</code> → <code>read</code></td>
+<td>the returned index resolves to the bytes appended</td>
+</tr>
+<tr>
+<td><code>AppendBatchReturnsOneIndexPerValue</code></td>
+<td><code>appendBatch</code></td>
+<td>one index out per value in, in order</td>
+</tr>
+<tr>
+<td><code>AnEmptyBatchDoesNothing</code></td>
+<td><code>appendBatch</code></td>
+<td>an empty vector is not an error</td>
+</tr>
+<tr>
+<td><code>RecordsAreOnDiskBeforeAppendReturns</code></td>
+<td><code>append</code>, <code>Options::sync</code></td>
+<td>the durability promise: the bytes are readable from a separate reader the instant <code>append</code> returns</td>
+</tr>
+<tr>
+<td><code>ReadNextWalksTheArchiveInOrder</code></td>
+<td><code>readNext</code></td>
+<td>iteration yields append order</td>
+</tr>
+<tr>
+<td><code>ReadNextEndsWithNullopt</code></td>
+<td><code>readNext</code></td>
+<td>end of archive is <code>nullopt</code>, not an error</td>
+</tr>
+<tr>
+<td><code>CurrentIndexNamesTheRecordReadNextReturned</code></td>
+<td><code>currentIndex</code></td>
+<td>the index names the record just handed out, not the next one</td>
+</tr>
+<tr>
+<td><code>RewindStartsTheWalkOver</code></td>
+<td><code>rewind</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>PayloadsAreOpaqueBytes</code></td>
+<td><code>append</code></td>
+<td>embedded NULs and arbitrary bytes survive</td>
+</tr>
+<tr>
+<td><code>WritingAfterCloseIsAProgrammingError</code></td>
+<td><code>close</code>, <code>append</code></td>
+<td>misuse throws rather than corrupting</td>
+</tr>
+<tr>
+<td><code>ReadingAfterCloseIsAProgrammingError</code></td>
+<td><code>close</code>, <code>read</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ClosingTwiceIsAllowed</code></td>
+<td><code>close</code></td>
+<td>idempotent</td>
+</tr>
+<tr>
+<td><code>ClosingAWriterReleasesItsSegment</code></td>
+<td><code>close</code> → <code>Segment::unlock</code></td>
+<td>the next writer can take it</td>
+</tr>
+<tr>
+<td><code>DestroyingAWriterReleasesItsSegment</code></td>
+<td><code>~RecordWriter</code></td>
+<td>the same without an explicit close</td>
+</tr>
+<tr>
+<td><code>WritersDoNotShareASegment</code></td>
+<td><code>Archive::acquireForWrite</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>OpeningAnArchiveThatIsNotThereFails</code></td>
+<td><code>RecordReader::RecordReader</code></td>
+<td><code>Archive::requireExists</code></td>
+</tr>
+<tr>
+<td><code>AnArchiveWithNoRecordsReadsAsEmpty</code></td>
+<td><code>readNext</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AWriterCanReopenAnArchiveItAlreadyWrote</code></td>
+<td><code>RecordWriter::RecordWriter</code></td>
+<td>reopen appends rather than truncates</td>
+</tr>
+<tr>
+<td><code>ReadersAndWritersMoveWithoutLosingTheirArchive</code></td>
+<td>move ctor &#x2F; move assign</td>
+<td></td>
+</tr>
+<tr>
+<td><code>StringViewOverloadsBehaveLikeTheStringOnes</code></td>
+<td><code>append(std::string_view)</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="test-iteration-cpp-—-ordering-and-visibility"><a href="#test-iteration-cpp-—-ordering-and-visibility" class="headerlink" title="test_iteration.cpp — ordering and visibility"></a><code>test_iteration.cpp</code> — ordering and visibility</h2><p>Two promises: records already complete when a reader opened come out in one<br>order, the same for every reader; records appended afterwards keep the order<br>of the writer that wrote them, with no order defined between writers.<br>Against <code>RecordReader::readNext</code> &#x2F; <code>rewind</code> in <code>src/api/reader.cpp</code>.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>OneWriterComesBackInAppendOrder</code></td>
+<td>the single-writer case, exactly</td>
+</tr>
+<tr>
+<td><code>ReadersAgreeOnWhatWasThereWhenTheyOpened</code></td>
+<td>two readers over the same archive produce the same prefix</td>
+</tr>
+<tr>
+<td><code>TheOrderOfWhatWasAlreadyThereDoesNotDependOnWhenYouRead</code></td>
+<td>opening later does not reorder the past</td>
+</tr>
+<tr>
+<td><code>ARecordAppendedAfterTheReaderCaughtUpBecomesVisible</code></td>
+<td>tailing a live writer</td>
+</tr>
+<tr>
+<td><code>AWriterThatStartedAfterTheReaderBecomesVisible</code></td>
+<td>a segment created after the reader opened is picked up</td>
+</tr>
+<tr>
+<td><code>ARecordStillBeingWrittenDoesNotHideAnotherSegmentsRecords</code></td>
+<td>an unfinished record stalls its own cursor, not the walk — the difference between “nothing more for now” and “nothing more until that writer finishes”</td>
+</tr>
+<tr>
+<td><code>RandomReadsAgreeWithTheWalk</code></td>
+<td><code>read(index)</code> and <code>readNext</code> return the same bytes</td>
+</tr>
+<tr>
+<td><code>RewindReplaysTheSameRecords</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RewindPicksUpWhatWasWrittenSinceTheReaderOpened</code></td>
+<td>rewind re-scans rather than replaying a snapshot</td>
+</tr>
+<tr>
+<td><code>EmptyRecordsTakePartInTheWalk</code></td>
+<td>a zero-length record is a record, not an end marker</td>
+</tr>
+<tr>
+<td><code>SegmentRolloverKeepsTheWalkInOrder</code></td>
+<td>order holds across a segment boundary</td>
+</tr>
+</tbody></table>
+<h2 id="test-boundary-cpp-—-the-edges"><a href="#test-boundary-cpp-—-the-edges" class="headerlink" title="test_boundary.cpp — the edges"></a><code>test_boundary.cpp</code> — the edges</h2><p>Empty and maximum records, batch and segment boundaries, and lengths that<br>have to be turned away before anything is reserved or written.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>function</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PreallocationChangesNothingAReaderCanSee</code></td>
+<td><code>Segment::configurePreallocation</code></td>
+<td>preallocation moves zeros around, never what a reader sees</td>
+</tr>
+<tr>
+<td><code>APreallocatedSegmentReopensAtTheRightPlace</code></td>
+<td><code>Segment::recover</code></td>
+<td>the trailing zeros are not mistaken for records</td>
+</tr>
+<tr>
+<td><code>EmptyRecordsRoundTrip</code></td>
+<td><code>append(&quot;&quot;)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RecordSizesFromOneByteUpwards</code></td>
+<td><code>append</code></td>
+<td>every small size, not a sample of them</td>
+</tr>
+<tr>
+<td><code>TheLargestAllowedRecordRoundTrips</code></td>
+<td><code>kMaxRecordSize</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ARecordOverTheLimitIsRefusedBeforeAnythingIsWritten</code></td>
+<td><code>append</code></td>
+<td>rejection leaves the file untouched</td>
+</tr>
+<tr>
+<td><code>MaxRecordBytesRaisesWhatAppendWillTake</code></td>
+<td><code>Options::maxRecordBytes</code></td>
+<td>and a reader told nothing about it still returns the record: the limit travels in the segment header</td>
+</tr>
+<tr>
+<td><code>MaxRecordBytesLowersItToo</code></td>
+<td><code>Options::maxRecordBytes</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MaxRecordBytesIsCheckedWhenTheWriterOpens</code></td>
+<td><code>RecordWriter::RecordWriter</code></td>
+<td>zero means the default; over <code>kRecordSizeCeiling</code> throws rather than silently clamping</td>
+</tr>
+<tr>
+<td><code>ASegmentWithNoLimitInItsHeaderUsesTheDefault</code></td>
+<td><code>format::recordLimit</code></td>
+<td>a segment written before the field existed still reads</td>
+</tr>
+<tr>
+<td><code>AnOversizedValueRejectsTheWholeBatch</code></td>
+<td><code>appendBatch</code></td>
+<td>all-or-nothing</td>
+</tr>
+<tr>
+<td><code>BatchesSpanningTheWriteChunkBoundary</code></td>
+<td><code>Segment::appendRecords</code></td>
+<td>the iovec chunking loop</td>
+</tr>
+<tr>
+<td><code>WritersRollOverToANewSegment</code></td>
+<td><code>Archive::acquireForWrite</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ABatchThatOutgrowsASegmentIsSplitAcrossSegments</code></td>
+<td><code>appendBatch</code></td>
+<td>a batch is not required to fit one segment</td>
+</tr>
+<tr>
+<td><code>ARecordLargerThanTheSegmentLimitGoesIntoAFreshSegment</code></td>
+<td></td>
+<td>a record always has somewhere to go</td>
+</tr>
+<tr>
+<td><code>ASegmentLimitWithNoRoomForRecordsIsRejected</code></td>
+<td><code>Options::maxSegmentBytes</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ASegmentLimitBeyondWhatAnIndexCanAddressIsClamped</code></td>
+<td><code>format::makeIndex</code></td>
+<td>the limit is clamped to what 64 bits of index can name</td>
+</tr>
+<tr>
+<td><code>TheFitCheckCannotWrapHoweverLargeTheLimitIs</code></td>
+<td><code>src/api/writer.cpp:82</code></td>
+<td><code>offset + used + span</code> is unsigned; a wrap would make an over-limit batch look like it fits. Every term is bounded, and this is the bound</td>
+</tr>
+<tr>
+<td><code>AWholeBatchAgainstTheClampedMaximumStillResolves</code></td>
+<td><code>appendBatch</code></td>
+<td>the same from the behavioural end: a wrap would put records past the cap and their indexes would not resolve</td>
+</tr>
+<tr>
+<td><code>ALengthThatCouldOverflowASpanIsRefusedBeforeAnythingIsWritten</code></td>
+<td><code>format::recordSpan</code></td>
+<td>the refusal happens before anything is reserved</td>
+</tr>
+<tr>
+<td><code>IndexesThatNameNothingReadAsEmpty</code></td>
+<td><code>read(index)</code></td>
+<td>a plausible but unused index is <code>nullopt</code>, not damage</td>
+</tr>
+<tr>
+<td><code>NegativeIndexesAreAProgrammingError</code></td>
+<td><code>read(index)</code></td>
+<td>throws</td>
+</tr>
+<tr>
+<td><code>RecordsRightAtTheSegmentLimitFit</code></td>
+<td></td>
+<td>off-by-one at the segment edge</td>
+</tr>
+</tbody></table>
+<h2 id="test-errors-cpp-—-things-going-wrong"><a href="#test-errors-cpp-—-things-going-wrong" class="headerlink" title="test_errors.cpp — things going wrong"></a><code>test_errors.cpp</code> — things going wrong</h2><p>The property throughout: a failure never lets a broken record pass for a<br>complete one, and never leaves the writer wedged.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>AnArchiveUnderAMissingDirectoryFails</code></td>
+<td>open refuses rather than creating a tree</td>
+</tr>
+<tr>
+<td><code>AnArchivePathThatIsAFileFails</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ADirectoryWeCannotWriteToFails</code></td>
+<td>permission failure surfaces as <code>std::system_error</code></td>
+</tr>
+<tr>
+<td><code>AWriteThatRunsOutOfRoomFailsCleanly</code></td>
+<td><code>RLIMIT_FSIZE</code> mid-write: the writer stays usable, the half-written record is not returned</td>
+</tr>
+<tr>
+<td><code>ADamagedPayloadIsNeverReturned</code></td>
+<td><code>Segment::readPayload</code> rejects on the payload CRC</td>
+</tr>
+<tr>
+<td><code>ADamagedRecordHeaderStopsIterationRatherThanGuessing</code></td>
+<td><code>format::metaIsValid</code> — no resynchronisation heuristics</td>
+</tr>
+<tr>
+<td><code>DamageInOneSegmentDoesNotStopTheOthers</code></td>
+<td>one bad file does not cost the archive</td>
+</tr>
+<tr>
+<td><code>ASegmentWithAnUnreadableHeaderIsSkipped</code></td>
+<td><code>Segment::verifyHeader</code></td>
+</tr>
+<tr>
+<td><code>AnEmptyFileWithASegmentNameIsAdoptedRatherThanRejected</code></td>
+<td>a zero-length segment is what a crash between create and header leaves</td>
+</tr>
+<tr>
+<td><code>DamageIsReportedThroughTheLoggerRatherThanSilently</code></td>
+<td><code>raf::logger()</code> gets the report</td>
+</tr>
+</tbody></table>
+<h2 id="test-faults-cpp-—-injected-failures"><a href="#test-faults-cpp-—-injected-failures" class="headerlink" title="test_faults.cpp — injected failures"></a><code>test_faults.cpp</code> — injected failures</h2><p>Everything raf does to a file goes through <code>IoBackend</code>, so that is where a<br>failure can be injected the filesystem will not produce on demand.<br><code>tests/fault_backend.h</code> holds a <code>ForwardingBackend</code> that passes everything<br>through and a <code>FaultBackend</code> with four knobs: how many writes to let past<br>before bending one, how many bytes of the bent write land before it reports<br>EIO, an offset to fail writes at, and whether <code>fsync</code> fails. It also records<br><code>syncDirectory</code> calls, which is the only way to assert on one — the<br>durability of a new segment’s directory entry leaves no trace in the archive.</p>
+<p>These drive the store layer directly, since that is the level a backend is<br>injectable at.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>function</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>AWriteThatFailsHalfwayLeavesNoPieceOfARecord</code></td>
+<td><code>Segment::appendRecords</code></td>
+<td>the rollback in the catch block: a header with no payload behind it is cut off, not left for recovery</td>
+</tr>
+<tr>
+<td><code>AWriterCarriesOnAfterAFailedWrite</code></td>
+<td><code>Segment::appendRecords</code></td>
+<td>not wedged — the same segment takes records again once the failure clears</td>
+</tr>
+<tr>
+<td><code>AFailedAppendHandsOutNothingAReaderWillHonour</code></td>
+<td><code>format::makeIndex</code></td>
+<td>the offset the failed record would have had goes to the next one</td>
+</tr>
+<tr>
+<td><code>RecoveryDropsAPartialRecordTheRollbackCouldNotRemove</code></td>
+<td><code>Segment::recover</code></td>
+<td>the rollback is best effort and can itself fail, so a scan has to reach the same verdict alone</td>
+</tr>
+<tr>
+<td><code>ASegmentWhoseHeaderCannotBeSyncedIsNotHandedBack</code></td>
+<td><code>Segment::initialize</code></td>
+<td>a failed header sync must not yield a usable segment; the alternative is a file every later scan special-cases</td>
+</tr>
+<tr>
+<td><code>ANewSegmentSyncsTheDirectoryItWasCreatedIn</code></td>
+<td><code>Archive::acquireForWrite</code></td>
+<td><code>src/store/archive.cpp:55</code> — a crash before it would leave records with no name. Reopening an existing segment syncs nothing</td>
+</tr>
+<tr>
+<td><code>AnAppendSurvivesAFrontierThatCannotBeWritten</code></td>
+<td><code>Segment::publishFrontier</code></td>
+<td>the frontier is a diagnostic: losing it costs a reader a worse answer, never a wrong one, and it is given up on once rather than retried per append</td>
+</tr>
+</tbody></table>
+<h2 id="test-concurrency-cpp-—-threads"><a href="#test-concurrency-cpp-—-threads" class="headerlink" title="test_concurrency.cpp — threads"></a><code>test_concurrency.cpp</code> — threads</h2><table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>AWriterPerThread</code></td>
+<td>N writers, N segments, every record lands once</td>
+</tr>
+<tr>
+<td><code>OneWriterSharedByManyThreads</code></td>
+<td>one <code>RecordWriter</code> is safe to share</td>
+</tr>
+<tr>
+<td><code>BatchesFromManyThreadsStayContiguous</code></td>
+<td>a batch is never interleaved with another thread’s</td>
+</tr>
+<tr>
+<td><code>RandomReadsFromManyThreadsShareOneReader</code></td>
+<td><code>RecordReader::read</code> is reentrant</td>
+</tr>
+<tr>
+<td><code>ReadNextFromManyThreadsHandsOutEachRecordOnce</code></td>
+<td><code>readNext</code> is a queue, not a broadcast</td>
+</tr>
+<tr>
+<td><code>AReaderSeesEachRoundOfWritesAsItLands</code></td>
+<td>visibility under load, round by round</td>
+</tr>
+<tr>
+<td><code>ReadersAndWritersRunTogether</code></td>
+<td>the two paths do not interfere</td>
+</tr>
+<tr>
+<td><code>WritersOpenedAndClosedRepeatedly</code></td>
+<td>segment acquire&#x2F;release under churn</td>
+</tr>
+<tr>
+<td><code>DurableAppendsFromManyThreads</code></td>
+<td><code>Options::sync</code> holds with contention</td>
+</tr>
+</tbody></table>
+<h2 id="test-multiprocess-cpp-—-processes"><a href="#test-multiprocess-cpp-—-processes" class="headerlink" title="test_multiprocess.cpp — processes"></a><code>test_multiprocess.cpp</code> — processes</h2><p>A writer’s claim on a segment is an <code>flock</code>, which conflicts between open<br>file descriptions, so the mechanism that separates two threads separates two<br>processes — and survives one that dies without cleaning up. Parent and child<br>meet at pipe-backed gates, so the event order is fixed.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ProcessesNeverShareASegment</code></td>
+<td><code>IoBackend::tryLockExclusive</code> across a fork</td>
+</tr>
+<tr>
+<td><code>RecordsFromSeveralProcessesAllLand</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ASegmentHeldByADeadProcessIsTakenOver</code></td>
+<td>the kernel drops the lock; the next writer recovers and continues the file</td>
+</tr>
+<tr>
+<td><code>AReaderSeesAnotherProcessesWrites</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>InterleavedProcessesKeepTheirOwnOrder</code></td>
+<td>per-writer order holds across processes</td>
+</tr>
+</tbody></table>
+<h2 id="test-recovery-cpp-—-crash-recovery"><a href="#test-recovery-cpp-—-crash-recovery" class="headerlink" title="test_recovery.cpp — crash recovery"></a><code>test_recovery.cpp</code> — crash recovery</h2><p>A dying process is a fork whose child leaves through <code>_exit</code> or <code>SIGKILL</code>, so<br>no destructor runs and nothing is closed. The contract each time: every<br>record whose <code>append</code> returned is still there, no partial record is ever<br>mistaken for a complete one, and the next writer resumes exactly where the<br>last stopped. Against <code>Segment::recover</code> in <code>src/store/segment.cpp</code>.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RecordsSurviveAWriterThatNeverClosed</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RecordsSurviveSigkill</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>IndexesHandedOutBeforeACrashStillResolve</code></td>
+<td>an index is durable the moment it is returned</td>
+</tr>
+<tr>
+<td><code>TheNextWriterTakesOverTheCrashedWritersSegment</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RecordsWrittenAfterRecoveryDoNotOverwriteTheOldOnes</code></td>
+<td>recovery sets the append offset, not zero</td>
+</tr>
+<tr>
+<td><code>CrashingAndRecoveringRepeatedlyKeepsEverything</code></td>
+<td>recovery is idempotent over many rounds</td>
+</tr>
+<tr>
+<td><code>AFileCutAtAnyPointRecoversToARecordBoundary</code></td>
+<td>truncation at <em>every</em> byte offset, not a sample</td>
+</tr>
+<tr>
+<td><code>ConcurrentWritersAllRecover</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RecoveryDoesNotDisturbAnUndamagedArchive</code></td>
+<td>the no-op case stays a no-op</td>
+</tr>
+</tbody></table>
+<h2 id="test-stress-cpp-—-scale"><a href="#test-stress-cpp-—-scale" class="headerlink" title="test_stress.cpp — scale"></a><code>test_stress.cpp</code> — scale</h2><p>The same correctness checks run wide enough to shake out what only appears<br>under load. <code>RAF_STRESS_SCALE</code> multiplies the sizes.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ManyWritersAndReadersAtOnce</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>LargeRecordsUnderLoad</code></td>
+<td>the sizes the design targets (1 MiB)</td>
+</tr>
+<tr>
+<td><code>SegmentChurn</code></td>
+<td>many rollovers in one run</td>
+</tr>
+<tr>
+<td><code>ReopeningAnArchiveManyTimes</code></td>
+<td>recover-and-append repeated</td>
+</tr>
+<tr>
+<td><code>RandomReadsAcrossManySegments</code></td>
+<td><code>Segment</code> cache behaviour in <code>src/api/reader.cpp</code></td>
+</tr>
+</tbody></table>
+<h2 id="test-segment-cpp-—-the-store-layer"><a href="#test-segment-cpp-—-the-store-layer" class="headerlink" title="test_segment.cpp — the store layer"></a><code>test_segment.cpp</code> — the store layer</h2><p>The segment file format, and what a scan makes of a file a crash or a bad<br>sector got to first. The largest file in the suite; most of the damage<br>semantics live here.</p>
+<p><strong>Layout and append</strong> — <code>Segment::initialize</code>, <code>appendRecords</code>,<br><code>Archive::segmentPath</code>:</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ANewSegmentStartsWithAValidHeader</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SegmentNamesRoundTrip</code></td>
+<td><code>Archive::segmentPath</code> ↔ id</td>
+</tr>
+<tr>
+<td><code>RecordsLandBackToBackAfterTheHeader</code></td>
+<td>byte-exact layout, no padding</td>
+</tr>
+<tr>
+<td><code>AppendTimestampsNeverGoBackwards</code></td>
+<td><code>RecordMeta::timestamp_ns</code> is monotonic</td>
+</tr>
+<tr>
+<td><code>SequenceNumbersContinueAfterReopen</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Scan</strong> — <code>Segment::recover</code>, returning <code>ScanResult</code>:</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ScanFindsEveryRecordAfterAReopen</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ScanDropsATornTail</code></td>
+<td>trailing non-records belong to an append that never returned, so dropping them loses nothing promised</td>
+</tr>
+<tr>
+<td><code>ScanDropsARecordWhosePayloadNeverLanded</code></td>
+<td>a header without its payload</td>
+</tr>
+<tr>
+<td><code>ScanStepsOverADamagedRecordAndKeepsTheRestOfTheFile</code></td>
+<td>a bad payload with a good record behind it is damage, not a tail</td>
+</tr>
+<tr>
+<td><code>ScanCountsWhatItFound</code></td>
+<td><code>ScanResult</code> counters</td>
+</tr>
+</tbody></table>
+<p><strong>The frontier</strong> — <code>Segment::publishFrontier</code> &#x2F; <code>metaFd</code>. The frontier is the<br>writer’s published high-water mark, and it is what lets a scan tell damage<br>from an unfinished write:</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ABadHeaderBelowTheFrontierIsDamage</code></td>
+<td>the writer acknowledged it, so breaking it is loss</td>
+</tr>
+<tr>
+<td><code>ABadHeaderAboveTheFrontierLooksLikeAnUnfinishedWrite</code></td>
+<td>past the frontier nothing was acknowledged</td>
+</tr>
+<tr>
+<td><code>AnImpossibleFrontierIsIgnored</code></td>
+<td>it has no checksum, so a value that cannot be true is not believed — believing an overstated one would report every unwritten byte as damage</td>
+</tr>
+<tr>
+<td><code>FileLengthDoesNotDecideDamage</code></td>
+<td>the rule the frontier replaced: file length broke on preallocated files and on a dead writer’s file</td>
+</tr>
+</tbody></table>
+<p><strong>Reading</strong> — <code>Segment::fetchMeta</code>, <code>readPayload</code>:</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ReadingAPayloadPicksUpTheNextHeaderInTheSameCall</code></td>
+<td>iteration costs one read per record, not two</td>
+</tr>
+<tr>
+<td><code>ReadingADamagedPayloadIsReportedSeparately</code></td>
+<td><code>ReadStatus</code> distinguishes damage from end</td>
+</tr>
+<tr>
+<td><code>APayloadCutShortAboveTheFrontierIsTheTail</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Speculation</strong> — a random read guesses the record length so it can fetch<br>header and payload in one call. Every case must return the right bytes<br>whatever the guess was:</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SpeculationLearnsTheRecordSizeAndStaysCorrect</code></td>
+<td>the guess adapts to the last span seen</td>
+</tr>
+<tr>
+<td><code>SpeculationSurvivesRecordsOfEveryOtherSize</code></td>
+<td>alternating sizes defeat the guess every time</td>
+</tr>
+<tr>
+<td><code>SpeculationGivesUpOnRecordsThatAreTooLarge</code></td>
+<td>past a ceiling it stops guessing rather than allocating large</td>
+</tr>
+<tr>
+<td><code>SpeculationReadingPastTheEndOfTheFileIsFine</code></td>
+<td>a short read at the last record is the end of the file, not an error</td>
+</tr>
+<tr>
+<td><code>SpeculationStillChecksThePayload</code></td>
+<td>the CRC is over the bytes that actually came back</td>
+</tr>
+</tbody></table>
+<p><strong>Archive</strong> — <code>Archive::acquireForWrite</code>, <code>openForRead</code>:</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>AFileThatIsNotASegmentIsIgnored</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>WritersTakeSeparateSegments</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AFullSegmentIsLeftAlone</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="test-direct-cpp-—-the-O-DIRECT-read-path-and-the-window"><a href="#test-direct-cpp-—-the-O-DIRECT-read-path-and-the-window" class="headerlink" title="test_direct.cpp — the O_DIRECT read path and the window"></a><code>test_direct.cpp</code> — the O_DIRECT read path and the window</h2><p><code>O_DIRECT</code> is what <code>Options::directReads</code> asks for and it is on by default:<br>no page cache, and three alignment rules — offset, length and buffer address<br>all multiples of the device’s logical block. Everything the buffered reader<br>promises has to survive that, which is why the buffered side is still here<br>to compare against.</p>
+<p>Because the default is <code>O_DIRECT</code>, every test in the suite needs a<br>filesystem that can do it. <code>TempArchive</code> picks one, falling back from <code>/tmp</code><br>to the working directory, since tmpfs refuses <code>O_DIRECT</code> outright.</p>
+<p><strong>Equivalence</strong> — <code>Segment::readPayload</code> with <code>direct_</code> set, via<br><code>src/store/read_window.cpp</code>:</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>IteratesEveryRecordInOrder</code></td>
+<td>record sizes that are a multiple of nothing, so every record starts and ends mid-sector</td>
+</tr>
+<tr>
+<td><code>AgreesWithTheBufferedReader</code></td>
+<td>record for record, both paths</td>
+</tr>
+<tr>
+<td><code>IterationAndRandomLookupAgree</code></td>
+<td>the two window paths — iteration slides one, a lookup speculates into a fresh one</td>
+</tr>
+<tr>
+<td><code>HandlesARecordLargerThanTheWindow</code></td>
+<td><code>ReadWindow::reserve</code> — the oversized path</td>
+</tr>
+<tr>
+<td><code>RandomLookupReturnsTheSameRecords</code></td>
+<td><code>Segment::readAligned</code>, the no-window path, several threads on one segment</td>
+</tr>
+<tr>
+<td><code>SeesRecordsAppendedAfterItCaughtUp</code></td>
+<td>tailing a live writer through <code>O_DIRECT</code></td>
+</tr>
+<tr>
+<td><code>ReportsADamagedPayloadLikeTheBufferedReader</code></td>
+<td>damage reads as damage, not as end of data</td>
+</tr>
+</tbody></table>
+<p><strong>Bytes moved</strong> — these are the only tests in the suite that count what the<br><code>IoBackend</code> was asked for rather than what came back, through a<br><code>CountingBackend</code>. They exist because the window can be badly wrong in a way<br>nothing above it can observe: it used to fill its whole buffer on every<br>refill, so a 4 KiB random lookup against a 64 KiB buffer moved sixteen times<br>the bytes it needed. The benchmark saw an amplification of 16.12; the suite<br>saw nothing at all.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>function</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>FetchesWhatWasAskedForWhenThereIsNoReadahead</code></td>
+<td><code>ReadWindow::read</code>, <code>readahead_ == 0</code></td>
+<td>asks for what it needs, rounded to a sector, and no more</td>
+</tr>
+<tr>
+<td><code>DoesNotKeepReadingABufferItHadToGrow</code></td>
+<td><code>ReadWindow::reserve</code></td>
+<td>one oversized record must not make every small one after it expensive</td>
+</tr>
+<tr>
+<td><code>ARandomLookupReadsAboutOneRecord</code></td>
+<td><code>Segment::readAligned</code></td>
+<td>the 16.12 regression, as a test</td>
+</tr>
+<tr>
+<td><code>FetchesAheadWhenToldTo</code></td>
+<td><code>ReadWindow::read</code>, <code>fetch_at_least</code></td>
+<td>readahead still happens when iteration asks for it</td>
+</tr>
+<tr>
+<td><code>IterationDoesNotRefetchAtAnyRecordSize</code></td>
+<td><code>Segment::windowFetch</code></td>
+<td>the second regression: refills used to start mid-record, so each one inherited the offset and 256 KiB records cost 1.34x</td>
+</tr>
+<tr>
+<td><code>AppendsSurviveAndStopAskingWhenDescriptorsRunOut</code></td>
+<td><code>Segment::disableFrontier</code></td>
+<td>EMFILE on the frontier descriptor disables it permanently instead of retrying per append</td>
+</tr>
+</tbody></table>
+<h2 id="test-format-cpp-—-layout-and-checksums"><a href="#test-format-cpp-—-layout-and-checksums" class="headerlink" title="test_format.cpp — layout and checksums"></a><code>test_format.cpp</code> — layout and checksums</h2><p>Against <code>src/store/format.h</code>. Two CRCs per record: one over the header minus<br>its own field, one over the payload behind it.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>HeaderAndMetaAreFixedSize</code></td>
+<td><code>sizeof(SegmentHeader) == 64</code>, <code>sizeof(RecordMeta) == 32</code>, <code>kHeaderSize == 4096</code> so the frontier has a page to itself</td>
+</tr>
+<tr>
+<td><code>MetaChecksumCoversEverythingExceptItself</code></td>
+<td><code>format::computeMetaCrc</code></td>
+</tr>
+<tr>
+<td><code>MetaChecksumNoticesEveryOtherField</code></td>
+<td>every field, one at a time</td>
+</tr>
+<tr>
+<td><code>MetaValidationRejectsGarbage</code></td>
+<td><code>format::metaIsValid</code></td>
+</tr>
+<tr>
+<td><code>SegmentHeaderChecksumCoversEverythingExceptItself</code></td>
+<td><code>format::headerIsValid</code></td>
+</tr>
+<tr>
+<td><code>IndexPacksSegmentAndOffset</code></td>
+<td><code>format::makeIndex</code>, <code>segmentOf</code>, <code>offsetOf</code></td>
+</tr>
+<tr>
+<td><code>NegativeIndexesAreRejected</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>RecordSpanIncludesTheHeader</code></td>
+<td><code>kMetaSize</code> is part of the span an index skips</td>
+</tr>
+</tbody></table>
+<h2 id="test-crc32c-cpp-—-the-checksum"><a href="#test-crc32c-cpp-—-the-checksum" class="headerlink" title="test_crc32c.cpp — the checksum"></a><code>test_crc32c.cpp</code> — the checksum</h2><p>Against <code>src/common/crc32c.cpp</code>. The fast path folds three interleaved<br>checksums back together with precomputed GF(2) shifts — arithmetic that can<br>be subtly wrong while still looking plausible — so every test compares<br>against a bit-at-a-time reference implementation in the test file that shares<br>no table and no code path with it.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MatchesTheCastagnoliCheckValues</code></td>
+<td>the published check values</td>
+</tr>
+<tr>
+<td><code>CoversEveryByteValue</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SplittingTheInputDoesNotChangeTheResult</code></td>
+<td>incremental use</td>
+</tr>
+<tr>
+<td><code>MatchesTheDefinitionAtEveryLength</code></td>
+<td>against the reference, every length</td>
+</tr>
+<tr>
+<td><code>SplittingAcrossTheInterleavedBlockIsExact</code></td>
+<td>the three-way fold at its seam</td>
+</tr>
+<tr>
+<td><code>DetectsBitFlipsAnywhereInALargeBuffer</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>NoticesSlicesSwappedAround</code></td>
+<td>a fold that misplaces a slice</td>
+</tr>
+<tr>
+<td><code>DetectsSingleBitFlips</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>HandlesLengthsAroundTheWordLoop</code></td>
+<td>the tail of the 8-byte loop</td>
+</tr>
+</tbody></table>
+<h2 id="test-backend-cpp-—-the-IO-layer"><a href="#test-backend-cpp-—-the-IO-layer" class="headerlink" title="test_backend.cpp — the IO layer"></a><code>test_backend.cpp</code> — the IO layer</h2><p>Value-parameterised over every backend built in: POSIX always, io_uring when<br><code>RAF_URING</code> is on. The layers above name no POSIX API, so a backend is<br>interchangeable or it is nothing, and both have to pass the same nine tests.<br>A backend that is compiled in but unavailable on the running kernel —<br>io_uring is restricted or absent on plenty of them — is found out with one<br>real write in <code>SetUp</code> and skipped rather than failed.</p>
+<table>
+<thead>
+<tr>
+<th>test</th>
+<th>function</th>
+<th>what it pins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>WritesAndReadsBack</code></td>
+<td><code>writeAll</code>, <code>readSome</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ScattersAcrossMoreIovecsThanTheKernelTakesAtOnce</code></td>
+<td><code>writeAll</code></td>
+<td>the <code>IOV_MAX</code> chunking loop</td>
+</tr>
+<tr>
+<td><code>ReadPastTheEndReturnsWhatIsThere</code></td>
+<td><code>readSome</code></td>
+<td>a short read is not an error</td>
+</tr>
+<tr>
+<td><code>TruncateAndSizeAgree</code></td>
+<td><code>truncate</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ExclusiveLockConflictsWithinOneProcess</code></td>
+<td><code>tryLockExclusive</code></td>
+<td><code>flock</code> conflicts between descriptions, not processes</td>
+</tr>
+<tr>
+<td><code>OpenReportsFailures</code></td>
+<td><code>open</code>, <code>tryOpen</code></td>
+<td><code>errno</code> surfaces</td>
+</tr>
+<tr>
+<td><code>DirectoryOperations</code></td>
+<td><code>makeDirectory</code>, <code>directoryExists</code>, <code>listDirectory</code>, <code>syncDirectory</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SyncWritesSurviveWithoutAnExplicitFlush</code></td>
+<td><code>OpenFlags::sync</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AWriteThatCannotFinishFailsWithItsPrefixOnDisk</code></td>
+<td><code>writeAll</code></td>
+<td>a genuine short <code>pwritev</code> via <code>RLIMIT_FSIZE</code>: the retry loop makes progress, then surfaces EFBIG instead of spinning or returning quietly</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="What-the-suite-does-not-test"><a href="#What-the-suite-does-not-test" class="headerlink" title="What the suite does not test"></a>What the suite does not test</h2><p>Deliberately, and measured elsewhere:</p>
+<ul>
+<li><strong>Performance.</strong> No test asserts a rate. The two byte-counting tests in<br><code>test_direct.cpp</code> are the exception that proves it — they assert <em>bytes<br>requested</em>, which is deterministic, not time. Throughput lives in<br><code>bench/</code> and the numbers in <code>docs/performance.md</code>.</li>
+<li><strong>Resource use.</strong> Now reported by the benchmarks rather than asserted:<br><code>raf_bench</code> prints a CPU-seconds-per-GiB column and a peak-RSS line,<br><code>raf_matrix</code> carries both on the end of its report line.</li>
+<li><strong>Real power loss.</strong> <code>SIGKILL</code> and truncation stand in for it. They cover<br>a process dying, not a drive that lies about its cache.</li>
+<li><strong>Filesystems that cannot do <code>O_DIRECT</code>.</strong> <code>Options::directReads</code> can be<br>turned off for them, but the suite exercises the default and so needs a<br>root that supports it.</li>
+</ul>
+<h2 id="Against-the-design-doc"><a href="#Against-the-design-doc" class="headerlink" title="Against the design doc"></a>Against the design doc</h2><p><code>docs/stage3.md</code> §6 lists eight kinds of test. Where each one landed:</p>
+<table>
+<thead>
+<tr>
+<th>stage3 §6</th>
+<th>here</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API 契约、持久化契约</td>
+<td><code>test_api.cpp</code>, with <code>RecordsAreOnDiskBeforeAppendReturns</code> for the returning-append-is-durable promise and <code>ANewSegmentSyncsTheDirectoryItWasCreatedIn</code> for the directory entry</td>
+</tr>
+<tr>
+<td>预期错误与故障注入</td>
+<td><code>test_errors.cpp</code> for the failures a real filesystem produces, <code>test_faults.cpp</code> for the ones it will not</td>
+</tr>
+<tr>
+<td>边界条件与长度溢出</td>
+<td><code>test_boundary.cpp</code>, including the three overflow tests</td>
+</tr>
+<tr>
+<td>正确性对照测试</td>
+<td><code>test_support.h</code>‘s <code>PayloadId</code> — every record carries its writer, sequence and a checksum</td>
+</tr>
+<tr>
+<td>崩溃恢复与并发崩溃恢复</td>
+<td><code>test_recovery.cpp</code></td>
+</tr>
+<tr>
+<td>并发正确性与反复开关</td>
+<td><code>test_concurrency.cpp</code>, <code>test_multiprocess.cpp</code></td>
+</tr>
+<tr>
+<td>性能测试（吞吐、恢复耗时、资源占用）</td>
+<td><code>bench/</code>; recovery scan time and the CPU&#x2F;RSS columns are both in <code>raf_bench</code></td>
+</tr>
+<tr>
+<td>压力测试</td>
+<td><code>test_stress.cpp</code>, and <code>bench/physical/vsfio.sh</code> from 1 to 256 workers</td>
+</tr>
+</tbody></table>
+<p>Two places where the implementation deliberately differs from what §6 asks<br>for, both because the result is stronger:</p>
+<p><strong>Seeds.</strong> §6 suggests re-running the concurrency and crash tests with<br>different random seeds and keeping the seed of a failure to reproduce it.<br>There are no seeds here. Payloads are a pure function of<br><code>(writer, sequence, size)</code> and every rendezvous is a <code>std::latch</code>, so there<br>is nothing to keep — a failure reproduces because the inputs never varied.<br>What varies between runs is the interleaving, and no assertion depends on it.</p>
+<p><strong>Crash points.</strong> §6 asks for the process to be killed at five named stages:<br>after reserving, after writing data, after writing metadata, after syncing,<br>and after acknowledging. <code>AFileCutAtAnyPointRecoversToARecordBoundary</code><br>truncates at <em>every byte offset</em> instead. The on-disk states those five<br>stages produce are a subset of what it covers.</p>
+<h2 id="The-benchmarks-for-contrast"><a href="#The-benchmarks-for-contrast" class="headerlink" title="The benchmarks, for contrast"></a>The benchmarks, for contrast</h2><p>Not part of <code>raf_test</code>; these are scripts that need a machine and a drive.<br>Each answers a question rather than producing a score.</p>
+<table>
+<thead>
+<tr>
+<th>script</th>
+<th>the question</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bench/physical/vsfio.sh</code></td>
+<td>how close is raf to fio in the same shape, 1→256 workers, six workloads</td>
+</tr>
+<tr>
+<td><code>bench/physical/seqscale.sh</code></td>
+<td>does that still hold once the device is saturated — every worker on its own stream, four matched sides per point</td>
+</tr>
+<tr>
+<td><code>bench/physical/ceiling.sh</code></td>
+<td>what can this drive actually do, and how much of it can a synchronous buffered reader reach</td>
+</tr>
+<tr>
+<td><code>bench/physical/appendscale.sh</code></td>
+<td>why durable append stops scaling at sixteen writers; takes the append path apart variant by variant</td>
+</tr>
+<tr>
+<td><code>bench/physical/appendcost.sh</code></td>
+<td>where the microseconds in one durable append go</td>
+</tr>
+<tr>
+<td><code>bench/physical/sustained.sh</code></td>
+<td>where the drive’s SLC cache runs out, and whether batching survives the cliff</td>
+</tr>
+<tr>
+<td><code>bench/physical/diagnose.sh</code></td>
+<td>is this drive healthy enough to trust a run on it</td>
+</tr>
+<tr>
+<td><code>bench/physical/run.sh</code></td>
+<td>all of the above into one results file</td>
+</tr>
+<tr>
+<td><code>bench/raf_matrix.cpp</code></td>
+<td>the harness: <code>write</code>, <code>scan</code>, <code>read</code>, <code>seqread</code>, <code>odread</code>, <code>odrand</code>, with device-level amplification from <code>/proc/diskstats</code></td>
+</tr>
+<tr>
+<td><code>bench/bench_raf.cpp</code></td>
+<td>the standalone benchmark, no fio and no root needed</td>
+</tr>
+</tbody></table>
+<p><code>bench/physical/README.md</code> records which of its questions are answered and<br>which are still open; <code>docs/performance.md</code> is where the answers are.</p>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

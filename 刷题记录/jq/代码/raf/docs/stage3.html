@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/jq/代码/raf/docs/stage3.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="9.24 Design Doc 整理自 stage3.md（2026-09-30），共 14 页。  0. 背景需要设计一个 RAF 存储系统，核心目的是：  向用户提供持久化语义，用户能够根据 API 完成随机读、顺序读和顺序写。 在单次 record size 为 4k 和 1M 的时候，拥有比较好的顺序读性能。 从单个 reader&#x2F;writer 扩展到多个的时候，拥有比较好的扩展">
+<meta property="og:type" content="website">
+<meta property="og:title" content="raf&#x2F;docs&#x2F;stage3.md">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/jq/%E4%BB%A3%E7%A0%81/raf/docs/stage3.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="9.24 Design Doc 整理自 stage3.md（2026-09-30），共 14 页。  0. 背景需要设计一个 RAF 存储系统，核心目的是：  向用户提供持久化语义，用户能够根据 API 完成随机读、顺序读和顺序写。 在单次 record size 为 4k 和 1M 的时候，拥有比较好的顺序读性能。 从单个 reader&#x2F;writer 扩展到多个的时候，拥有比较好的扩展">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:modified_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            raf/docs/stage3.md -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h1 id="9-24-Design-Doc"><a href="#9-24-Design-Doc" class="headerlink" title="9.24 Design Doc"></a>9.24 Design Doc</h1><blockquote>
+<p>整理自 stage3.md（2026-09-30），共 14 页。</p>
+</blockquote>
+<h2 id="0-背景"><a href="#0-背景" class="headerlink" title="0. 背景"></a>0. 背景</h2><p>需要设计一个 RAF 存储系统，核心目的是：</p>
+<ol>
+<li>向用户提供持久化语义，用户能够根据 API 完成随机读、顺序读和顺序写。</li>
+<li>在单次 record size 为 4k 和 1M 的时候，拥有比较好的顺序读性能。</li>
+<li>从单个 reader&#x2F;writer 扩展到多个的时候，拥有比较好的扩展性。</li>
+</ol>
+<h2 id="1-层级"><a href="#1-层级" class="headerlink" title="1. 层级"></a>1. 层级</h2><p>整体架构可以分成三级，三级尽量解耦设计。</p>
+<h3 id="1-1-Frontend"><a href="#1-1-Frontend" class="headerlink" title="1.1 Frontend"></a>1.1 Frontend</h3><p>这层的目的：</p>
+<ul>
+<li>对接 API，提供用户层语义</li>
+<li>提供多线程&#x2F;多进程一致性保障，向下层过滤掉多线程多进程导致的安全问题</li>
+</ul>
+<h3 id="1-2-Middle"><a href="#1-2-Middle" class="headerlink" title="1.2 Middle"></a>1.2 Middle</h3><p>这层目的：</p>
+<ul>
+<li>提供文件层语义，包括文件格式，RAF 真正的文件设计</li>
+</ul>
+<h3 id="1-3-Backend"><a href="#1-3-Backend" class="headerlink" title="1.3 Backend"></a>1.3 Backend</h3><p>这层目的：</p>
+<ul>
+<li>后端接口，posix &#x2F; io_uring &#x2F; spdk 等</li>
+</ul>
+<h2 id="2-Frontend-API-语义"><a href="#2-Frontend-API-语义" class="headerlink" title="2. Frontend: API 语义"></a>2. Frontend: API 语义</h2><h3 id="2-1-返回语义"><a href="#2-1-返回语义" class="headerlink" title="2.1 返回语义"></a>2.1 返回语义</h3><p>返回语义可以有几种选项：</p>
+<ul>
+<li>返回即代表持久化；</li>
+<li>返回不代表持久化，持久化时间随机；</li>
+</ul>
+<p>如果返回不代表持久化，虽然可以额外增加查询是否持久化的接口，但是对下游的语义修改是比较大的。所以应该采用返回即代表持久化语义。</p>
+<h3 id="2-2-Index-语义"><a href="#2-2-Index-语义" class="headerlink" title="2.2 Index 语义"></a>2.2 Index 语义</h3><p>Index 有几种选项：</p>
+<ul>
+<li>Int 当前默认设计</li>
+<li>用一个复合的结构体</li>
+</ul>
+<p>用复合的结构体优点是：</p>
+<ul>
+<li>能存储更多信息</li>
+<li>能直观表示细节</li>
+</ul>
+<p>缺点是：</p>
+<ul>
+<li>占用额外的空间</li>
+<li>后续设计可能需要考虑它本身的 cache line 对齐等优化</li>
+</ul>
+<p>对于一个文件的格式来说，Index 直接对应偏移量是足够的，并且我们没有必要向下层表示更多细节，所以用 int 就可以。</p>
+<h3 id="2-3-迭代读语义"><a href="#2-3-迭代读语义" class="headerlink" title="2.3 迭代读语义"></a>2.3 迭代读语义</h3><p>迭代读语义取决于不同的设计。可以是要求全局一致（每个 Reader 读的顺序一致），也可以不一致。</p>
+<h3 id="2-4-接口"><a href="#2-4-接口" class="headerlink" title="2.4 接口"></a>2.4 接口</h3><div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> INDEX_TYPE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RecordWriter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Open a record archive file.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="built_in">RecordWriter</span>(<span class="type">const</span> std::string &amp;filepath);</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Append one binary value and return its index.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">INDEX_TYPE <span class="title">append</span><span class="params">(<span class="type">const</span> std::string &amp;value)</span></span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Append multiple binary values and return their indexes.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">std::vector&lt;INDEX_TYPE&gt; <span class="title">appendBatch</span><span class="params">(<span class="type">const</span> std::vector&lt;std::string&gt; &amp;values)</span></span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Close the writer. Writing after close must fail.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RecordReader</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Open a record archive file.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="built_in">RecordReader</span>(<span class="type">const</span> std::string &amp;filepath);</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Append one binary value and return its index.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">std::optional&lt;std::string&gt; <span class="title">read</span><span class="params">(<span class="type">const</span> INDEX_TYPE &amp;index)</span></span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Append multiple binary values and return their indexes.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">std::optional&lt;std::string&gt; <span class="title">readNext</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Close the reader. reading after close must fail.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<p>失败定义：</p>
+<ul>
+<li>用户执行操作导致的：抛出 <code>std::logic_error</code></li>
+<li>系统故障导致的：抛出 <code>std::system_error</code></li>
+</ul>
+<h2 id="3-Frontend-多进程-x2F-多线程适配"><a href="#3-Frontend-多进程-x2F-多线程适配" class="headerlink" title="3. Frontend: 多进程&#x2F;多线程适配"></a>3. Frontend: 多进程&#x2F;多线程适配</h2><h3 id="3-1-多线程-x2F-多进程"><a href="#3-1-多线程-x2F-多进程" class="headerlink" title="3.1 多线程&#x2F;多进程"></a>3.1 多线程&#x2F;多进程</h3><p>为了适配用户语义上的多线程&#x2F;多进程，有几种方案：</p>
+<ol>
+<li>唯一写者。所有的 Writer 将写请求发送给这个中心化写者，由它来做统筹写入。</li>
+<li>多个写者同时写入：<ul>
+<li>同时写入数据</li>
+<li>同时写入元数据</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-1-1-中心化写者"><a href="#3-1-1-中心化写者" class="headerlink" title="3.1.1 中心化写者"></a>3.1.1 中心化写者</h4><p>整体架构设计只有一个中心化写者，而无论多进程还是多线程，都是 Writer 对象只需要给这个写者发送任务即可。也就是说，这里会有一个 MPSC 队列。</p>
+<p>Writer 会向中心化写者注册，因此中心化写者知道有多少 Writer。中心化写者会进行攒批，当计时器结束或者没有可用的 Writer，或者到达批次上限时候会向 Middle 写入 batch 数据。完成之后回调并释放 Writer。</p>
+<ul>
+<li>需要注意的是，中心化写者不一定只有一个 IO 线程，它可以有多个线程，使得 CPU 提交侧不是瓶颈。（默认先关闭）</li>
+<li>Reader 自己持有自己的队列，可以攒批触发，也可以不攒批。（先实现成不攒批的，后续看情况决定）</li>
+</ul>
+<p>中心化写者的位置设计和性能关系是：</p>
+<ol>
+<li>如果只有一个 Writer，那么因为 Writer 请求间是串行的，所以严格和延迟相关。因此，我们必须缩短在单个 Writer 下的路径。</li>
+<li>如果有多个 Writer，带宽大概率只和中心化写者的配置有关，因为上游的 MPSC 队列等可以通过其他优化来解决。</li>
+</ol>
+<p>Writer 需要发送给中心化节点，可能会增加一次拷贝。但是这种情况一定是多个 Writer，因为单个 Writer 自己就是这个中心化写者。而多个 Writer 的性能可能大概率与拷贝关系不大。</p>
+<p><strong>综上，中心化写者只需要跟随第一个 Writer 即可。</strong></p>
+<p>在多线程模式下，程序出现异常所有 Writer 都会失败，因此中心化写者不需要考虑所有权转移。</p>
+<p>在多进程模式下，会出现单个 Writer 崩溃而其他 Writer 存活的可能性，因此需要考虑中心化写者的所有权转移问题。也就是说，当第一个 Writer 进程启动并且它是中心化写者，第二个 Writer 将会给第一个进程的共享内存发送内容。而第一个 Writer 结束运行或者失败后，第二个 Writer 应该立即能接管所有权运行。</p>
+<p>那么可行的比较简单的方案就是通过 <code>flock</code> 做任期管理。关键在于恢复和接管。注意到我们的 API 语义是返回即代表持久化，而不返回的信息可以丢失。所以如果这时候崩溃，那么队列中的内容是允许丢失的。</p>
+<p>所以，提交的顺序就可以是：</p>
+<ol>
+<li>将 Writer 可用数目减一</li>
+<li>如果是 0，并且队列长度是 0，那么直接提交</li>
+<li>否则要多 Writer，从队列 pop 出一个或一批</li>
+<li>将这块写入</li>
+<li>原子更新共享内存中的全局文件尾部</li>
+</ol>
+<p>当 3 步结束或者中间某一时刻崩溃时，由于 API 接口尚未返回，API 语义保证了没有意外的数据丢失。当第 4 步中间丢失，全局 size 尚未增加，因此直接覆盖，认为这一批全部丢失。</p>
+<p>而接管的步骤是：</p>
+<ol>
+<li>提交当前的内容到共享队列中</li>
+<li>等待。定时检查一下 flock，如果拿不到锁，证明有人在任期，放弃。否则立即成为 Leader。</li>
+<li>接管成功后，从原子更新的全局文件尾部开始处理。</li>
+</ol>
+<p>中心化写者的优点是：</p>
+<ol>
+<li>拥有全局的顺序，不需要考虑 Consistency Order。保证不同 Reader 拿到的顺序是一致的。</li>
+<li>中心节点可以决定攒批和真正的 IO 线程数目，减少 Writer 过多导致的锁竞争问题。</li>
+</ol>
+<p>缺点是：</p>
+<ol>
+<li>多个 Writer 有拷贝开销</li>
+</ol>
+<h4 id="3-1-2-多个写者同时写入数据"><a href="#3-1-2-多个写者同时写入数据" class="headerlink" title="3.1.2 多个写者同时写入数据"></a>3.1.2 多个写者同时写入数据</h4><p>这个方案每一个 Writer 尝试写入包含以下步骤：</p>
+<ol>
+<li>先获取 flock 锁</li>
+<li>写入 Meta，扩展文件</li>
+<li>释放锁</li>
+<li>写入数据</li>
+</ol>
+<p>优点是：</p>
+<ol>
+<li>比较简单</li>
+<li>拥有全局的顺序，不需要考虑 Consistency Order。保证不同 Reader 拿到的顺序是一致的。</li>
+<li>即使是多个 Writer，也没有拷贝开销</li>
+</ol>
+<p>缺点是：</p>
+<ol>
+<li>无法攒批和分线程。</li>
+<li>单个 Writer 也需要获取全局 flock 锁，否则后续注册的 Writer 可能会写入。</li>
+<li>如果支持并行写数据，那么就很可能留下空洞，同时可能会有放大的问题。如果不支持并行写，那么就变成了严格串行。</li>
+<li>因为语义规定，API 返回之后保证持久化。所以当恢复确定 Writer 写前沿的时候，读到错误的数据，还需要接着往后读，直到读到最后。迭代也是同理。</li>
+<li>Writer 足够多的时候可能会随机写。</li>
+</ol>
+<h4 id="3-1-3-同时写入元数据"><a href="#3-1-3-同时写入元数据" class="headerlink" title="3.1.3 同时写入元数据"></a>3.1.3 同时写入元数据</h4><p>同时写入元数据要配合 Middle 层做调整，也就是下面提到的链式方案。</p>
+<p>优点是：</p>
+<ol>
+<li>写入位置灵活。通过指针连接已对齐的 chunk，不要求记录在物理文件中连续存放。</li>
+</ol>
+<p>缺点是：</p>
+<ol>
+<li>复杂</li>
+<li>没有全局顺序，不同 Reader 有可能拿到不同的顺序</li>
+<li>读放大</li>
+<li>空间浪费</li>
+</ol>
+<h4 id="3-1-4-同时写入数据-V2"><a href="#3-1-4-同时写入数据-V2" class="headerlink" title="3.1.4 同时写入数据 V2"></a>3.1.4 同时写入数据 V2</h4><p>基于同时写入数据的版本。</p>
+<p>我们可以针对每个 Writer，让其拥有一段独占的区域（这里有不同方案，可以是单个文件内的区域，也可以是每个 Writer 独占整个文件）。Writer 直接在这段区域里面写入。</p>
+<p>考虑到空洞以及单文件管理问题，可以使用多文件。</p>
+<p>Writer 初始化顺序：</p>
+<ol>
+<li>遍历文件，通过 flock 找到一个当前没有占用的文件或创建新文件（<code>O_CREAT | O_EXCL</code>），加锁。（理论上应该是 middle 层提供一个加锁 API）</li>
+<li>遍历这个文件，验证并找到最后一个安全的点。</li>
+</ol>
+<p>Writer 写入顺序：</p>
+<ol>
+<li>根据 middle 层，写入一块内容。</li>
+<li>检查距离上次检查了多久，如果过了很久，那么就看看有没有文件损坏标记。如果文件损坏，那么就新开一个文件。</li>
+</ol>
+<p>Reader 迭代读顺序：</p>
+<ol>
+<li>获取所有文件尾部并记录。</li>
+<li>归并排序，读最早的。这里通过预取获得文件的排序依据（时间戳）。</li>
+<li>获取某个文件的下一个。如果补充不到，说明文件要么读完，要么已经损坏，不再预取 meta。（middle 层返回损坏或读完）</li>
+<li>直到所有文件读到超过尾部那么就不读了（下一条的起始点小于等于，结束点大于，或读不到下一条），尝试看看之前的文件有没有更新，也就是更新尾部记录，并且重新读（以防漏掉正在写的）。</li>
+</ol>
+<p>预取的形式如下（由 middle 层负责）：</p>
+<ol>
+<li>对于每个文件，初始化的时候，预取 meta1，此时队列为 <code>[meta1]</code>。</li>
+<li>当触发读请求时：<ul>
+<li>如果文件确认整体损坏，不再读。</li>
+<li>如果队列为空，那么尝试补足 meta。如果补足失败，那么还没有写入，<strong>到文件末尾</strong>。如果成功，这时候队列为 <code>[meta1]</code>。</li>
+<li>校验 meta1 crc，如果没通过，检查文件长度。如果文件长度超过 <code>p + meta_len + max_data_len + meta_len</code>，那就记录成<strong>从这里开始损坏</strong>。否则认为还没有写入，<strong>到文件末尾</strong>，将 meta1 释放回去。</li>
+<li>尝试一次性取 data1 + meta2。<ul>
+<li>如果取完了 meta2，此时队列为 <code>[meta1, data1, meta2]</code><ul>
+<li>验证 <code>[meta1, data1]</code>。如果失败，表示<strong>部分损坏</strong>，pop1，并且再次触发读请求。否则<strong>成功返回 1</strong>。</li>
+</ul>
+</li>
+<li>如果只取完了 data1，那么此时队列为 <code>[meta1, data1]</code><ul>
+<li>验证 <code>[meta1, data1]</code>。如果失败，表示<strong>到文件末尾</strong>，将 data1 释放回去。否则<strong>成功返回 1</strong>。</li>
+</ul>
+</li>
+<li>如果连 data1 也没有取完，那么还没有写入，<strong>到文件末尾</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>迭代读能够保证的语义是：</p>
+<ol>
+<li>如果两个 reader 在 <code>open()</code> 时取得相同的完整尾部向量（每个文件的已完成写入尾部相同），那么它们对于这些尾部向量之前的 <code>readNext()</code> 会返回相同的记录和顺序。也就是说，<strong>如果两个 reader 打开的间隔中间没有写，那么对于它们打开之前的写，返回的顺序一致。</strong></li>
+<li>如果已经打开 reader，对于它们的尾部向量后面的元素，只能保证相同文件的顺序性。也就是说，<strong>对于后续的写，保证的语义是相同 writer 的顺序一致，而不同 writer 的读取顺序不能保证。</strong></li>
+</ol>
+<p>例如，对于全局顺序：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">W1:1 W2:1 W1:2 W2:2 R1 R2 W1:3 W2:3 W1:4 W2:4</span><br></pre></td></tr></table></figure></div>
+
+<p>对于 <code>W1:1 W2:1 W1:2 W2:2</code>，两个 reader 获得的顺序是一样的，都是 <code>W1:1 W2:1 W1:2 W2:2</code>。而对于 <code>W1:3 W2:3 W1:4 W2:4</code>，两者的顺序可能不一致，R1 可能读到 <code>W1:3 W2:3 W1:4 W2:4</code>，而 R2 可能读到 <code>W1:1 W2:1 W2:2 W1:2</code>。但是，对于 W1 和 W2 内部，顺序是一致的。</p>
+<p>Reader 随机读顺序：</p>
+<ol>
+<li>Index 这时候不但要包含位置，还需要包含文件 id。可以用 int 的高位代表文件 id，低位代表文件内偏移量。这是因为可以控制每个文件最大的尺寸。例如单个文件不能超过 256TB（2^48），而高的 16 位可以存放 65536 个文件，允许 65536 个 Writer 同时打开。</li>
+</ol>
+<p>优点是：</p>
+<ol>
+<li>比较简单</li>
+<li>即使是多个 Writer，也没有拷贝开销</li>
+</ol>
+<p>缺点是：</p>
+<ol>
+<li>没有拥有全局的顺序。</li>
+</ol>
+<h4 id="3-1-5-观察测试"><a href="#3-1-5-观察测试" class="headerlink" title="3.1.5 观察测试"></a>3.1.5 观察测试</h4><p>对于写来说，峰值性能大约是 4GB&#x2F;s（2M 4 线程，256 depth）：</p>
+<table>
+<thead>
+<tr>
+<th>bs</th>
+<th>作业</th>
+<th>总 QD</th>
+<th>IOPS</th>
+<th>按请求折算 MiB&#x2F;s</th>
+<th>fio MiB&#x2F;s</th>
+<th>p99 ms</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2m</td>
+<td>4</td>
+<td>256</td>
+<td>2,063.2</td>
+<td>4,126.5</td>
+<td>4,189.0</td>
+<td>392.2</td>
+</tr>
+</tbody></table>
+<p>而 64k 拉大 depth 到 1024 也能达到接近：</p>
+<table>
+<thead>
+<tr>
+<th>IOPS</th>
+<th>MiB&#x2F;s</th>
+<th>写 p99 ms</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>59,978.0</td>
+<td>3,748.6</td>
+<td>41.7</td>
+</tr>
+</tbody></table>
+<p>测试参数以及原因：</p>
+<p>我们要看的是在单作业情况下是否也能达到和多作业类似的效果，其他参数可以给到一个合理的值。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>64K 单作业锚点</th>
+<th>2MiB 多作业</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>direct</code> &#x2F; <code>sync</code></td>
+<td>1 &#x2F; dsync</td>
+<td>1 &#x2F; dsync</td>
+</tr>
+<tr>
+<td><code>bs</code></td>
+<td>64k</td>
+<td>2m</td>
+</tr>
+<tr>
+<td><code>numjobs</code></td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>每作业 <code>iodepth</code></td>
+<td>1024</td>
+<td>64</td>
+</tr>
+<tr>
+<td>总目标 QD</td>
+<td>1024</td>
+<td>256</td>
+</tr>
+<tr>
+<td>每作业 <code>size</code></td>
+<td>4G</td>
+<td>1G</td>
+</tr>
+<tr>
+<td><code>offset_increment</code></td>
+<td>4G</td>
+<td>1G</td>
+</tr>
+</tbody></table>
+<p>所以多写者提高的 depth，使用单写者提高 depth 也能做到。</p>
+<p><strong>因此，中心化写者是一个比较适合的方案。</strong></p>
+<p>此外，出于直观性，同时写入数据 v2 也是一个比较合理的版本。</p>
+<p>这两个的区别在于对用户语义（reader 迭代一致性）和实现简单性的取舍。由于文档中没有规定 reader 迭代是必须一致的，所以我认为可以采用<strong>同时写入数据 v2</strong> 版本，这样既简单，而 API 语义也不会被牺牲太多。</p>
+<h2 id="4-Middle-文件格式"><a href="#4-Middle-文件格式" class="headerlink" title="4. Middle: 文件格式"></a>4. Middle: 文件格式</h2><h3 id="4-1-Record-模式"><a href="#4-1-Record-模式" class="headerlink" title="4.1 Record 模式"></a>4.1 Record 模式</h3><p>Block 分为几种：Meta Block、Data Block。</p>
+<p>每个 chunk，写入一个 Metadata Block，表明 Length + 时间戳 + meta crc + 全部 crc，然后写数据，里面有结束标记和 CRC。</p>
+<p>由于 meta block 和 data block 一定是一起出现的，所以是一起写入的（一个写请求），并且是通过 <code>O_DSYNC</code> 写入。如果返回，那么就能够代表其已经持久化。需要注意的是都被一起提交到队列中，但是不代表是原子的。</p>
+<p>读取时，根据 Length 去读，如果 CRC 校验通过，那么就读成功。</p>
+<p>迭代根据 Length 进行，而随机读根据文件内偏移量进行。</p>
+<p>为了保证正确性，我们先让每次都校验 crc。设计结束后看着性能，只有重复读同一批记录很常见、且 CRC 或磁盘读取确实成为瓶颈时，再考虑 RAF 自己的 LRU 优化。</p>
+<p>优点：</p>
+<ol>
+<li>一个文件同时存元数据和数据，保证全局顺序</li>
+<li>只 Append，性能比较好</li>
+<li>设计实现比较简单</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>统一设计，不利于扩展多写情况。</li>
+<li>额外的空间占用，没有对齐的数据都可能导致写放大。</li>
+</ol>
+<h3 id="4-2-分离式"><a href="#4-2-分离式" class="headerlink" title="4.2 分离式"></a>4.2 分离式</h3><p>index 文件和 Data 文件分离。写入文件的时候先写 data 文件，写完后再写 index 文件，index 文件后同样有 CRC。</p>
+<p>优点：</p>
+<ol>
+<li>设计比较简单</li>
+<li>额外空间占用比较少</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>写入需要写两个文件，性能可能会比较差</li>
+<li>两个文件都需要保证正确性</li>
+</ol>
+<h3 id="4-3-链式"><a href="#4-3-链式" class="headerlink" title="4.3 链式"></a>4.3 链式</h3><p>提前确定好每个 chunk 的大小，让数据都对齐。当写入时，提前先锁定一块用于存放 Meta-B，然后锁定一块用于存放 Data-A，先写数据，然后利用之前锁定的 Meta-A 写入数据位置、下一块 Meta 区域、DataLength、CRC。</p>
+<p>优点：</p>
+<ol>
+<li>可以支持多写者并发调用（但是目前证明多写者是不好的）</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>比较复杂</li>
+<li>分离设计，性能可能比较差</li>
+</ol>
+<h3 id="4-4-最终选型"><a href="#4-4-最终选型" class="headerlink" title="4.4 最终选型"></a>4.4 最终选型</h3><p>计划选 Record 格式的，因为它性能比较好。</p>
+<h2 id="5-Backend-写磁盘"><a href="#5-Backend-写磁盘" class="headerlink" title="5. Backend: 写磁盘"></a>5. Backend: 写磁盘</h2><p>计划先采用 io_uring。虽然 io_uring 有很多问题，但是可以后续再调整。</p>
+<h2 id="6-测试内容"><a href="#6-测试内容" class="headerlink" title="6. 测试内容"></a>6. 测试内容</h2><ul>
+<li><strong>API 契约、持久化契约</strong>：覆盖创建、打开、追加、读取、关闭的正常调用和非法调用顺序，检查返回值及状态变化。分到验证写入成功返回、同步成功返回的持久化保证，以及写入尚未返回时缺漏后的允许结果；若创建新文件也在保证范围内，还要验证目录项的持久化。</li>
+<li><strong>预期错误与故障注入</strong>：主动制造无效参数、重复打开写者、权限不足、空间耗尽、短写、同步失败和数据损坏，检查错误码与后续状态。重点确认失败不会让记录被误判为完整，也不会使后续写入永久卡住。</li>
+<li><strong>边界条件与长度溢出</strong>：测试空记录、最小和最大记录、批次边界、块边界、文件末尾，以及恰好超出限制的长度。对长度相加、偏移计算和空间预留构造数值溢出输入，确认在分配或写盘前拒绝。</li>
+<li><strong>正确性对照测试</strong>：测试程序为每条写入生成唯一 ID、内容校验值和调用时间线，将 RAF 读出结果与契约允许的结果自动比较。并发和崩溃测试可以更换随机种子反复运行，失败时保留种子与故障注入点以便复现。</li>
+<li><strong>崩溃恢复与并发崩溃恢复</strong>：在预留位置、写数据、写元数据、同步和返回确认等阶段分别终止进程，重开后检查完整记录集合与恢复位置。对多个在途写入重复此测试，确认已承诺持久化的记录不丢失，未完成记录不被当作完整记录。每次恢复后立即追加新记录，再次关闭和重开；检查新记录没有覆盖旧记录，索引、长度和下一写入位置一致。</li>
+<li><strong>并发正确性与反复开关</strong>：用多线程、多进程的 writer 和 reader 交错运行，被对记录无重复、无串扰、内容完整，且读取顺序符合已定义的契约。并发执行打开、关闭、崩溃和重开，检查 writer 互斥、资源释放，以及 reader 对新记录的可见性。</li>
+<li><strong>性能测试</strong>：用目标业务负载分别测吞吐、恢复耗时和资源占用。</li>
+<li><strong>压力测试</strong>：增大 writer 和 reader 数目，检查性能变化情况。</li>
+</ul>
+<h2 id="7-计划推进顺序"><a href="#7-计划推进顺序" class="headerlink" title="7. 计划推进顺序"></a>7. 计划推进顺序</h2><ol>
+<li>实现 backend，做好底层文件是否成功写入的功能单元测试</li>
+<li>实现 middle 层，做好功能和单元测试</li>
+<li>实现单 Writer 写入数据，验证 API 语义测试、边界条件测试、故障处理、崩溃恢复、正确性对照测试</li>
+<li>扩展到多线程，验证并发正确性和反复开关下的正确性</li>
+<li>进行性能测试</li>
+<li>验证多进程</li>
+</ol>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="A1-测试结果"><a href="#A1-测试结果" class="headerlink" title="A1 测试结果"></a>A1 测试结果</h3><h4 id="A1-1-持久化方式：64k"><a href="#A1-1-持久化方式：64k" class="headerlink" title="A1.1 持久化方式：64k"></a>A1.1 持久化方式：64k</h4><p>（单元格格式为 <code>IOPS / MiB/s</code>）</p>
+<table>
+<thead>
+<tr>
+<th>bs</th>
+<th>作业数</th>
+<th>缓冲 O_DSYNC</th>
+<th>缓冲写 + 每写 fdatasync</th>
+<th>O_DIRECT + O_DSYNC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4K</td>
+<td>1</td>
+<td>193 &#x2F; 0.8</td>
+<td>284 &#x2F; 1.1</td>
+<td>360 &#x2F; 1.4</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>8</td>
+<td>794 &#x2F; 3.1</td>
+<td>451 &#x2F; 1.8</td>
+<td>428 &#x2F; 1.7</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>32</td>
+<td>2,601 &#x2F; 10.2</td>
+<td>502 &#x2F; 2.0</td>
+<td>1,487 &#x2F; 5.8</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>64</td>
+<td>3,336 &#x2F; 13.0</td>
+<td>841 &#x2F; 3.3</td>
+<td>3,059 &#x2F; 11.9</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>128</td>
+<td>5,009 &#x2F; 19.6</td>
+<td>1,730 &#x2F; 6.8</td>
+<td>5,134 &#x2F; 20.1</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>256</td>
+<td>6,804 &#x2F; 26.6</td>
+<td>3,574 &#x2F; 14.0</td>
+<td><strong>12,683 &#x2F; 49.5</strong></td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>1</td>
+<td>130 &#x2F; 129.5</td>
+<td>499 &#x2F; 498.5</td>
+<td>416 &#x2F; 416.1</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>8</td>
+<td>517 &#x2F; 516.5</td>
+<td>781 &#x2F; 781.3</td>
+<td>602 &#x2F; 602.6</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>32</td>
+<td>1,130 &#x2F; 1,129.8</td>
+<td>855 &#x2F; 855.2</td>
+<td>1,963 &#x2F; 1,962.5</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>64</td>
+<td>861 &#x2F; 860.7</td>
+<td>881 &#x2F; 880.7</td>
+<td>3,050 &#x2F; 3,050.2</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>128</td>
+<td>1,485 &#x2F; 1,485.3</td>
+<td>1,505 &#x2F; 1,505.3</td>
+<td>3,377 &#x2F; 3,377.1</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>256</td>
+<td>2,421 &#x2F; 2,421.2</td>
+<td>2,308 &#x2F; 2,308.4</td>
+<td><strong>4,323 &#x2F; 4,322.9</strong></td>
+</tr>
+</tbody></table>
+<p>这步证明，O_DSYNC 要比 fdatasync 更好用，可以提供更好的 iops。而我们并不过分关系延迟，所以这里优先采用 O_DIRECT + O_DSYNC 方案。非缓冲 + fdatasync 方案会有问题：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">If fio is using non-buffered I/O, we may not sync the file. The exception is the sg I/O</span><br><span class="line">engine, which synchronizes the disk cache anyway.</span><br></pre></td></tr></table></figure></div>
+
+<p>测试参数以及原因：</p>
+<p>我们需要针对 4K 和 1M 来测试，因此可以先设定这两个 batch_size。由于我们每次写入一定会同步等待结束后才发送下一个任务，所以每作业深度为 1。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>取值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--bs</code></td>
+<td>4k, 1m</td>
+</tr>
+<tr>
+<td><code>--numjobs</code></td>
+<td>1, 8, 32, 64, 128, 256</td>
+</tr>
+<tr>
+<td>每作业深度</td>
+<td>固定 <code>--iodepth=1</code>，总目标深度等于作业数</td>
+</tr>
+<tr>
+<td>缓冲 O_DSYNC</td>
+<td><code>--direct=0 --sync=dsync</code></td>
+</tr>
+<tr>
+<td>缓冲写 + 每写 fdatasync</td>
+<td><code>--direct=0 --fdatasync=1</code></td>
+</tr>
+<tr>
+<td>O_DIRECT + O_DSYNC</td>
+<td><code>--direct=1 --sync=dsync</code></td>
+</tr>
+</tbody></table>
+<h4 id="A1-2-性能上限"><a href="#A1-2-性能上限" class="headerlink" title="A1.2 性能上限"></a>A1.2 性能上限</h4><h5 id="A1-2-1-单读者-x2F-写者"><a href="#A1-2-1-单读者-x2F-写者" class="headerlink" title="A1.2.1 单读者&#x2F;写者"></a>A1.2.1 单读者&#x2F;写者</h5><p>虽然我们可能会有 worker pool 来做 IO，但是在单读者&#x2F;写者情况下，根据 API 语义，是一定会串行的。所以，性能上限就是 fio 的单个 worker 性能。通过扫 depth 确定上限如下：</p>
+<table>
+<thead>
+<tr>
+<th>请求大小</th>
+<th>操作</th>
+<th>单调用者 QD1</th>
+<th>多调用者已测结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4K</td>
+<td>随机读</td>
+<td>13,038 TPS &#x2F; 51 MiB&#x2F;s</td>
+<td>128 作业：322,077 TPS &#x2F; 1,258 MiB&#x2F;s</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>顺序读</td>
+<td>16,025 TPS &#x2F; 63 MiB&#x2F;s</td>
+<td>128 作业：342,061 TPS &#x2F; 1,336 MiB&#x2F;s</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>顺序同步写</td>
+<td>448 TPS &#x2F; 1.8 MiB&#x2F;s</td>
+<td>128 作业：6,244 TPS &#x2F; 24 MiB&#x2F;s</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>随机读</td>
+<td>3,007 TPS &#x2F; 3,007 MiB&#x2F;s</td>
+<td>128 作业：5,300 TPS &#x2F; 5,300 MiB&#x2F;s</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>顺序读</td>
+<td>2,983 TPS &#x2F; 2,983 MiB&#x2F;s</td>
+<td>128 作业：5,037 TPS &#x2F; 5,037 MiB&#x2F;s</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>顺序同步写</td>
+<td>390 TPS &#x2F; 390 MiB&#x2F;s</td>
+<td>64 作业稳定：2,619 TPS &#x2F; 2,619 MiB&#x2F;s</td>
+</tr>
+</tbody></table>
+<p>测试参数以及原因：</p>
+<p>对于单调用者，为了更准确测出磁盘性能，我们采用了 direct 忽略 page cache 开销。</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th>fio 关键参数</th>
+<th>时长与文件大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1.2 单调用者读</td>
+<td><code>bs=4k,1m rw=randread,read direct=1 iodepth=1 numjobs=1</code></td>
+<td><code>runtime=3 ramp_time=1 size=4G</code></td>
+</tr>
+<tr>
+<td>A1.2 单调用者同步写</td>
+<td><code>bs=4k,1m rw=write direct=1 sync=dsync iodepth=1 numjobs=1</code></td>
+<td><code>runtime=3 ramp_time=1 size=4G</code></td>
+</tr>
+</tbody></table>
+<h5 id="A1-2-1-多读者"><a href="#A1-2-1-多读者" class="headerlink" title="A1.2.1 多读者"></a>A1.2.1 多读者</h5><blockquote>
+<p>原文此处编号与上一节重复，保持原样。</p>
+</blockquote>
+<p>多读者几乎无法攒批，因此不如直接将它们发送给 Middle 层直接执行。这样，它的性能上限应该与同 worker 数目下的 fio 最大值情况一致。例如以下给出几个 worker 数目的性能参考：</p>
+<table>
+<thead>
+<tr>
+<th>请求大小</th>
+<th>作业数</th>
+<th>随机读 TPS</th>
+<th>随机读 MiB&#x2F;s</th>
+<th>顺序读 TPS</th>
+<th>顺序读 MiB&#x2F;s</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4K</td>
+<td>1</td>
+<td>14,978</td>
+<td>59</td>
+<td>29,126</td>
+<td>114</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>8</td>
+<td>89,627</td>
+<td>350</td>
+<td>79,526</td>
+<td>311</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>32</td>
+<td>215,151</td>
+<td>840</td>
+<td>200,698</td>
+<td>784</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>64</td>
+<td>298,631</td>
+<td>1,167</td>
+<td>296,356</td>
+<td>1,158</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>128</td>
+<td>337,279</td>
+<td>1,318</td>
+<td>338,439</td>
+<td>1,322</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>256</td>
+<td>350,409</td>
+<td>1,369</td>
+<td>364,607</td>
+<td>1,424</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>512</td>
+<td>422,109</td>
+<td>1,649</td>
+<td>423,601</td>
+<td>1,655</td>
+</tr>
+<tr>
+<td><strong>4K</strong></td>
+<td><strong>1024</strong></td>
+<td><strong>472,842</strong></td>
+<td><strong>1,847</strong></td>
+<td><strong>486,841</strong></td>
+<td><strong>1,902</strong></td>
+</tr>
+<tr>
+<td>4K</td>
+<td>2048</td>
+<td>422,053</td>
+<td>1,649</td>
+<td>472,686</td>
+<td>1,846</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>1</td>
+<td>3,069</td>
+<td>3,069</td>
+<td>2,627</td>
+<td>2,627</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>8</td>
+<td>4,715</td>
+<td>4,715</td>
+<td>4,719</td>
+<td>4,719</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>32</td>
+<td>4,775</td>
+<td>4,775</td>
+<td>4,754</td>
+<td>4,754</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>64</td>
+<td>4,820</td>
+<td>4,820</td>
+<td>4,837</td>
+<td>4,837</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>128</td>
+<td>4,859</td>
+<td>4,859</td>
+<td>5,112</td>
+<td>5,112</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>256</td>
+<td>4,963</td>
+<td>4,963</td>
+<td>5,011</td>
+<td>5,011</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>512</td>
+<td>5,087</td>
+<td>5,087</td>
+<td>4,945</td>
+<td>4,945</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>1024</td>
+<td>5,282</td>
+<td>5,282</td>
+<td>5,012</td>
+<td>5,012</td>
+</tr>
+<tr>
+<td><strong>1MiB</strong></td>
+<td><strong>2048</strong></td>
+<td><strong>6,901</strong></td>
+<td><strong>6,901</strong></td>
+<td><strong>6,798</strong></td>
+<td><strong>6,798</strong></td>
+</tr>
+</tbody></table>
+<p>测试参数以及原因：</p>
+<p>对于多读者，为了更准确测出磁盘性能，我们采用了 direct 忽略 page cache 开销。</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th>fio 关键参数</th>
+<th>时长与文件大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1.2 多读者</td>
+<td><code>bs=4k,1m rw=randread,read direct=1 iodepth=1 numjobs=1,8,32,64,128,256,512,1024,2048</code></td>
+<td><code>runtime=3 ramp_time=1 size=4G</code></td>
+</tr>
+</tbody></table>
+<h5 id="A1-2-2-多写者"><a href="#A1-2-2-多写者" class="headerlink" title="A1.2.2 多写者"></a>A1.2.2 多写者</h5><p>多写者是真正可以用到攒批和分发的部分。在 Writer 足够多的时候，上限应该和设备上限保持一致。设备上限性能是顺式写（开启 <code>direct=1 sync=dsync</code>）的情况下，带宽最多可以到多少，参考：</p>
+<table>
+<thead>
+<tr>
+<th>bs</th>
+<th>作业</th>
+<th>总 QD</th>
+<th>IOPS</th>
+<th>按请求折算 MiB&#x2F;s</th>
+<th>fio MiB&#x2F;s</th>
+<th>p99 ms</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2m</td>
+<td>4</td>
+<td>256</td>
+<td>2,063.2</td>
+<td>4,126.5</td>
+<td>4,189.0</td>
+<td>392.2</td>
+</tr>
+</tbody></table>
+<p>如果使用多写者同时写数据 v2 版本，那么应该和作业数上限接近：</p>
+<table>
+<thead>
+<tr>
+<th>请求大小</th>
+<th>文件大小</th>
+<th>作业数</th>
+<th>轮次</th>
+<th>写 TPS</th>
+<th>MiB&#x2F;s</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>1</td>
+<td>1</td>
+<td>423</td>
+<td>1.7</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>8</td>
+<td>1</td>
+<td>529</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>32</td>
+<td>1</td>
+<td>1,760</td>
+<td>6.9</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>64</td>
+<td>1</td>
+<td>2,888</td>
+<td>11.3</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>128</td>
+<td>2</td>
+<td>6,324</td>
+<td>24.7</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>256</td>
+<td>2</td>
+<td>12,761</td>
+<td>49.8</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>512</td>
+<td>2</td>
+<td>33,621</td>
+<td>131.3</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>4GiB</td>
+<td>1024</td>
+<td>2</td>
+<td>67,403</td>
+<td>263.3</td>
+</tr>
+<tr>
+<td><strong>4K</strong></td>
+<td><strong>4GiB</strong></td>
+<td><strong>2048</strong></td>
+<td><strong>2</strong></td>
+<td><strong>114,935</strong></td>
+<td><strong>449.0</strong></td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>4GiB</td>
+<td>1</td>
+<td>1</td>
+<td>429</td>
+<td>429</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>4GiB</td>
+<td>8</td>
+<td>1</td>
+<td>463</td>
+<td>463</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>4GiB</td>
+<td>32</td>
+<td>1</td>
+<td>1,679</td>
+<td>1,679</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>4GiB</td>
+<td>64</td>
+<td>1</td>
+<td>2,121</td>
+<td>2,121</td>
+</tr>
+<tr>
+<td>1MiB</td>
+<td>4GiB</td>
+<td>128</td>
+<td>1</td>
+<td>3,969</td>
+<td>3,969</td>
+</tr>
+<tr>
+<td><strong>1MiB</strong></td>
+<td><strong>4GiB</strong></td>
+<td><strong>256</strong></td>
+<td><strong>1</strong></td>
+<td><strong>4,108</strong></td>
+<td><strong>4,108</strong></td>
+</tr>
+</tbody></table>
+<p>如果是多个文件，测试结果为：</p>
+<table>
+<thead>
+<tr>
+<th>请求大小</th>
+<th>文件合计</th>
+<th>作业数＝总目标 QD</th>
+<th>有效&#x2F;计划轮</th>
+<th>写 TPS 中位数</th>
+<th>MiB&#x2F;s 中位数</th>
+<th>轮间最大&#x2F;最小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>1</td>
+<td>2&#x2F;2</td>
+<td>282.5</td>
+<td>1.1</td>
+<td>×1.25</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>8</td>
+<td>2&#x2F;2</td>
+<td>673.5</td>
+<td>2.6</td>
+<td>×1.40</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>32</td>
+<td>2&#x2F;2</td>
+<td>2,371.5</td>
+<td>9.3</td>
+<td>×2.17</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>64</td>
+<td>2&#x2F;2</td>
+<td>4,884.1</td>
+<td>19.1</td>
+<td>×2.25</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>128</td>
+<td>2&#x2F;2</td>
+<td>11,386.5</td>
+<td>44.5</td>
+<td>×1.22</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>256</td>
+<td>2&#x2F;2</td>
+<td>22,016.2</td>
+<td>86.0</td>
+<td>×1.18</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>512</td>
+<td>2&#x2F;2</td>
+<td>35,628.2</td>
+<td>139.2</td>
+<td>×1.23</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>1024</td>
+<td>2&#x2F;2</td>
+<td>65,020.9</td>
+<td>254.0</td>
+<td>×1.47</td>
+</tr>
+<tr>
+<td>4k</td>
+<td>4GiB</td>
+<td>2048</td>
+<td>2&#x2F;2</td>
+<td>88,934.5</td>
+<td>347.4</td>
+<td>×1.04</td>
+</tr>
+<tr>
+<td>1m</td>
+<td>4GiB</td>
+<td>1</td>
+<td>2&#x2F;2</td>
+<td>202.5</td>
+<td>202.5</td>
+<td>×1.02</td>
+</tr>
+<tr>
+<td>1m</td>
+<td>4GiB</td>
+<td>8</td>
+<td>2&#x2F;2</td>
+<td>523.4</td>
+<td>523.4</td>
+<td>×1.16</td>
+</tr>
+<tr>
+<td>1m</td>
+<td>4GiB</td>
+<td>32</td>
+<td>2&#x2F;2</td>
+<td>1,692.0</td>
+<td>1,692.0</td>
+<td>×1.27</td>
+</tr>
+<tr>
+<td>1m</td>
+<td>4GiB</td>
+<td>64</td>
+<td>2&#x2F;2</td>
+<td>2,304.1</td>
+<td>2,304.1</td>
+<td>×1.02</td>
+</tr>
+<tr>
+<td>1m</td>
+<td>4GiB</td>
+<td>128</td>
+<td>2&#x2F;2</td>
+<td>2,634.7</td>
+<td>2,634.7</td>
+<td>×1.58</td>
+</tr>
+<tr>
+<td>1m</td>
+<td>4GiB</td>
+<td>256</td>
+<td>2&#x2F;2</td>
+<td>1,995.7</td>
+<td>1,995.7</td>
+<td>×2.06</td>
+</tr>
+</tbody></table>
+<p>测试参数以及原因：</p>
+<p>对于多写者，为了更准确测出磁盘性能，我们采用了 direct 忽略 page cache 开销。对于写性能上限，依旧采用了 direct 和 dsync，并且给足 jobs 和 depth，避免 depth 和 cpu 造成干扰。</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th>fio 关键参数</th>
+<th>时长与文件大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1.2 多写者</td>
+<td><code>bs=4k,1m rw=write direct=1 sync=dsync iodepth=1</code>；4K 的 <code>numjobs=1,8,32,64,128,256,512,1024,2048</code>，1MiB 的 <code>numjobs=1,8,32,64,128,256</code></td>
+<td><code>runtime=3 ramp_time=1 size=4G</code></td>
+</tr>
+<tr>
+<td>A1.2 写性能上限</td>
+<td><code>bs=2m rw=write direct=1 sync=dsync numjobs=4 iodepth=64</code>，即总<strong>目标 QD&#x3D;256</strong></td>
+<td><code>runtime=8 ramp_time=2 size=1G</code> 每作业，合计 4G</td>
+</tr>
+<tr>
+<td>A1.2 多文件多写者</td>
+<td><code>bs=4k,1m rw=write direct=1 sync=dsync iodepth=1 thread=1</code>；4K 作业数 1,8,32,64,128,256,512,1024,2048，1MiB 作业数 1,8,32,64,128,256。每个作业写不同文件，总目标 QD&#x3D;作业数。</td>
+<td><code>runtime=3 ramp_time=1 time_based=1</code>，每档重复 2 轮；所有文件合计 4G，每作业文件大小为 <code>4G / 作业数</code></td>
+</tr>
+</tbody></table>
+<p>命令详细为：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fio --name=<span class="built_in">test</span> \</span><br><span class="line">  --filename=<span class="string">&quot;<span class="variable">$file</span>&quot;</span> --ioengine=io_uring \</span><br><span class="line">  --direct=<span class="variable">$direct</span> <span class="string">&quot;<span class="variable">$mode_opt</span>&quot;</span> \</span><br><span class="line">  --rw=write --bs=<span class="string">&quot;<span class="variable">$bs</span>&quot;</span> \</span><br><span class="line">  --numjobs=<span class="string">&quot;<span class="variable">$workers</span>&quot;</span> --iodepth=1 --thread=1 \</span><br><span class="line">  --offset=0 --size=<span class="string">&quot;<span class="variable">$region</span>&quot;</span> --offset_increment=<span class="string">&quot;<span class="variable">$region</span>&quot;</span> \</span><br><span class="line">  --time_based=1 --runtime=3 --ramp_time=1 \</span><br><span class="line">  --group_reporting=0 --allow_file_create=0 \</span><br><span class="line">  --output-format=json --output=result.json</span><br></pre></td></tr></table></figure></div>
+
+<p>因此，写入的是不同的区域。所以多文件和单文件基本在同一量级。</p>
+<h4 id="A1-3-参数初步选择（如果采用单写者方案）"><a href="#A1-3-参数初步选择（如果采用单写者方案）" class="headerlink" title="A1.3 参数初步选择（如果采用单写者方案）"></a>A1.3 参数初步选择（如果采用单写者方案）</h4><h5 id="A1-3-1-队列深度"><a href="#A1-3-1-队列深度" class="headerlink" title="A1.3.1 队列深度"></a>A1.3.1 队列深度</h5><table>
+<thead>
+<tr>
+<th>目标 QD</th>
+<th>写 IOPS</th>
+<th>MiB&#x2F;s</th>
+<th>平均 μs</th>
+<th>p99 μs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>525.6</td>
+<td>32.8</td>
+<td>1,890.1</td>
+<td>6,914.0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1,026.6</td>
+<td>64.2</td>
+<td>3,887.5</td>
+<td>11,468.8</td>
+</tr>
+<tr>
+<td>16</td>
+<td>4,440.7</td>
+<td>277.6</td>
+<td>3,597.1</td>
+<td>7,962.6</td>
+</tr>
+<tr>
+<td>32</td>
+<td>5,720.8</td>
+<td>357.7</td>
+<td>5,587.4</td>
+<td>11,730.9</td>
+</tr>
+<tr>
+<td>64</td>
+<td>13,386.6</td>
+<td>836.9</td>
+<td>4,775.3</td>
+<td>11,337.7</td>
+</tr>
+<tr>
+<td>128</td>
+<td>21,384.2</td>
+<td>1,337.0</td>
+<td>5,979.9</td>
+<td>9,764.9</td>
+</tr>
+<tr>
+<td>256</td>
+<td>32,943.0</td>
+<td>2,060.0</td>
+<td>7,765.8</td>
+<td>13,959.2</td>
+</tr>
+<tr>
+<td>512</td>
+<td>47,694.4</td>
+<td>2,983.0</td>
+<td>10,727.8</td>
+<td>16,711.7</td>
+</tr>
+<tr>
+<td>1024</td>
+<td>66,753.8</td>
+<td>4,176.4</td>
+<td>15,331.1</td>
+<td>24,510.5</td>
+</tr>
+<tr>
+<td>2048</td>
+<td>68,591.8</td>
+<td>4,295.5</td>
+<td>29,814.6</td>
+<td>42,205.2</td>
+</tr>
+</tbody></table>
+<p>1024 是比较好的，因为比较接近上限了。</p>
+<p>测试参数以及原因：</p>
+<p>单作业写深度扫描，即固定 batch size 大小，变化 depth。</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th>fio 关键参数</th>
+<th>时长与文件大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1.3.1 单作业写深度扫描</td>
+<td><code>bs=64k rw=write direct=1 sync=dsync numjobs=1 iodepth=1,4,16,32,64,128,256,512,1024,2048</code></td>
+<td><code>runtime=15 ramp_time=5 size=4G</code></td>
+</tr>
+</tbody></table>
+<h5 id="A1-3-2-chunk-size"><a href="#A1-3-2-chunk-size" class="headerlink" title="A1.3.2 chunk size"></a>A1.3.2 chunk size</h5><table>
+<thead>
+<tr>
+<th>bs</th>
+<th>写 IOPS</th>
+<th>MiB&#x2F;s</th>
+<th>平均 μs</th>
+<th>p99 μs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4k</td>
+<td>12,163.8</td>
+<td>47.5</td>
+<td>5,259.2</td>
+<td>8,847.4</td>
+</tr>
+<tr>
+<td>16k</td>
+<td>15,524.6</td>
+<td>242.6</td>
+<td>4,120.5</td>
+<td>8,224.8</td>
+</tr>
+<tr>
+<td>64k</td>
+<td>14,861.9</td>
+<td>929.1</td>
+<td>4,300.8</td>
+<td>9,633.8</td>
+</tr>
+<tr>
+<td>128k</td>
+<td>14,404.4</td>
+<td>1,801.1</td>
+<td>4,437.1</td>
+<td>9,371.6</td>
+</tr>
+<tr>
+<td>256k</td>
+<td>8,766.2</td>
+<td>2,192.6</td>
+<td>7,288.6</td>
+<td>13,697.0</td>
+</tr>
+<tr>
+<td>512k</td>
+<td>6,686.6</td>
+<td>3,345.4</td>
+<td>9,545.0</td>
+<td>15,925.2</td>
+</tr>
+<tr>
+<td>1m</td>
+<td>3,918.8</td>
+<td>3,923.0</td>
+<td>16,286.1</td>
+<td>25,559.0</td>
+</tr>
+</tbody></table>
+<p>可以发现在 128k 左右已经比较接近上限，后续可以调整队列深度来优化。</p>
+<p>测试参数以及原因：</p>
+<p>单作业写大小扫描，即固定 depth 深度，变化 batch size。</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th>fio 关键参数</th>
+<th>时长与文件大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1.3.2 请求大小扫描</td>
+<td><code>bs=4k,16k,64k,128k,256k,512k,1m rw=write direct=1 sync=dsync numjobs=1 iodepth=64</code></td>
+<td><code>runtime=15 ramp_time=5 size=4G</code></td>
+</tr>
+</tbody></table>
+<h4 id="A1-4-硬盘性能"><a href="#A1-4-硬盘性能" class="headerlink" title="A1.4 硬盘性能"></a>A1.4 硬盘性能</h4><h5 id="A1-4-1-官方性能"><a href="#A1-4-1-官方性能" class="headerlink" title="A1.4.1 官方性能"></a>A1.4.1 官方性能</h5><p><code>Samsung SSD 990 PRO 1TB</code>，性能上限：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>三星官方指标</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>顺序读／写</td>
+<td>7,450／6,900 MB&#x2F;s</td>
+</tr>
+<tr>
+<td>随机读，QD1、1 线程</td>
+<td>90 MB&#x2F;s</td>
+</tr>
+<tr>
+<td>随机读，QD32、16 线程</td>
+<td>4,915 MB&#x2F;s</td>
+</tr>
+</tbody></table>
+<h5 id="A1-4-2-实测性能上限"><a href="#A1-4-2-实测性能上限" class="headerlink" title="A1.4.2 实测性能上限"></a>A1.4.2 实测性能上限</h5><table>
+<thead>
+<tr>
+<th>测试</th>
+<th>fio 条件</th>
+<th>三星标称</th>
+<th>实测</th>
+<th>标称比例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4 KiB 随机读</td>
+<td>1 作业 × QD1</td>
+<td>22,000 IOPS；约 90 MB&#x2F;s</td>
+<td><strong>14,900 IOPS；61 MB&#x2F;s</strong></td>
+<td>68%</td>
+</tr>
+<tr>
+<td>4 KiB 随机读</td>
+<td>16 作业 × 每作业 QD32</td>
+<td>1,200,000 IOPS；约 4,915 MB&#x2F;s</td>
+<td><strong>682,000 IOPS；2,794 MB&#x2F;s</strong></td>
+<td>57%</td>
+</tr>
+<tr>
+<td>顺序读</td>
+<td>1 MiB，1 作业 × QD32</td>
+<td>7,450 MB&#x2F;s</td>
+<td><strong>6,643 MB&#x2F;s</strong></td>
+<td>89%</td>
+</tr>
+<tr>
+<td>顺序写，15 秒</td>
+<td>同一 8 GiB 文件；无预热</td>
+<td>6,900 MB&#x2F;s</td>
+<td>平均 <strong>4,310 MB&#x2F;s</strong>；最高每秒约 <strong>6,852 MB&#x2F;s</strong></td>
+<td>平均 62%；最高约 99%</td>
+</tr>
+<tr>
+<td>顺序写，8 秒</td>
+<td>64 GiB 文件，实际写入 35.1 GiB；无预热、未回绕</td>
+<td>6,900 MB&#x2F;s</td>
+<td>平均 <strong>4,698 MB&#x2F;s</strong>；最高每秒约 <strong>6,535 MB&#x2F;s</strong></td>
+<td>平均 68%；最高 95%</td>
+</tr>
+</tbody></table>
+<p>测试参数：</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th><code>--rw</code></th>
+<th>bs</th>
+<th>numjobs</th>
+<th>iodepth</th>
+<th>size</th>
+<th>runtime</th>
+<th>ramp_time</th>
+<th>测试文件及附加参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4 KiB 随机读，QD1</td>
+<td>randread</td>
+<td>4k</td>
+<td>1</td>
+<td>1</td>
+<td>8G</td>
+<td>30</td>
+<td>5</td>
+<td><code>fio_990pro_read.bin</code></td>
+</tr>
+<tr>
+<td>4 KiB 随机读，16 作业</td>
+<td>randread</td>
+<td>4k</td>
+<td>16</td>
+<td>32</td>
+<td>8G</td>
+<td>30</td>
+<td>5</td>
+<td><code>fio_990pro_read.bin</code>；未设置 <code>--thread=1</code>，即 fio 默认的 16 个进程</td>
+</tr>
+<tr>
+<td>顺序读</td>
+<td>read</td>
+<td>1m</td>
+<td>1</td>
+<td>32</td>
+<td>8G</td>
+<td>30</td>
+<td>5</td>
+<td><code>fio_990pro_read.bin</code></td>
+</tr>
+<tr>
+<td>顺序写，15 秒</td>
+<td>write</td>
+<td>1m</td>
+<td>1</td>
+<td>32</td>
+<td>8G</td>
+<td>15</td>
+<td>0</td>
+<td><code>fio_990pro_seqwrite.bin</code>；<code>--log_avg_msec=1000 --write_bw_log=seqwrite_trace</code></td>
+</tr>
+<tr>
+<td>顺序写，8 秒</td>
+<td>write</td>
+<td>1m</td>
+<td>1</td>
+<td>32</td>
+<td>64G</td>
+<td>8</td>
+<td>0</td>
+<td><code>fio_990pro_seqwrite_large.bin</code>；<code>--log_avg_msec=1000 --write_bw_log=seqwrite_large</code></td>
+</tr>
+</tbody></table>
+<p>可以发现顺序读写已经接近官方上限。而随机读的性能，主要原因猜测是 WSL 导致的。WSL2 的虚拟磁盘路径放大了小 I&#x2F;O 的开销。因为 1M 随机读可以到 5G&#x2F;s 左右。</p>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

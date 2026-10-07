@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/jq/代码/raf/readme.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="raf — record archive fileAn append-only store for opaque binary records, built to the design indocs&#x2F;stage3.md. A writer appends; readers walk the archive in order or jumpstraight to a record by index.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="raf&#x2F;README.md">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/jq/%E4%BB%A3%E7%A0%81/raf/README.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="raf — record archive fileAn append-only store for opaque binary records, built to the design indocs&#x2F;stage3.md. A writer appends; readers walk the archive in order or jumpstraight to a record by index.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:modified_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            raf/README.md -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h1 id="raf-—-record-archive-file"><a href="#raf-—-record-archive-file" class="headerlink" title="raf — record archive file"></a>raf — record archive file</h1><p>An append-only store for opaque binary records, built to the design in<br><code>docs/stage3.md</code>. A writer appends; readers walk the archive in order or jump<br>straight to a record by index. <code>append()</code> returning means the record is on<br>stable storage.</p>
+<div class="highlight-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;raf/raf.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">raf::RecordWriter <span class="title">writer</span><span class="params">(<span class="string">&quot;/var/lib/events&quot;</span>)</span></span>;</span><br><span class="line"><span class="type">const</span> raf::INDEX_TYPE index = writer.<span class="built_in">append</span>(payload);   <span class="comment">// durable on return</span></span><br><span class="line"></span><br><span class="line"><span class="function">raf::RecordReader <span class="title">reader</span><span class="params">(<span class="string">&quot;/var/lib/events&quot;</span>)</span></span>;</span><br><span class="line">std::optional&lt;std::string&gt; one = reader.<span class="built_in">read</span>(index);    <span class="comment">// random lookup</span></span><br><span class="line"><span class="keyword">while</span> (std::optional&lt;std::string&gt; next = reader.<span class="built_in">readNext</span>()) &#123; ... &#125;  <span class="comment">// walk</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="Layers"><a href="#Layers" class="headerlink" title="Layers"></a>Layers</h2><p>The three layers of the design doc – the doc calls them frontend, middle and<br>backend – one directory each, and nothing reaches past its neighbour.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Directory</th>
+<th>Owns</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>api</code></td>
+<td><code>src/api</code></td>
+<td><code>RecordWriter</code>, <code>RecordReader</code>, the durability and ordering contracts, thread safety</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td><code>src/store</code></td>
+<td>The file format: segment files, record headers, recovery scans, the archive directory</td>
+</tr>
+<tr>
+<td><code>io</code></td>
+<td><code>src/io</code></td>
+<td>Every system call: <code>pwritev</code>&#x2F;<code>preadv</code>, <code>flock</code>, <code>fsync</code>, directory reads</td>
+</tr>
+</tbody></table>
+<p><code>IoBackend</code> is an interface with two implementations: <code>posixBackend()</code>, the<br>default, and <code>uringBackend()</code>, built when <code>-DRAF_URING=ON</code> and selected at run<br>time with <code>RAF_BACKEND=uring</code>. The layers above name no POSIX API, so the swap<br>touches nothing but the one line in <code>defaultBackend()</code>.</p>
+<p>io_uring is off by default because measuring it says it should be. A returning<br>append is a durable append, so a backend call cannot return before its<br>completion arrives – every operation is submit-then-wait, depth one, and the<br>ring has nothing to batch. <code>strace -c</code> counts one <code>io_uring_enter</code> per append<br>against one <code>pwritev</code>: the same syscall count, plus a ring. Worse, an <code>O_DSYNC</code><br>write cannot complete inline, so io_uring hands it to an <code>iou-wrk</code> kernel<br>worker – one writer thread spawns 16 of them – and pays a context switch per<br>record. On tmpfs, where no device latency hides that cost, 4 KiB durable<br>appends run 2756 MiB&#x2F;s on POSIX and 533 MiB&#x2F;s on io_uring. On a disk slow<br>enough that 1.5 ms of device latency swamps 7 us of handoff the two are even,<br>which is the only reason io_uring looks free here. Reads are a different story<br>– a cached read completes inline, no worker involved, and the two backends<br>land within 1% of each other.</p>
+<p>io_uring starts paying when a backend call is allowed to return before the<br>write lands, which means group commit across callers, not a different system<br>call underneath the same synchronous interface.</p>
+<h2 id="On-disk"><a href="#On-disk" class="headerlink" title="On disk"></a>On disk</h2><p>An archive is a directory of segment files, <code>seg-00000.raf</code> upward. Each holds<br>a 64-byte header and then records back to back:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SegmentHeader | RecordMeta payload | RecordMeta payload | ...</span><br></pre></td></tr></table></figure></div>
+
+<p><code>RecordMeta</code> is 32 bytes and carries <strong>two</strong> checksums, which answer different<br>questions:</p>
+<ul>
+<li><code>meta_crc</code> covers the 28 bytes before it — the header minus itself. It is<br>what lets a reader trust <code>length</code> before it has read, or even allocated for,<br>the payload.</li>
+<li><code>data_crc</code> covers the payload, and is checked once the payload is in hand.</li>
+</ul>
+<p>One checksum over both would mean trusting a length that nothing had vouched<br>for yet.</p>
+<p>A record’s header and payload go to the kernel in a single <code>pwritev</code> against a<br>descriptor opened <code>O_DSYNC</code>, so one write makes the whole record durable. There<br>is no flush step and nothing to call after <code>append()</code>.</p>
+<p>Buffered <code>O_DSYNC</code> rather than the <code>O_DIRECT | O_DSYNC</code> the doc’s measurements<br>favour, deliberately: <code>O_DIRECT</code> requires the buffer, the offset and the length<br>to be sector-aligned, which for records of arbitrary size means padding every<br>record and bouncing every payload through an aligned buffer. That is exactly<br>the copy this implementation is built to avoid. <code>O_DIRECT</code> belongs behind the<br>backend interface, alongside io_uring, where it can own its own aligned<br>buffers.</p>
+<h3 id="One-writer-one-segment"><a href="#One-writer-one-segment" class="headerlink" title="One writer, one segment"></a>One writer, one segment</h3><p>Each writer takes a segment for itself with <code>flock</code> and never shares it. That<br>is the design doc’s “concurrent data writes v2”: writers do not queue behind<br>one another, do not copy their payloads into a shared queue, and a writer that<br>dies takes nothing else down with it — the kernel drops its lock and the next<br>writer adopts the segment and recovers it.</p>
+<p>Because <code>flock</code> conflicts between open file descriptions rather than between<br>processes, the same lock separates two threads and two processes.</p>
+<p>A single <code>RecordWriter</code> serializes its own appends, which is what the<br>synchronous API already implies. <strong>More write throughput means more writers,<br>one per thread</strong>, not more threads on one writer.</p>
+<h3 id="Indexes"><a href="#Indexes" class="headerlink" title="Indexes"></a>Indexes</h3><p><code>INDEX_TYPE</code> is a 64-bit integer: 15 bits of segment id in 62..48, 48 bits of<br>offset in 47..0. Bit 63 stays clear, so every valid index is non-negative and a<br>negative one is unambiguously a mistake. That allows 32768 segments — and so<br>32768 concurrent writers — of 256 TiB each.</p>
+<h3 id="Recovery"><a href="#Recovery" class="headerlink" title="Recovery"></a>Recovery</h3><p>Opening a segment for writing scans it: walk the records, stop at the first<br>byte that is not the start of a complete one, and truncate there. A trailing<br>fragment belongs to an append that never returned, so dropping it loses nothing<br>the API promised.</p>
+<p>A payload that fails its checksum with a good record behind it is a different<br>thing — that is damage, not a torn tail, and the scan steps over it rather than<br>throwing away the records after it. A record header that fails its checksum<br>with more than one record’s worth of file behind it gets the same treatment,<br>except that nothing can say where the next record starts, so iteration of that<br>segment stops. Direct lookups past the damage still work.</p>
+<h2 id="Iteration-order"><a href="#Iteration-order" class="headerlink" title="Iteration order"></a>Iteration order</h2><p>With several writers on several segments:</p>
+<ul>
+<li>Records that were already complete when a reader opened come out in one<br>order, and <strong>every reader that opens on the same segment tails walks them in<br>that same order</strong>.</li>
+<li>Records appended after that keep <strong>the order of the writer that wrote them</strong>;<br>no order is defined between writers.</li>
+</ul>
+<p>A reader that has caught up is not finished: a later <code>readNext()</code> picks up<br>records appended since, and segments created since — including by writers that<br>started after the reader did.</p>
+<p>Each segment keeps one record header prefetched; the merge compares those<br>headers’ timestamps to decide who goes next. Reading a payload picks up the<br>following header in the same <code>preadv</code>, so iteration costs one system call per<br>record and never copies the payload.</p>
+<h2 id="One-system-call-per-record-no-extra-copies"><a href="#One-system-call-per-record-no-extra-copies" class="headerlink" title="One system call per record, no extra copies"></a>One system call per record, no extra copies</h2><p>Payloads are never assembled, staged or duplicated:</p>
+<ul>
+<li><code>append()</code> and <code>appendBatch()</code> point iovecs straight at the caller’s buffers.<br>The only bytes raf builds are the 32-byte record headers.</li>
+<li><code>appendBatch(const std::vector&lt;std::string&gt;&amp;)</code> builds a vector of<br><code>string_view</code>, not a vector of strings.</li>
+<li>Reads land directly in the <code>std::string</code> that is returned, sized without<br>zeroing it first. That zeroing is what C++23’s <code>resize_and_overwrite</code> avoids,<br>and it is worth 15 µs on every 1 MiB record; under C++20 the code falls back<br>to <code>resize()</code> and pays it.</li>
+<li>Scratch vectors are reused across appends, so a steady stream of appends<br>allocates nothing.</li>
+</ul>
+<p>Both read paths reach one system call per record, and neither gives up the<br>first point to do it:</p>
+<ul>
+<li><strong>Iteration</strong> reads a payload and the header that follows it in one<br><code>preadv</code> — two iovecs, the payload going straight into the string to be<br>returned.</li>
+<li><strong>Random reads</strong> cannot know a record’s length until they have read and<br>checked its header, which is a system call before the payload read can start.<br>So they guess: records in one segment come from one writer and tend to be the<br>same size, so a segment remembers the last length it served and scatters the<br>header and that much payload in a single <code>preadv</code>. A correct guess is one<br>call; a guess that runs short falls back to reading the payload exactly, no<br>worse than not guessing at all. Records past 64 KiB are not guessed at, since<br>by then the second call is lost in the payload anyway.</li>
+</ul>
+<p>Measured with <code>strace</code>: 1005 <code>preadv</code> for 1000 records iterated, 101 for 100<br>random lookups.</p>
+<h2 id="Extending-the-file-is-the-expensive-part"><a href="#Extending-the-file-is-the-expensive-part" class="headerlink" title="Extending the file is the expensive part"></a>Extending the file is the expensive part</h2><p>Measured on a KIOXIA EXCERIA G2 (consumer NVMe, no power-loss protection),<br>4 KiB durable writes, 32000 of them, throughput per 4000-write chunk:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>first chunk</th>
+<th>steady state</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>overwriting blocks that already exist</td>
+<td>360 us</td>
+<td><strong>360 us, flat</strong></td>
+</tr>
+<tr>
+<td>extending the file – what raf does</td>
+<td>957 us</td>
+<td><strong>4500 us</strong></td>
+</tr>
+<tr>
+<td>raf <code>appendBatch</code>, 32 records per call</td>
+<td>176 us&#x2F;record</td>
+<td><strong>176 us&#x2F;record, flat</strong></td>
+</tr>
+</tbody></table>
+<p>The drive is not the problem: overwriting runs at 360 us per durable write<br>and never degrades. Extending the file does, by 12.5x, because every append<br>makes ext4 commit a size change and the journal reaches a state it does not<br>come back from – a 60 second idle does not recover it. raf never<br>preallocates, so every <code>append()</code> extends.</p>
+<p>Two consequences. <strong>Batching is not an optimization here, it is the<br>difference between 0.9 and 21 MiB&#x2F;s</strong>, and <code>appendBatch</code> already provides<br>it: one flush and one metadata commit per call instead of per record.</p>
+<p><strong>Preallocating segments turns appends into overwrites</strong>, and <code>Options:: preallocateBytes</code> does that. On a consumer NVMe it is worth about 1.85x, and<br>it holds: that drive falls off a cliff under sustained small durable writes<br>whether preallocation is on or not, and the ratio survives the fall.</p>
+<table>
+<thead>
+<tr>
+<th>4 KiB durable append</th>
+<th>extends the file</th>
+<th>overwrites</th>
+<th>ratio</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>before the cliff</td>
+<td>613 us</td>
+<td><strong>335 us</strong></td>
+<td>1.84x</td>
+</tr>
+<tr>
+<td>after the cliff</td>
+<td>4427 us</td>
+<td><strong>2128 us</strong></td>
+<td>1.89x</td>
+</tr>
+</tbody></table>
+<p>The cliff is the device’s, not the option’s – it took 30000 records to<br>reach without preallocation and 22000 with, and no amount of idling brings<br>it back. It is off by default anyway, because it writes twice the bytes:<br>nothing to gain where a flush is already cheap, flash endurance to lose, and<br>the cliff arrives sooner counted in records even though it arrives later<br>counted in device bytes, the zeros being large sequential writes.</p>
+<p>Making that work at all needed a different end-of-data rule, since<br>preallocation destroys the one thing the old one rested on. A segment<br>now publishes its append point into its header after each append lands, and<br>a header that fails its checksum below that frontier is damage while the<br>same bytes at or above it are an unfinished write. File length no longer<br>enters into it.</p>
+<p>None of this is visible on a slow disk. On the QEMU SCSI disk this project<br>was developed against, overwriting measured <em>slower</em> than extending, and the<br>curve was flat.</p>
+<h2 id="Checksums"><a href="#Checksums" class="headerlink" title="Checksums"></a>Checksums</h2><p>CRC-32C over every record header and every payload, on the SSE4.2 <code>crc32</code><br>instruction where the CPU has it. That instruction retires one operation per<br>cycle but takes three to produce its answer, so a single chain of them — each<br>waiting on the one before — wastes two thirds of the throughput. raf runs three<br>chains over three slices of each 3 KiB block and folds them back together with<br>precomputed GF(2) shifts, which is exact rather than approximate: 31 GiB&#x2F;s<br>instead of 11.5.</p>
+<h2 id="Errors"><a href="#Errors" class="headerlink" title="Errors"></a>Errors</h2><table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Exception</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Caller’s mistake — closed writer, oversized record, negative index</td>
+<td><code>std::logic_error</code></td>
+</tr>
+<tr>
+<td>Failed system call — no permission, out of space, unreadable archive</td>
+<td><code>std::system_error</code></td>
+</tr>
+</tbody></table>
+<p><code>read()</code> returns <code>std::nullopt</code> for an index with nothing readable at it: never<br>written, or written and since damaged. A damaged record is never returned as a<br>value.</p>
+<p>A write that fails partway rolls the segment back to the last record boundary,<br>so nothing half-written is left behind and the writer keeps working once the<br>underlying problem is gone.</p>
+<h2 id="Building"><a href="#Building" class="headerlink" title="Building"></a>Building</h2><p>Needs CMake 3.16, spdlog, and GoogleTest for the tests. C++23 is used where the<br>compiler has it and C++20 otherwise; pass <code>-DCMAKE_CXX_STANDARD=20</code> to force<br>the older one.</p>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmake -S . -B build</span><br><span class="line">cmake --build build -j</span><br><span class="line">ctest --test-dir build</span><br><span class="line">./build/raf_bench</span><br></pre></td></tr></table></figure></div>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RAF_URING</code></td>
+<td><code>OFF</code></td>
+<td>build the io_uring backend; needs liburing</td>
+</tr>
+<tr>
+<td><code>RAF_BUILD_TESTS</code></td>
+<td><code>ON</code></td>
+<td>build <code>raf_test</code></td>
+</tr>
+<tr>
+<td><code>RAF_BUILD_BENCH</code></td>
+<td><code>ON</code></td>
+<td>build <code>raf_bench</code></td>
+</tr>
+<tr>
+<td><code>RAF_SANITIZE</code></td>
+<td><code>OFF</code></td>
+<td>address + undefined sanitizers</td>
+</tr>
+<tr>
+<td><code>RAF_TSAN</code></td>
+<td><code>OFF</code></td>
+<td>thread sanitizer</td>
+</tr>
+<tr>
+<td><code>RAF_LOG_LEVEL</code></td>
+<td><code>info</code></td>
+<td>lowest level compiled in; below it the calls vanish</td>
+</tr>
+</tbody></table>
+<h2 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h2><p><code>&lt;raf/raf.h&gt;</code> does not mention spdlog. An application that wants raf’s<br>diagnostics includes <code>&lt;raf/logging.h&gt;</code> and calls <code>raf::setLogger()</code>. By default<br>raf reports warnings and above to stderr: damaged records, recovered segments,<br>segment files it could not make sense of. The levels below <code>RAF_LOG_LEVEL</code> are<br>compiled out, so the append path does not carry their string literals.</p>
+<h2 id="Tests"><a href="#Tests" class="headerlink" title="Tests"></a>Tests</h2><p><code>ctest --test-dir build</code>, or <code>./build/raf_test</code> for the detail. Nothing in the<br>suite uses random data or sleeps: payloads are a pure function of<br><code>(writer, sequence, size)</code>, threads meet at <code>std::latch</code>, and processes meet at<br>pipe-backed gates, so a failure reproduces.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>test_crc32c.cpp</code></td>
+<td>check values against a bit-at-a-time reference at every length, across the interleaved block boundaries</td>
+</tr>
+<tr>
+<td><code>test_format.cpp</code></td>
+<td>header layout, what each checksum covers, index packing</td>
+</tr>
+<tr>
+<td><code>test_backend.cpp</code></td>
+<td>scatter&#x2F;gather past <code>IOV_MAX</code>, short reads, locking, directories</td>
+</tr>
+<tr>
+<td><code>test_segment.cpp</code></td>
+<td>the format end to end: scans, torn tails, damage, prefetch, read speculation</td>
+</tr>
+<tr>
+<td><code>test_api.cpp</code></td>
+<td>the contract: return values, durability, calls out of order</td>
+</tr>
+<tr>
+<td><code>test_boundary.cpp</code></td>
+<td>empty and maximum records, batch and segment boundaries, bad lengths</td>
+</tr>
+<tr>
+<td><code>test_errors.cpp</code></td>
+<td>refused opens, a write that runs out of room, damage on disk</td>
+</tr>
+<tr>
+<td><code>test_recovery.cpp</code></td>
+<td>crashes by <code>_exit</code> and <code>SIGKILL</code>, files cut at every interesting byte</td>
+</tr>
+<tr>
+<td><code>test_iteration.cpp</code></td>
+<td>the ordering contract, including the doc’s worked example</td>
+</tr>
+<tr>
+<td><code>test_concurrency.cpp</code></td>
+<td>threads writing, reading and reopening together</td>
+</tr>
+<tr>
+<td><code>test_multiprocess.cpp</code></td>
+<td>segment ownership, takeover after a crash, cross-process visibility</td>
+</tr>
+<tr>
+<td><code>test_stress.cpp</code></td>
+<td>the same checks run wide; <code>RAF_STRESS_SCALE=n</code> for a longer soak</td>
+</tr>
+</tbody></table>
+<p>The suite passes clean under <code>-fsanitize=address,undefined</code> and<br><code>-fsanitize=thread</code>.</p>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

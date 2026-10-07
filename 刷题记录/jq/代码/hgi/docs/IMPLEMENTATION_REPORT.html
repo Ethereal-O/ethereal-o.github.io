@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/jq/代码/hgi/docs/implementation_report.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="HGI 实现与评测汇总更新日期：2026-10-04 1. 结论HGI 第一版已经实现并可通过交互式 CLI 使用。系统能够在用户输入期间启动只读探索，保存完整或阶段性 Artifact，并在正式提交后将证据注入 Committed Agent。 使用 gpt-5.6-luna、low reasoning 的单轮真实 A&#x2F;B 测试中，15 秒输入窗口下的提交后延迟从 62.136 秒降至">
+<meta property="og:type" content="website">
+<meta property="og:title" content="hgi&#x2F;docs&#x2F;IMPLEMENTATION_REPORT.md">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/jq/%E4%BB%A3%E7%A0%81/hgi/docs/IMPLEMENTATION_REPORT.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="HGI 实现与评测汇总更新日期：2026-10-04 1. 结论HGI 第一版已经实现并可通过交互式 CLI 使用。系统能够在用户输入期间启动只读探索，保存完整或阶段性 Artifact，并在正式提交后将证据注入 Committed Agent。 使用 gpt-5.6-luna、low reasoning 的单轮真实 A&#x2F;B 测试中，15 秒输入窗口下的提交后延迟从 62.136 秒降至">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-07T14:03:30.225Z">
+<meta property="article:modified_time" content="2026-10-07T14:03:30.225Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            hgi/docs/IMPLEMENTATION_REPORT.md -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h1 id="HGI-实现与评测汇总"><a href="#HGI-实现与评测汇总" class="headerlink" title="HGI 实现与评测汇总"></a>HGI 实现与评测汇总</h1><p>更新日期：2026-10-04</p>
+<h2 id="1-结论"><a href="#1-结论" class="headerlink" title="1. 结论"></a>1. 结论</h2><p>HGI 第一版已经实现并可通过交互式 CLI 使用。系统能够在用户输入期间启动只读探索，保存完整或阶段性 Artifact，并在正式提交后将证据注入 Committed Agent。</p>
+<p>使用 <code>gpt-5.6-luna</code>、<code>low</code> reasoning 的单轮真实 A&#x2F;B 测试中，15 秒输入窗口下的提交后延迟从 62.136 秒降至 46.948 秒，降低 24.4%。投机组总 token 从 187,086 降至 176,603，但由于缓存命中更少，按 OpenAI 标准单价估算的金额从 $0.03067 上升至 $0.03325，增加约 8.4%。</p>
+<p>这说明当前实现已经验证了核心假设：后台探索可以降低 Enter 后的等待时间；代价是更多模型请求、更高未缓存输入量，以及在部分工作负载上略高的实际费用。</p>
+<h2 id="2-已实现功能"><a href="#2-已实现功能" class="headerlink" title="2. 已实现功能"></a>2. 已实现功能</h2><h3 id="输入与控制"><a href="#输入与控制" class="headerlink" title="输入与控制"></a>输入与控制</h3><ul>
+<li>逐次接收输入 Buffer 变化。</li>
+<li>在句号、问号、感叹号、分号、换行或停顿后触发 Judge。</li>
+<li>支持 <code>manual</code>、<code>assist</code>、<code>auto</code> Commit 模式。</li>
+<li>用户 Commit 和 Stop 始终优先于 Judge。</li>
+<li>使用 generation 隔离迟到的 Explorer 结果。</li>
+</ul>
+<h3 id="Judge-与-Summary"><a href="#Judge-与-Summary" class="headerlink" title="Judge 与 Summary"></a>Judge 与 Summary</h3><ul>
+<li>Judge 返回 <code>wait</code>、<code>summarize_and_wait</code>、<code>explore</code> 或 <code>commit</code>。</li>
+<li>User Summary 只消费用户输入，不混入工具或 Agent 输出。</li>
+<li>Judge 决定探索后，Explorer 和 Summary 并行启动，避免串行增加首轮探索延迟。</li>
+<li>Judge 被提示在后续输入只改写目标或增加无关背景时返回 <code>wait</code>。</li>
+<li>Commit 不阻塞等待重复的 Summary 调用；已有摘要覆盖当前输入时只传摘要，未摘要的最新输入原样追加，摘要不可用时回退完整 request。</li>
+</ul>
+<h3 id="Explorer"><a href="#Explorer" class="headerlink" title="Explorer"></a>Explorer</h3><ul>
+<li>使用独立 Agent 上下文。</li>
+<li>Dispatcher 只注册 <code>read_file</code>、<code>glob_files</code>、<code>grep</code>、<code>git_diff</code> 和 <code>read_artifact</code>。</li>
+<li>不注册写文件或命令执行工具。</li>
+<li>输出带路径、行号、claim、源码摘录、置信度和未解决问题的 Artifact。</li>
+<li>每次只读工具返回后实时生成 partial Artifact。</li>
+<li>用户在最终探索摘要生成前提交时，已完成的目录、搜索和源码证据仍可复用。</li>
+<li>相似目标由技术标识符和中英文词项覆盖率去重，不取消已有 Explorer 或清空 partial Artifact。</li>
+<li>默认 3 次模型调用为软预算；仍产生新源码证据时可继续，但最多 6 次，最后一轮关闭工具并强制收尾。</li>
+<li>单次探索注入模型的工具结果累计不超过 24,000 字符。</li>
+</ul>
+<h3 id="Speculative-Buffer"><a href="#Speculative-Buffer" class="headerlink" title="Speculative Buffer"></a>Speculative Buffer</h3><ul>
+<li>完整 Artifact 保存为普通 JSON 文件。</li>
+<li>短索引保存为 JSONL。</li>
+<li>使用关键词、代码路径、英文前缀、中文双字词、新鲜度和置信度筛选候选项。</li>
+<li>正式提交时直接把选中的完整 Artifact 注入 Committed Agent，不额外调用 <code>read_artifact</code>。</li>
+<li>只持久化达到置信度门槛且包含真实源码位置或摘录的 Artifact；纯文件清单不进入缓存。</li>
+<li>成功只读提交会合并 Explorer partial 和 Committed Agent 实际读取的源码，保存为一小时有效的 provisional Artifact，使短输入窗口也能服务近期追问。</li>
+<li>检索过滤通用请求词，并对命中的宽泛 Artifact 按路径裁剪 Evidence；持久化原件保持完整。</li>
+<li>Evidence 保存文件 SHA-256；文件变化后对应证据从正式复用集合中移除，并作为 stale unresolved 交给 Explorer 刷新。</li>
+<li><code>write_file</code> 精确报告实际内容变化；<code>run_command</code> 通过命令前后的文件元数据快照报告创建、修改和删除路径。</li>
+<li>修改发生时同步移除受影响 Evidence 并保留其他文件证据；成功提交返回后异步刷新 stale Artifact，不阻塞当前答案。</li>
+<li>新用户输入、下一次 Commit 或 Stop 会取消后台刷新；失败或取消的正式任务不会启动刷新。</li>
+<li>后台刷新默认单次最多 30 秒，失败后延迟 3 秒重试一次，避免 provider 长时间挂起。</li>
+<li>后续 Explorer 直接获得未过期的完整 Artifact；内部哈希不进入模型上下文。</li>
+<li>同主题的新高质量 Artifact 成功落盘后替换旧版本，避免重复证据持续扩大上下文。</li>
+</ul>
+<h3 id="Committed-Agent"><a href="#Committed-Agent" class="headerlink" title="Committed Agent"></a>Committed Agent</h3><ul>
+<li>具备读取、权限控制写文件和参数化命令执行能力。</li>
+<li>命令使用 argv 调用，不经过 shell 展开。</li>
+<li><code>ask</code>、<code>allow</code>、<code>deny</code> 策略由 Dispatcher 强制执行。</li>
+<li>对只读分析优先使用 Artifact 摘录；对修改任务只验证将要变更的文件。</li>
+<li>累计注入模型的工具结果不超过 16,000 字符；并行结果公平共享预算，避免单个大结果挤掉其余证据；额度耗尽后关闭工具并强制收尾。</li>
+</ul>
+<h3 id="模型-Provider"><a href="#模型-Provider" class="headerlink" title="模型 Provider"></a>模型 Provider</h3><ul>
+<li>支持 Anthropic Messages API。</li>
+<li>支持 OpenAI Responses API。</li>
+<li>可读取现有 Codex <code>model_provider</code>、<code>base_url</code> 和认证配置。</li>
+<li>默认配置为 <code>gpt-5.6-luna</code>、reasoning effort <code>low</code>。</li>
+<li>API key 运行时从 <code>~/.codex/auth.json</code> 读取，不复制到仓库。</li>
+</ul>
+<h2 id="3-主要模块"><a href="#3-主要模块" class="headerlink" title="3. 主要模块"></a>3. 主要模块</h2><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/hgi/controller.py</code></td>
+<td>输入触发、Judge、Summary、任务 generation、Commit 和取消</td>
+</tr>
+<tr>
+<td><code>src/hgi/agent.py</code></td>
+<td>最小 model&#x2F;tool&#x2F;result 循环与工具结果回调</td>
+</tr>
+<tr>
+<td><code>src/hgi/services.py</code></td>
+<td>Judge、Summary、Explorer、Committed 服务</td>
+</tr>
+<tr>
+<td><code>src/hgi/buffer.py</code></td>
+<td>Artifact 持久化、索引和相关性检索</td>
+</tr>
+<tr>
+<td><code>src/hgi/tools.py</code></td>
+<td>只读工具、写权限、命令权限和路径隔离</td>
+</tr>
+<tr>
+<td><code>src/hgi/model.py</code></td>
+<td>Anthropic 与 OpenAI Responses 适配器</td>
+</tr>
+<tr>
+<td><code>src/hgi/observability.py</code></td>
+<td>structlog、轮转日志、脱敏、usage 和指标聚合</td>
+</tr>
+<tr>
+<td><code>src/hgi/cli.py</code></td>
+<td>prompt_toolkit 交互界面</td>
+</tr>
+</tbody></table>
+<h2 id="4-安全边界"><a href="#4-安全边界" class="headerlink" title="4. 安全边界"></a>4. 安全边界</h2><ul>
+<li>Explorer 没有写工具或通用 shell。</li>
+<li>只读工具排除 <code>.env</code>、虚拟环境、VCS 元数据、缓存、<code>node_modules</code> 和工作区外符号链接；<code>.env.example</code> 等公开模板仍可读取。</li>
+<li>所有工作区路径在解析后必须位于 workspace 内。</li>
+<li>Committed 写入和命令执行服从 <code>WritePolicy</code>。</li>
+<li>命令执行使用 <code>create_subprocess_exec</code>，不执行 shell 字符串。</li>
+<li>Stop 会取消并等待 Judge、Explorer、Committed、Artifact 刷新和停顿任务收尾。</li>
+<li>Artifact 摘录最多 40 条、总计 24,000 字符，防止无界上下文增长。</li>
+<li>日志默认不保存请求、回答、源码摘录、命令完整参数、API key 或错误正文。</li>
+</ul>
+<h2 id="5-日志与成本观测"><a href="#5-日志与成本观测" class="headerlink" title="5. 日志与成本观测"></a>5. 日志与成本观测</h2><p>日志基于 <code>structlog</code>，通过标准库 <code>QueueHandler/QueueListener</code> 异步写入 <code>RotatingFileHandler</code>。</p>
+<p>默认位置：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;workspace&gt;/.hgi/logs/hgi.jsonl</span><br></pre></td></tr></table></figure></div>
+
+<p>默认轮转策略：</p>
+<ul>
+<li>每个文件 10 MB。</li>
+<li>保留 5 个备份。</li>
+<li>每行一个 JSON 对象。</li>
+</ul>
+<p>关键字段包括：</p>
+<ul>
+<li><code>session_id</code>、<code>run_id</code>、<code>generation</code>、<code>component</code>。</li>
+<li>模型、响应 ID、调用状态和耗时。</li>
+<li>input、cached input、output、reasoning、total tokens。</li>
+<li>Judge、Summary、Explorer、Committed 分阶段 usage。</li>
+<li>各模型调用和工具调用的 started&#x2F;completed&#x2F;cancelled&#x2F;failed 计数。</li>
+<li>Artifact 数量、回答长度和端到端耗时。</li>
+</ul>
+<p>查看运行汇总：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jq <span class="string">&#x27;select(.event == &quot;run.completed&quot;) |</span></span><br><span class="line"><span class="string">  &#123;run_id, duration_ms, usage, usage_by_component, metrics&#125;&#x27;</span> \</span><br><span class="line">  .hgi/logs/hgi.jsonl</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="6-环境与启动"><a href="#6-环境与启动" class="headerlink" title="6. 环境与启动"></a>6. 环境与启动</h2><p>项目使用现有 Conda <code>Python311</code> 解释器创建本地 venv：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ethereal/vm2/jq/hgi</span><br><span class="line">/home/ethereal/vm2/conda/anaconda3/envs/Python311/bin/python -m venv .venv</span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br><span class="line">pip install -e <span class="string">&#x27;.[dev]&#x27;</span></span><br><span class="line">hgi --workspace /path/to/project</span><br></pre></td></tr></table></figure></div>
+
+<p>常用参数：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hgi \</span><br><span class="line">  --provider codex \</span><br><span class="line">  --model gpt-5.6-luna \</span><br><span class="line">  --reasoning-effort low \</span><br><span class="line">  --writes ask \</span><br><span class="line">  --log-level INFO</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="7-端到端评测"><a href="#7-端到端评测" class="headerlink" title="7. 端到端评测"></a>7. 端到端评测</h2><h3 id="评测任务"><a href="#评测任务" class="headerlink" title="评测任务"></a>评测任务</h3><div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">请分析 HGI 的 Speculative Buffer 如何把探索结果交给正式 Agent。</span><br><span class="line">重点说明 Controller 的 artifact 选择路径，并列出关键文件；不要修改代码。</span><br></pre></td></tr></table></figure></div>
+
+<p>配置：</p>
+<ul>
+<li>模型：<code>gpt-5.6-luna</code>。</li>
+<li>Reasoning effort：<code>low</code>。</li>
+<li>写策略：<code>deny</code>。</li>
+<li>投机组在第一句后保留 15 秒输入窗口，然后 Commit。</li>
+<li>两组使用独立临时状态目录。</li>
+<li>指标从 <code>run.completed</code> 结构化日志读取。</li>
+</ul>
+<h3 id="最新-A-x2F-B-结果"><a href="#最新-A-x2F-B-结果" class="headerlink" title="最新 A&#x2F;B 结果"></a>最新 A&#x2F;B 结果</h3><table>
+<thead>
+<tr>
+<th>指标</th>
+<th align="right">投机探索</th>
+<th align="right">无投机基线</th>
+<th align="right">变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Enter 到回答</td>
+<td align="right">46.948 s</td>
+<td align="right">62.136 s</td>
+<td align="right">-24.4%</td>
+</tr>
+<tr>
+<td>首次输入到回答</td>
+<td align="right">61.950 s</td>
+<td align="right">62.136 s</td>
+<td align="right">-0.3%</td>
+</tr>
+<tr>
+<td>Artifact 数量</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">+1</td>
+</tr>
+<tr>
+<td>回答长度</td>
+<td align="right">2,899 字符</td>
+<td align="right">4,336 字符</td>
+<td align="right">-33.1%</td>
+</tr>
+<tr>
+<td>Input tokens</td>
+<td align="right">174,522</td>
+<td align="right">184,891</td>
+<td align="right">-5.6%</td>
+</tr>
+<tr>
+<td>Cached input tokens</td>
+<td align="right">23,040</td>
+<td align="right">49,664</td>
+<td align="right">-53.6%</td>
+</tr>
+<tr>
+<td>Output tokens</td>
+<td align="right">2,081</td>
+<td align="right">2,195</td>
+<td align="right">-5.2%</td>
+</tr>
+<tr>
+<td>Reasoning tokens</td>
+<td align="right">335</td>
+<td align="right">144</td>
+<td align="right">+132.6%</td>
+</tr>
+<tr>
+<td>Total tokens</td>
+<td align="right">176,603</td>
+<td align="right">187,086</td>
+<td align="right">-5.6%</td>
+</tr>
+<tr>
+<td>模型请求</td>
+<td align="right">11</td>
+<td align="right">9</td>
+<td align="right">+22.2%</td>
+</tr>
+<tr>
+<td>工具调用</td>
+<td align="right">16</td>
+<td align="right">17</td>
+<td align="right">-5.9%</td>
+</tr>
+</tbody></table>
+<p>投机组分阶段 token：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th align="right">Total tokens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Judge</td>
+<td align="right">262</td>
+</tr>
+<tr>
+<td>Summary</td>
+<td align="right">335</td>
+</tr>
+<tr>
+<td>Explorer</td>
+<td align="right">23,847</td>
+</tr>
+<tr>
+<td>Committed</td>
+<td align="right">152,159</td>
+</tr>
+</tbody></table>
+<p>投机阶段额外使用约 24,444 tokens，但让 Committed 阶段相对基线减少约 34,735 tokens，净减少 10,483 tokens。</p>
+<h3 id="价格估算"><a href="#价格估算" class="headerlink" title="价格估算"></a>价格估算</h3><p>按 2026-10-01 OpenAI 文档中 <code>gpt-5.6-luna</code> 的标准单价：</p>
+<ul>
+<li>Input：$0.20 &#x2F; 1M tokens。</li>
+<li>Cached input：$0.02 &#x2F; 1M tokens。</li>
+<li>Output：$1.20 &#x2F; 1M tokens。</li>
+</ul>
+<p>计算时 cached input 从 input 中扣除后单独计价：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">投机探索：$0.03325</span><br><span class="line">无投机基线：$0.03067</span><br><span class="line">两组合计：$0.06393</span><br></pre></td></tr></table></figure></div>
+
+<p>投机组总 token 更少，但 cached input 命中也更少，因此估算金额高约 8.4%。当前请求经过自定义 <code>ipads</code> provider，实际账单仍取决于该 provider 的额度、折扣或加价。</p>
+<p>开发期间所有真实模型测试合计粗估为 $0.17-$0.24。早期测试尚未启用 usage 日志，因此该数字是区间估算，不是账单值。</p>
+<h2 id="8-评测解读"><a href="#8-评测解读" class="headerlink" title="8. 评测解读"></a>8. 评测解读</h2><p>已经验证的收益：</p>
+<ul>
+<li>partial Artifact 可以在 Explorer 未完成时被正式任务复用。</li>
+<li>正式阶段模型轮次和文件探索量通常减少。</li>
+<li>用户按 Enter 后的等待时间在本轮测试中下降 24.4%。</li>
+<li>15 秒用户输入时间基本覆盖了投机探索的墙钟开销。</li>
+</ul>
+<p>当前代价：</p>
+<ul>
+<li>Judge、Summary 和 Explorer 增加模型请求数。</li>
+<li>投机组缓存命中下降，导致金额未随总 token 同步下降。</li>
+<li>Committed Agent 仍会重新验证部分文件。</li>
+<li>被取消的模型请求没有最终 usage 响应，日志中的 token 是可观测下界。</li>
+</ul>
+<h3 id="长输入与无关背景复测"><a href="#长输入与无关背景复测" class="headerlink" title="长输入与无关背景复测"></a>长输入与无关背景复测</h3><p>2026-10-02 使用同一权限审查任务模拟了 40 秒输入：第一阶段立即给出完整意图，第二阶段持续追加不改变目标的背景信息。</p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th align="right">Enter 到回答</th>
+<th align="right">Total tokens</th>
+<th align="right">Explorer tokens</th>
+<th align="right">Committed 调用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无投机基线</td>
+<td align="right">59.405 s</td>
+<td align="right">108,719</td>
+<td align="right">0</td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td>优化前投机</td>
+<td align="right">50.561 s</td>
+<td align="right">258,575</td>
+<td align="right">131,476</td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td>去重和预算后、过滤前</td>
+<td align="right">88.516 s</td>
+<td align="right">143,114</td>
+<td align="right">16,418</td>
+<td align="right">7</td>
+</tr>
+<tr>
+<td>加入敏感&#x2F;生成目录过滤</td>
+<td align="right">55.617 s</td>
+<td align="right">26,074</td>
+<td align="right">3,114</td>
+<td align="right">3</td>
+</tr>
+</tbody></table>
+<p>最终一轮答案仍覆盖 <code>allow/ask/deny</code>、路径逃逸和 shell 注入。相对基线，总 token 降低 76.0%；相对优化前投机版本降低 89.9%。最终一轮的 55.617 秒仍包含 17.5 秒提交时 Summary 等待，该阻塞调用已在测试后移除，因此表中尚未反映这项最后优化。</p>
+<p>根因是原只读文件清单包含 <code>.venv</code>，500 项上限和工具上下文预算被依赖文件占满，产生的 Artifact 没有源码证据；Committed Agent 甚至尝试读取 <code>.env</code>。统一过滤后，Explorer 文件清单从大量环境文件缩减为 23 个真实项目文件。</p>
+<h3 id="跨请求缓存摊薄复测"><a href="#跨请求缓存摊薄复测" class="headerlink" title="跨请求缓存摊薄复测"></a>跨请求缓存摊薄复测</h3><p>同一个只读安全分析问题在同一 workspace&#x2F;state 运行四轮。第一轮建立带文件哈希的 Artifact；第二轮验证缓存命中；第三轮将旧实现产生的两份重复缓存压缩为一份；第四轮代表稳定态。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th align="right">首轮冷缓存</th>
+<th align="right">第四轮稳定态</th>
+<th align="right">变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Explorer 等待</td>
+<td align="right">37.604 s</td>
+<td align="right">29.644 s</td>
+<td align="right">-21.2%</td>
+</tr>
+<tr>
+<td>Enter 到回答</td>
+<td align="right">28.245 s</td>
+<td align="right">23.914 s</td>
+<td align="right">-15.3%</td>
+</tr>
+<tr>
+<td>Total tokens</td>
+<td align="right">18,235</td>
+<td align="right">8,150</td>
+<td align="right">-55.3%</td>
+</tr>
+<tr>
+<td>Explorer tokens</td>
+<td align="right">12,921</td>
+<td align="right">3,771</td>
+<td align="right">-70.8%</td>
+</tr>
+<tr>
+<td>Committed tokens</td>
+<td align="right">4,790</td>
+<td align="right">3,806</td>
+<td align="right">-20.5%</td>
+</tr>
+<tr>
+<td>Explorer 模型调用</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">-75.0%</td>
+</tr>
+<tr>
+<td>持久 Artifact 数量</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">不增长</td>
+</tr>
+</tbody></table>
+<p>四轮答案均覆盖 <code>.env</code>、<code>.venv</code> 和工作区外符号链接。稳定态只命中一份 Artifact，Explorer 与 Committed 各调用模型一次。结果证明缓存能够摊薄重复问题的输入和探索成本，同时硬预算仍限制最坏情况。</p>
+<h3 id="长输入摘要提交与-Committed-预算复测"><a href="#长输入摘要提交与-Committed-预算复测" class="headerlink" title="长输入摘要提交与 Committed 预算复测"></a>长输入摘要提交与 Committed 预算复测</h3><p>2026-10-04 使用 4,518 字符请求复测完整链路：前 4,445 字符为重复背景，最后 72 字符才给出分析 <code>Controller → Artifact → Committed Agent</code> 的明确目标。两轮均保留 12 秒第二阶段投机窗口，使用独立临时状态目录和 <code>deny</code> 写策略。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th align="right">完整原文提交</th>
+<th align="right">摘要提交 + 工具硬预算</th>
+<th align="right">变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Committed 请求字符</td>
+<td align="right">4,518</td>
+<td align="right">90</td>
+<td align="right">-98.0%</td>
+</tr>
+<tr>
+<td>Enter 到回答</td>
+<td align="right">39.191 s</td>
+<td align="right">30.733 s</td>
+<td align="right">-21.6%</td>
+</tr>
+<tr>
+<td>首次输入到回答</td>
+<td align="right">58.469 s</td>
+<td align="right">46.745 s</td>
+<td align="right">-20.1%</td>
+</tr>
+<tr>
+<td>Committed 模型调用</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">-25.0%</td>
+</tr>
+<tr>
+<td>Committed tokens</td>
+<td align="right">53,009</td>
+<td align="right">11,850</td>
+<td align="right">-77.6%</td>
+</tr>
+<tr>
+<td>全链路可观测 tokens</td>
+<td align="right">67,621</td>
+<td align="right">19,796</td>
+<td align="right">-70.7%</td>
+</tr>
+<tr>
+<td>最大 Committed prompt</td>
+<td align="right">86,177 字符</td>
+<td align="right">22,199 字符</td>
+<td align="right">-74.2%</td>
+</tr>
+<tr>
+<td>最终答案</td>
+<td align="right">3,629 字符</td>
+<td align="right">3,376 字符</td>
+<td align="right">-7.0%</td>
+</tr>
+</tbody></table>
+<p>按标准单价粗估，可观测成本从约 <code>$0.0152</code> 降到约 <code>$0.0059</code>，降低约 61%。两轮都有被取消且没有最终 usage 的 Explorer 请求，因此仍是账单下界。</p>
+<p>实现上，Commit 在现有 Summary 与请求前缀一致时只传摘要；尚未总结的最新尾部原样追加，摘要缺失或不匹配时回退完整请求。Committed 工具结果采用 16,000 字符累计硬预算，同批结果公平分配；预算耗尽后的下一轮关闭工具并强制收尾。最终轮生成 1,124 output tokens 仍耗时 22.654 秒，是当前超过 15 秒目标的主要剩余瓶颈。</p>
+<h2 id="9-已知限制与后续工作"><a href="#9-已知限制与后续工作" class="headerlink" title="9. 已知限制与后续工作"></a>9. 已知限制与后续工作</h2><ol>
+<li>当前数据来自单轮真实 A&#x2F;B，模型路径和网络延迟存在波动。应连续运行 10-20 轮并报告 P50&#x2F;P95。</li>
+<li>当前目标去重使用本地词项与技术标识符相似度，仍需用更多改写和真实意图变更样本校准误判率。</li>
+<li>当前缓存按同主题替换而非细粒度 evidence graph 合并；跨主题共享同一文件证据时仍可能重复保存。</li>
+<li>应分别统计已取消请求的 provider 账单，校准日志 usage 下界。</li>
+<li>如需跨主机集中观测，可在现有 structlog 事件之上接入 OpenTelemetry、Loki 或其他日志平台。</li>
+<li>当前轮转适合单进程 CLI；多进程共享同一日志文件时需要改为集中 sink 或支持进程锁的 handler。</li>
+<li><code>run_command</code> 的主动修改检测比较 2 MB 以下、非敏感&#x2F;非生成文件的 <code>mtime_ns + size</code>；极少数保留相同元数据的原地写入会延迟到 SHA-256 懒校验时发现。HGI 之外的外部修改也依赖该懒校验。</li>
+</ol>
+<h2 id="10-验证状态"><a href="#10-验证状态" class="headerlink" title="10. 验证状态"></a>10. 验证状态</h2><div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">47 passed</span><br><span class="line">No broken requirements found.</span><br></pre></td></tr></table></figure></div>
+
+<p>覆盖范围包括：</p>
+<ul>
+<li>Artifact 质量门槛、持久化、同主题替换、哈希失效、精确主动失效、后台刷新与跨会话注入。</li>
+<li>路径逃逸和 Explorer 权限边界。</li>
+<li><code>write_file</code> 与 <code>run_command</code> 修改检测、刷新取消，以及失败提交不触发刷新。</li>
+<li>Evidence 级检索、通用词过滤、Committed 证据捕获、provisional 过期，以及刷新超时&#x2F;重试。</li>
+<li>写入、命令权限与 argv 调用。</li>
+<li>输入触发、探索、提交、取消和 partial Artifact。</li>
+<li>相似目标去重、Explorer 自适应软&#x2F;硬预算、上下文预算和非阻塞 Commit。</li>
+<li>敏感路径、生成目录和工作区外符号链接过滤。</li>
+<li>Python 3.11 CLI 参数解析。</li>
+<li>Codex 配置与 Responses 工具协议转换。</li>
+<li>structlog JSONL、脱敏、轮转、上下文、usage 和 run 聚合。</li>
+</ul>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

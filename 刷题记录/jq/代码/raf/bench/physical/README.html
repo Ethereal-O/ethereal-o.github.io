@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Ethereal">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/刷题记录/jq/代码/raf/bench/physical/readme.html"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Measuring raf on real hardwareEverything in the repo so far was measured inside a QEMU VM whose diskpresents as QEMU HARDDISK over emulated SCSI, with rotational&#x3D;1 and awrite-back cache. A 4 KiB durab">
+<meta property="og:type" content="website">
+<meta property="og:title" content="raf&#x2F;bench&#x2F;physical&#x2F;README.md">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/jq/%E4%BB%A3%E7%A0%81/raf/bench/physical/README.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Measuring raf on real hardwareEverything in the repo so far was measured inside a QEMU VM whose diskpresents as QEMU HARDDISK over emulated SCSI, with rotational&#x3D;1 and awrite-back cache. A 4 KiB durab">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:modified_time" content="2026-10-07T14:03:30.229Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            raf/bench/physical/README.md -
+        
+        Ethereal&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"busuanzi_counter":{"enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"pjax":true,"open_graph":true,"google_analytics":{"enable":false,"id":null},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Ethereal's Blog","subtitle":{"text":["A willing horse needs no spur."],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.2.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Github":{"path":"https://github.com/Ethereal-O/","icon":"fa-brands fa-github"},"CSDN":{"path":"https://blog.csdn.net/weixin_51969975","icon":"fa-brands fa-stack-overflow"},"Links":{"icon":"fa-regular fa-link","submenus":{"Fontawesome":"https://fontawesome.com/search","Iconfont":"https://www.iconfont.cn/","Redefine":"https://redefine-docs.ohevan.com/introduction","Linyu":"https://www.linyu.cool/","Electronic-Waste":"https://blog.electronicwaste.cn/?","Thysrael":"https://thysrael.github.io/?","World-explorer":"https://www.cnblogs.com/world-explorer"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2023/8/1 00:00:00"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="main-content-container">
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ethereal&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-github"></i>
+                                        
+                                        GITHUB
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                                    
+                                        
+                                            <i class="fa-brands fa-stack-overflow"></i>
+                                        
+                                        CSDN
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" 
+                                    href="#" onClick="return false;">
+                                    
+                                        
+                                            <i class="fa-regular fa-link"></i>
+                                        
+                                        LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL
+                                        </a>
+                                        </li>
+                                    
+                                        <li>
+                                        <a target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER
+                                        </a>
+                                        </li>
+                                    
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://github.com/Ethereal-O/"  >
+                             
+                                
+                                    <i class="fa-brands fa-github"></i>
+                                
+                                GITHUB
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51969975"  >
+                             
+                                
+                                    <i class="fa-brands fa-stack-overflow"></i>
+                                
+                                CSDN
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="has-dropdown" 
+                        href="#" onClick="return false;">
+                            
+                                
+                                    <i class="fa-regular fa-link"></i>
+                                
+                                LINKS&nbsp;<i class="fa-solid fa-chevron-down"></i>
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                              
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://fontawesome.com/search">FONTAWESOME</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.iconfont.cn/">ICONFONT</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://redefine-docs.ohevan.com/introduction">REDEFINE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.linyu.cool/">LINYU</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://blog.electronicwaste.cn/?">ELECTRONIC-WASTE</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://thysrael.github.io/?">THYSRAEL</a>
+                            </li>
+                        
+                            <li class="dropdown-item flex-center">
+                                <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.cnblogs.com/world-explorer">WORLD-EXPLORER</a>
+                            </li>
+                        
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="page-template-container">
+        
+        
+        
+        <div class="page-template-content markdown-body">
+            
+                <h1 id="Measuring-raf-on-real-hardware"><a href="#Measuring-raf-on-real-hardware" class="headerlink" title="Measuring raf on real hardware"></a>Measuring raf on real hardware</h1><p>Everything in the repo so far was measured inside a QEMU VM whose disk<br>presents as <code>QEMU HARDDISK</code> over emulated SCSI, with <code>rotational=1</code> and a<br>write-back cache. A 4 KiB durable append costs about 1.4 ms there; on an NVMe<br>it is 10-20 us. That gap does not merely scale the numbers down, it changes<br>which conclusions hold:</p>
+<table>
+<thead>
+<tr>
+<th>4 KiB durable append, 1 writer</th>
+<th>posix MiB&#x2F;s</th>
+<th>io_uring &#x2F; posix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tmpfs (no block layer)</td>
+<td>2709</td>
+<td><strong>0.19</strong></td>
+</tr>
+<tr>
+<td><code>null_blk</code>, no device latency</td>
+<td>133</td>
+<td>0.86</td>
+</tr>
+<tr>
+<td><code>null_blk</code>, 15 us injected</td>
+<td>49</td>
+<td>0.90</td>
+</tr>
+<tr>
+<td>this VM’s QEMU SCSI disk</td>
+<td>3.0</td>
+<td><strong>1.13</strong></td>
+</tr>
+</tbody></table>
+<p>io_uring’s <code>iou-wrk</code> handoff is a fixed ~7.5 us. It is 0.5% of a 1.4 ms append<br>and invisible; it is a third of a 20 us one. <strong>The VM says io_uring is free<br>because the storage is slow.</strong> These scripts exist to find out what real<br>storage says.</p>
+<h2 id="What-is-still-open"><a href="#What-is-still-open" class="headerlink" title="What is still open"></a>What is still open</h2><ol>
+<li><p><strong>Does io_uring’s handoff matter on a real NVMe?</strong> Predicted yes, roughly<br>0.85-0.95 on small durable appends. Never measured on hardware.</p>
+</li>
+<li><p><del><strong>What does the 2.00x read amplification cost?</strong></del> <strong>Answered: half the<br>throughput, and O_DIRECT gets most of it back.</strong> Random reads, 40 GiB<br>archive on a 31 GiB machine, cold:</p>
+<table>
+<thead>
+<tr>
+<th>workers</th>
+<th>fio</th>
+<th>raf</th>
+<th>raf-od</th>
+<th>raf&#x2F;fio</th>
+<th>od&#x2F;fio</th>
+<th>amp</th>
+<th>od amp</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>44.8</td>
+<td>23.7</td>
+<td>38.3</td>
+<td>0.53</td>
+<td>0.85</td>
+<td>2.00</td>
+<td>1.12</td>
+</tr>
+<tr>
+<td>8</td>
+<td>280.6</td>
+<td>148.7</td>
+<td>231.3</td>
+<td>0.53</td>
+<td>0.82</td>
+<td>2.00</td>
+<td>1.12</td>
+</tr>
+<tr>
+<td>32</td>
+<td>657.6</td>
+<td>319.3</td>
+<td>503.6</td>
+<td>0.49</td>
+<td>0.77</td>
+<td>2.00</td>
+<td>1.12</td>
+</tr>
+<tr>
+<td>64</td>
+<td>817.2</td>
+<td>426.4</td>
+<td>607.1</td>
+<td>0.52</td>
+<td>0.74</td>
+<td>1.77</td>
+<td>1.12</td>
+</tr>
+</tbody></table>
+<p>O_DIRECT reads 512 byte sectors where the page cache reads 4096 byte<br>pages, so a 4128 byte record costs it 4608 bytes rather than 8192: <code>amp</code><br>1.12 against 2.00, and 1.4 to 1.6x the throughput. It does not need the<br>format changed, and what is left of the gap to fio is almost exactly the<br>1.12.</p>
+<p><strong>Except when the working set fits in memory.</strong> The same test over a 6 GiB<br>archive, once the cache was serving most of it, put buffered at 632.1 and<br>O_DIRECT at 534.9 with <code>amp</code> reading 0.18 – eighty-two percent of the<br>bytes never reached the drive. A cache hit cannot be beaten by making the<br>miss cheaper. A 4 KiB record is 4128 bytes with its 32-byte header, so it<br>always spans two pages. On the VM both raf and fio saturated the device<br>anyway and the 2x cost nothing. On the KIOXIA it costs exactly what it<br>says: <code>vsfio.sh</code> puts 4 KiB random read at 0.47-0.54 of fio at every<br>worker count from 1 to 256, with <code>amp</code> reading 2.00, and p50 at 1 worker<br>of 183 us against fio’s 92. The same 2x shows up on 4 KiB durable append<br>once the drive saturates – 1.1x at 1 writer, 0.45x at 256 – because each<br>append dirties a page the next one has to write again. At 1 MiB both are<br>0.9-1.0x, which is the same fact seen from the other end.</p>
+</li>
+<li><p><strong>Where does the drive’s SLC cache run out, and is raf still the<br>bottleneck after it?</strong> A 990 PRO absorbs tens of GB at 4-6 GB&#x2F;s then falls<br>to native TLC speed. Short runs measure the cache.</p>
+</li>
+<li><p><del><strong>How much of the raw device does raf hand through, and does that hold<br>as the thread count rises?</strong></del> <strong>Answered for sequential work.</strong></p>
+<p>Sequential read, every worker on its own stream (<code>seqscale.sh</code>), with<br><code>raf-od</code> reading the same segments through O_DIRECT and parsing them in<br>the benchmark:</p>
+<table>
+<thead>
+<tr>
+<th>4 KiB</th>
+<th>fio</th>
+<th>raf</th>
+<th>raf-od</th>
+<th>raf&#x2F;fio</th>
+<th>od&#x2F;fio</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 stream</td>
+<td>378.7</td>
+<td>346.3</td>
+<td>1386.2</td>
+<td>0.91</td>
+<td>3.66</td>
+</tr>
+<tr>
+<td>8</td>
+<td>316.3</td>
+<td>399.3</td>
+<td><strong>1999.2</strong></td>
+<td>1.26</td>
+<td>6.32</td>
+</tr>
+<tr>
+<td>32</td>
+<td>868.4</td>
+<td>725.5</td>
+<td>1867.2</td>
+<td>0.84</td>
+<td>2.15</td>
+</tr>
+<tr>
+<td>64</td>
+<td>923.7</td>
+<td>842.3</td>
+<td>1817.6</td>
+<td>0.91</td>
+<td>1.97</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>1 MiB</th>
+<th>fio</th>
+<th>raf</th>
+<th>raf-od</th>
+<th>raf&#x2F;fio</th>
+<th>od&#x2F;fio</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 stream</td>
+<td>142.9</td>
+<td>313.1</td>
+<td>1456.9</td>
+<td>2.19</td>
+<td>10.20</td>
+</tr>
+<tr>
+<td>8</td>
+<td>318.2</td>
+<td>415.6</td>
+<td><strong>2043.8</strong></td>
+<td>1.31</td>
+<td>6.42</td>
+</tr>
+<tr>
+<td>32</td>
+<td>762.3</td>
+<td>776.6</td>
+<td>1921.7</td>
+<td>1.02</td>
+<td>2.52</td>
+</tr>
+<tr>
+<td>64</td>
+<td>911.3</td>
+<td>947.0</td>
+<td>1865.6</td>
+<td>1.04</td>
+<td>2.05</td>
+</tr>
+</tbody></table>
+<p>raf matches fio at both sizes and converges on it as the load rises –<br>0.84 to 1.31 across the sweep, 0.91 and 1.04 at sixty-four streams, <code>amp</code><br>1.00 throughout. An earlier sweep to 128 streams read 0.99.</p>
+<p><strong>Both of them get 45% of the drive</strong>, and <code>raf-od</code> says why that is the<br>shape rather than the code: 1817 to 2044 MiB&#x2F;s, which is the O_DIRECT<br>range below, reached with eight threads. raf’s framing, its CRC and a copy<br>out of the window are not a bottleneck – a single O_DIRECT thread already<br>reads 1386.</p>
+<table>
+<thead>
+<tr>
+<th>shape</th>
+<th>MiB&#x2F;s</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>O_DIRECT, psync, 8 threads</td>
+<td>1935</td>
+</tr>
+<tr>
+<td>O_DIRECT, psync, 32 threads</td>
+<td>1923</td>
+</tr>
+<tr>
+<td>O_DIRECT, io_uring, queue depth 64</td>
+<td>1775</td>
+</tr>
+<tr>
+<td>buffered, io_uring, queue depth 64</td>
+<td>936</td>
+</tr>
+<tr>
+<td>buffered, psync, 32 threads, 4 MiB blocks</td>
+<td>713</td>
+</tr>
+<tr>
+<td><strong>buffered, psync, 32 threads – raf’s shape</strong></td>
+<td><strong>733</strong></td>
+</tr>
+<tr>
+<td>buffered, psync, 8 threads</td>
+<td>302</td>
+</tr>
+</tbody></table>
+<p>raf at 32 streams reads 725 to 776. <strong>It is at the ceiling of the shape it<br>uses, and O_DIRECT is a different ceiling rather than a faster road to the<br>same one.</strong></p>
+<p>The rows vary queue depth and O_DIRECT independently, because which one<br>costs the 2.5x decides what raf should do about it, and the answer is<br>unambiguous: <strong>every buffered row lands between 302 and 936 MiB&#x2F;s whatever<br>the engine, queue depth, thread count or block size, and every O_DIRECT<br>row lands between 1775 and 1935.</strong> Buffered io_uring at depth 64 reads<br>936, no better than psync’s 733. It is not the queue depth. It is also not<br>page-cache reclaim: an 8 GiB file on a 31 GiB machine gives 733 against<br>the 46 GiB file’s 751.</p>
+<p>So a batched or asynchronous read API would not help raf’s sequential read<br>at all, and O_DIRECT doubles it with eight synchronous threads, which raf<br>already has. No format change is needed either: this drive’s logical block<br>is 512 bytes, so an aligned window costs at most 511 bytes at each end –<br>it is the page cache, not the drive, that rounds a 4128 byte record up to<br>two 4096 byte pages.</p>
+<p>What O_DIRECT costs is <strong>not</strong> a copy, though an earlier reading of these<br>numbers said it was. A buffered pread into the caller’s string is the<br>kernel copying out of the page cache, so a miss costs one DMA and one copy<br>whichever path it takes; O_DIRECT moves that copy out of the kernel rather<br>than adding one.</p>
+<p>It could be fewer copies than today. O_DIRECT needs the destination<br>aligned and the offset and length multiples of 512, and raf’s payloads sit<br>at 32*(k+1) mod 512 – aligned one record in sixteen. Padding the meta to<br>512 would align every payload and make every length a multiple of 512, so<br>the drive could DMA straight into the caller’s buffer: genuinely zero<br>copies, which the buffered path cannot reach because <code>copy_to_user</code> is not<br>optional. The price is 512 bytes a record rather than 32 – 12.5% on a 4<br>KiB payload – and an API that hands back an aligned buffer instead of a<br>std::string.</p>
+<p>And it costs less than losing the page cache sounds like it should,<br>because <strong>neither <code>odread</code> nor <code>odrand</code> caches anything</strong> and both numbers<br>above are theirs. <code>odread</code> slides a 1 MiB window and carries the<br>straddling record forward – that is the whole of its readahead, and one<br>thread of it reads 1386 MiB&#x2F;s. <code>odrand</code> issues one pread per record and<br>keeps nothing between them, and still beats the buffered path by 1.4 to<br>1.6x on a working set larger than memory. Self-managed caching is not a<br>prerequisite for any of this; it is only what raf would need in order to<br>win the one case it loses, a working set that fits in RAM, and<br>reimplementing the page cache to win that case is rarely a good trade.</p>
+<p>Page-aligning records, considered and dropped: padding a record to 8192<br>aligns where the record starts, not where the payload starts. The payload<br>still begins 32 bytes in and still spans two pages, so <code>amp</code> stays 2.00<br>and the padding buys nothing. With a 4096 byte payload the only layout<br>that fixes random-read amplification is one that stops storing the meta<br>next to the payload. Sequential reads never had the problem: <code>amp</code> is 1.01<br>there, because neighbouring records share pages.</p>
+<p>One machine, one drive. The buffered ceiling in particular may be this<br>box’s – it runs kubelet and a VM image off the same filesystem.</p>
+<p>Taken with the random-read numbers above, buffered I&#x2F;O has no throughput<br>advantage anywhere raf was measured on a working set larger than memory:<br>sequential 2.2 to 5x for O_DIRECT, random 1.4 to 1.6x. Its one advantage<br>is the page cache hit, and that is worth everything when the working set<br>fits and nothing when it does not. The question is not which is faster but<br>what raf’s working set is expected to be against RAM – which is a product<br>question, not a measurement.</p>
+<p>Sequential 1 MiB durable append reaches 1209 MiB&#x2F;s at eight writers with<br>raf&#x2F;fio at 1.04. 4 KiB durable append is still open, below.</p>
+</li>
+<li><p><strong>What is the 8.8 ms append?</strong> At 4 KiB with two to eight writers, p50<br>pins to 8.8 ms and barely moves: 8847, 8784, 8762 across worker counts,<br>and 8825, 8828, 8814 with the frontier write disabled. Three suspects are<br>eliminated at the magnitude where it appears – measurement order, page<br>alignment, and the frontier write – and the journal counters are<br>identical to fio’s at every worker count, so raf asks for no more journal<br>work than fio does. <strong>fio lands in the same mode</strong>, 8737 us at four<br>writers, which says it is the system’s and not raf’s.</p>
+</li>
+<li><p><strong>The drive degrades over a session and does not recover.</strong> The same<br>machine, the same test at four writers: 11.5 MiB&#x2F;s for fio and 11.4 for<br>raf early on, 1.7 and 1.7 after a few hundred GiB. Both sides fall<br>together, so ratios taken back to back stay meaningful while absolute 4<br>KiB write numbers do not. Any 4 KiB write figure in this repo should be<br>read as “on a drive in whatever state that session’s writes had left it”.</p>
+</li>
+</ol>
+<h2 id="Where-raf-stands-against-the-drive"><a href="#Where-raf-stands-against-the-drive" class="headerlink" title="Where raf stands against the drive"></a>Where raf stands against the drive</h2><p>One machine, a KIOXIA EXCERIA G2, measured over a session that wrote several<br>hundred gigabytes to it. The drive degrades as that goes on – its streaming<br>write ceiling read 631 MiB&#x2F;s at the end against 1209 for a durable append<br>earlier the same day – so <strong>the absolute numbers are a floor and the ratios,<br>taken back to back, are what hold.</strong></p>
+<h3 id="Sequential-read-at-the-drive-with-directReads"><a href="#Sequential-read-at-the-drive-with-directReads" class="headerlink" title="Sequential read: at the drive, with directReads"></a>Sequential read: at the drive, with <code>directReads</code></h3><table>
+<thead>
+<tr>
+<th></th>
+<th>MiB&#x2F;s</th>
+<th>of the drive</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>drive, O_DIRECT</td>
+<td>1900</td>
+<td>100%</td>
+</tr>
+<tr>
+<td><strong>raf, <code>directReads</code>, 8 readers</strong></td>
+<td><strong>1953</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td>fio, buffered, 64 jobs</td>
+<td>907</td>
+<td>48%</td>
+</tr>
+<tr>
+<td>raf, buffered, 64 readers</td>
+<td>837</td>
+<td>44%</td>
+</tr>
+</tbody></table>
+<p>Buffered, raf tracks fio from one reader to 128 – 0.83 to 1.18, 0.99 at 128<br>– and neither reaches the drive, because the page cache caps this machine at<br>733 to 936 MiB&#x2F;s whatever the engine, queue depth, thread count or block<br>size. <code>directReads</code> crosses that cap with eight synchronous readers.</p>
+<h3 id="Random-4-KiB-read-close-to-fio-and-fio-is-at-the-drive"><a href="#Random-4-KiB-read-close-to-fio-and-fio-is-at-the-drive" class="headerlink" title="Random 4 KiB read: close to fio, and fio is at the drive"></a>Random 4 KiB read: close to fio, and fio is at the drive</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>MiB&#x2F;s</th>
+<th>of the drive</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>drive, random 4 KiB</td>
+<td>822</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>fio, 64 jobs</td>
+<td>791</td>
+<td>96%</td>
+</tr>
+<tr>
+<td><strong>raf, <code>directReads</code>, 64 readers</strong></td>
+<td><strong>623</strong></td>
+<td><strong>76%</strong></td>
+</tr>
+<tr>
+<td>raf, buffered, 64 readers</td>
+<td>424</td>
+<td>52%</td>
+</tr>
+</tbody></table>
+<p>Buffered is a flat 0.5 of fio at every worker count, which is <code>amp</code> 2.00: a<br>4096 byte payload with a 32 byte header spans two pages and the page cache<br>reads pages. <code>directReads</code> reads 512 byte sectors instead – <code>amp</code> 1.12 –<br>and recovers most of it. What is left is the 1.12 itself plus the CRC and the<br>copy, which is work fio does not do at all.</p>
+<h3 id="Durable-append-the-drive-is-not-the-limit-the-journal-is"><a href="#Durable-append-the-drive-is-not-the-limit-the-journal-is" class="headerlink" title="Durable append: the drive is not the limit, the journal is"></a>Durable append: the drive is not the limit, the journal is</h3><p>One run, eleven worker counts, 4 KiB records, throughput and device bytes<br>measured together at each point:</p>
+<table>
+<thead>
+<tr>
+<th>writers</th>
+<th>fio MiB&#x2F;s</th>
+<th>raf MiB&#x2F;s</th>
+<th>raf&#x2F;fio</th>
+<th>fio amp</th>
+<th>raf amp</th>
+<th>amp ratio</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>6.0</td>
+<td>5.8</td>
+<td>0.97</td>
+<td>7.20</td>
+<td>8.13</td>
+<td>1.13</td>
+</tr>
+<tr>
+<td>2</td>
+<td>6.6</td>
+<td>6.0</td>
+<td>0.91</td>
+<td>7.12</td>
+<td>7.85</td>
+<td>1.10</td>
+</tr>
+<tr>
+<td>4</td>
+<td>11.1</td>
+<td>10.7</td>
+<td>0.96</td>
+<td>5.56</td>
+<td>6.49</td>
+<td>1.17</td>
+</tr>
+<tr>
+<td>8</td>
+<td>23.3</td>
+<td>20.6</td>
+<td>0.88</td>
+<td>4.90</td>
+<td>5.80</td>
+<td>1.18</td>
+</tr>
+<tr>
+<td>16</td>
+<td>42.3</td>
+<td>40.8</td>
+<td>0.96</td>
+<td>4.38</td>
+<td>5.28</td>
+<td>1.21</td>
+</tr>
+<tr>
+<td>32</td>
+<td>43.1</td>
+<td>69.2</td>
+<td>1.61</td>
+<td>3.99</td>
+<td>4.94</td>
+<td>1.24</td>
+</tr>
+<tr>
+<td>64</td>
+<td>77.6</td>
+<td>111.8</td>
+<td>1.44</td>
+<td>3.27</td>
+<td>4.09</td>
+<td>1.25</td>
+</tr>
+<tr>
+<td>128</td>
+<td>201.1</td>
+<td>45.0</td>
+<td>0.22</td>
+<td>2.69</td>
+<td>3.82</td>
+<td>1.42</td>
+</tr>
+<tr>
+<td>256</td>
+<td>100.9</td>
+<td>67.7</td>
+<td>0.67</td>
+<td>2.75</td>
+<td>3.74</td>
+<td>1.36</td>
+</tr>
+<tr>
+<td>512</td>
+<td>123.6</td>
+<td>82.2</td>
+<td>0.67</td>
+<td>2.64</td>
+<td>3.61</td>
+<td>1.37</td>
+</tr>
+<tr>
+<td>1024</td>
+<td>128.9</td>
+<td>103.7</td>
+<td>0.80</td>
+<td>2.50</td>
+<td>3.52</td>
+<td>1.41</td>
+</tr>
+</tbody></table>
+<p><strong>raf writes one extra page per record, and that is the whole structural<br>difference.</strong> Subtract the columns rather than dividing them: raf - fio is<br>0.93, 0.73, 0.93, 0.90, 0.90, 0.95, 0.82, 1.13, 0.99, 0.97, 1.02 payload<br>bytes, which is 4096 bytes within measurement noise at every concurrency from<br>one writer to a thousand. A 4096-byte payload with a 32-byte header spans two<br>4096-byte pages and buffered writes go out a page at a time.</p>
+<p>The <em>ratio</em> moves from 1.13 to 1.41 only because the cost both sides share<br>shrinks: journal transactions fall from 1.001 per flush at one writer to<br>0.002 at 1024, as more appends batch into one commit. A prediction of 1.12<br>matches the low-concurrency end, and gets there for the wrong reason – it is<br>not a 512-byte block, it is a whole page against a journal bill that happens<br>to be six times larger.</p>
+<p>Throughput tracks that, with one exception: <strong>raf is 0.88 to 1.61 of fio from<br>one worker to 64</strong> – ahead of it at 32 and 64 – and 0.67 to 0.80 from 256<br>up. The 128-worker row is not to be trusted: fio’s 201.1 is its highest<br>reading anywhere and <code>batch32</code> drops from 1118 to 410 at the same point.</p>
+<p>batch32’s amplification is 1.26 at one writer and 1.09 from 64 up, and its<br>throughput reaches four figures. Those are burst numbers – 256 writers times<br>1024 appends is a gigabyte, which this drive’s cache absorbs – so read them<br>as a direction, not a rate.</p>
+<p>Preallocation is the one variant that does not improve with concurrency –<br>its amplification is flat at 4.05 to 4.11 while everything else falls – and<br>its throughput is 4.9 to 13.0 MiB&#x2F;s against raf’s 22.2 to 56.2. It removes<br>the journal work (0.001 to 0.003 transactions per flush against 0.008 to<br>0.250) and spends more than it saves on the zeros. <strong>Leave it off.</strong></p>
+<p>Asking for the flush the other way changes nothing: fio with <code>--sync=dsync</code>,<br>which is what raf opens with, reads 14.7, 88.4 and 89.9 MiB&#x2F;s at eight, 64<br>and 256 writers against 13.3, 87.2 and 83.2 for <code>--fdatasync=1</code>.</p>
+<p>Nor does a deeper queue. One thread with 64 O_DSYNC writes outstanding<br>through io_uring retires 1363 4 KiB appends a second; sixty-four files at<br>depth one retire 4155, and sixty-four at depth four retire 7634 – file count<br>is what moves it, and even the best of those is a third of the 23398 that 64<br>plain psync threads manage. <strong>An asynchronous append API would not help.</strong></p>
+<p><strong>This drive is no longer in a state where that can be resolved.</strong> A single<br>durable append read 1.7 MiB&#x2F;s for fio here against 5.8 earlier the same day<br>on the same command; the session has written well over a terabyte to it.<br>Every number on this page is a floor, and the write numbers are the worst<br>affected. Settling the 11 ms mode needs a drive that has been left alone, or<br>trimmed, first.</p>
+<p>The 1 MiB durable rows in <code>seqscale.sh --what write</code> are not trustworthy as<br>they stand: 64 MiB per worker is 64 operations, and 512 MiB of burst fits in<br>the drive’s cache – one row read 1216 MiB&#x2F;s, above the measured streaming<br>ceiling, which cannot be a sustained rate. That needs a bigger budget before<br>it means anything.</p>
+<h2 id="Running-it"><a href="#Running-it" class="headerlink" title="Running it"></a>Running it</h2><div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> &lt;this repo&gt; &amp;&amp; <span class="built_in">cd</span> raf</span><br><span class="line">sudo <span class="built_in">mkdir</span> -p /mnt/raf-bench &amp;&amp; sudo <span class="built_in">chown</span> <span class="string">&quot;<span class="variable">$USER</span>&quot;</span> /mnt/raf-bench   <span class="comment"># on the drive under test</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> bench/physical</span><br><span class="line">sudo ./setup.sh --mount /mnt/raf-bench --tune --out ~/raf-results</span><br><span class="line">     ./run.sh   --mount /mnt/raf-bench            --out ~/raf-results</span><br><span class="line">sudo ./setup.sh --mount /mnt/raf-bench --restore --out ~/raf-results</span><br></pre></td></tr></table></figure></div>
+
+<p>Then send back <strong>both</strong> <code>~/raf-results/results.txt</code> and<br><code>~/raf-results/env.txt</code>. The second one is not optional: a drive that was 90%<br>full, thermally throttled, or running <code>mq-deadline</code> explains more than any<br>table, and without it a surprising number cannot be told from a broken one.</p>
+<h3 id="What-needs-root"><a href="#What-needs-root" class="headerlink" title="What needs root"></a>What needs root</h3><table>
+<thead>
+<tr>
+<th>script</th>
+<th>root</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>setup.sh</code></td>
+<td>yes for <code>--tune</code> and <code>--restore</code>; the report alone runs as you</td>
+</tr>
+<tr>
+<td><code>run.sh</code></td>
+<td>only the <code>read</code> section, to drop the page cache. <code>--only write,slc</code> needs none</td>
+</tr>
+<tr>
+<td><code>sustained.sh</code></td>
+<td><strong>no</strong></td>
+</tr>
+<tr>
+<td><code>appendcost.sh</code></td>
+<td><strong>no</strong></td>
+</tr>
+<tr>
+<td><code>appendscale.sh</code></td>
+<td><strong>no</strong></td>
+</tr>
+<tr>
+<td><code>vsfio.sh</code></td>
+<td><strong>no</strong>. It drops the page cache with <code>posix_fadvise</code>, not <code>/proc/sys/vm/drop_caches</code></td>
+</tr>
+<tr>
+<td><code>diagnose.sh</code></td>
+<td>no. Under sudo it fills in the drive’s model, write-cache flag and wear; without it those lines are skipped rather than prompted for</td>
+</tr>
+</tbody></table>
+<p>Temperature comes from sysfs in every case, so no script shells out to<br><code>nvme</code> just to read it.</p>
+<h3 id="Requirements"><a href="#Requirements" class="headerlink" title="Requirements"></a>Requirements</h3><ul>
+<li>cmake and a C++20 compiler (C++23 is used where available)</li>
+<li><strong>spdlog</strong>, the library’s one hard dependency. If cmake cannot find it, it<br>is downloaded automatically, so no package manager is needed – but a<br>distro copy is faster: <code>apt install libspdlog-dev</code>, <code>dnf install spdlog-devel</code>, <code>brew install spdlog</code>. Build with <code>-DRAF_FETCH_DEPS=OFF</code> to<br>require a local copy instead of downloading. (GoogleTest is handled the<br>same way, and <code>run.sh</code> builds with tests off anyway.)</li>
+<li><code>liburing</code> for the io_uring rows. If it is in a local prefix, point<br>pkg-config at it: <code>PKG_CONFIG_PATH=/opt/liburing/lib/pkgconfig ./run.sh ...</code><br>Without it those rows print <code>-</code> and the rest still runs.</li>
+<li><code>fio</code> and <code>jq</code> for the reference section; skipped with a note if missing.</li>
+<li>Free space of at least 2x RAM plus headroom. <code>setup.sh</code> checks and warns.</li>
+</ul>
+<p><strong>If conda is active</strong> (a <code>(base)</code> prefix on your shell), deactivate it first.<br>Conda ships its own compiler and libstdc++, and a benchmark built against<br>those is not measuring the system toolchain:</p>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h3><table>
+<thead>
+<tr>
+<th>flag</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--only write,read,slc,fio</code></td>
+<td>run a subset</td>
+</tr>
+<tr>
+<td><code>--quick</code></td>
+<td>smaller counts; a sanity pass, not a result</td>
+</tr>
+<tr>
+<td><code>--reps N</code></td>
+<td>repetitions per point, median reported (default 3)</td>
+</tr>
+<tr>
+<td><code>--set-gib N</code></td>
+<td>override the cold working set; <strong>must exceed RAM</strong></td>
+</tr>
+</tbody></table>
+<p>The full run writes roughly 2x RAM for the read section plus 128 GiB for the<br>sustained-write section, and takes a few hours. <code>--only write</code> alone answers<br>question 1 in minutes.</p>
+<h3 id="Check-what-you-are-about-to-mkfs"><a href="#Check-what-you-are-about-to-mkfs" class="headerlink" title="Check what you are about to mkfs"></a>Check what you are about to mkfs</h3><p><code>--mount</code> can be a plain directory on the root filesystem, and <code>findmnt -T</code><br>is the only way to tell:</p>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">findmnt -T /mnt/raf-bench</span><br></pre></td></tr></table></figure></div>
+
+<p>If <code>SOURCE</code> is the root partition, nothing in this directory should be given<br>a device argument – no <code>tune2fs</code>, no <code>mkfs</code>, no <code>mount -o</code>. None of these<br>scripts take one, and none of them should be made to.</p>
+<p>The filesystem here is default ext4 and stays that way, so the durable-append<br>cliff cannot be tuned away underneath raf. The two levers that remain are in<br>raf itself: batching, which <code>appendBatch</code> already provides, and preallocating<br>segments so appends overwrite rather than extend.</p>
+<h2 id="How-close-is-raf-to-the-device"><a href="#How-close-is-raf-to-the-device" class="headerlink" title="How close is raf to the device?"></a>How close is raf to the device?</h2><div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./vsfio.sh --mount /mnt/raf-bench --out ~/raf-results          <span class="comment"># a few hours</span></span><br><span class="line">./vsfio.sh --mount /mnt/raf-bench --workloads rr4k,sw4k \</span><br><span class="line">           --workers <span class="string">&quot;1 16 256&quot;</span> --reps 3                       <span class="comment"># the short version</span></span><br></pre></td></tr></table></figure></div>
+
+<p>fio over a plain file is the floor: the same system calls, no format, no<br>checksum, no index. Six workloads – 4 KiB and 1 MiB, random read, sequential<br>read and durable append – each swept 1, 2, 4 … 256 workers, with fio and<br>raf run back to back at every point so both see the same drive.</p>
+<p>What makes the two sides comparable, and where they are not:</p>
+<ul>
+<li>fio runs <code>ioengine=psync</code>, because that is what raf’s posix io layer does.<br>An io_uring fio number would be measuring a different program.</li>
+<li>Both sides are durable on writes: raf opens <code>O_DSYNC</code>, fio gets<br><code>--fdatasync=1</code>. fio’s <code>clat</code> stops before the flush, so the reported p50<br>adds fio’s sync latency back in. Without that fio looks ten times faster<br>than it is.</li>
+<li>raf writes 4128 bytes per 4 KiB record and fio writes 4096. A few percent<br>of any write gap is that, by construction.</li>
+<li>Caches are dropped on both sides the same way, with <code>posix_fadvise</code><br>(<code>DONTNEED</code>) rather than fio’s own <code>--invalidate</code>, which would have each of<br>W jobs evicting what the others just read.</li>
+</ul>
+<p>The dataset defaults to 1.5x RAM so a dropped page cache is really cold; the<br>drive’s own cache is out of reach either way, and the script says so when<br><code>--gib</code> is below RAM. Reading <code>raf/fio</code> close to 1.00 means the format costs<br>nothing measurable; a ratio that falls as workers rise is raf serialising<br>somewhere, and the latency columns say whether it is queueing or a stall.</p>
+<table>
+<thead>
+<tr>
+<th>flag</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--workloads rr4k,rr1m,sr4k,sr1m,sw4k,sw1m</code></td>
+<td>pick a subset</td>
+</tr>
+<tr>
+<td><code>--workers &quot;1 16 256&quot;</code></td>
+<td>the sweep (default 1 2 4 … 256)</td>
+</tr>
+<tr>
+<td><code>--gib N</code></td>
+<td>dataset size; should exceed RAM</td>
+</tr>
+<tr>
+<td><code>--write-mib N</code></td>
+<td>bytes per worker in the write sweep (default 16)</td>
+</tr>
+<tr>
+<td><code>--ops4k N</code> &#x2F; <code>--ops1m N</code></td>
+<td>total operations per read point, split across workers</td>
+</tr>
+<tr>
+<td><code>--reps N</code></td>
+<td>repetitions per point, best by throughput (default 2). Keep it even: it is what alternates which side goes first</td>
+</tr>
+</tbody></table>
+<h3 id="Why-does-the-append-stop-scaling-at-sixteen-writers"><a href="#Why-does-the-append-stop-scaling-at-sixteen-writers" class="headerlink" title="Why does the append stop scaling at sixteen writers?"></a>Why does the append stop scaling at sixteen writers?</h3><div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./appendscale.sh --mount /mnt/raf-bench --out ~/raf-results</span><br></pre></td></tr></table></figure></div>
+
+<p>raf gains nothing between one writer and sixteen while fio nearly triples,<br>and raf’s latency rises almost exactly 16x – work that serialises. Two<br>explanations are already ruled out: measurement order, and page alignment.<br>The script runs six variants at each worker count – fio as the floor, raf as<br>shipped, with preallocation (no metadata commit per append), without the<br>frontier write (<code>RAF_PUBLISH_FRONTIER=0</code>, one write per append instead of<br>two), both, and <code>batch32</code> as the ceiling. Whichever variant restores scaling<br>names the cost; if none does, it is somewhere this script does not look.</p>
+<p><code>RAF_PUBLISH_FRONTIER=0</code> is a measurement switch rather than a feature. With<br>it off a reader calls a damaged record end-of-data instead of damaged, which<br>is a worse diagnostic, not a wrong answer.</p>
+<h3 id="If-a-number-looks-wrong-diagnose-before-re-running"><a href="#If-a-number-looks-wrong-diagnose-before-re-running" class="headerlink" title="If a number looks wrong, diagnose before re-running"></a>If a number looks wrong, diagnose before re-running</h3><div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./diagnose.sh --mount /mnt/raf-bench</span><br></pre></td></tr></table></figure></div>
+
+<p>Under a minute, ~100 MiB written. It prints the device-mapper stack, mount<br>options, NVMe write-cache and APST settings, and then splits one 4 KiB write<br>three ways – <code>O_DIRECT</code> alone, <code>O_DIRECT|O_DSYNC</code>, and buffered with<br><code>fdatasync</code> – so the cost lands on the flash, the flush, or the filesystem<br>rather than on “the disk is slow”. A healthy NVMe is 10-50 us for all three;<br>anything in the milliseconds has a cause worth finding before the long run.</p>
+<h3 id="If-something-is-off"><a href="#If-something-is-off" class="headerlink" title="If something is off"></a>If something is off</h3><ul>
+<li><strong><code>amp</code> below 1.0</strong> means reads were served from the page cache, so the set<br>was not larger than RAM. Raise <code>--set-gib</code>.</li>
+<li><strong>io_uring rows all <code>-</code></strong> means pkg-config could not find liburing.</li>
+<li><strong>Latency percentiles that swing wildly between reps</strong> usually mean the CPU<br>governor is not <code>performance</code>, or something else is using the drive.</li>
+<li><strong><code>cannot write .../results.txt</code></strong> means an earlier <code>sudo ./setup.sh</code> left<br>the output directory root-owned. The script now chowns it back, but to fix<br>an existing one: <code>sudo chown -R &quot;$USER&quot; ~/raf-results</code>.</li>
+</ul>
+<h2 id="What-the-scripts-do"><a href="#What-the-scripts-do" class="headerlink" title="What the scripts do"></a>What the scripts do</h2><p><code>setup.sh</code> records the machine (CPU, RAM, kernel, drive model and firmware,<br>PCIe link, queue settings, NVMe wear and temperature, filesystem options) into<br><code>env.txt</code>, then checks the things that quietly invalidate a measurement:<br>rotational flag, I&#x2F;O scheduler, readahead, CPU governor, virtualisation, free<br>space, and how full the filesystem is. <code>--tune</code> sets <code>scheduler=none</code>,<br><code>read_ahead_kb=0</code> and <code>governor=performance</code>, saving the old values;<br><code>--restore</code> puts them back.</p>
+<p><code>run.sh</code> builds <code>raf_matrix</code> and runs four sections. <code>raf_matrix</code> reports<br>latency percentiles alongside throughput, and for reads it brackets the run<br>with <code>/proc/diskstats</code> so it can report bytes-moved over bytes-returned. Its<br><code>scan</code> mode writes the index list to a side file so the cold read phase never<br>has to walk the archive first – that walk would warm the cache and turn a<br>cold measurement into a warm one.</p>
+<p><code>vsfio.sh</code> runs the same <code>raf_matrix</code> binary beside fio, using its <code>seqread</code><br>mode for iteration and its <code>read</code> mode for random lookups. Write points get a<br>fresh archive and fresh fio files each time: an append that extends a file<br>costs differently from one that overwrites, and reusing files would turn half<br>the sweep into the other measurement.</p>
+<p>Both are deterministic: payload bytes come from the record number, writers<br>start together on a <code>std::latch</code>, and the random-read order is a fixed<br>coprime stride. Two runs of the same arguments touch the same records in the<br>same order, so a difference between runs is a real difference.</p>
+
+            
+        </div>
+        <div class="page-template-comments">
+            
+        </div>
+    </div>
+</div>
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2023</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ethereal</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.2.1</a>
+        </div>
+        
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script async data-pjax>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax',
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            Global.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            Global.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            Global.refresh();
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
