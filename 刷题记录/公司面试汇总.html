@@ -26,11 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<<<<<<< HEAD
-<meta property="article:modified_time" content="2026-09-29T16:28:52.093Z">
-=======
-<meta property="article:modified_time" content="2026-09-23T14:15:50.064Z">
->>>>>>> 8fa4cf515f48dff997972b8d3790cbd1879b4dfa
+<meta property="article:modified_time" content="2026-10-14T15:43:19.210Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -3917,6 +3913,168 @@
 </ol>
 <ul>
 <li>设置一个原子的运行状态标志（如 <code>std::atomic&lt;bool&gt; is_running</code>），当系统收到停止信号时设为 <code>false</code>，主循环在处理完队列中的剩余残余数据后安全退出，确保资源妥善释放。</li>
+</ul>
+<h2 id="54-Scientech二面"><a href="#54-Scientech二面" class="headerlink" title="54. Scientech二面"></a>54. Scientech二面</h2><h3 id="54-1-第一部分：非编程题（项目深挖、C-八股与反问）"><a href="#54-1-第一部分：非编程题（项目深挖、C-八股与反问）" class="headerlink" title="54.1 第一部分：非编程题（项目深挖、C++八股与反问）"></a>54.1 第一部分：非编程题（项目深挖、C++八股与反问）</h3><h4 id="1-因子计算图引擎与-99-9-Production-Grade-Accuracy"><a href="#1-因子计算图引擎与-99-9-Production-Grade-Accuracy" class="headerlink" title="1. 因子计算图引擎与 99.9% Production Grade Accuracy"></a>1. 因子计算图引擎与 99.9% Production Grade Accuracy</h4><ul>
+<li><p>你在原话中说“因为 Python 用了不稳定的排序，而 C++ 本身的排序是稳定的”。<strong>实际上恰恰相反：Python 的内置 <code>sort</code>（Timsort）是稳定排序（Stable Sort），而 C++ 的 <code>std::sort</code>（Introsort）是不稳定排序</strong>（C++ 中需要显式调用 <code>std::stable_sort</code> 才是稳定的）。</p>
+</li>
+<li><p>标准表述：“剩下的 0.1% 主要是浮点数累加顺序导致的 IEEE 754 精度舍入误差（如 Python 用 NumPy 向量化归约与 C++ 循环累加的细微精度差），以及排序稳定性差异（Python 默认 <code>Timsort</code> 是稳定排序，而 C++ 默认 <code>std::sort</code> 是不稳定的，遇到等值截面因子排名时会出现微小扰动，后来我们在 C++ 侧对齐为 <code>std::stable_sort</code> 解决了大部分此类问题）。”</p>
+</li>
+</ul>
+<h4 id="2-C-基础一：std-vector-建二叉树的代码找茬"><a href="#2-C-基础一：std-vector-建二叉树的代码找茬" class="headerlink" title="2. C++ 基础一：std::vector 建二叉树的代码找茬"></a>2. C++ 基础一：<code>std::vector</code> 建二叉树的代码找茬</h4><ul>
+<li><p><strong>面试官问题</strong>：代码用 <code>std::vector&lt;Node&gt;</code> 存节点，先放 <code>root</code>，后续每次 <code>push_back</code> 新节点并把内部 <code>Node* parent</code> 裸指针指向 <code>index / 2</code> 处。这会带来什么问题？</p>
+</li>
+<li><p>扩容时会开辟新内存区域，通过 <code>move</code>（因为 <code>noexcept</code>）或 <code>copy</code> 把旧元素搬移过去，并析构释放原来的内存地址。导致此前节点里保存的 <code>parent</code> 裸指针依然指向已被释放的旧内存位置（悬空指针）。</p>
+</li>
+<li><p>修复方案有三种：1）如果节点总数已知，建树前先调用 <code>vec.reserve(MAX_NODES)</code> 锁死容量不扩容；2）最推荐的做法是把 <code>Node* parent</code> 裸指针改为存储数组下标 <code>size_t parent_idx</code>；3）或者把容器换成扩容时不搬移旧内存块地址的 <code>std::deque&lt;Node&gt;</code>。</p>
+</li>
+</ul>
+<h4 id="3-C-基础二：Spinlock（自旋锁）与-Mutex（互斥锁）原理及场景"><a href="#3-C-基础二：Spinlock（自旋锁）与-Mutex（互斥锁）原理及场景" class="headerlink" title="3. C++ 基础二：Spinlock（自旋锁）与 Mutex（互斥锁）原理及场景"></a>3. C++ 基础二：<code>Spinlock</code>（自旋锁）与 <code>Mutex</code>（互斥锁）原理及场景</h4><ul>
+<li><p><strong>面试官问题</strong>：简述多线程中自旋锁和互斥锁的具体原理及适用场景。</p>
+</li>
+<li><p>常见的 <code>Mutex</code> 内部实现其实也包含了先自旋（Spin）一下、获取不到再陷入内核态申请锁槽位。 Linux 下 <code>std::mutex</code> 底层基于 <code>futex</code>（Fast Userspace Mutex）实现。<code>Futex</code>内部本身也会先自旋。</p>
+</li>
+<li><p><code>Spinlock</code> 在用户态死循环等待，持续占用 CPU 资源，但锁释放时能极其及时地拿到通知；<code>Mutex</code> 抛开短暂自旋后会陷入内核并挂起线程，减少 CPU 资源浪费，但内核唤醒通知没那么及时。</p>
+</li>
+<li><p>选型标准主要看<strong>临界区耗时与线程上下文切换开销（通常约 1~3 微秒）的对比</strong>：当临界区极短（几十纳秒，如简单指针交换或计数器更新）、且线程绑核（CPU Pinning）不超售时，必须用 <code>Spinlock</code> 避免上下文切换引发的调度延迟和 Cache 污染；当临界区较长（涉及 I&#x2F;O、系统调用或复杂计算）或锁竞争极其激烈时，用 <code>Mutex</code> 让出 CPU。</p>
+</li>
+</ul>
+<h3 id="第二部分：编程与并发设计题"><a href="#第二部分：编程与并发设计题" class="headerlink" title="第二部分：编程与并发设计题"></a>第二部分：编程与并发设计题</h3><h4 id="1-并发数据结构设计：定长-10K-记录集合（单写多读）"><a href="#1-并发数据结构设计：定长-10K-记录集合（单写多读）" class="headerlink" title="1. 并发数据结构设计：定长 10K 记录集合（单写多读）"></a>1. 并发数据结构设计：定长 10K 记录集合（单写多读）</h4><ul>
+<li><p><strong>题目要求</strong>：维护固定容量 10K 的记录集合（含 <code>symbol</code>, <code>close_price</code>, <code>volume</code>），满时覆盖最早记录。<strong>单线程 <code>push</code>，多线程并发调用以下两个查询</strong>：1）<code>getRecent(N)</code> 获取最近 $N$ 条记录；2）<code>getLatest(symbol)</code> 获取某只股票最近一条记录。</p>
+</li>
+<li><p><strong>你是怎么说的</strong>：</p>
+<ul>
+<li><p><strong>在每个 Slot 里放置一把读写锁（Read-Write Lock）</strong>，用来把 Writer 挡在外面不能覆盖；同时补充了 Reader 侧的四步校验流程：1）获取 <code>tail</code>；2）算出读取范围并对 Slot 加锁；3）拷贝数据；4）<strong>再次 Check <code>head</code> 有没有被修改</strong>，确保没有写者污染后再返回。</p>
+</li>
+<li><p><strong>缺点</strong>：1）对每个 Slot 加读写锁不仅开销大，而且<strong>违反了量化系统中“慢读者绝不能阻塞单写者”的基本原则</strong>；2）既然第 4 步已经想到了乐观校验 <code>head</code> 是否被修改，其实就不再需要加读写锁了；3）<strong>完全漏掉了如何高效实现 <code>getLatest(symbol)</code> 这个接口</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>更好的标准答案（Ring Buffer + SeqLock 无锁乐观读 + 哈希索引）</strong>：</p>
+<ul>
+<li><p><strong>核心思路</strong>：单写多读场景下，标准范式是 <strong>SeqLock（顺序锁 &#x2F; 乐观版本号校验）</strong>，全程无锁（Lock-free），Writer 永远 $O(1)$ 无阻塞写入。</p>
+</li>
+<li><p><strong>标准结构与代码逻辑</strong>：</p>
+<ol>
+<li><p><strong>物理存储</strong>：分配大小为 $C &#x3D; 16384$（$2^{14}$，大于 10K 的 2 的幂，用位运算 <code>&amp; (C - 1)</code> 代替取模）的 Ring Buffer，维护一个单调递增、永不回绕的 64 位原子计数器 <code>std::atomic&lt;uint64_t&gt; write_seq&#123;0&#125;</code>。</p>
+</li>
+<li><p><strong>操作 1：<code>push(Record)</code>（单线程写）</strong>：</p>
+<ul>
+<li><p>每个 Slot 内部带一个版本号 <code>std::atomic&lt;uint64_t&gt; ver</code>。</p>
+</li>
+<li><p>写入前将 <code>slot.ver</code> 设为奇数（表示正在写，配合 <code>memory_order_release</code>），写入数据，再将 <code>slot.ver</code> 设为偶数新版本号，最后 <code>write_seq.fetch_add(1, std::memory_order_release)</code>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>操作 2：<code>getRecent(N)</code>（多线程乐观读）</strong>：</p>
+<ul>
+<li><p>读者先读取当前 <code>cur_tail = write_seq.load(acquire)</code>，算出起始序号 <code>start_seq = max(0, cur_tail - N)</code>。</p>
+</li>
+<li><p>直接把 <code>[start_seq, cur_tail)</code> 区间的数据拷贝到本地 vector。</p>
+</li>
+<li><p><strong>乐观校验</strong>：拷贝完成后，再次读取 <code>new_tail = write_seq.load(acquire)</code>。检查 <code>new_tail - start_seq &lt;= 10000</code>（且对应 Slot 的 <code>ver</code> 未变成奇数或改变）。如果成立，说明拷贝期间老数据未被覆盖，直接返回！如果被覆盖了（说明读者极慢，Writer 已经写满一整圈 10K 条追上了它），则重新读取最新区间重试。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>操作 3：<code>getLatest(Symbol)</code>（补齐你漏掉的接口）</strong>：</p>
+<ul>
+<li><p>额外维护一个定长数组或哈希表 <code>std::atomic&lt;uint64_t&gt; symbol_latest_seq[MAX_SYMBOLS]</code>，初始化为无效值。</p>
+</li>
+<li><p>Writer 每次 <code>push</code> 到序号 <code>seq</code> 时，顺手执行 <code>symbol_latest_seq[record.symbol_id].store(seq, release)</code>。</p>
+</li>
+<li><p>Reader 查询某 <code>symbol</code> 时，直接 $O(1)$ 取出 <code>seq</code>。若 <code>write_seq - seq &gt; 10000</code> 说明该股票最后一条记录已被挤出 10K 窗口，返回空；否则直接去 <code>ring_buffer[seq &amp; (C - 1)]</code> 用同样的 SeqLock 乐观校验拷贝单条数据返回，时间复杂度严格 $O(1)$。</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-并发算法设计：无序列号的双路数据流快慢判定"><a href="#2-并发算法设计：无序列号的双路数据流快慢判定" class="headerlink" title="2. 并发算法设计：无序列号的双路数据流快慢判定"></a>2. 并发算法设计：无序列号的双路数据流快慢判定</h4><ul>
+<li><p><strong>题目要求</strong>：两个数据流 <code>Stream 1</code> 和 <code>Stream 2</code> 发送内容和顺序完全相同的消息（无丢包，支持判断两条消息相等 <code>MsgA == MsgB</code>），但<strong>没有递增的 Sequence Number</strong>，且到达时间不同。Handler 启动时间不确定（看到的第一条消息可能不同）。设计算法在稳定后判断当前哪个流领先。</p>
+</li>
+<li><p><strong>你是怎么说的</strong>：</p>
+<ul>
+<li><p><strong>核心对冲思想</strong>：为两个流分别维护一个队列 <code>Q1</code> 和 <code>Q2</code>。当一个流收到消息时，检查对方队列是否为空：若对方为空则压入自己队列；若对方非空则消费（Pop）掉对方队头元素完成匹配抵消。因此哪个队列里有剩余元素，哪个流就领先。</p>
+</li>
+<li><p><strong>多线程竞态考量</strong>：你主动提出两个流的回调跑在不同线程上，<code>check empty</code> 和 <code>push</code> 之间存在 Gap（可能两个线程同时发现对方为空，都把消息 1 放进自己队列）。你给出的解法是在调用查询接口返回结果前，再执行一次循环撮合（把两个队列头部相等的元素持续 Pop 掉，直到有一个变空）。</p>
+</li>
+<li><p><strong>不足之处</strong>：1）<strong>忽略了题干中“启动时看到的第一条消息可能不同”的边界条件</strong>（如果 <code>Stream 2</code> 启动时多收了一条历史消息 <code>Msg0</code> 放在队头，而 <code>Stream 1</code> 从 <code>Msg1</code> 开始收，直接消解队头会导致错位或无法匹配）；2）并发控制其实没必要留到查询时再兜底，直接加轻量自旋锁即可。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>更好的标准答案</strong>：</p>
+<ul>
+<li><p><strong>第一阶段：启动对齐（Calibration Phase，解决初始偏移）</strong>：</p>
+<ul>
+<li><p>设置状态标志 <code>bool is_aligned = false</code>。在未对齐前，把 <code>Stream 1</code> 和 <code>Stream 2</code> 收到的消息存进各自队列，并放入哈希表记录索引。</p>
+<ul>
+<li>一旦某一方新收到的消息 <code>M</code> 在另一方的历史队列中被找到，说明找到了两条流的<strong>首个共同锚点</strong>！立刻把双方队列中排在 <code>M</code> 之前的所有不对齐残余消息全部清除，将状态切换为 <code>is_aligned = true</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>第二阶段：稳态消解与并发控制（Steady State）</strong>：</p>
+<ul>
+<li><p>对齐之后，由于两条流顺序严格一致，<strong>同一时刻最多只有一个队列非空</strong>（或者我们根本不需要存两个队列，只需要存<strong>领先方队列 <code>lead_queue</code></strong> 和一个标识 <code>int leading_stream = 0</code>）。</p>
+<ul>
+<li>使用一把极轻量的 <strong><code>Spinlock</code></strong> 保护回调更新：当 <code>Stream X</code> 收到消息 <code>M</code> 时，若当前无领先者或自己就是领先者，直接 <code>lead_queue.push(M)</code> 并设 <code>leading_stream = X</code>；若对方是领先者且 <code>lead_queue.front() == M</code>，则直接 <code>lead_queue.pop()</code>（若 Pop 后队列变空，则处于平手状态）。这样既消除了多线程 Race Condition，又避免了队列无限积压。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-现场手写-Coding：Rolling-Min（滑动窗口最小值）"><a href="#3-现场手写-Coding：Rolling-Min（滑动窗口最小值）" class="headerlink" title="3. 现场手写 Coding：Rolling Min（滑动窗口最小值）"></a>3. 现场手写 Coding：Rolling Min（滑动窗口最小值）</h4><ul>
+<li><p><strong>题目要求</strong>：接收 <code>float</code> 数据流，构造函数传入窗口大小 <code>window_size</code>，实现 <code>update(float val)</code> 和 <code>query()</code> 返回过去 <code>window_size</code> 个元素中的最小值。</p>
+</li>
+<li><p><strong>你是怎么说的 &#x2F; 怎么写的</strong>：</p>
+<ul>
+<li><p>你提出使用<strong>最小堆（Min-Heap）</strong>，在 <code>update</code> 时将 <code>(val, timestamp/index)</code> 直接插入堆中；在 <code>query</code> 时检查堆顶元素的时间戳是否超过了 <code>window_size</code>，若过期则不断 <code>pop</code>，直到堆顶元素处于窗口期内，返回堆顶。你在 3 分半钟内迅速写完了代码。</p>
+</li>
+<li><p><strong>缺点</strong>：最小堆的 <code>update</code> 是 $O(\log N)$，<code>query</code> 是均摊 $O(\log N)$；且如果输入流是单调递增的，过期元素永远不会浮到堆顶被清理，会导致堆内存随数据流无限膨胀。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>更好的标准答案：单调双端队列 Monotonic Deque，严格均摊 $O(1)$ 时间，$O(K)$ 空间</strong></p>
+</li>
+</ul>
+<h4 id="4-算法-Follow-up：Rolling-Median（滑动窗口中位数）"><a href="#4-算法-Follow-up：Rolling-Median（滑动窗口中位数）" class="headerlink" title="4. 算法 Follow-up：Rolling Median（滑动窗口中位数）"></a>4. 算法 Follow-up：Rolling Median（滑动窗口中位数）</h4><ul>
+<li><p><strong>题目要求</strong>：同样的滑动窗口模型，将求最小值改为求过去 <code>window_size</code> 个值的<strong>中位数（Median）</strong>，口述算法思路。</p>
+</li>
+<li><p><strong>你是怎么说的</strong>：</p>
+<ul>
+<li><p>第一时间想到维护<strong>两个堆（一个最大堆，一个最小堆）</strong>，保持两堆元素个数相差不超过 1。</p>
+</li>
+<li><p>紧接着你敏锐地发现了痛点：要维持两堆平衡，必须统计<strong>真正处于 <code>window_size</code> 内的有效元素数目</strong>，而不是堆的物理大小；且新数据到来导致老数据过期时，需要知道过期数据在哪个堆里并把它删掉，而普通堆不支持随机定位删除。</p>
+</li>
+<li><p>于是你果断把结构替换为：<strong>用红黑树（如 <code>std::multiset</code>）代替堆，并额外维护一个 FIFO 队列记录窗口内的数据</strong>；当窗口滑过时，从队列获知即将过期的老数据是谁，去红黑树中将其扔掉，再对两棵树做 Rebalance 保持大小一致。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>更好的标准答案</strong>：</p>
+<ul>
+<li><p><strong>方案 A（双 <code>std::multiset</code> + 迭代器队列，最易写且内存受控）</strong>：</p>
+<ul>
+<li><p>维护两个 <code>std::multiset&lt;float&gt;</code>：<code>low</code>（存较小的一半）和 <code>high</code>（存较大的一半），始终维持 <code>low.size() == high.size()</code> 或 <code>low.size() == high.size() + 1</code>。</p>
+<ul>
+<li><strong>关键优化</strong>：因为 C++ 标准保证 <code>std::multiset</code>（红黑树）插入和删除节点<strong>不会使其他节点的迭代器失效</strong>，所以外部的 FIFO 队列（或定长 Ring Buffer）直接存 <code>std::multiset&lt;float&gt;::iterator</code>（以及它属于 <code>low</code> 还是 <code>high</code> 的标记）。如果只存 <code>float</code> 值，调用 <code>multiset.erase(val)</code> 会把树里所有等于 <code>val</code> 的重复元素一次性全删光导致 Bug；而存迭代器直接调用 <code>erase(it)</code> 不仅不会误删重复值，还能省去 $O(\log K)$ 的查找开销，做到摊还 $O(1)$ 节点摘除，随后仅需 $O(\log K)$ 移动一个边界元素完成 Rebalance。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>方案 B（对顶堆 + 哈希表延迟删除，面试官顺嘴提到的可删堆方案）</strong>：</p>
+<ul>
+<li><p>如果追求极致的缓存局部性（红黑树节点指针跳转 Cache Miss 高），仍然可以用标准大顶堆 <code>low</code> 和小顶堆 <code>high</code>，外加一个 <code>std::unordered_map&lt;float, int&gt; delayed_delete</code> 记录已过期但还没浮到堆顶的元素计数，并用两个整型变量 <code>low_valid_cnt</code> 和 <code>high_valid_cnt</code> 单独维护两堆内的<strong>有效未过期元素个数</strong>。</p>
+<ul>
+<li>当老元素 <code>old_val</code> 滑出窗口时，比对它与 <code>low.top()</code> 的大小关系，将对应的 <code>valid_cnt</code> 减 1，并在 <code>delayed_delete[old_val]++</code> 中打上墓碑标记；随后根据 <code>low_valid_cnt</code> 和 <code>high_valid_cnt</code> 调整两堆平衡，只要发现堆顶元素在 <code>delayed_delete</code> 中计数大于 0，就立刻 <code>pop</code> 掉。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
