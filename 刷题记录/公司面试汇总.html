@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-10-15T17:43:15.637Z">
+<meta property="article:modified_time" content="2026-10-18T14:59:51.949Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -4187,7 +4187,97 @@
 </ol>
 </li>
 </ul>
-<h2 id="56-世纪前沿二面"><a href="#56-世纪前沿二面" class="headerlink" title="56. 世纪前沿二面"></a>56. 世纪前沿二面</h2>
+<h2 id="56-世纪前沿二面"><a href="#56-世纪前沿二面" class="headerlink" title="56. 世纪前沿二面"></a>56. 世纪前沿二面</h2><h2 id="57-拼多多一面"><a href="#57-拼多多一面" class="headerlink" title="57. 拼多多一面"></a>57. 拼多多一面</h2><h3 id="57-1-没有答好的问题与标准答案"><a href="#57-1-没有答好的问题与标准答案" class="headerlink" title="57.1 没有答好的问题与标准答案"></a>57.1 没有答好的问题与标准答案</h3><h4 id="1-操作系统如何优化虚拟内存映射（TLB-Miss）的开销？"><a href="#1-操作系统如何优化虚拟内存映射（TLB-Miss）的开销？" class="headerlink" title="1. 操作系统如何优化虚拟内存映射（TLB Miss）的开销？"></a>1. 操作系统如何优化虚拟内存映射（TLB Miss）的开销？</h4><ul>
+<li><p><strong>面试现场：</strong> 面试官问 TLB Miss 后走内核级页表查找开销很大，在使用操作系统时可以怎么去调优？你的回答偏向硬件 Cache 的组相联机制、把程序数据尽量放一起以减少哈希冲突，没有答到操作系统层面的工程调优手段。</p>
+</li>
+<li><p><strong>标准答案：</strong></p>
+</li>
+</ul>
+<ol>
+<li><p><strong>开启大页内存（HugePages &#x2F; 透明大页 THP）：</strong> 这是 OS 层面最核心的手段。默认的 4KB 页在大内存应用下会导致页表项极多且需要走四级&#x2F;五级页表查找（Page Walk）。改成 2MB 甚至 1GB 的大页后，首先同样容量的 TLB 能覆盖的物理内存范围呈数百倍增加，直接大幅降低 TLB Miss 率；其次页表层级减少（例如减少最后一级页表），即便发生 TLB Miss，硬件 Page Walk 的内存访问次数也会减少。</p>
+</li>
+<li><p><strong>绑定 CPU 亲和性（CPU Affinity &#x2F; <code>taskset</code>）与进程地址空间复用：</strong> 减少进程&#x2F;线程跨核迁移，避免跨核切换或页表变更带来的 TLB 刷新（TLB Flush &#x2F; Shootdown）。</p>
+</li>
+<li><p><strong>内存分配器层面的连续性优化：</strong> 使用支持大页或 Slab&#x2F;Arena 池化的内存分配器（如 <code>jemalloc</code>、<code>tcmalloc</code> 配置 HugePage），让热点数据紧凑排布在少数几个大页内，提升虚拟页的空间局部性。</p>
+</li>
+</ol>
+<h4 id="2-持久化队列中，为什么不“内存写一份供-Reader-直接读、磁盘异步写一份”，而是直接通过-mmap-读写持久化数据？"><a href="#2-持久化队列中，为什么不“内存写一份供-Reader-直接读、磁盘异步写一份”，而是直接通过-mmap-读写持久化数据？" class="headerlink" title="2. 持久化队列中，为什么不“内存写一份供 Reader 直接读、磁盘异步写一份”，而是直接通过 mmap 读写持久化数据？"></a>2. 持久化队列中，为什么不“内存写一份供 Reader 直接读、磁盘异步写一份”，而是直接通过 <code>mmap</code> 读写持久化数据？</h4><ul>
+<li><p><strong>面试现场：</strong> 面试官质疑直接读内存状态、磁盘异步落盘是否延迟更低。你从单机部署、PageCache 预取平稳性以及 <code>munmap</code> 导致 TLB Shootdown 的角度做了解释，但没有直接击中面试官关于“为何不把内存通信和磁盘持久化拆开”的架构疑问。</p>
+</li>
+<li><p><strong>标准答案：</strong></p>
+</li>
+</ul>
+<ol>
+<li><p><strong>跨进程零拷贝通信（IPC Zero-Copy）：</strong> 在量化交易系统中，行情网关（Writer）和多个策略进程（Readers）通常是独立的进程。基于 <code>mmap</code> 共享同一个底层文件，本质上是利用操作系统的 <strong>PageCache 作为共享内存</strong>。Writer 写入的就是内存（PageCache），Reader 读的也是同一块物理内存，完全没有磁盘 I&#x2F;O 阻塞，同时省去了“跨进程内存同步 + 异步落盘线程”的双写内存拷贝开销。</p>
+</li>
+<li><p><strong>进程级 Crash 容灾（数据零丢失）：</strong> 如果采用应用层内存队列 + 异步刷盘，一旦交易进程崩溃（Segfault），内存队列中尚未刷盘的实时行情或订单状态就会丢失。而通过 <code>mmap</code> 写入 PageCache 后，即便用户态进程崩溃，只要操作系统不宕机，内核线程（<code>pdflush</code>&#x2F;<code>kworker</code>）依然会保证脏页安全落盘。</p>
+</li>
+<li><p><strong>主线程零干扰的生命周期管理：</strong> 既然读写的都是内存（PageCache），平时延迟极低（纳秒级）。唯一的尾延迟（Tail Latency）毛刺来自于滑动窗口切换文件块时调用 <code>munmap</code> 触发跨核中断（IPI）进行 <strong>TLB Shootdown</strong>。工程上的解法是：主交易&#x2F;读写线程只负责在已映射的 RingBuffer&#x2F;Arena 上无锁追加读写，将耗时的文件预分配（<code>fallocate</code>）、映射（<code>mmap</code>）和卸载（<code>munmap</code>）全部剥离到绑定在非隔离核（Housekeeping Core）的后台异步线程中执行，从而兼顾持久化与极致尾延迟。</p>
+</li>
+</ol>
+<h4 id="3-灵均投资“重构计算图调度”与“消除冗余内存-x2F-文件访问”的技术深度"><a href="#3-灵均投资“重构计算图调度”与“消除冗余内存-x2F-文件访问”的技术深度" class="headerlink" title="3. 灵均投资“重构计算图调度”与“消除冗余内存&#x2F;文件访问”的技术深度"></a>3. 灵均投资“重构计算图调度”与“消除冗余内存&#x2F;文件访问”的技术深度</h4><ul>
+<li><p><strong>面试现场：</strong> 你如实描述了原系统直接按 JSON 数组顺序从上往下算、5000 只股票每个对象各自从磁盘读一份数据。这导致面试官评价“说明之前做得比较简单粗暴”、“理论上量化系统本来就该全是静态分配”，无形中拉低了你工作的技术含量。</p>
+</li>
+<li><p><strong>标准答案（高阶话术重塑）：</strong></p>
+</li>
+</ul>
+<ol>
+<li><strong>计算图重构：</strong> 不要强调“前人没做排序导致乱序算错”，而是定义为“从静态线性执行引擎向动态 DAG 编译调度引擎的演进”。强调业务从单一机器学习上游演进到多源异构因子接入后，你不仅引入了 AST（抽象语法树）解析构建依赖图与拓扑排序（解决循环依赖与乱序），还在此基础上做了公共子表达式消除（CSE，避免像因子 B 被多次重复计算）<strong>、</strong>算子融合<strong>以及</strong>基于入度&#x2F;引用计数的确定性并行调度。</li>
+<li><strong>内存与文件优化：</strong> 顺着面试官“量化都是静态分配”的思路说。强调老架构是为了单因子快速实验写的面向对象原型（每个标的独立初始化），你在将其工程化落地的过程中，引入了<strong>全局只读数据段的 Flyweight（享元）共享机制 &#x2F; 预加载内存池</strong>，将原本 $O(N)$（$N&#x3D;5000$ 只股票）的碎片化系统调用与内存拷贝，重构为启动期单次顺序 I&#x2F;O 映射 + 标的对象的零拷贝指针偏移绑定，并在运行期配合静态内存池消除了动态分配开销。</li>
+</ol>
+<h4 id="4-九维数智“基于-LMCache-的分布式推理框架”除了接入开源组件还有什么核心工作？"><a href="#4-九维数智“基于-LMCache-的分布式推理框架”除了接入开源组件还有什么核心工作？" class="headerlink" title="4. 九维数智“基于 LMCache 的分布式推理框架”除了接入开源组件还有什么核心工作？"></a>4. 九维数智“基于 LMCache 的分布式推理框架”除了接入开源组件还有什么核心工作？</h4><ul>
+<li><p><strong>面试现场：</strong> 面试官直接追问：“只是基于这个 LMCache 然后就达到了收益吗？有其他的东西吗？” 你的回答停留在“因为 vLLM 没有 L3 Cache 换出能力，所以把 LMCache 接进来做类似 SGLang 的 Prefix 缓存”，听起来像单纯的开源组件拼装。</p>
+</li>
+<li><p><strong>标准答案（突出自研改造与深水区问题）：</strong></p>
+</li>
+</ul>
+<ol>
+<li><p><strong>I&#x2F;O 与计算的异步流水线重叠（Layer-wise Pipelining）：</strong> 原生接入时，远端或主机内存（Host DRAM &#x2F; 磁盘）的 KV Cache 换入（Prefetch）会阻塞 GPU 计算。需要改造 vLLM 的调度循环，实现按层（Layer-by-Layer）异步传输与前向计算的 Overlap，隐藏 PCIe&#x2F;网络传输延迟。</p>
+</li>
+<li><p><strong>碎片化 Page 传输合并（Gather&#x2F;Scatter 优化）：</strong> vLLM 的 PagedAttention 物理块是不连续的，直接按小 Block 走网络或 DMA 传输会导致带宽利用率极低。核心工作在于设计聚合缓冲区（Pinned Memory Bounce Buffer）或利用 GPU Direct RDMA 的 Scatter-Gather 列表，将零散的 KV 块打包成大块连续传输。</p>
+</li>
+<li><p><strong>前缀感知的全局路由与驱逐策略（Prefix-Aware Routing &amp; Eviction）：</strong> 配合上层网关实现了类似 SGLang RadixAttention 的分布式前缀树索引，结合任务的 SLO 优先级定制多级缓存（GPU HBM $\rightarrow$ Host DRAM $\rightarrow$ 远端存储）的换出与预取策略，避免高频公共前缀被抖动驱逐。</p>
+</li>
+</ol>
+<h3 id="57-2-编程题总结"><a href="#57-2-编程题总结" class="headerlink" title="57.2 编程题总结"></a>57.2 编程题总结</h3><h4 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1. 题目描述"></a>1. 题目描述</h4><ul>
+<li><p><strong>问题原型：</strong> 合并 $K$ 个有序数组（Merge $K$ Sorted Vectors &#x2F; LeetCode 23 合并 $K$ 个升序链表的数组变体）。</p>
+</li>
+<li><p><strong>输入与输出：</strong> 输入 <code>input</code> 是一个二维数组（<code>vector&lt;vector&lt;Item&gt;&gt;</code>），其中的每一个子数组内部已经按照时间戳（<code>timestep</code>）排好序。要求将所有子数组中的元素合并，整体按照 <code>timestep</code> 升序排列，并写入一维结果数组 <code>output</code> 中。</p>
+</li>
+</ul>
+<h4 id="2-最优算法思路"><a href="#2-最优算法思路" class="headerlink" title="2. 最优算法思路"></a>2. 最优算法思路</h4><p>面试官要求“选一个比较好的方案”，标准解法主要有两种（假设共有 $K$ 个子数组，所有元素总数为 $N$）：</p>
+<ul>
+<li><p><strong>方案 A：基于最小堆（Min-Heap &#x2F; <code>std::priority_queue</code>）的多路归并（最主流，适合流式或动态场景）</strong></p>
+<ul>
+<li><p>维护一个大小为 $K$ 的最小堆，堆中每个节点记录：<code>&#123;当前元素的 timestep（或元素本身）, 所属子数组的索引 row, 在子数组中的下标 col&#125;</code>。</p>
+</li>
+<li><p>初始化时，将 $K$ 个非空子数组的第 0 个元素推入最小堆。</p>
+</li>
+<li><p>循环弹出堆顶元素（即当前全局最小元素）放入 <code>output</code>；若该元素所在的子数组还有下一个元素（<code>col + 1 &lt; input[row].size()</code>），则将下一个元素推入堆中，直到堆为空。</p>
+</li>
+<li><p><strong>复杂度：</strong> 时间复杂度 $O(N \log K)$，额外空间复杂度 $O(K)$。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>方案 B：分治两两归并（Divide and Conquer，Cache 局部性更好）</strong></p>
+<ul>
+<li><p>将 $K$ 个数组两两配对进行标准的双指针二路归并，合并成 $K&#x2F;2$ 个数组，不断递归&#x2F;迭代向上合并，直到只剩 1 个数组。</p>
+</li>
+<li><p><strong>复杂度：</strong> 时间复杂度同样为 $O(N \log K)$，常数开销小且对 CPU 缓存极度友好。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-面试官考察的-C-工程与性能细节"><a href="#3-面试官考察的-C-工程与性能细节" class="headerlink" title="3. 面试官考察的 C++ 工程与性能细节"></a>3. 面试官考察的 C++ 工程与性能细节</h4><p>在检查完你的算法逻辑后，面试官针对代码实现提出了三个典型的 C++ 性能细节考察：</p>
+<ol>
+<li><p><strong><code>emplace_back</code> vs <code>push_back</code>（第 52 行）：</strong> 面试官指出往 <code>output</code> 塞元素时用 <code>emplace_back</code> 直接原地构造，还是先构造临时对象再传入的区别，意在考察如何避免多余的临时对象构造与移动&#x2F;拷贝构造函数调用。</p>
+</li>
+<li><p><strong>值拷贝 vs 常引用 <code>const auto&amp;</code>（第 48 行）：</strong> 从堆顶 <code>top()</code> 取元素时，面试官建议用引用（<code>const T&amp;</code>）以避免产生多次值拷贝。（你在现场反驳说堆元素只有两个字段、体积很小，直接拷到栈上比引用解引用具有更好的局部性&#x2F;寄存器亲和性，这个底层解释是合理的，但在工业界通用代码规范中，对容器元素读取依然习惯默认加 <code>const auto&amp;</code> 防止后续结构体膨胀带来隐式深拷贝）。</p>
+</li>
+<li><p><strong>输出数组预分配（<code>output.reserve(N)</code>）：</strong> 在多路归并前，先遍历一遍 $K$ 个子数组的 <code>size()</code> 累加出总元素个数 $N$，并调用 <code>output.reserve(N)</code> 一次性分配好连续内存，彻底消除 <code>vector</code> 在归并过程中动态扩容（Reallocation）带来的内存拷贝开销。</p>
+</li>
+</ol>
+
             
         </div>
         <div class="page-template-comments">

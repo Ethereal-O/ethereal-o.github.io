@@ -13,20 +13,20 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/刷题记录/架构设计/02-raf-全局单链加锁.html"/>
+    <link rel="canonical" href="http://example.com/刷题记录/jq/架构设计/01-raf-每进程独立链.html"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="单文件。文件由一条全局 MetaUnit 链和大量数据页交错组成。writer 攒批后构造一个大 MetaUnit，抢全局锁 → 推进全局偏移量 → 写 MetaUnit → 释放锁，随后并行写数据页。 本文对未指定部分的假设（需确认）：页为定长（示例取 64KB），大记录跨页用 FIRST&#x2F;MIDDLE&#x2F;LAST 标志切片；锁为跨进程互斥（F_OFD_SETLK 或 shm">
+        <meta name="description" content="单文件、多进程并发追加、崩溃可恢复。写入返回 index，支持按 index 点读与顺序迭代。  并发模型：多进程 · 每进程多线程 记录长度：几 B ~ 1 MB 持久化：O_DIRECT + FUA   1. API 语义与文件格式API 契约123u64   append(const void *buf, size_t len);   &#x2F;&#x2F; 阻塞，返回即持久void  read(u64 in">
 <meta property="og:type" content="website">
-<meta property="og:title" content="RAF 日志格式（方案 B）—— 全局单链 + 互斥 MetaUnit">
-<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/02-raf-%E5%85%A8%E5%B1%80%E5%8D%95%E9%93%BE%E5%8A%A0%E9%94%81.html">
+<meta property="og:title" content="RAF 日志格式 —— 设计说明">
+<meta property="og:url" content="http://example.com/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/jq/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/01-raf-%E6%AF%8F%E8%BF%9B%E7%A8%8B%E7%8B%AC%E7%AB%8B%E9%93%BE.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="单文件。文件由一条全局 MetaUnit 链和大量数据页交错组成。writer 攒批后构造一个大 MetaUnit，抢全局锁 → 推进全局偏移量 → 写 MetaUnit → 释放锁，随后并行写数据页。 本文对未指定部分的假设（需确认）：页为定长（示例取 64KB），大记录跨页用 FIRST&#x2F;MIDDLE&#x2F;LAST 标志切片；锁为跨进程互斥（F_OFD_SETLK 或 shm">
+<meta property="og:description" content="单文件、多进程并发追加、崩溃可恢复。写入返回 index，支持按 index 点读与顺序迭代。  并发模型：多进程 · 每进程多线程 记录长度：几 B ~ 1 MB 持久化：O_DIRECT + FUA   1. API 语义与文件格式API 契约123u64   append(const void *buf, size_t len);   &#x2F;&#x2F; 阻塞，返回即持久void  read(u64 in">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-20T15:21:58.000Z">
-<meta property="article:modified_time" content="2026-09-20T15:21:58.868Z">
+<meta property="article:modified_time" content="2026-09-21T15:48:59.486Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -40,7 +40,7 @@
     
     <title>
         
-            RAF 日志格式（方案 B）—— 全局单链 + 互斥 MetaUnit -
+            RAF 日志格式 —— 设计说明 -
         
         Ethereal&#39;s Blog
     </title>
@@ -364,8 +364,12 @@
         
         <div class="page-template-content markdown-body">
             
-                <p>单文件。文件由<strong>一条全局 MetaUnit 链</strong>和<strong>大量数据页</strong>交错组成。<br>writer 攒批后构造一个大 MetaUnit，抢全局锁 → 推进全局偏移量 → 写 MetaUnit → 释放锁，随后并行写数据页。</p>
-<p><strong>本文对未指定部分的假设</strong>（需确认）：页为定长（示例取 64KB），大记录跨页用 FIRST&#x2F;MIDDLE&#x2F;LAST 标志切片；锁为跨进程互斥（<code>F_OFD_SETLK</code> 或 shm robust mutex）。</p>
+                <p>单文件、多进程并发追加、崩溃可恢复。写入返回 index，支持按 index 点读与顺序迭代。</p>
+<ul>
+<li>并发模型：多进程 · 每进程多线程</li>
+<li>记录长度：几 B ~ 1 MB</li>
+<li>持久化：O_DIRECT + FUA</li>
+</ul>
 <hr>
 <h2 id="1-API-语义与文件格式"><a href="#1-API-语义与文件格式" class="headerlink" title="1. API 语义与文件格式"></a>1. API 语义与文件格式</h2><h3 id="API-契约"><a href="#API-契约" class="headerlink" title="API 契约"></a>API 契约</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">u64   <span class="title function_">append</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *buf, <span class="type">size_t</span> len)</span>;   <span class="comment">// 阻塞，返回即持久</span></span><br><span class="line"><span class="type">void</span>  <span class="title function_">read</span><span class="params">(u64 index, <span class="type">void</span> *out, <span class="type">size_t</span> *len)</span>;</span><br><span class="line">iter  <span class="title function_">iterate</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure></div>
 
@@ -399,7 +403,7 @@
 </tr>
 <tr>
 <td><strong>A6</strong></td>
-<td>顺序：所有已持久记录有唯一的<strong>全局顺序</strong>，迭代即按该顺序返回；并发 <code>append</code> 之间谁在前由抢锁决定，未定义</td>
+<td>顺序：两次 <code>append</code> 之间若存在 happens-before，则 index 单调递增；并发调用之间顺序未定义</td>
 </tr>
 <tr>
 <td><strong>A7</strong></td>
@@ -407,26 +411,26 @@
 </tr>
 </tbody></table>
 <p><strong>吞吐的直接后果：</strong> 因为 <code>append</code> 阻塞，单个调用线程的吞吐上限 &#x3D; <code>1 / 端到端延迟</code>。<br>要打满设备必须有足够多的并发调用方（线程 &#x2F; 进程），由实现侧攒批摊销 IO 成本。<br>这条契约也决定了下面格式设计的核心取向：<strong>一切结构都服务于「已 ack 的数据绝不可丢」</strong>。</p>
-<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">off 0        SuperBlock        4KB，创建时写一次，此后永不修改</span><br><span class="line">off 4K       Meta#0            全局链的第一个 MetaUnit，位置固定</span><br><span class="line">之后          自由区            MetaUnit 与 Page 交错，由全局偏移量顺序分配</span><br><span class="line"></span><br><span class="line">Meta#0 ──► Meta#1 ──► Meta#2 ──► Meta#3 ──► ...     唯一一条链</span><br><span class="line">   │          │  └─ next_offset ─┘</span><br><span class="line">   └─ Entry[] └─ Entry[] ──► Page ──► Page ──► Page</span><br></pre></td></tr></table></figure></div>
+<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">off 0          SuperBlock          4KB，创建时写一次，此后永不修改</span><br><span class="line">off 4K         Slot[0 .. N-1]      各 4KB；每个 Slot 即该链的首个 MetaUnit</span><br><span class="line">off 4K+N·4K    自由区              MetaUnit 与 DataChunk 任意交错，</span><br><span class="line">                                   由共享 cursor 以扇区粒度 fetch_add 分配</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Slot[0] ──► MetaUnit ──► MetaUnit ──► MetaUnit      进程 A 的链</span><br><span class="line">Slot[1] ──► MetaUnit ──► MetaUnit                   进程 B 的链</span><br><span class="line">Slot[2] ──► MetaUnit ──► ...                        进程 C 的链</span><br><span class="line">              │              └─ next_offset ─┘</span><br><span class="line">              └─ Entry[] ──► DataChunk (文件中任意位置)</span><br></pre></td></tr></table></figure></div>
 
-<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SuperBlock  &#123; magic; nonce; page_size; meta_unit_size; sector_size; &#125;</span><br><span class="line"></span><br><span class="line">MetaUnit    &#123; magic; nonce; unit_seq;</span><br><span class="line">              next_offset;         <span class="comment">// 下一个 MetaUnit 的位置，写本单元前于锁内预留</span></span><br><span class="line">              entry_count;</span><br><span class="line">              header_crc; body_crc;</span><br><span class="line">              Entry entries[]; &#125;</span><br><span class="line"></span><br><span class="line">Entry       &#123; u64 first_page;   u32 page_count;</span><br><span class="line">              u32 data_len;     u32 data_crc;  u32 rec_count; &#125;</span><br><span class="line"></span><br><span class="line">Page        纯 payload，无 header、无 magic、无 crc。</span><br><span class="line">            页内 [varint len][payload] 紧密排列；跨页记录带 FIRST/MID/LAST 标志</span><br><span class="line"></span><br><span class="line">index       (page_no, offset_in_page)  打包成一个 u64</span><br></pre></td></tr></table></figure></div>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SuperBlock  &#123; magic; nonce; slot_count; meta_unit_size; sector_size; &#125;</span><br><span class="line"></span><br><span class="line">MetaUnit    &#123; magic; nonce; unit_seq;</span><br><span class="line">              next_offset;         <span class="comment">// 下一个 MetaUnit 的位置，写本单元前预留</span></span><br><span class="line">              entry_count; flags;  <span class="comment">// flags: CLOSED（干净退出）</span></span><br><span class="line">              header_crc; body_crc;</span><br><span class="line">              Entry entries[]; &#125;</span><br><span class="line"></span><br><span class="line">Entry       &#123; u64 data_offset;  u32 data_len;</span><br><span class="line">              u32 data_crc;    u32 rec_count; &#125;        ≈ <span class="number">20</span> B</span><br><span class="line"></span><br><span class="line">DataChunk   纯 payload。无 header、无 magic、无 crc、无对齐。</span><br><span class="line">            [varint len][payload] × rec_count   块内紧密排列</span><br><span class="line"></span><br><span class="line">index       (data_offset, offset_in_chunk)  打包成一个 u64</span><br></pre></td></tr></table></figure></div>
 
 <h3 id="三条格式铁律"><a href="#三条格式铁律" class="headerlink" title="三条格式铁律"></a>三条格式铁律</h3><ul>
-<li><strong>F1 数据页零元数据。</strong> 校验与长度全部在 MetaUnit 的 Entry 里，页内不留任何头部。</li>
-<li><strong>F2 页按扇区对齐分配。</strong> 扇区是写入的最小单位，两个进程共享扇区必然互相覆盖；页<strong>内部</strong>完全不对齐。</li>
-<li><strong>F3 永不回写任何字节。</strong> 写 MetaUnit#N 之前，在锁内先把 #N+1 的位置预留掉，链始终向前声明。</li>
+<li><strong>F1 数据区零元数据。</strong> 所有描述信息都在 MetaUnit 里。4096 字节的 payload 正好占 1 扇区，开销为 0。</li>
+<li><strong>F2 分配按扇区粒度。</strong> 扇区是写入的最小单位，两个进程共享一个扇区必然互相覆盖。块内记录则完全不对齐。</li>
+<li><strong>F3 永不回写任何字节。</strong> 写 MetaUnit#N 之前先 <code>fetch_add</code> 预留 #N+1 的位置，链始终向前声明，不存在回填指针。</li>
 </ul>
+<p>每个进程独占一条链。Slot 只在<strong>崩溃</strong>时消耗（干净退出的链可被安全接管续写），用尽后滚动到新 segment。</p>
 <hr>
-<h2 id="2-写入与读取流程"><a href="#2-写入与读取流程" class="headerlink" title="2. 写入与读取流程"></a>2. 写入与读取流程</h2><h3 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. writer 攒批，打包数据页内容，算 data_crc，构造 MetaUnit</span><br><span class="line">2. 【加锁】</span><br><span class="line">3. off_meta  = cursor; cursor += meta_unit_size</span><br><span class="line">   off_pages = cursor; cursor += page_bytes</span><br><span class="line">   next_off  = cursor; cursor += meta_unit_size      ← 预留下一个 MetaUnit</span><br><span class="line">4. 写 MetaUnit（FUA），**等到 CQE 回来**</span><br><span class="line">5. 【解锁】</span><br><span class="line">6. 并行写数据页（锁外，FUA），等持久</span><br><span class="line">7. 两者都持久 → ack，返回 index</span><br></pre></td></tr></table></figure></div>
-
+<h2 id="2-写入与读取流程"><a href="#2-写入与读取流程" class="headerlink" title="2. 写入与读取流程"></a>2. 写入与读取流程</h2><h3 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h3><ol>
+<li>写线程把请求 push 进<strong>进程本地</strong> MPSC 队列（一次 XCHG），阻塞在本地 futex。</li>
+<li>本地 leader 摘下一批，打包成一个 DataChunk（varint 密排），计算 <code>data_crc</code>。</li>
+<li><code>fetch_add</code> 共享 cursor 两次：DataChunk 的扇区、下一个 MetaUnit 的位置。</li>
+<li><strong>并发</strong>提交两个 IO，均带 FUA：MetaUnit（含本批 Entry 与 <code>next_offset</code>）与 DataChunk。不等待、不排序，继续处理下一批。</li>
+<li>两个 CQE 都回来 → ack，按链序释放 futex 唤醒。</li>
+</ol>
 <blockquote>
-<p><strong>不变式 L1：锁必须持有到 MetaUnit 持久，不能在提交后就释放。</strong><br>否则两个 MetaUnit 同时在飞，后者先落盘、前者没落，链上出现无法到达的孤儿单元 —— 其中已 ack 的记录将永久丢失。<br>锁”持有到持久”正是本方案正确性的来源：它自动保证了链的前缀持久性。</p>
-</blockquote>
-<blockquote>
-<p><strong>不变式 L2：ack ⟺ meta 与 data 均持久。</strong> 崩溃时仍在队列、在锁外排队或在飞的记录一律丢失 —— 它们从未 ack。</p>
-</blockquote>
-<blockquote>
-<p><strong>可做的优化：</strong> 第 3 步里数据页的分配可以移到锁外（单独的原子 <code>fetch_add</code>），第 6 步的数据写与第 4 步的 meta 写<strong>并发发出</strong>。延迟从 <code>2 × IO</code> 降到 <code>1 × IO</code>，锁的持有时间不变。</p>
+<p><strong>ack ⟺ durable。</strong> index 只在两个 IO 都持久后才返回。崩溃时仍在队列、打包中或在飞的记录一律丢失 —— 它们从未 ack，符合契约。</p>
 </blockquote>
 <h3 id="读取与恢复"><a href="#读取与恢复" class="headerlink" title="读取与恢复"></a>读取与恢复</h3><table>
 <thead>
@@ -437,101 +441,39 @@
 </thead>
 <tbody><tr>
 <td><strong>点读</strong></td>
-<td>index → 读对应页 → 验 <code>data_crc</code> → 跳到页内偏移。一次 IO。</td>
+<td>index → 读 DataChunk → 验 <code>data_crc</code> → 跳到块内偏移。一次 IO。</td>
 </tr>
 <tr>
 <td><strong>迭代</strong></td>
-<td>走链 → 每个 Entry 读其页区间 → 页内 varint walk。<strong>顺序即全局写入顺序。</strong></td>
+<td>走链 → 每个 Entry 读一块 → 块内 varint walk 逐条产出。</td>
 </tr>
 <tr>
 <td><strong>恢复</strong></td>
-<td>读 SuperBlock → 从 Meta#0 沿 <code>next_offset</code> 走，<strong>见第一个无效 MetaUnit 即停</strong>（链不可能有洞）→ 逐 Entry 验数据 crc，不过即为从未 ack，跳过 → <code>cursor = 已知最大 offset + 安全边距</code>。</td>
+<td>读 SuperBlock → <strong>并行</strong>走 N 条链，各走到第一个无效 MetaUnit 即为该链终点 → 逐 Entry 验数据 crc，不过即为从未 ack，跳过 → <code>cursor = 已知最大 offset + 安全边距</code>（跨过死进程可能仍在飞的 IO）。</td>
 </tr>
 </tbody></table>
-<p>恢复<strong>从不扫描数据区</strong>：不需要 magic 搜索、resync 启发式或误判概率论证。</p>
-<h3 id="共享状态"><a href="#共享状态" class="headerlink" title="共享状态"></a>共享状态</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">全局锁        跨进程互斥，持有到 meta 持久</span><br><span class="line">cursor        受锁保护，不需要原子操作；崩溃后可由走链重建</span><br><span class="line"></span><br><span class="line">无 slot 表、无共享数据缓冲区、无跨进程 leader、无拷贝。</span><br></pre></td></tr></table></figure></div>
+<p>恢复<strong>从不扫描数据区</strong>。数据区的空洞没有任何人会去读，因此不需要 magic 搜索、resync 启发式或误判概率论证。</p>
+<h3 id="共享状态"><a href="#共享状态" class="headerlink" title="共享状态"></a>共享状态</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cursor      shm, u64    每次 flush 一次 fetch_add</span><br><span class="line">next_slot   shm, u64    每进程一生一次，不在写路径上</span><br><span class="line"></span><br><span class="line">两者均可从磁盘重建（重建时需跳过安全余量）。</span><br><span class="line">快路径上没有锁、没有共享缓冲区、没有跨进程 leader、没有拷贝。</span><br></pre></td></tr></table></figure></div>
 
 <hr>
 <h2 id="3-好处与坏处"><a href="#3-好处与坏处" class="headerlink" title="3. 好处与坏处"></a>3. 好处与坏处</h2><h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
-<li><strong>全局写入顺序天然成立。</strong> 迭代是一条链的线性遍历，顺序就是真实写入顺序，不需要逻辑时间戳或读侧归并。</li>
-<li><strong>恢复是最简形态</strong>：走一条链，见坏即停。不扫数据区，不需要跨过空洞。</li>
-<li><strong>锁自动保证链的前缀持久</strong>，不会出现孤儿 MetaUnit，也不需要”按链序释放 ack”的记账逻辑。</li>
-<li><strong>文件级元数据只有 SuperBlock</strong>：没有 slot 表、没有槽位耗尽、不必为槽位滚动 segment。</li>
-<li><code>cursor</code> 在锁保护下，<strong>连原子操作都不需要</strong>，也不依赖共享内存存活。</li>
-<li>永不回写 ⟹ 已 ack 的数据不可能被任何后续写破坏。</li>
+<li>恢复是<strong>指针追踪</strong>，不扫描数据区：无需 resync、magic 搜索、概率论证或 GAP_BOUND 配额</li>
+<li>数据区零对齐浪费；扇区整数倍的 payload 开销为 0</li>
+<li>快路径只有一个 <code>fetch_add</code>；零拷贝，数据直接从进程自己的内存 DMA</li>
+<li>永不回写 ⟹ 已 ack 的数据不可能被任何后续写破坏</li>
+<li>故障隔离：一个进程崩溃只终止它自己的链</li>
 </ul>
 <h3 id="坏处"><a href="#坏处" class="headerlink" title="坏处"></a>坏处</h3><ul>
-<li><strong>锁跨 IO 持有 ⟹ meta 的队列深度恒为 1。</strong> 全局 meta 吞吐上限 &#x3D; <code>1 / IO延迟</code> ≈ 2 万次&#x2F;秒。</li>
-<li><strong>尾延迟 &#x3D; 进程数 × meta IO 延迟。</strong> 64 进程 × 50µs ≈ 3.2 ms。</li>
-<li><strong>延迟与吞吐被锁绑死。</strong> 想降延迟就得缩小批次，缩小批次就加剧锁争用 —— 两头不可兼得。这是本方案最本质的限制。</li>
-<li><strong>一个进程慢或卡住，所有 writer 一起等。</strong> 持锁进程崩溃需要锁能自动释放（<code>F_OFD_SETLK</code> 可以，普通 mutex 需要 robust 语义）。</li>
-<li><strong>持锁者崩溃后的 <code>next_offset</code> 重写竞态：</strong> 它预留的下一个 MetaUnit 位置必须由后继者写入，而死进程可能仍有在飞的 IO 指向那里。单链下无法靠”换个位置”规避，只能加宽限期。</li>
-<li><strong>低负载写放大：</strong> 只有几条记录也要写出一个完整的 MetaUnit。</li>
-<li><strong>为全局顺序付了全局锁的代价。</strong> 如果记录之间本就独立，这笔开销是白花的。</li>
-<li>meta 先于 data 的串行顺序会让延迟翻倍（可按 §2 的优化改为并发）。</li>
+<li>每次 flush 两个 IO（并发发出，延迟不叠加，但 IOPS 翻倍）</li>
+<li>空洞永久泄漏：每次崩溃漏掉一段已分配未写入的空间</li>
+<li>Slot 数量有限，崩溃时消耗，用尽需滚动 segment</li>
+<li>跨链无全局顺序；需要的话得加逻辑时间戳 + 读侧归并</li>
+<li>小记录仍依赖进程内攒批摊销 Entry 开销（否则每条 20 B）</li>
+<li>恢复需走完整条链；链头 checkpoint 可加速，但那是设计中<strong>唯一</strong>的原地重写</li>
+<li>at-least-once：迭代可能看到数据完好但从未 ack 的记录，上层需自带幂等键</li>
 </ul>
 <hr>
-<h2 id="4-与「每进程独立链」方案的对比"><a href="#4-与「每进程独立链」方案的对比" class="headerlink" title="4. 与「每进程独立链」方案的对比"></a>4. 与「每进程独立链」方案的对比</h2><table>
-<thead>
-<tr>
-<th></th>
-<th><strong>B：全局单链 + 锁</strong></th>
-<th><strong>A：每进程独立链</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>全局写入顺序</td>
-<td>天然具备</td>
-<td>无，需逻辑时间戳 + 读侧归并</td>
-</tr>
-<tr>
-<td>meta 并发度</td>
-<td>QD &#x3D; 1</td>
-<td>不受限</td>
-</tr>
-<tr>
-<td>尾延迟</td>
-<td>进程数 × IO</td>
-<td>1 × IO</td>
-</tr>
-<tr>
-<td>文件级元数据</td>
-<td>仅 SuperBlock</td>
-<td>额外 Slot 表，且会耗尽</td>
-</tr>
-<tr>
-<td>链的前缀持久</td>
-<td>锁自动保证</td>
-<td>需进程内按链序释放 ack</td>
-</tr>
-<tr>
-<td>慢进程的影响</td>
-<td>阻塞所有人</td>
-<td>只影响自己</td>
-</tr>
-<tr>
-<td>恢复</td>
-<td>走 1 条链</td>
-<td>并行走 N 条链</td>
-</tr>
-<tr>
-<td>崩溃后的位置重写竞态</td>
-<td>存在，需宽限期</td>
-<td>换新槽位即可规避</td>
-</tr>
-<tr>
-<td>实现复杂度</td>
-<td><strong>更低</strong></td>
-<td>更高</td>
-</tr>
-</tbody></table>
-<h3 id="选型建议"><a href="#选型建议" class="headerlink" title="选型建议"></a>选型建议</h3><ul>
-<li><strong>需要全局写入顺序</strong> → 选 B。锁买到的就是这个，其余都是代价。</li>
-<li><strong>记录彼此独立</strong> → 选 A。B 的锁是纯损失。</li>
-<li><strong>两者都要</strong> → 折中方案：全局锁只保护「排序 + 分配」（纳秒级，不跨 IO），MetaUnit 内容推进共享 ring，由一个 leader 批量写出。保留全局顺序，同时把 meta 的 QD 从 1 放开。代价是引入共享缓冲区和一次拷贝（每条 Entry 约 20B，可忽略），以及 leader 的故障转移。</li>
-</ul>
-<hr>
-<p>待定参数：<code>page_size</code> · <code>meta_unit_size</code> · 攒批触发阈值 · 安全边距 · 持锁者崩溃后的宽限期</p>
+<p>待定参数：<code>slot_count</code> · <code>meta_unit_size</code> · flush 触发阈值 · 安全边距 · segment 滚动尺寸</p>
 
             
         </div>
