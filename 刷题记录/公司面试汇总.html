@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-10-25T16:05:46.004Z">
+<meta property="article:modified_time" content="2026-10-25T16:40:07.386Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -4380,13 +4380,214 @@
 </ul>
 </li>
 </ul>
-<h2 id="60-拼多多二面"><a href="#60-拼多多二面" class="headerlink" title="60. 拼多多二面"></a>60. 拼多多二面</h2><h3 id="60-1-没有答得完美的知识点与标准答案"><a href="#60-1-没有答得完美的知识点与标准答案" class="headerlink" title="60.1 没有答得完美的知识点与标准答案"></a>60.1 没有答得完美的知识点与标准答案</h3><ul>
+<h2 id="60-顽岩笔试"><a href="#60-顽岩笔试" class="headerlink" title="60. 顽岩笔试"></a>60. 顽岩笔试</h2><h3 id="60-1-分苹果"><a href="#60-1-分苹果" class="headerlink" title="60.1 分苹果"></a>60.1 分苹果</h3><ul>
+<li><strong>给定m个苹果n个人k是目标位置，怎么分让第k个人分到的最多，同时保证相邻的人苹果数目相差不超过1</strong></li>
+</ul>
+<p>这是一个经典的<strong>二分查找与贪心算法</strong>结合的问题（同 LeetCode 1802 题）。为了让第 $k$ 个人分到的苹果数 $x$ 最多，我们需要让其他人的苹果数尽可能少。根据“相邻人苹果数相差不超过1”的条件，以第 $k$ 个人为中心，向两侧的苹果数应呈公差为 1 的等差数列递减；如果递减到 1，则剩余的人每人分 1 个苹果（假设每人至少分 1 个）。</p>
+<p><strong>核心算法步骤</strong></p>
+<p><strong>1. 确定二分查找边界</strong></p>
+<ul>
+<li><p>**下界 (Low)**：1（最坏情况每人只分 1 个）。</p>
+</li>
+<li><p>**上界 (High)**：$m$（最好情况所有多出的苹果都给第 $k$ 个人）。</p>
+</li>
+</ul>
+<p><strong>2. 贪心计算最小需求量</strong></p>
+<p>假设第 $k$ 个人（下标从 0 开始）分到 $x$ 个苹果，我们需要计算这种情况下消耗的总苹果数。</p>
+<p>分为左侧（长度 $L &#x3D; k$）和右侧（长度 $R &#x3D; n - 1 - k$）两部分进行求和：</p>
+<p>对于任意一侧（设长度为 $len$）：</p>
+<ul>
+<li><p><strong>情况 A：</strong> 侧边长度刚好或不足以一直递减到 1（即 $len &lt; x - 1$）。<br>此时侧边呈梯形递减，最小值为 $x - len$。<br>$$Sum &#x3D; \frac{(x - 1 + x - len) \times len}{2}$$</p>
+</li>
+<li><p><strong>情况 B：</strong> 侧边长度足以递减到 1，并有剩余人数（即 $len \ge x - 1$）。<br>此时侧边包含一个从 $x-1$ 递减到 1 的三角形，外加剩下的每人 1 个苹果。<br>$$Sum &#x3D; \frac{x \times (x - 1)}{2} + (len - x + 1)$$</p>
+</li>
+</ul>
+<p>如果 <code>左侧和 + 右侧和 + x &lt;= m</code>，说明当前 $x$ 是合法的，我们可以尝试更大的 $x$；否则缩小 $x$。</p>
+<h3 id="60-2-背包"><a href="#60-2-背包" class="headerlink" title="60.2 背包"></a>60.2 背包</h3><ul>
+<li>给定abc三个数组，数组长度都是n。我们进行n场比赛，正常做获得a分数，作弊获得b分数，付出c风险。总共可以付出的风险总和是k。最多多少分。</li>
+</ul>
+<p>这是一个典型的0&#x2F;1 背包问题（0&#x2F;1 Knapsack Problem）变体。</p>
+<p>核心思路是<strong>计算边际收益（Marginal Gain）</strong>：假设最开始我们所有比赛都选择“正常做”，此时不需要付出任何风险，获得的基础总分为 $\sum_{i&#x3D;1}^n a_i$。对于每一场比赛 $i$，如果我们选择“作弊”，相当于花费了 $c_i$ 的风险容量，获得了 $(b_i - a_i)$ 的额外分数收益。</p>
+<p><strong>模型转换</strong></p>
+<ol>
+<li><p><strong>背包容量：</strong> 总风险限额 $k$。</p>
+</li>
+<li><p><strong>物品重量：</strong> 第 $i$ 场比赛作弊的风险 $c_i$。</p>
+</li>
+<li><p><strong>物品价值：</strong> 第 $i$ 场比赛作弊带来的额外收益 $gain &#x3D; b_i - a_i$。</p>
+</li>
+</ol>
+<ul>
+<li><em>注意：如果 $b_i \le a_i$，说明作弊反而得分更低或不变，这种比赛直接跳过，绝对不作弊。</em></li>
+</ul>
+<ol start="4">
+<li><p><strong>目标：</strong> 在总重量不超过 $k$ 的前提下，选取若干物品，使得总价值最大。</p>
+</li>
+<li><p><strong>最终答案：</strong> 基础总分 + 背包能装下的最大价值。</p>
+</li>
+</ol>
+<h3 id="60-3-OrderBook改错"><a href="#60-3-OrderBook改错" class="headerlink" title="60.3 OrderBook改错"></a>60.3 OrderBook改错</h3><ul>
+<li><p>垂悬引用</p>
+</li>
+<li><p>删除遍历、插入迭代器失效，返回指针</p>
+</li>
+</ul>
+<h3 id="60-4-实时排行榜广播系统"><a href="#60-4-实时排行榜广播系统" class="headerlink" title="60.4 实时排行榜广播系统"></a>60.4 实时排行榜广播系统</h3><ul>
+<li>设计题。一个多房间游戏，每个房间都会公布排名前五的红方和蓝方玩家的排名，id（字符串），分数。总共有多个房间，每个房间都有id（字符串）。更新大约每500ms更新一次，更新数据需要带上时间戳，并且需要将数据同步给多个client。传输协议怎么设计？处理流程怎么做，包括计算排行，序列化，发送，广播，接收广播，反序列化，解析？扩展性分析（时间缩短，增加更多client）？</li>
+</ul>
+<p>这是一个典型的<strong>高频低延迟广播与分布式推送（Pub&#x2F;Sub）</strong> 系统设计。</p>
+<p><strong>1. 传输协议设计</strong></p>
+<p>对于 500ms 级别的高频状态同步，如果使用 JSON 会带来巨大的序列化&#x2F;反序列化和带宽开销。建议采用<strong>自定义二进制协议</strong>或<strong>零拷贝序列化框架（如 FlatBuffers &#x2F; Cap’n Proto）</strong>。传输层在公网环境下首选 <strong>WebSocket (TCP)</strong> 以保证全双工和穿透性，若对延迟要求极高可采用 **QUIC&#x2F;KCP (UDP)**。</p>
+<p><strong>二进制包结构设计（全量快照模式，Snapshot）：</strong></p>
+<p>为了极致压缩，字符串 ID 应当尽量在客户端连接时或首次出现时映射为整数（Dictionary Compression），若必须传字符串，则采用 <code>Length + Bytes</code> 格式。</p>
+<table>
+<thead>
+<tr>
+<th><strong>字段名</strong></th>
+<th><strong>类型</strong></th>
+<th><strong>字节数</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MsgType</code></td>
+<td>uint8</td>
+<td>1</td>
+<td>消息类型（如 0x01 表示排行榜更新）</td>
+</tr>
+<tr>
+<td><code>RoomIDLen</code></td>
+<td>uint8</td>
+<td>1</td>
+<td>房间 ID 长度</td>
+</tr>
+<tr>
+<td><code>RoomID</code></td>
+<td>char[]</td>
+<td><code>RoomIDLen</code></td>
+<td>房间 ID 字符串</td>
+</tr>
+<tr>
+<td><code>Timestamp</code></td>
+<td>uint64</td>
+<td>8</td>
+<td>服务器发包时间戳（毫秒），用于乱序处理</td>
+</tr>
+<tr>
+<td><code>RedCount</code></td>
+<td>uint8</td>
+<td>1</td>
+<td>红方上榜人数（最多 5）</td>
+</tr>
+<tr>
+<td><code>RedList</code></td>
+<td>Array</td>
+<td>变长</td>
+<td><code>[Rank(1B), IDLen(1B), ID(变长), Score(4B/8B)]</code> * N</td>
+</tr>
+<tr>
+<td><code>BlueCount</code></td>
+<td>uint8</td>
+<td>1</td>
+<td>蓝方上榜人数（最多 5）</td>
+</tr>
+<tr>
+<td><code>BlueList</code></td>
+<td>Array</td>
+<td>变长</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>协议设计要点</strong>：</p>
+<ol>
+<li><p><strong>幂等性与丢包容忍</strong>：500ms 属于状态同步（State Sync），直接发送全量 Top 5。如果客户端发生丢包，直接用下一个 500ms 的包覆盖即可，无需复杂的重传逻辑。</p>
+</li>
+<li><p><strong>时间戳防回跃</strong>：由于网络抖动，先发的包可能后到，客户端需记录最后一次更新的 <code>Timestamp</code>，若收到的包时间戳 <code>&lt;</code> 记录值，则直接丢弃。</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>2. 处理流程 (Processing Flow)</strong></p>
+<p>整个系统需要解耦“游戏逻辑（生产）”与“连接管理（消费）”，典型架构为：<strong>Game Server -&gt; Message Broker (如 NATS &#x2F; Redis PubSub) -&gt; Gateway Nodes -&gt; Clients</strong>。</p>
+<ol>
+<li><strong>计算排行 (Game Server)</strong></li>
+</ol>
+<ul>
+<li><p><strong>数据结构</strong>：房间内维护一个哈希表 <code>Hash&lt;PlayerID, Score&gt;</code> 记录实时分数，同时维护两棵平衡树或跳表（类似 Redis 的 ZSET，<code>std::set&lt;pair&lt;Score, PlayerID&gt;&gt;</code>）分别对应红蓝方。</p>
+</li>
+<li><p><strong>触发机制</strong>：采用定时器（Ticker），每 500ms 触发一次排行榜快照抓取。取跳表的前 5 名。</p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>序列化 (Game Server)</strong></li>
+</ol>
+<ul>
+<li><p>将抓取到的 Top 5 榜单与当前高精度系统时间戳结合，利用 FlatBuffers 构建二进制 Payload。</p>
+</li>
+<li><p><strong>零拷贝优势</strong>：FlatBuffers 在构造完毕后就是一段连续内存（<code>const uint8_t*</code>），无需额外转换为中间对象。</p>
+</li>
+</ul>
+<ol start="3">
+<li><strong>发送与广播 (Message Broker)</strong></li>
+</ol>
+<ul>
+<li><p>Game Server 将二进制 Payload 作为一条消息，Publish 到消息队列。</p>
+</li>
+<li><p><strong>Topic 路由策略</strong>：Topic 命名为 <code>room_rank.&#123;room_id&#125;</code>。</p>
+</li>
+<li><p><strong>Broker 选择</strong>：因为不需要持久化，推荐使用 <strong>NATS</strong> 或 <strong>Redis PubSub</strong>，它们在内存转发和扇出（Fan-out）性能上极高。</p>
+</li>
+</ul>
+<ol start="4">
+<li><strong>接收广播 (Gateway Node)</strong></li>
+</ol>
+<ul>
+<li><p>Gateway（网关服，可使用基于 Boost.Beast 或 Go 的高并发网络框架）负责维护大量客户端的长连接。</p>
+</li>
+<li><p>Gateway 动态订阅客户端所在的房间 Topic。收到 Broker 推送的二进制包后，Gateway <strong>无需反序列化</strong>，直接将这块二进制内存原封不动地通过 Socket 写入（<code>write/sendmsg</code>）给所有订阅了该房间的客户端连接。</p>
+</li>
+</ul>
+<ol start="5">
+<li><strong>反序列化与解析 (Client)</strong></li>
+</ol>
+<ul>
+<li><p>客户端收到二进制流，根据包头的 <code>MsgType</code> 路由到处理函数。</p>
+</li>
+<li><p>提取 <code>Timestamp</code>，进行防乱序校验（抛弃过期包）。</p>
+</li>
+<li><p>直接通过 FlatBuffers 的指针偏移读取数据（<strong>O(1) 解析，无内存分配开销</strong>），提取红蓝榜单并刷新 UI。</p>
+</li>
+</ul>
+<p><strong>3. 扩展性分析 (Scalability Analysis)</strong></p>
+<ul>
+<li><p>维度 A：时间缩短（如 500ms -&gt; 50ms）：高频更新会导致 CPU 在排序和序列化上出现瓶颈，网络带宽也会成倍增加。</p>
+<ul>
+<li><p><strong>计算优化</strong>：不能再每 50ms 取一次全量。应改为<strong>事件驱动的增量维护</strong>。只有当玩家分数变化导致其排名跨越了“前 5 名的阈值”或前 5 名内部发生逆序时，才触发局部更新（脏标记机制）。</p>
+</li>
+<li><p>**传输优化 (Delta Sync)<strong>：抛弃全量快照，改发</strong>增量包 (Delta)**（例如：<code>&#123;Action: Update, Team: Red, Rank: 3, NewScore: 100&#125;</code>）。客户端收到后自行在本地 Patch 状态。但这会丧失天然的丢包容忍性，必须引入包序列号（Sequence Number）并在客户端断档时请求全量快照恢复。</p>
+</li>
+<li><p><strong>底层协议优化</strong>：TCP 粘包和排头阻塞在 50ms 级别会非常明显，必须切换到基于 UDP 的可靠协议（如 KCP）。</p>
+</li>
+</ul>
+</li>
+<li><p>维度 B：增加海量 Client（如单房间 10 万人观看）：这会带来典型的 <strong>Fan-out（扇出）风暴</strong>，单台机器的文件描述符（FD）和网卡带宽会被瞬间打满。</p>
+<ul>
+<li><p><strong>水平扩展 Gateway 层</strong>：采用无状态的接入层。增加更多的 Gateway 节点（Fat Node），前面挂载 L4 负载均衡（如 LVS&#x2F;HAProxy）。</p>
+</li>
+<li><p>**组播&#x2F;多播聚合 (Multicast&#x2F;Batching)**：在 Gateway 内部维护一个环形缓冲区（Ring Buffer）。对于同一个房间的广播，不要循环调用 10 万次 <code>send</code> 系统调用，而是利用 <code>io_uring</code> 或 Linux 的 <code>sendmmsg</code> 批量提交网络发送请求，减少内核态切换。</p>
+</li>
+<li><p><strong>分级 Pub&#x2F;Sub 架构</strong>：当 Gateway 节点数量多到压垮单一 Redis&#x2F;NATS 节点时，需要在 Broker 和 Gateway 之间引入 Relay Node（中继节点），形成树状拓扑，将 $O(N)$ 的复制压力分摊到多层网络。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="61-拼多多二面"><a href="#61-拼多多二面" class="headerlink" title="61. 拼多多二面"></a>61. 拼多多二面</h2><h3 id="61-1-没有答得完美的知识点与标准答案"><a href="#61-1-没有答得完美的知识点与标准答案" class="headerlink" title="61.1 没有答得完美的知识点与标准答案"></a>61.1 没有答得完美的知识点与标准答案</h3><ul>
 <li><p><strong>问题：在优化矩阵乘法算子时，采用 Tiling（分块）技术的核心目的是什么？</strong> 候选人在回答该问题时，仅指出如果不做 Tiling，巨大的矩阵无法放入 SM 的 L1&#x2F;L2 Cache 中，会导致内存颠簸。面试官随后纠正并补充了更底层的本质原因。</p>
 </li>
 <li><p><strong>标准答案：</strong> Tiling 的核心目的在于<strong>数据复用</strong>。在矩阵乘法中，行列数据在计算时会被高频重复访问。如果直接进行计算，每次都会从较慢的全局内存（Global Memory）中读取数据，造成极大的访存带宽浪费。通过 Tiling，将数据分块搬运到更上一级的存储（如共享内存 Shared Memory）中，可以让大量运算直接在高速存储中完成数据的复用计算，避免频繁访问全局内存，从而有效缓解 Memory Bound。</p>
 </li>
 </ul>
-<h3 id="60-2-面试算法题与解题思路"><a href="#60-2-面试算法题与解题思路" class="headerlink" title="60.2 面试算法题与解题思路"></a>60.2 面试算法题与解题思路</h3><h4 id="60-2-1-LRU"><a href="#60-2-1-LRU" class="headerlink" title="60.2.1 LRU"></a>60.2.1 LRU</h4><ul>
+<h3 id="61-2-面试算法题与解题思路"><a href="#61-2-面试算法题与解题思路" class="headerlink" title="61.2 面试算法题与解题思路"></a>61.2 面试算法题与解题思路</h3><h4 id="61-2-1-LRU"><a href="#61-2-1-LRU" class="headerlink" title="61.2.1 LRU"></a>61.2.1 LRU</h4><ul>
 <li><p><strong>题目内容：</strong> 设计并实现一个 LRU（Least Recently Used，最近最少使用）缓存机制。进阶要求：禁止使用系统自带的数据结构（如 <code>std::list</code>），必须手动实现底层双向链表。</p>
 </li>
 <li><p><strong>解题思路：</strong></p>
@@ -4398,7 +4599,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="60-2-2-数学题"><a href="#60-2-2-数学题" class="headerlink" title="60.2.2 数学题"></a>60.2.2 数学题</h4><ul>
+<h4 id="61-2-2-数学题"><a href="#61-2-2-数学题" class="headerlink" title="61.2.2 数学题"></a>61.2.2 数学题</h4><ul>
 <li><p><strong>题目内容：</strong> 线段切三段组成三角形的概率是1&#x2F;4，最简标准思路是利用二维几何概率与三角形中位线定理。</p>
 </li>
 <li><p><strong>解题思路：</strong></p>
@@ -4414,7 +4615,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="61-世纪前沿二面"><a href="#61-世纪前沿二面" class="headerlink" title="61. 世纪前沿二面"></a>61. 世纪前沿二面</h2><h3 id="61-1-没有答得好的知识点与标准答案"><a href="#61-1-没有答得好的知识点与标准答案" class="headerlink" title="61.1 没有答得好的知识点与标准答案"></a>61.1 没有答得好的知识点与标准答案</h3><p><strong>问题一：多线程撮合引擎的设计与任务调度</strong></p>
+<h2 id="62-世纪前沿二面"><a href="#62-世纪前沿二面" class="headerlink" title="62. 世纪前沿二面"></a>62. 世纪前沿二面</h2><h3 id="62-1-没有答得好的知识点与标准答案"><a href="#62-1-没有答得好的知识点与标准答案" class="headerlink" title="62.1 没有答得好的知识点与标准答案"></a>62.1 没有答得好的知识点与标准答案</h3><p><strong>问题一：多线程撮合引擎的设计与任务调度</strong></p>
 <ul>
 <li><p>你面对5000只股票和16个核心的场景，提出使用共享队列和线程池，让空闲线程去拉取行情以应对交易量的不均匀分布。</p>
 </li>
