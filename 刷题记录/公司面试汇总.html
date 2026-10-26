@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-10-25T16:40:07.386Z">
+<meta property="article:modified_time" content="2026-10-26T17:32:30.185Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -4652,6 +4652,60 @@
 <li><p><strong>标准解答思路</strong>：IC通常指Rank IC，是计算某一期因子暴露度（Factor Exposure）与该股票下一期截面收益率之间的斯皮尔曼秩相关系数。</p>
 </li>
 <li><p><strong>标准解答思路</strong>：夏普比率的计算公式应熟练掌握，即（投资组合年化收益率 - 无风险利率）&#x2F; 投资组合的年化波动率，用于衡量每承担一单位风险能产生多少超额回报。</p>
+</li>
+</ul>
+<h2 id="63-Scientech二面"><a href="#63-Scientech二面" class="headerlink" title="63. Scientech二面"></a>63. Scientech二面</h2><h3 id="63-1-未答好的问题及标准答案"><a href="#63-1-未答好的问题及标准答案" class="headerlink" title="63.1 未答好的问题及标准答案"></a>63.1 未答好的问题及标准答案</h3><ul>
+<li><p><strong>编译器取模优化</strong></p>
+<ul>
+<li>候选人认为 <code>% 2048</code> 会被优化为位移，而 <code>% 2000</code> 仍会执行耗时的除法指令。</li>
+<li>标准答案：现代编译器对于已知常数的取模运算（如 <code>% 2000</code>），会将其优化为基于魔数（Magic Number）的乘法和移位操作，并不会实际生成开销巨大的硬件除法指令。</li>
+</ul>
+</li>
+<li><p><strong>C++ 万能引用与完美转发语义</strong></p>
+<ul>
+<li>候选人在类构造函数中，错误地对非模板的右值引用参数直接使用了 <code>std::forward</code>，混淆了普通右值引用与万能引用的边界。</li>
+<li>标准答案：万能引用必须依赖模板类型推导（如 <code>template &lt;typename T&gt;</code> 配合 <code>T&amp;&amp;</code>）才能成立。在明确需要接管对象所有权的场景下（如字符串构造），标准且心智负担最小的做法是“按值传递参数，并在内部 <code>std::move</code>”，这在左值时仅多一次移动，右值时仅有两次移动开销。</li>
+</ul>
+</li>
+<li><p><strong>原子变量的内存序（Memory Order）应用场景</strong></p>
+<ul>
+<li>候选人虽了解底层硬件的 Store Buffer 机制，但在涉及智能指针引用计数析构时，错误地认为单变量状态判断使用 <code>relaxed</code> 即可，且未清晰阐明 <code>seq_cst</code> 的必要场景。</li>
+<li>标准答案：对于引用计数的递减析构，必须建立 <code>acquire/release</code> 同步关系，以确保执行对象销毁的线程能“看到”其他线程在此前对该对象的所有内存修改。而 <code>seq_cst</code>（顺序一致性）则在需要多个线程对多个不同原子变量的操作达成全局唯一的观察顺序时强制要求使用。</li>
+</ul>
+</li>
+<li><p><strong>订单簿（Orderbook）缓存亲和性瓶颈</strong></p>
+<ul>
+<li>候选人使用 <code>std::map</code> 与 <code>std::multimap</code> 实现订单簿，认为利用其自带的排序和迭代器稳定性即可，未察觉其在极低延迟场景下的严重缺陷。</li>
+<li>标准答案：基于红黑树的 Map 节点在内存中离散分配，极度缺乏缓存亲和性（Cache Friendliness），且在查询最优五档时遍历树节点开销极大。高频场景下通常将价格转为整型后，使用基于连续内存平铺的数组（Flat Array&#x2F;Vector）按价格偏置进行索引，最大化 CPU 缓存命中率。</li>
+</ul>
+</li>
+<li><p><strong>函数时间统计</strong></p>
+<ul>
+<li><strong>硬件级时钟周期与指令屏障：</strong> 完全弃用 <code>std::chrono</code>，改用 CPU 硬件指令 <code>__rdtsc()</code> 或 <code>__rdtscp()</code> 提取时钟周期。为防止 CPU 乱序执行（Out-of-order Execution）将计时指令和业务代码重排，必须在获取时间戳前后插入编译器内存屏障或硬件栅栏（如 <code>_mm_lfence()</code>），确立绝对的测量边界。</li>
+<li><strong>全量记录取代降频采样：</strong> 在交易系统中，导致 P99.99 延迟恶化的往往是难以复现的微小毛刺。由于将 8 字节整型写入局部 L1 缓存的开销极低（约 1-2 纳秒），业界标准是进行全量打点记录，而非候选人提出的达到一定计数才采样的模式。</li>
+<li><strong>线程局部（TLS）无锁环形队列：</strong> 绝对禁止在关键路径更新全局状态。应为每个核心交易线程预分配内存对齐的、纯局部的超大环形缓冲区（Ring Buffer）或预聚合直方图（如 HDR Histogram）。打点时，仅需更新当前线程独占的局部指针，彻底消除伪共享（False Sharing）开销。</li>
+<li><strong>带外异步无锁落盘：</strong> 交易主线程绝不能触碰任何 I&#x2F;O。标准机制是利用共享内存（Shared Memory）与原子标记，分配一个绑核的独立后台审计线程。该线程以单一消费者（SPSC）模式无锁轮询各个交易线程的局部缓冲区，在核心链路之外异步完成数据的聚合与落盘日志打印。</li>
+</ul>
+</li>
+</ul>
+<h3 id="63-2-编程题与核心思路"><a href="#63-2-编程题与核心思路" class="headerlink" title="63.2 编程题与核心思路"></a>63.2 编程题与核心思路</h3><ul>
+<li><p><strong>极低延迟哈希表定制（Symbol to ID）</strong></p>
+<ul>
+<li>场景要求：为一个最多包含 1000 个长度 1-6 位字母数字的股票代码映射内部 ID，插入仅在盘前进行，盘中要求极致的查询速度。</li>
+<li>核心思路：放弃传统哈希函数的散列计算与拉链法冲突处理。利用业务规模小且字符范围固定的特性，将字符串直接序列化映射为一个大整数（<strong>字符串零开销强转（Type Punning）：</strong> 抛弃逐字符计算进制的循环。由于Symbol长度仅1-6字节，可直接将其补齐空字符至8字节，然后通过指针强转（如 <code>*(uint64_t*)str</code>）作为一个64位无符号整数读取，将哈希计算的输入步骤压缩至一条汇编指令）。通过牺牲部分内存空间，分配一个容量充裕的连续数组，将计算出的整数（或通过简单位运算取模后）直接作为数组下标进行 O(1) 寻址，彻底规避哈希冲突导致的指针跳转，实现纳秒级延迟。</li>
+</ul>
+</li>
+<li><p><strong>订单簿（Orderbook）基础构建与维护</strong></p>
+<ul>
+<li>场景要求：根据交易所发来的逐笔新订单和撤单数据，维护买卖双边的价格档位及挂单情况。</li>
+<li>核心思路：由于浮点数存在精度问题，需优先将价格乘以固定倍数（如 100）转化为无符号整型。数据结构的选型上，需要一种次级结构将订单 ID 映射到物理存储位置以支持 O(1) 撤单；同时主结构必须保持价格档位有序，避免遍历，从而能够针对高速的行情快照需求瞬间切片出当前的 BBO（最优买卖价）或最优五档。</li>
+</ul>
+</li>
+<li><p><strong>字符串参数传递与生命周期所有权转移</strong></p>
+<ul>
+<li>场景要求：为类实现一个接收字符串的构造函数，将其保存为类成员变量，并在调用方传入左值或右值时，尽可能避免不必要的深拷贝。</li>
+<li>核心思路：舍弃手写多态重载（同时写 <code>const string&amp;</code> 与 <code>string&amp;&amp;</code>）的繁琐逻辑。利用现代 C++ 的移动语义，直接让构造函数的参数按值传递。调用方若是右值，参数传递发生一次移动；在成员初始化列表中对该参数再调用一次 <code>std::move</code> 完成接管。通过这一策略，用极其清爽的接口实现了性能防劣化，将工程实现上的心智负担降至最低。</li>
+</ul>
 </li>
 </ul>
 
