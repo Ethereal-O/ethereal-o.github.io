@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-10-28T10:01:03.021Z">
+<meta property="article:modified_time" content="2026-10-31T14:35:35.024Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -4746,6 +4746,94 @@
 <li><strong>二面</strong>：30分钟，问项目是否上线、上一家公司工作内容、是否接受团队小且工作综合；题型与一面类似。</li>
 <li><strong>leader面试</strong>：待补充。</li>
 <li><strong>CEO面</strong>：1小时，面试官纯数学背景，问概率统计题：独立标准正态 (X,Y)，只保留 (X+Y\ge 0) 样本后算相关系数，结论为负相关；以及 (Y&#x3D;aX+\varepsilon) 在截断条件下的相关系数变化，强调截断会改变相关性，方向取决于截断条件。</li>
+</ul>
+<h2 id="65-九坤高频组面试"><a href="#65-九坤高频组面试" class="headerlink" title="65. 九坤高频组面试"></a>65. 九坤高频组面试</h2><h3 id="65-1-未答好的问题及标准答案"><a href="#65-1-未答好的问题及标准答案" class="headerlink" title="65.1 未答好的问题及标准答案"></a>65.1 未答好的问题及标准答案</h3><p><strong>1. 高频交易系统端到端延迟的精准测量</strong></p>
+<ul>
+<li><p><strong>未答好情况</strong>：候选人提出使用 <code>RDTSC</code> 指令读取时钟周期来测量，但在被追问为何 <code>RDTSC</code> 测量不准、以及现代 CPU 架构（如流水线和重排机制）为何导致其不准时回答吃力。在面试官提示使用 <code>CPUID</code> 作为屏障指令阻断指令重排后，候选人依然无法解释为何加入了屏障指令后，测出来的延迟仍与实盘真实表现不一致。</p>
+</li>
+<li><p><strong>标准答案解析</strong>：</p>
+<ul>
+<li><strong>不准的根源</strong>：现代 CPU 采用了超标量流水线（Pipeline）和乱序执行（Out-of-Order Execution）。<code>RDTSC</code> 作为普通指令，会被 CPU 调度重排到待测代码的前面或后面，导致获取的时间戳无法精准包裹目标逻辑。</li>
+<li><strong>软件缓解与探针效应（Observer Effect）</strong>：加入序列化指令（如 <code>CPUID</code> 或 <code>LFENCE</code>）确实可以清空流水线并强制按序执行，但这也破坏了实盘运行时的指令级并行（ILP）与缓存状态。测量时强制阻断流水线带来的几百个时钟周期的额外开销被计入了结果，导致测得的延迟远大于实盘中无屏障全速运行时的真实延迟。</li>
+<li><strong>工业界终极方案</strong>：对于纳秒级高频交易，最精准的端到端测量通常抛弃软件打点，改用<strong>硬件网络分光仪（Network Tap）结合 FPGA 或高精度 PTP 硬件时间戳</strong>。直接在物理层抓包，比对行情入站网络包与订单出站网络包的精确时间差，从而完全规避 CPU 指令探针带来的干扰。</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. 订单簿（Order Book）微观结构与队列位置（Queue Position）计算</strong></p>
+<ul>
+<li><p><strong>未答好情况</strong>：候选人未能第一时间准确理解 Queue Position 的定义，误以为其代表“订单的笔数”，后被面试官纠正是“前方排队的手数（Size）”。在推导前方发生撤单（Cancellation）或成交（Trade）时自身队列位置的变化规律时，逻辑混乱，无法清晰计算出剩余排队量。</p>
+</li>
+<li><p><strong>标准答案解析</strong>：</p>
+<ul>
+<li><strong>核心定义</strong>：在价格优先、时间优先的撮合机制中，Queue Position 严格指代在同一价格档位下，排在自身订单前面的<strong>累计挂单数量（Volume&#x2F;Size）</strong>。</li>
+<li><strong>演变逻辑</strong>：只有两种情况会让 Queue Position 前移（数值减小）：一是排在前面的订单主动撤单；二是对手方市价单（Market Order）击穿该价位，导致排在前面的订单成交。排在后面的新增订单完全不影响自身的 Queue Position。</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. 订单成交概率（Fill Probability）的量化建模</strong></p>
+<ul>
+<li><p><strong>未答好情况</strong>：在讨论排队位置、前方排队量、剩余数量与成交概率这四个变量的关系时，候选人仅能给出“反比关系”的定性猜测。对于如何建模估算成交概率，候选人的回答是“人为造一个公式去拟合（如条件分之一乘以常数）”，缺乏微观结构量化建模的专业思路。</p>
+</li>
+<li><p><strong>标准答案解析</strong>：</p>
+<ul>
+<li><p><strong>变量关系</strong>：成交概率随 Queue Ahead（前方排队量）的减小呈非线性显著上升。自身订单的剩余数量（Remaining Quantity）只有在 Queue Ahead 降为 0 后，遭遇新的对手单吃单时才会开始减少。</p>
+</li>
+<li><p><strong>科学建模方案</strong>：</p>
+<ol>
+<li><p><strong>微观动力学模型</strong>：将市价单到达率和限价单撤单率分别建模为泊松过程（Poisson Process）。利用排队论计算在价格档位发生不利移动前，前方排队量被完全消耗的理论概率。</p>
+</li>
+<li><p><strong>机器学习预测</strong>：提取高频 Level-2&#x2F;Level-3 快照特征（如订单流不平衡量 Order Flow Imbalance、自身位置占同档位总量的百分比、买卖压力差），输入逻辑回归（Logistic Regression）、生存分析模型（Survival Analysis）或时序神经网络中，利用历史真实成交与撤单日志，通过监督学习直接输出该笔订单在特定时间窗口内的实际成交概率预测值。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="66-九坤交易系统组面试"><a href="#66-九坤交易系统组面试" class="headerlink" title="66. 九坤交易系统组面试"></a>66. 九坤交易系统组面试</h2><h3 id="66-1-未答好的问题及标准答案"><a href="#66-1-未答好的问题及标准答案" class="headerlink" title="66.1 未答好的问题及标准答案"></a>66.1 未答好的问题及标准答案</h3><p><strong>1. 文件映射（mmap）的持久化时机与核心机制</strong></p>
+<ul>
+<li><p><strong>面试表现：</strong> 解释不清数据何时以及如何落盘，将持久化时机与 <code>munmap</code> 或 <code>madvise</code> 强绑定，未清晰区分内核 Page Cache 与磁盘 I&#x2F;O 刷盘机制。</p>
+</li>
+<li><p><strong>标准答案：</strong> 写入 <code>mmap</code> 的内存区域实质上是写入操作系统的 Page Cache。实际的落盘（持久化）操作由操作系统内核的后台线程（如 pdflush&#x2F;flusher）根据脏页比例和时间异步定期完成，不会在普通写指令时同步阻塞。若需强制且明确地保证数据同步落盘，应显式调用 <code>msync(addr, length, MS_SYNC)</code> 系统调用，而非依赖 <code>munmap</code> 或仅仅提供内存建议的 <code>madvise</code>。</p>
+</li>
+</ul>
+<p><strong>2. 匿名映射与文件映射在纯共享内存读写路径上的绝对性能差异</strong></p>
+<ul>
+<li><p><strong>面试表现：</strong> 认为非匿名映射（文件映射）会写 Page Cache 并在后台落盘，从而导致写操作存在伪延迟（长尾延迟）差异。</p>
+</li>
+<li><p><strong>标准答案：</strong> 在不考虑初始的缺页中断（Page Fault）和极端内存回收的前提下，一旦物理内存分配并建立好页表映射，两者的直接读写（Load&#x2F;Store指令）均在用户态内存中进行，不陷入内核。因此，绝对读写延迟和吞吐量在正常路径下没有本质区别。文件映射的异步刷脏行为由内核后台处理，通常不阻塞用户态普通的内存写指令。</p>
+</li>
+</ul>
+<p><strong>3. 中美股市基础交易机制差异（T+0与T+1，交易与清结算）</strong></p>
+<ul>
+<li><p><strong>面试表现：</strong> 仅模糊了解A股是T+1、美股是T+0，被追问交易与清结算的具体概念区别时无法作答。</p>
+</li>
+<li><p><strong>标准答案：</strong></p>
+<ul>
+<li><strong>交易制度：</strong> A股实行 T+1 交易（当日买入的股票次日才能卖出）；美股实行 T+0 交易（支持日内回转交易，当日买入可当日卖出）。</li>
+<li><strong>清算交收（结算）制度：</strong> 交易指达成买卖协议，交收指实际的钱券划转。A股的股票和资金清算是 T+1 交收；美股传统上实行 T+2 交收（注：自2024年5月底起，美股已正式步入 T+1 结算时代，但这与前端的“T+0交易”依然是两个维度的概念）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. 基数统计（如 HyperLogLog）中前导零数量与独立元素数量的数学关系</strong></p>
+<ul>
+<li><p><strong>面试表现：</strong> 仅能给出“前导零多说明概率小、元素多”的模糊直觉，未能透彻解释其背后的数学期望关系。</p>
+</li>
+<li><p><strong>标准答案：</strong> 理想的哈希函数会将输入均匀分布在二进制空间。产生 $k$ 个连续前导零的哈希值概率为 $1&#x2F;2^k$。在伯努利试验中，当抛掷次数（即独立元素个数 $N$）达到 $2^k$ 时，预期才会出现一次连续 $k$ 个前导零。因此，记录到的最大前导零数量 $k_{max}$ 可作为评估独立元素总数规模的基准，其估算基准值为 $N \approx 2^{k_{max}}$。</p>
+</li>
+</ul>
+<p><strong>5. 基数统计中分桶（Bucketing）的真实目的</strong></p>
+<ul>
+<li><p><strong>面试表现：</strong> 错误猜测分桶是为了让不同桶使用不同的哈希函数，或者单纯为了提升多线程并发性能。</p>
+</li>
+<li><p><strong>标准答案：</strong> 分桶的核心目的是利用统计平均（Stochastic Averaging）来大幅降低估算方差。单一全局最大前导零极易受极端异常值影响（偶然性大）；通过将数据流利用哈希值的高位分散到 $m$ 个独立的子集（桶）中，分别求各桶的最大前导零，再采用调和平均数（Harmonic Mean）等数学方式进行汇总，能够有效平滑极端离群值，显著提升整体估算精度。</p>
+</li>
+</ul>
+<p><strong>6. 项目设计的自顶向下（Top-Down）系统抽象能力</strong></p>
+<ul>
+<li><p><strong>面试表现：</strong> 在介绍 SPDK 队列和持久化设计时，直接陷入 <code>shared_ptr</code> 控制块、控制协议失效等底层语法细节，导致面试官难以构建整体队列框架的认知。</p>
+</li>
+<li><p><strong>标准答案：</strong> 描述系统架构需遵循自顶向下的表达逻辑：业务场景与核心挑战 -&gt; 系统的顶层抽象定义（如提供怎样的 API） -&gt; 核心技术路径（如 mmap + ring buffer） -&gt; 针对痛点（如伪延迟）的具体破局点。避免在第一轮陈述中强行塞入代码级的局部变量实现细节。</p>
+</li>
 </ul>
 
             
