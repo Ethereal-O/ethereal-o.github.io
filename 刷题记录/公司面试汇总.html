@@ -26,7 +26,7 @@
 <meta property="og:description" content="1. Dynamic Technology Lab 建议做什么：有空找就行 面试周期：先面试后笔试2轮，小红书过往原题 英文中文：有可能英文 什么时候开暑期实习：不确定，一直在招 转正概率：50%，上实盘就可以  2. 字节跳动Seed一面一、 项目深挖：调度系统与大规模架构面试官非常关注“为什么不使用现有工具”以及“系统如何应对大规模扩展”。 1. 核心问题：为什么不直接使用 K8s 原生调度器">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-16T12:33:00.000Z">
-<meta property="article:modified_time" content="2026-10-31T14:35:35.024Z">
+<meta property="article:modified_time" content="2026-11-02T14:05:39.245Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
     
@@ -4833,6 +4833,37 @@
 <li><p><strong>面试表现：</strong> 在介绍 SPDK 队列和持久化设计时，直接陷入 <code>shared_ptr</code> 控制块、控制协议失效等底层语法细节，导致面试官难以构建整体队列框架的认知。</p>
 </li>
 <li><p><strong>标准答案：</strong> 描述系统架构需遵循自顶向下的表达逻辑：业务场景与核心挑战 -&gt; 系统的顶层抽象定义（如提供怎样的 API） -&gt; 核心技术路径（如 mmap + ring buffer） -&gt; 针对痛点（如伪延迟）的具体破局点。避免在第一轮陈述中强行塞入代码级的局部变量实现细节。</p>
+</li>
+</ul>
+<h2 id="67-拼多多三面"><a href="#67-拼多多三面" class="headerlink" title="67. 拼多多三面"></a>67. 拼多多三面</h2><h3 id="67-1-未答好的问题及标准答案"><a href="#67-1-未答好的问题及标准答案" class="headerlink" title="67.1 未答好的问题及标准答案"></a>67.1 未答好的问题及标准答案</h3><p><strong>1. GPU内存体系结构中的Local Memory（概念混淆）</strong></p>
+<ul>
+<li><p><strong>候选人表现</strong>：当面试官询问“local memory”的特点时，候选人回答称“它就是这个SM里面的那个memory”。</p>
+</li>
+<li><p><strong>标准答案</strong>：在CUDA架构中，Local Memory（局部内存）在物理上<strong>位于片外（Off-chip）的Global Memory（全局内存&#x2F;显存）中</strong>，而不是在SM（流多处理器）内部。它之所以被称为“Local”，是指其<strong>作用域</strong>仅限于单个线程。当线程的寄存器溢出（Register Spilling）、或者使用了无法在编译期确定大小的数组及大型结构体时，数据会被存储到Local Memory中。由于其物理位置在片外，访问延迟与全局内存一样高（除非被L1&#x2F;L2 Cache缓存）。SM内部的片上内存实际上是Shared Memory（共享内存）或寄存器。</p>
+</li>
+</ul>
+<p><strong>2. 网络通信（TCP&#x2F;DPDK）相关开发（知识盲区）</strong></p>
+<ul>
+<li><p><strong>候选人表现</strong>：面试官询问是否涉及DPDK或TCP网络通信开发时，候选人承认对此接触不多，并将话题转移到了自己熟悉的SPDK上。</p>
+</li>
+<li><p><strong>标准答案（补充知识）</strong>：</p>
+<ul>
+<li><strong>TCP高性能网络编程</strong>：通常基于epoll等I&#x2F;O多路复用技术配合Reactor模式实现，性能优化的关键在于减少系统调用、使用零拷贝（Zero-copy，如<code>sendfile</code>或<code>mmap</code>）以及减少上下文切换。</li>
+<li><strong>DPDK（Data Plane Development Kit）</strong>：其核心思想是<strong>内核旁路（Kernel Bypass）</strong>。它将网卡控制权转移到用户态，通过轮询模式驱动（PMD）直接在用户空间读取网卡队列，彻底避免了中断处理的开销、内核态与用户态的内存拷贝，以及协议栈的解析损耗，常用于极高吞吐量的低延迟网络场景。</li>
+</ul>
+</li>
+</ul>
+<h3 id="67-2-算法题"><a href="#67-2-算法题" class="headerlink" title="67.2 算法题"></a>67.2 算法题</h3><p><strong>1. 二叉树非递归后序遍历（算法熟练度不足）</strong></p>
+<ul>
+<li><p><strong>候选人表现</strong>：候选人坦承“有点忘了”，在推导思路上花费了较多时间，最终通过判断左右节点是否遍历完的思路勉强写出代码。</p>
+</li>
+<li><p><strong>标准答案</strong>：非递归后序遍历（左-右-根）通常有两种标准且高效的实现方式：</p>
+<ul>
+<li><p><strong>双栈法</strong>：将根节点压入栈1；循环弹出栈1的节点并压入栈2，同时将其左孩子和右孩子依次压入栈1。最后全部弹出栈2的节点，即为后序遍历结果。</p>
+</li>
+<li><p><strong>单栈+prev指针法</strong>：使用一个栈不断将左节点压栈到底；当无法继续向左时，查看栈顶元素，如果其没有右节点或右节点已经被访问过（<code>right == prev</code>），则弹出并访问该节点，将<code>prev</code>指向该节点；否则将右节点压栈并重复上述过程。</p>
+</li>
+</ul>
 </li>
 </ul>
 
